@@ -1,0 +1,18 @@
+package com.ssafy.pettodoctor.api.domain;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name="schedules")
+public class Schedule {
+    @Id @GeneratedValue
+    @Column(name = "schedules_id")
+    private Long id;
+
+    private Integer plusDay;
+    private String bitmask;
+
+    @ManyToOne
+    @JoinColumn(name = "doctor_id")
+    private Doctor doctor;
+}
