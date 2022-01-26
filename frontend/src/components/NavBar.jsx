@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -12,15 +12,25 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { NavLink } from "react-router-dom";
-
+import { styled } from "@mui/material/styles";
 const pages = [
-    { path: "/hospitalsearch", name: "병원찾기" },
-    { path: "/hosipitalreservation", name: "예약하기" },
-    { path: "/notice", name: "공지사항" },
+    { id: 1, path: "/hospitalsearch", name: "병원찾기" },
+    { id: 2, path: "/hospitalreservation", name: "예약하기" },
+    { id: 3, path: "/notice", name: "공지사항" },
 ];
 const settings = ["내 예약", "마이페이지", "Logout"];
 
-const NavBar = () => {
+const MyDiv = styled("div")({
+    color: "#29A1B1",
+});
+const selectNav = "black";
+
+const activeStyle = {
+    color: "#29A1B1",
+};
+
+const NavBarEl = (props) => {
+    console.log(props);
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -31,21 +41,41 @@ const NavBar = () => {
         setAnchorElUser(event.currentTarget);
     };
 
-    const handleCloseNavMenu = () => {
-        setAnchorElNav(null);
+    const handleCloseNavMenu = (id) => {
+        console.log(id);
+        if (id === props.selectNav) props.clickNav(id);
     };
 
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
 
+    let MyButton = (page, selectedColor) => (
+        <Button
+            key={page}
+            onClick={() => {
+                props.clickNav(page.id);
+            }}
+            sx={{ mx: 8, my: 2, color: selectedColor, display: "block" }}
+        >
+            <Typography variant="h6">{page.name}</Typography>
+        </Button>
+    );
+
     return (
         <AppBar color="transparent" position="sticky">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <NavLink to="/"><Typography variant="h6" noWrap component="div" sx={{ mr: 2, display: { xs: "none", md: "flex" } }}>
-                        <img src="img/logo512.png" height="50px" alt=""></img>
-                    </Typography></NavLink>
+                    <NavLink to="/">
+                        <Typography
+                            variant="h6"
+                            noWrap
+                            component="div"
+                            sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
+                        >
+                            <img src="img/logo.png" height="50px" alt=""></img>
+                        </Typography>
+                    </NavLink>
 
                     <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
                         <IconButton
@@ -78,10 +108,10 @@ const NavBar = () => {
                         >
                             {/* 모바일 화면일 때 메뉴 */}
                             {pages.map((page) => (
-                                <NavLink to={page.path} key={page.path}>
-                                    <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                        <Typography textAlign="center">{page.name}</Typography>
-                                    </MenuItem>
+                                <NavLink to={page.path} key={page.path} style={{ textDecoration: "none" }}>
+                                    {props.selectedNav === page.id
+                                        ? MyButton(page, "#29A1B1")
+                                        : MyButton(page, "black")}
                                 </NavLink>
                             ))}
                         </Menu>
@@ -92,54 +122,65 @@ const NavBar = () => {
                         component="div"
                         sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
                     >
-                        LOGO
+                        <img src="img/logo.png" height="50px" alt=""></img>
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
                         {pages.map((page) => (
-                            <NavLink to={page.path} key={page.path}>
-                                <Button
-                                    key={page}
-                                    onClick={handleCloseNavMenu}
-                                    sx={{ mx: 2, my: 2, color: "black", display: "block" }}
-                                >
-                                    {page.name}
-                                </Button>
+                            <NavLink to={page.path} key={page.path} style={{ textDecoration: "none" }}>
+                                {props.selectedNav === page.id ? MyButton(page, "#29A1B1") : MyButton(page, "black")}
                             </NavLink>
                         ))}
                     </Box>
-
-                    <Box sx={{ flexGrow: 0 }}>
-                        <Tooltip title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                            </IconButton>
-                        </Tooltip>
-                        <Menu
-                            sx={{ mt: "45px" }}
-                            id="menu-appbar"
-                            anchorEl={anchorElUser}
-                            anchorOrigin={{
-                                vertical: "top",
-                                horizontal: "right",
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: "top",
-                                horizontal: "right",
-                            }}
-                            open={Boolean(anchorElUser)}
-                            onClose={handleCloseUserMenu}
-                        >
-                            {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center">{setting}</Typography>
-                                </MenuItem>
-                            ))}
-                        </Menu>
-                    </Box>
+                    {props.isLogin ? (
+                        <Box sx={{ flexGrow: 0 }}>
+                            <Tooltip title="Open settings">
+                                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                    <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                                </IconButton>
+                            </Tooltip>
+                            <Menu
+                                sx={{ mt: "45px" }}
+                                id="menu-appbar"
+                                anchorEl={anchorElUser}
+                                anchorOrigin={{
+                                    vertical: "top",
+                                    horizontal: "right",
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: "top",
+                                    horizontal: "right",
+                                }}
+                                open={Boolean(anchorElUser)}
+                                onClose={handleCloseUserMenu}
+                            >
+                                {settings.map((setting) => (
+                                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                                        <Typography textAlign="center">{setting}</Typography>
+                                    </MenuItem>
+                                ))}
+                            </Menu>
+                        </Box>
+                    ) : (
+                        <Box sx={{ flexGrow: 0 }}>
+                            <Button sx={{ mx: 8, my: 2, color: "black", display: "block" }}>
+                                <Typography variant="h6">Login</Typography>
+                            </Button>
+                        </Box>
+                    )}
                 </Toolbar>
             </Container>
         </AppBar>
     );
 };
+
+function NavBar(props) {
+    let [selectedNav, setSelectedNav] = useState(0);
+    let [isLogin, setIsLogin] = useState(true);
+    function clickNav(selected) {
+        console.log(selected);
+        setSelectedNav(selected);
+    }
+    return <NavBarEl selectedNav={selectedNav} isLogin={isLogin} clickNav={clickNav}></NavBarEl>;
+}
 export default NavBar;
