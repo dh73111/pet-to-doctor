@@ -30,7 +30,7 @@ class UserRepositoryTest {
         // when
 
         // then
-        Assertions.assertThat(userRepository.isDuplicated(u2)).isEqualTo(true);
+//        Assertions.assertThat(userRepository.isDuplicated(u2.)).isEqualTo(true);
     }
 
 }

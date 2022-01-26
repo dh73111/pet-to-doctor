@@ -20,11 +20,11 @@ public class UserRepository {
         em.persist(user);
     }
 
-    // 회원 중복 확인
-    public Boolean isDuplicated(User user) {
+    // 이메일 중복 확인
+    public Boolean isDuplicated(String email) {
         try {
             em.createQuery("select u from User u where u.email = :email")
-                    .setParameter("email", user.getEmail())
+                    .setParameter("email", email)
                     .getSingleResult();
         } catch (NoResultException e) {
             return false;

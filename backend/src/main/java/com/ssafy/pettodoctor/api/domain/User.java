@@ -21,4 +21,30 @@ public class User {
     private Boolean isOauth;
     private Boolean isCertificated;
     private LocalDateTime joinDate;
+
+    //== 생성 메소드 ==//
+    public static User createCommonUser(String email, String name, String password, String address){
+        User user = new User();
+        user.setEmail(email);
+        user.setName(name);
+        user.setPassword(password);
+        user.setAddress(address);
+        user.setIsCertificated(false);
+        user.setIsOauth(false);
+        user.setJoinDate(LocalDateTime.now());
+
+        return user;
+    }
+
+    public User createOauthUser(String email, String name){
+        User user = new User();
+        user.setEmail(email);
+        user.setName(name);
+        user.setIsCertificated(true);
+        user.setIsOauth(true);
+        user.setJoinDate(LocalDateTime.now());
+
+        return user;
+    }
+
 }
