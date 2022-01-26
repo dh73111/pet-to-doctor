@@ -2,6 +2,9 @@ package com.ssafy.pettodoctor.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -25,8 +28,9 @@ import java.util.List;
  * API 문서 관련 swagger2 설정 정의.
  */
 @Configuration
-@EnableSwagger2
-public class SwaggerConfig {
+//@EnableSwagger2
+@EnableWebMvc
+public class SwaggerConfig extends WebMvcConfigurationSupport {
 
     @Bean
     public Docket postsApi() {
