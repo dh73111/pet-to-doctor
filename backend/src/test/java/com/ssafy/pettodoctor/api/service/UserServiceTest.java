@@ -16,7 +16,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Rollback(false)
+//@Rollback(false)
 class UserServiceTest {
     @Autowired
     private UserService userService;

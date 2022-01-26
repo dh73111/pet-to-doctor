@@ -3,10 +3,12 @@ package com.ssafy.pettodoctor.api.controller;
 import com.ssafy.pettodoctor.api.domain.User;
 import com.ssafy.pettodoctor.api.request.UserCommonSignupPostReq;
 import com.ssafy.pettodoctor.api.service.UserService;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+//import io.swagger.annotations.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,19 +20,21 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
+@Tag(name = "user controller", description = "사용자 관련 컨트롤러")
+@CrossOrigin("*")
 public class UserController {
     private final UserService userService;
 
     @GetMapping("/duplication")
-    @ApiOperation(value = "이메일 중복 확인", notes = "이메일 중복을 확인해준다. 중복이라면 true 반환")
+    @Operation(summary = "이메일 중복 확인", description = "이메일 중복을 확인해준다. 중복이라면 true 반환")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "성공"),
-            @ApiResponse(code = 401, message = "인증 실패"),
-            @ApiResponse(code = 404, message = "사용자 없음"),
-            @ApiResponse(code = 500, message = "서버 오류")
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "401", description = "인증 실패"),
+            @ApiResponse(responseCode = "404", description = "사용자 없음"),
+            @ApiResponse(responseCode = "500", description = "서버 오류")
     })
     public ResponseEntity<Map<String, Object>> isDuplicated(
-            @RequestParam @ApiParam(value="이메일 정보", required = true) String email) {
+            @RequestParam @Parameter(description = "사용자 이메일") String email) {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
         try {
@@ -48,15 +52,15 @@ public class UserController {
 
 
     @PostMapping
-    @ApiOperation(value = "회원 가입", notes = "<strong>아이디와 패스워드</strong>를 통해 회원가입 한다.")
+    @Operation(summary = "회원 가입", description = "<strong>아이디와 패스워드</strong>를 통해 회원가입 한다.")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "성공"),
-            @ApiResponse(code = 401, message = "인증 실패"),
-            @ApiResponse(code = 404, message = "사용자 없음"),
-            @ApiResponse(code = 500, message = "서버 오류")
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "401", description = "인증 실패"),
+            @ApiResponse(responseCode = "404", description = "사용자 없음"),
+            @ApiResponse(responseCode = "500", description = "서버 오류")
     })
     public ResponseEntity<Map<String, Object>> signup (
-            @RequestBody @ApiParam(value="회원가입 정보", required = true) UserCommonSignupPostReq signupInfo
+            @RequestBody @Parameter(description = "사용자 가입 정보") UserCommonSignupPostReq signupInfo
     ) {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
