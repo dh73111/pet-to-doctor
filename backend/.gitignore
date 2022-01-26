@@ -70,3 +70,7 @@ Temporary Items
 .apdisk
 
 # End of https://www.toptal.com/developers/gitignore/api/macos
+
+# log file
+pet-to-doctor.log
+pet-to-doctor.log.*
