@@ -9,21 +9,15 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name="users")
 @Getter @Setter
-public class User {
-    @Id @GeneratedValue
-    @Column(name="user_id")
-    private Long id;
-    private String email;
-    private String password;
-    private String name;
-    private String tel;
-    private String address;
+@DiscriminatorValue("U")
+public class User extends Account {
+    @Embedded
+    private Address address;
     private Boolean isOauth;
     private Boolean isCertificated;
-    private LocalDateTime joinDate;
 
     //== 생성 메소드 ==//
-    public static User createCommonUser(String email, String name, String password, String address){
+    public static User createCommonUser(String email, String name, String password, Address address){
         User user = new User();
         user.setEmail(email);
         user.setName(name);
