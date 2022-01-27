@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
+import {
+    AppBar,
+    Box,
+    Toolbar,
+    IconButton,
+    Typography,
+    Menu,
+    Container,
+    Avatar,
+    Button,
+    Tooltip,
+    MenuItem,
+    Modal,
+} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
 import { NavLink } from "react-router-dom";
-import { styled } from "@mui/material/styles";
+import UserLoginModal from "./UserLoginModal";
 const pages = [
     { id: 1, path: "/hospitalsearch", name: "병원찾기" },
     { id: 2, path: "/hospitalreservation", name: "예약하기" },
@@ -20,20 +23,25 @@ const pages = [
 ];
 const settings = ["내 예약", "마이페이지", "Logout"];
 
-const MyDiv = styled("div")({
-    color: "#29A1B1",
-});
-const selectNav = "black";
-
-const activeStyle = {
-    color: "#29A1B1",
+const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 1440,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
 };
 
 const NavBarEl = (props) => {
     console.log(props);
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
-
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
@@ -63,7 +71,7 @@ const NavBarEl = (props) => {
     );
 
     return (
-        <AppBar color="transparent" position="sticky">
+        <AppBar color="inherit" position="sticky">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <NavLink to="/">
@@ -163,11 +171,22 @@ const NavBarEl = (props) => {
                         </Box>
                     ) : (
                         <Box sx={{ flexGrow: 0 }}>
-                            <Button sx={{ mx: 8, my: 2, color: "black", display: "block" }}>
+                            <Button sx={{ mx: 8, my: 2, color: "black", display: "block" }} onClick={handleOpen}>
                                 <Typography variant="h6">Login</Typography>
                             </Button>
                         </Box>
                     )}
+
+                    <Modal
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box sx={style}>
+                            <UserLoginModal></UserLoginModal>
+                        </Box>
+                    </Modal>
                 </Toolbar>
             </Container>
         </AppBar>
@@ -176,7 +195,7 @@ const NavBarEl = (props) => {
 
 function NavBar(props) {
     let [selectedNav, setSelectedNav] = useState(0);
-    let [isLogin, setIsLogin] = useState(true);
+    let [isLogin, setIsLogin] = useState(false);
     function clickNav(selected) {
         console.log(selected);
         setSelectedNav(selected);

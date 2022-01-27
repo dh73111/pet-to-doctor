@@ -18,23 +18,12 @@ const MyDiv = styled("div")({
     top: "580px",
     width: "100%",
 });
-const Item = styled(Paper)(({ theme }) => ({
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-}));
-const bull = (
-    <Box component="span" sx={{ display: "inline-block", mx: "2px", transform: "scale(0.8)" }}>
-        •
-    </Box>
-);
 
 function Home(props) {
     return (
         <div>
             <MyImage>
-                <img src="./img/main.png" width="100%" height="550px" alt=""></img>
+                <img src="./img/메인.png" width="100%" height="550px" alt=""></img>
             </MyImage>
             <MyDiv>
                 <Grid container>
@@ -73,21 +62,16 @@ function Home(props) {
                 </Grid>
             </MyDiv>
             <Box sx={{ width: "100%" }}>
-                <Grid container rowSpacing={20} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                <Grid container rowSpacing={22} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                     <Grid item xs={12}></Grid>
-                    <Grid item xs={12}></Grid>
-                    <Grid item xs={12}></Grid>
-                    <Grid item xs={3}></Grid>
-                    <Grid item xs={6}>
-                        <img src="./img/mainDesc1.png" width="100%" height="300px" alt=""></img>
+                    <Grid item xs={12}>
+                        <img src="./img/mainDesc.png" width="100%" height="450px" alt=""></img>
                     </Grid>
-                    <Grid item xs={3}></Grid>
-                    <Grid item xs={12}></Grid>
-                    <Grid item xs={3}></Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={2.4}></Grid>
+                    <Grid item xs={7.2}>
                         <img src="./img/mainDesc2.png" width="100%" height="300px" alt=""></img>
                     </Grid>
-                    <Grid item xs={3}></Grid>
+                    <Grid item xs={2.4}></Grid>
                 </Grid>
             </Box>
         </div>
