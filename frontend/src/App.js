@@ -6,11 +6,13 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HospitalReservation from "./pages/hospital/HospitalReservation";
 import HospitalSearch from "./pages/hospital/HospitalSearch";
 import Notice from "./pages/Notice";
+// import UserLoginModal from "./components/UserLoginModal";
 
 function App() {
     return (
         <BrowserRouter>
             <div className="App">
+                {/* <UserLoginModal /> */}
                 <Routes>
                     <Route path="/*" element={<NavBar></NavBar>}></Route>
                 </Routes>

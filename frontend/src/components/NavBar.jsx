@@ -58,7 +58,7 @@ const NavBarEl = (props) => {
             }}
             sx={{ mx: 8, my: 2, color: selectedColor, display: "block" }}
         >
-            <Typography variant="h6">{page.name}</Typography>
+            <Typography>{page.name}</Typography>
         </Button>
     );
 
