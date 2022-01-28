@@ -23,7 +23,7 @@ public class UserRepository {
     // 이메일 중복 확인
     public Boolean isDuplicated(String email) {
         try {
-            em.createQuery("select u from User u where u.email = :email")
+            em.createQuery("select u from User u where u.email = :email", User.class)
                     .setParameter("email", email)
                     .getSingleResult();
         } catch (NoResultException e) {
@@ -31,6 +31,17 @@ public class UserRepository {
         }
 
         return true;
+    }
+
+    // 이메일로 유저 찾기
+    public User findByEmail(String email){
+        try {
+            return em.createQuery("select u from User u where u.email = :email", User.class)
+                    .setParameter("email", email)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
 }

@@ -1,9 +1,11 @@
 package com.ssafy.pettodoctor.api.controller;
 
 import com.ssafy.pettodoctor.api.domain.User;
+import com.ssafy.pettodoctor.api.request.LoginPostReq;
 import com.ssafy.pettodoctor.api.request.UserCommonSignupPostReq;
 import com.ssafy.pettodoctor.api.service.UserService;
 //import io.swagger.annotations.*;
+import com.ssafy.pettodoctor.common.util.JwtTokenUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -77,4 +79,34 @@ public class UserController {
         return new ResponseEntity(resultMap, status);
     }
 
+
+    @PostMapping("/login")
+    @Operation(summary = "로그인", description = "<strong>아이디와 패스워드</strong>를 통해 회원가입 한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "401", description = "인증 실패"),
+            @ApiResponse(responseCode = "404", description = "사용자 없음"),
+            @ApiResponse(responseCode = "500", description = "서버 오류")
+    })
+    public ResponseEntity<Map<String, Object>> login (@RequestBody LoginPostReq loginPostReq){
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+
+        try{
+            User user = userService.findByEmail(loginPostReq.getEmail());
+            if(user == null || !loginPostReq.getPassword().equals(user.getPassword())){
+                status = HttpStatus.NOT_ACCEPTABLE;
+            } else{
+                status = HttpStatus.OK;
+                String accessToken = JwtTokenUtil.getToken(user.getId().toString());
+                resultMap.put("access-token", accessToken);
+            }
+
+        }catch (Exception e){
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            resultMap.put("message", "서버 오류");
+        }
+
+        return new ResponseEntity(resultMap, status);
+    }
 }
