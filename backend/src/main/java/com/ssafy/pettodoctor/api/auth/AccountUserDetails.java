@@ -4,6 +4,7 @@ package com.ssafy.pettodoctor.api.auth;
 import com.ssafy.pettodoctor.api.domain.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class AccountUserDetails implements UserDetails {
     public AccountUserDetails(Account account) {
     		super();
     		this.account = account;
+		this.roles.add(new SimpleGrantedAuthority(account.getRole()));
     }
     
     public Account getUser() {

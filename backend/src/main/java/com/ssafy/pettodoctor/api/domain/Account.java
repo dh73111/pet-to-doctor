@@ -22,4 +22,8 @@ public class Account {
     private String role;
     private String tel;
     private LocalDateTime joinDate;
+
+    public String getAuthority(){
+        return this.role;
+    }
 }
