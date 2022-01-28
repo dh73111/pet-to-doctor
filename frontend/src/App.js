@@ -17,16 +17,11 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Home></Home>}></Route>
                 </Routes>
-                <Container>
-                    <Routes>
-                        <Route path="/hospitalsearch" element={<HospitalSearch></HospitalSearch>}></Route>
-                        <Route
-                            path="/hospitalreservation"
-                            element={<HospitalReservation></HospitalReservation>}
-                        ></Route>
-                        <Route path="/notice" element={<Notice></Notice>}></Route>
-                    </Routes>
-                </Container>
+                <Routes>
+                    <Route path="/hospitalsearch" element={<HospitalSearch></HospitalSearch>}></Route>
+                    <Route path="/hospitalreservation" element={<HospitalReservation></HospitalReservation>}></Route>
+                    <Route path="/notice" element={<Notice></Notice>}></Route>
+                </Routes>
             </div>
         </BrowserRouter>
     );
