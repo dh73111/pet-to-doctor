@@ -102,7 +102,7 @@ public class UserController {
                 resultMap.put("message", "비밀번호가 일치하지 않습니다.");
             } else {
                 status = HttpStatus.OK;
-                String accessToken = JwtTokenUtil.getToken(user.getId().toString(), user.getRole().toString());
+                String accessToken = JwtTokenUtil.getToken(user.getId().toString(), user.getRole());
                 resultMap.put("access-token", accessToken);
             }
 
