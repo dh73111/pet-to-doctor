@@ -89,16 +89,20 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
     public ResponseEntity<Map<String, Object>> login (@RequestBody LoginPostReq loginPostReq){
-        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> resultMap = new HashMap<String, Object>();
         HttpStatus status = null;
 
         try{
             User user = userService.findByEmail(loginPostReq.getEmail());
-            if(user == null || !loginPostReq.getPassword().equals(user.getPassword())){
+            if(user == null) {
                 status = HttpStatus.NOT_ACCEPTABLE;
-            } else{
+                resultMap.put("message", "존재하지 않는 이메일입니다.");
+            } else if (!loginPostReq.getPassword().equals(user.getPassword())) {
+                status = HttpStatus.UNAUTHORIZED;
+                resultMap.put("message", "비밀번호가 일치하지 않습니다.");
+            } else {
                 status = HttpStatus.OK;
-                String accessToken = JwtTokenUtil.getToken(user.getId().toString());
+                String accessToken = JwtTokenUtil.getToken(user.getId().toString(), user.getRole().toString());
                 resultMap.put("access-token", accessToken);
             }
 
