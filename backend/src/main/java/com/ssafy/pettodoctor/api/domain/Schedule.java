@@ -17,7 +17,7 @@ public class Schedule {
     private Integer plusDay;
     private String bitmask;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
 }

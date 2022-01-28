@@ -40,4 +40,8 @@ public class UserService {
     public Boolean isDuplicated(String email) {
         return userRepository.isDuplicated(email);
     }
+
+    public User findByEmail(String email){
+        return userRepository.findByEmail(email);
+    }
 }

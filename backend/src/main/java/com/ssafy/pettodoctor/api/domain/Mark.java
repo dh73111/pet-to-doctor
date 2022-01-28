@@ -13,11 +13,11 @@ public class Mark {
     @Column(name="mark_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="hospital_id")
     private Hospital hospital;
 

@@ -15,11 +15,11 @@ public class Treatment {
     @Column(name = "treatment_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="doctor_id")
     private Doctor doctor;
 
@@ -27,7 +27,7 @@ public class Treatment {
     @JoinColumn(name = "prescription_id")
     private Prescription prescription;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="hospital_id")
     private Hospital hospital;
 

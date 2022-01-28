@@ -26,7 +26,9 @@ public class Prescription {
     private String invoiceCode;
     private String paymentCode;
 
-    private String shippingAddress;
+    @Embedded
+    private Address shippingAddress;
+
     private String shippingName;
     private String shippingTel;
 
