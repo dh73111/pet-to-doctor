@@ -10,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -20,7 +18,7 @@ public class UserService {
     private final PetRepository petRepository;
 
     @Transactional
-    public void signup(UserCommonSignupPostReq signupInfo) {
+    public User signup(UserCommonSignupPostReq signupInfo) {
         // 필수
         User user = User.createCommonUser(signupInfo.getEmail(),
                 signupInfo.getName(), signupInfo.getPassword(), signupInfo.getAddress());
@@ -34,14 +32,20 @@ public class UserService {
                 Pet p = Pet.createPet(pet.getName(), pet.getBirthDate(), pet.getSpecies(), pet.getWeight(), user);
                 petRepository.save(p);
             }
-
+        return user;
     }
 
     public Boolean isDuplicated(String email) {
-        return userRepository.isDuplicated(email);
+        User findUser = userRepository.findByEmail(email);
+
+        if (findUser == null) {
+            return false;
+        } else return true;
     }
 
-    public User findByEmail(String email){
+    public User getUserById(Long id) { return userRepository.findById(id);}
+
+    public User getUserByEmail(String email){
         return userRepository.findByEmail(email);
     }
 }

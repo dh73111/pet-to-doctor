@@ -16,8 +16,9 @@ public class PetRepository {
     public void save(Pet pet){
         if(pet.getId() == null)
             em.persist(pet);
-        else
+        else {
             em.merge(pet);
+        }
     }
 
     public List<Pet> findByUser(Long userId) {
