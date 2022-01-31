@@ -1,5 +1,6 @@
 package com.ssafy.pettodoctor.api.domain;
 
+import com.ssafy.pettodoctor.api.request.TreatmentPostReq;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -46,4 +47,27 @@ public class Treatment {
 
     private Integer price;
     private String url;
+
+
+    public static Treatment createTreatment(TreatmentPostReq req
+            , Doctor doctor, User user, Hospital hospital) {
+        Treatment treatment = new Treatment();
+        treatment.setDoctor(doctor);
+        treatment.setUser(user);
+        treatment.setHospital(hospital);
+        treatment.setPaymentCode(req.getPaymentCode());
+        treatment.setReVisit(req.getReVisit());
+        treatment.setScheduleDate(req.getScheduleDate());
+        treatment.setSymptom(req.getSymptom());
+        treatment.setType(req.getType());
+        treatment.setPrice(req.getPrice());
+
+        // 동물 관련
+        treatment.setPetName(req.getPetName());
+        treatment.setPetSpecies(req.getPetSpecies());
+        treatment.setBirthDate(req.getBirthDate());
+        treatment.setPetWeight(req.getPetWeight());
+
+        return treatment;
+    }
 }

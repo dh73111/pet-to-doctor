@@ -44,4 +44,9 @@ public class UserRepository {
         }
     }
 
+    // 아이디로 유저 찾기
+    public User findById(Long id){
+        return em.find(User.class, id);
+    }
+
 }
