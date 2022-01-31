@@ -26,4 +26,5 @@ public class Hospital {
     private String longitude;
     private String businessNumber;
     private String dongCode;
+    private String name;
 }
