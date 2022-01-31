@@ -1,6 +1,8 @@
 package com.ssafy.pettodoctor.api.repository;
 
+import com.ssafy.pettodoctor.api.domain.Hospital;
 import com.ssafy.pettodoctor.api.domain.Review;
+import com.ssafy.pettodoctor.api.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -17,5 +19,11 @@ public class ReviewRepository {
                 , Review.class)
                 .setParameter("id", id)
                 .getResultList();
+    }
+
+    public Long registerReview(User user, Hospital hospital, String content, Integer rate){
+        Review review = Review.createReview(user, hospital, content, rate);
+        em.persist(review);
+        return review.getId();
     }
 }
