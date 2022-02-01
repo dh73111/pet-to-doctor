@@ -1,6 +1,7 @@
 package com.ssafy.pettodoctor.api.controller;
 
 import com.ssafy.pettodoctor.api.domain.Review;
+import com.ssafy.pettodoctor.api.request.ReviewPostReq;
 import com.ssafy.pettodoctor.api.response.ReviewRes;
 import com.ssafy.pettodoctor.api.service.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,6 +43,32 @@ public class ReviewController {
         try{
             List<Review> reviews = reviewService.findByHospitalId(hospitalId);
             resultMap.put("reviews", convertToResList(reviews));
+            resultMap.put("message", "성공");
+            status = HttpStatus.OK;
+        } catch (Exception e){
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            resultMap.put("message", "서버 오류");
+        }
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
+    @PostMapping
+    @Operation(summary = "리뷰 등록", description = "리뷰를 등록한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "401", description = "인증 실패"),
+            @ApiResponse(responseCode = "404", description = "사용자 없음"),
+            @ApiResponse(responseCode = "500", description = "서버 오류")
+    })
+    public ResponseEntity<Map<String, Object>> registerReview(
+            @RequestBody @Parameter(description = "리뷰 내용") ReviewPostReq reviewPostReq ) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+
+        try{
+            Long reviewId = reviewService.registerReview(reviewPostReq);
+            resultMap.put("reviewId", reviewId);
             resultMap.put("message", "성공");
             status = HttpStatus.OK;
         } catch (Exception e){
