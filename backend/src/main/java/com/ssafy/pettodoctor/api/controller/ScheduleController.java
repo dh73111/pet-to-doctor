@@ -1,8 +1,9 @@
 package com.ssafy.pettodoctor.api.controller;
 
 import com.ssafy.pettodoctor.api.domain.Doctor;
-import com.ssafy.pettodoctor.api.response.DoctorRes;
-import com.ssafy.pettodoctor.api.service.DoctorService;
+import com.ssafy.pettodoctor.api.domain.Schedule;
+import com.ssafy.pettodoctor.api.response.ScheduleRes;
+import com.ssafy.pettodoctor.api.service.ScheduleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -11,63 +12,38 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/doctor")
-@Tag(name = "doctor controller", description = "의사 관련 컨트롤러")
+@RequestMapping("/api/schedule")
+@Tag(name = "schedule controller", description = "스케쥴 관련 컨트롤러")
 @CrossOrigin("*")
-public class DoctorController {
-    private final DoctorService doctorService;
-
-    @GetMapping("/hospital/{hospitalId}")
-    @Operation(summary = "병원키에 해당하는 의사 정보 반환", description = "병원키에 해당하는 의사 정보 리스트를 반환한다.")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "성공"),
-            @ApiResponse(responseCode = "401", description = "인증 실패"),
-            @ApiResponse(responseCode = "404", description = "사용자 없음"),
-            @ApiResponse(responseCode = "500", description = "서버 오류")
-    })
-    public ResponseEntity<Map<String, Object>> findDoctorsByHospitalId(
-            @PathVariable @Parameter(description = "병원키") Long hospitalId ) {
-        Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status = null;
-
-        try{
-            List<Doctor> doctors = doctorService.findByHospitalId(hospitalId);
-            resultMap.put("doctors", convertToResList(doctors));
-            resultMap.put("message", "성공");
-            status = HttpStatus.OK;
-        } catch (Exception e){
-            status = HttpStatus.INTERNAL_SERVER_ERROR;
-            resultMap.put("message", "서버 오류");
-        }
-
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
-    }
+public class ScheduleController {
+    private final ScheduleService scheduleService;
 
     @GetMapping("/{doctorId}")
-    @Operation(summary = "키에 해당하는 의사 정보 반환", description = "키에 해당하는 의사 정보를 반환한다.")
+    @Operation(summary = "의사의 몇일 후 스케줄 정보 반환", description = "의사의 몇일 후 스케줄 정보 반환한다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공"),
             @ApiResponse(responseCode = "401", description = "인증 실패"),
             @ApiResponse(responseCode = "404", description = "사용자 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
-    public ResponseEntity<Map<String, Object>> findDoctorsById(
-            @PathVariable @Parameter(description = "의사키") Long doctorId ) {
+    public ResponseEntity<Map<String, Object>> findSchedule(
+            @PathVariable @Parameter(description = "의사키") Long doctorId,
+            @RequestParam @Parameter(description = "몇일 후") Integer plusDay) {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
         try{
-            Doctor doctor = doctorService.findById(doctorId);
-            resultMap.put("doctor", converToRes(doctor));
+            Schedule schedule = scheduleService.findOneByDoctorId(doctorId, plusDay);
+            resultMap.put("schedule", convertToRes(schedule));
             resultMap.put("message", "성공");
             status = HttpStatus.OK;
         } catch (Exception e){
@@ -78,21 +54,37 @@ public class DoctorController {
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
-    private DoctorRes converToRes(Doctor d){
-        DoctorRes dr = new DoctorRes(d.getId(), d.getEmail(), d.getName()
-                , d.getRole(), d.getTel(),d.getJoinDate(),
-                d.getPysicianLicenseNumber(), d.getSpecialty()
-                , d.getPrice(), d.getHospital().getId());
-        return dr;
-    }
+    @PostMapping("/{doctorId}")
+    @Operation(summary = "의사의 몇일 후 스케줄 정보 갱신", description = "의사의 몇일 후 스케줄 정보 갱신한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "401", description = "인증 실패"),
+            @ApiResponse(responseCode = "404", description = "사용자 없음"),
+            @ApiResponse(responseCode = "500", description = "서버 오류")
+    })
+    public ResponseEntity<Map<String, Object>> updateSchdule(
+            @PathVariable @Parameter(description = "의사키") Long doctorId,
+            @RequestParam @Parameter(description = "몇일 후") Integer plusDay,
+            @RequestParam @Parameter(description = "갱신할 스케쥴 정보") String bitmask) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
 
-    // Doctor 엔티티 리스트를 반환형 타입 리스트로 변환하는 함수
-    private List<DoctorRes> convertToResList(List<Doctor> doctors){
-        List<DoctorRes> result = new ArrayList<>();
-        for(Doctor d : doctors){
-            result.add(converToRes(d));
+        try{
+            Schedule schedule = scheduleService.updateOneByDoctorId(doctorId, plusDay, bitmask);
+            resultMap.put("schedule", convertToRes(schedule));
+            resultMap.put("message", "성공");
+            status = HttpStatus.OK;
+        } catch (Exception e){
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            resultMap.put("message", "서버 오류");
         }
 
-        return result;
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
+    public ScheduleRes convertToRes(Schedule s){
+        ScheduleRes sr = new ScheduleRes(s.getId(), s.getPlusDay(),
+                s.getBitmask(), s.getDoctor().getId());
+        return sr;
     }
 }

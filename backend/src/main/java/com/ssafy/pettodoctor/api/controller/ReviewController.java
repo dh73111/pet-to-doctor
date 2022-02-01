@@ -1,8 +1,6 @@
 package com.ssafy.pettodoctor.api.controller;
 
-import com.ssafy.pettodoctor.api.domain.Doctor;
 import com.ssafy.pettodoctor.api.domain.Review;
-import com.ssafy.pettodoctor.api.response.DoctorRes;
 import com.ssafy.pettodoctor.api.response.ReviewRes;
 import com.ssafy.pettodoctor.api.service.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,7 +41,7 @@ public class ReviewController {
 
         try{
             List<Review> reviews = reviewService.findByHospitalId(hospitalId);
-            resultMap.put("reviews", convertToRes(reviews));
+            resultMap.put("reviews", convertToResList(reviews));
             resultMap.put("message", "성공");
             status = HttpStatus.OK;
         } catch (Exception e){
@@ -54,7 +52,7 @@ public class ReviewController {
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
-    private List<ReviewRes> convertToRes(List<Review> reviews){
+    private List<ReviewRes> convertToResList(List<Review> reviews){
         List<ReviewRes> result = new ArrayList<>();
         for(Review r : reviews){
             ReviewRes rr = new ReviewRes(r.getId(), r.getUser().getId()

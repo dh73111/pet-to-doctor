@@ -27,9 +27,9 @@ public class ScheduleRepository {
                 .getSingleResult();
     }
 
-    public Schedule updateOneByDoctorId(Long id, Integer plusDay, String mask){
+    public Schedule updateOneByDoctorId(Long id, Integer plusDay, String bitmask){
         Schedule schedule = findOneByDoctorId(id, plusDay);
-        schedule.setBitmask(mask);
+        schedule.setBitmask(bitmask);
         return schedule;
     }
 }

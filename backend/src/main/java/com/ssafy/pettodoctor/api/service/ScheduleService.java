@@ -23,7 +23,7 @@ public class ScheduleService {
     }
 
     @Transactional
-    public Schedule updateOneByDoctorId(Long id, Integer plusDay, String mask){
-        return scheduleRepository.updateOneByDoctorId(id, plusDay, mask);
+    public Schedule updateOneByDoctorId(Long id, Integer plusDay, String bitmask){
+        return scheduleRepository.updateOneByDoctorId(id, plusDay, bitmask);
     }
 }

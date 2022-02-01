@@ -34,7 +34,7 @@ public class TreatmentService {
     }
 
     @Transactional
-    Long registerTreatment(TreatmentPostReq treatmentPostReq) {
+    public Long registerTreatment(TreatmentPostReq treatmentPostReq) {
         Doctor doctor = doctorRepository.findById(treatmentPostReq.getDoctorId());
         User user = userRepository.findById(treatmentPostReq.getUserId());
         Hospital hospital = hospitalRepository.findById(treatmentPostReq.getHospitalId());
@@ -43,7 +43,7 @@ public class TreatmentService {
     }
 
     @Transactional
-    Treatment updateTreatment(Long id, TreatmentType type){
+    public Treatment updateTreatment(Long id, TreatmentType type){
         return treatmentRepositry.updateTreatment(id, type);
     }
 }
