@@ -44,14 +44,16 @@ public class MarkController {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         HttpStatus status = null;
 
-        User nowUser = new User();
-        if (SecurityContextHolder.getContext().getAuthentication() != null) {   //마찬가지로 실제로는 jwt검증 과정에서 다 걸러지므로 if문으로 검사도 필요없음
-            AccountUserDetails userDetails = (AccountUserDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
-            nowUser = userService.getUserById(userDetails.getUserId()).get();
+        if (SecurityContextHolder.getContext().getAuthentication() == null) {
+            resultMap.put("message", "사용자 정보가 없습니다.");
+            status = HttpStatus.NOT_FOUND;
+            return new ResponseEntity<Map<String, Object>>(resultMap, status);
         }
         Hospital hospital = new Hospital(); // hospitalService에서 받아오는 걸로 바꿔야 함
 
         try {
+            AccountUserDetails userDetails = (AccountUserDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
+            User nowUser = userService.getUserById(userDetails.getUserId()).get();
             markService.addMark(nowUser, hospital);
             resultMap.put("message", "성공");
             status = HttpStatus.OK;
@@ -76,13 +78,17 @@ public class MarkController {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         HttpStatus status = null;
 
-        User nowUser = new User();
-        if (SecurityContextHolder.getContext().getAuthentication() != null) {   //마찬가지로 실제로는 jwt검증 과정에서 다 걸러지므로 if문으로 검사도 필요없음
-            AccountUserDetails userDetails = (AccountUserDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
-            nowUser = userService.getUserById(userDetails.getUserId()).get();
+        if (SecurityContextHolder.getContext().getAuthentication() == null) {
+            resultMap.put("message", "사용자 정보가 없습니다.");
+            status = HttpStatus.NOT_FOUND;
+            return new ResponseEntity<Map<String, Object>>(resultMap, status);
         }
 
+
+
         try {
+            AccountUserDetails userDetails = (AccountUserDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
+            User nowUser = userService.getUserById(userDetails.getUserId()).get();
             List<Mark> marksOfUser = markService.getMarksOfUser(nowUser);
 
             resultMap.put("message", "성공");
@@ -110,14 +116,15 @@ public class MarkController {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         HttpStatus status = null;
 
-        User nowUser = new User();
-        if (SecurityContextHolder.getContext().getAuthentication() != null) {   //마찬가지로 실제로는 jwt검증 과정에서 다 걸러지므로 if문으로 검사도 필요없음
-            AccountUserDetails userDetails = (AccountUserDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
-            nowUser = userService.getUserById(userDetails.getUserId()).get();
+        if (SecurityContextHolder.getContext().getAuthentication() == null) {
+            resultMap.put("message", "사용자 정보가 없습니다.");
+            status = HttpStatus.NOT_FOUND;
+            return new ResponseEntity<Map<String, Object>>(resultMap, status);
         }
 
-
         try {
+            AccountUserDetails userDetails = (AccountUserDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
+            User nowUser = userService.getUserById(userDetails.getUserId()).get();
             markService.delete(nowUser, markId);
             resultMap.put("message", "성공");
             status = HttpStatus.OK;
