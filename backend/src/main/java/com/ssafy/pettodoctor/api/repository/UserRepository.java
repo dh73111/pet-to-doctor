@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -32,8 +33,9 @@ public class UserRepository {
     }
 
     // Id로 유저 찾기
-    public User findById(Long id) {
-        return em.find(User.class, id);
+    public Optional<User> findById(Long id) {
+        User findUser =  em.find(User.class, id);
+        return Optional.ofNullable(findUser);
     }
 
 }
