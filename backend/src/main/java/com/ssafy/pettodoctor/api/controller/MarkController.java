@@ -32,7 +32,7 @@ public class MarkController {
     private final MarkService markService;
     private final UserService userService;
 
-    @PostMapping("/")
+    @PostMapping("")
     @Operation(summary = "즐겨찾기 추가(미구현)", description = "즐겨찾기를 추가한다. 반환 내용 없음")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공"),
@@ -44,11 +44,6 @@ public class MarkController {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         HttpStatus status = null;
 
-        if (SecurityContextHolder.getContext().getAuthentication() == null) {
-            resultMap.put("message", "사용자 정보가 없습니다.");
-            status = HttpStatus.NOT_FOUND;
-            return new ResponseEntity<Map<String, Object>>(resultMap, status);
-        }
         Hospital hospital = new Hospital(); // hospitalService에서 받아오는 걸로 바꿔야 함
 
         try {
@@ -67,7 +62,7 @@ public class MarkController {
     }
 
 
-    @GetMapping("/")
+    @GetMapping("")
     @Operation(summary = "사용자의 즐겨찾기 목록을 가져온다.", description = "요청에 있는 jwt토큰 주인 사용자의 즐겨찾기 리스트를 반환한다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공"),
@@ -77,14 +72,6 @@ public class MarkController {
     public ResponseEntity<Map<String, Object>> getMarkList() {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         HttpStatus status = null;
-
-        if (SecurityContextHolder.getContext().getAuthentication() == null) {
-            resultMap.put("message", "사용자 정보가 없습니다.");
-            status = HttpStatus.NOT_FOUND;
-            return new ResponseEntity<Map<String, Object>>(resultMap, status);
-        }
-
-
 
         try {
             AccountUserDetails userDetails = (AccountUserDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
@@ -104,7 +91,7 @@ public class MarkController {
     }
 
 
-    @DeleteMapping("/")
+    @DeleteMapping("")
     @Operation(summary = "즐겨찾기 삭제", description = "로그인한 사용자가 즐겨찾기를 삭제한다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공"),
@@ -115,12 +102,6 @@ public class MarkController {
             @RequestParam @Parameter(description = "마크 ID") Long markId) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         HttpStatus status = null;
-
-        if (SecurityContextHolder.getContext().getAuthentication() == null) {
-            resultMap.put("message", "사용자 정보가 없습니다.");
-            status = HttpStatus.NOT_FOUND;
-            return new ResponseEntity<Map<String, Object>>(resultMap, status);
-        }
 
         try {
             AccountUserDetails userDetails = (AccountUserDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
