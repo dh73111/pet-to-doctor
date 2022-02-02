@@ -30,8 +30,9 @@ public class PetRepository {
         return Optional.ofNullable(findPet);
     }
 
-    public void delete(Long id) {
+    public void delete(User user, Long id) {
         Pet findPet = em.find(Pet.class, id);
-        em.remove(findPet);
+        if (findPet.getUser() == user)
+            em.remove(findPet);
     }
 }

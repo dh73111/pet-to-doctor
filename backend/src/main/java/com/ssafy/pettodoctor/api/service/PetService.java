@@ -40,8 +40,8 @@ public class PetService {
     }
 
     @Transactional
-    public void delete(Long petId) {
-        petRepository.delete(petId);
+    public void delete(User user, Long petId) {
+        petRepository.delete(user, petId);
     }
 
     @Transactional
