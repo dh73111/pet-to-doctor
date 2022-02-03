@@ -46,12 +46,6 @@ public class PetController {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
-        if (SecurityContextHolder.getContext().getAuthentication() == null) {
-            resultMap.put("message", "사용자 정보가 없습니다.");
-            status = HttpStatus.NOT_FOUND;
-            return new ResponseEntity<Map<String, Object>>(resultMap, status);
-        }
-
         try {
             AccountUserDetails userDetails = (AccountUserDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
             User nowUser = userService.getUserById(userDetails.getUserId()).get();
@@ -67,11 +61,37 @@ public class PetController {
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
-    @GetMapping("/")
-    @Operation(summary = "사용자의 반려동물 목록을 가져온다.", description = "요청에 있는 jwt토큰 주인 사용자의 반려동물 리스트를 반환한다.")
+    @GetMapping("/{petId}")
+    @Operation(summary = "반려동물 조회", description = "반려동물 조회")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공"),
-            @ApiResponse(responseCode = "404", description = "사용자 또는 병원 없음"),
+            @ApiResponse(responseCode = "404", description = "해당 petId 없음"),
+            @ApiResponse(responseCode = "500", description = "서버 오류")
+    })
+    public ResponseEntity<ResVO<PetRes>> getPet(
+            @RequestParam @Parameter(description = "펫 ID") Long petId) {
+        ResVO<PetRes> result = new ResVO<>();
+        HttpStatus status = null;
+
+        try {
+            Pet findPet = petService.getPetById(petId);
+            result.setData(PetRes.convertToPetRes(findPet));
+            result.setMessage("반려동물 조회 성공");
+            status = HttpStatus.OK;
+
+        } catch (Exception e) {
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            result.setMessage("서버 오류");
+        }
+
+        return new ResponseEntity<ResVO<PetRes>>(result, status);
+    }
+
+    @GetMapping("/")
+    @Operation(summary = "사용자의 반려동물 목록", description = "요청에 있는 jwt토큰 주인 사용자의 반려동물 리스트를 반환한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "404", description = "사용자 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
     public ResponseEntity<ResVO<List<PetRes>>> getPetList() {
@@ -98,11 +118,11 @@ public class PetController {
     @Operation(summary = "반려동물 데이터 삭제", description = "로그인한 사용자의 반려동물 데이터 하나를 삭제한다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공"),
-            @ApiResponse(responseCode = "404", description = "사용자 또는 병원 없음"),
+            @ApiResponse(responseCode = "404", description = "해당 petId 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
     public ResponseEntity<Map<String, Object>> deletePet(
-            @RequestParam @Parameter(description = "마크 ID") Long petId) {
+            @RequestParam @Parameter(description = "펫 ID") Long petId) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         HttpStatus status = null;
 
@@ -121,5 +141,32 @@ public class PetController {
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
+    @PutMapping("/{petId}")
+    @Operation(summary = "반려동물 정보 수정", description = "반려동물 정보 수정")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "404", description = "해당 펫 id 없음"),
+            @ApiResponse(responseCode = "500", description = "서버 오류")
+    })
+    public ResponseEntity<ResVO<PetRes>> changePet(
+            @RequestParam @Parameter(description = "펫 ID") Long petId,
+            @RequestParam @Parameter(description = "애완동물 입력 폼")PetPostReq petReq) {
+        ResVO<PetRes> result = new ResVO<>();
+        HttpStatus status = null;
+
+        try {
+            Pet findPet = petService.getPetById(petId);
+            Pet newPet = petService.change(petId, petReq);
+            result.setData(PetRes.convertToPetRes(newPet));
+            result.setMessage("반려동물 정보 수정 성공");
+            status = HttpStatus.OK;
+
+        } catch (Exception e) {
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            result.setMessage("서버 오류");
+        }
+
+        return new ResponseEntity<ResVO<PetRes>>(result, status);
+    }
 
 }

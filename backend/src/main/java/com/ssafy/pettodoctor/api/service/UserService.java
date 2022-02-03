@@ -5,6 +5,7 @@ import com.ssafy.pettodoctor.api.domain.User;
 import com.ssafy.pettodoctor.api.repository.PetRepository;
 import com.ssafy.pettodoctor.api.repository.UserRepository;
 import com.ssafy.pettodoctor.api.request.PetPostReq;
+import com.ssafy.pettodoctor.api.request.UserChangeReq;
 import com.ssafy.pettodoctor.api.request.UserCommonSignupPostReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -51,5 +52,29 @@ public class UserService {
 
     public User getUserByEmail(String email){
         return userRepository.findByEmail(email);
+    }
+
+    public void deleteNowUser(User nowUser) {
+        userRepository.delete(nowUser);
+    }
+
+    public Optional<User> changeUser(Long userId, UserChangeReq urq) {
+        User user = userRepository.findById(userId).get();
+        if (urq.getName() != null) {
+            user.setName(urq.getName());
+        }
+        if (urq.getAddress() != null) {
+            user.setAddress(urq.getAddress());
+        }
+        if (urq.getTel() != null) {
+            user.setTel(urq.getTel());
+        }
+        if (urq.getJoinDate() != null) {
+            user.setJoinDate(urq.getJoinDate());
+        }
+        if (urq.getIsCertificated() != null) {
+            user.setIsCertificated(urq.getIsCertificated());
+        }
+        return Optional.ofNullable(user);
     }
 }
