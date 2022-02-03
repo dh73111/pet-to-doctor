@@ -93,7 +93,7 @@ public class UserController {
         HttpStatus status = null;
 
         try{
-            User user = userService.findByEmail(loginPostReq.getEmail());
+            User user = userService.getUserByEmail(loginPostReq.getEmail());
             if(user == null) {
                 status = HttpStatus.NOT_ACCEPTABLE;
                 resultMap.put("message", "존재하지 않는 이메일입니다.");

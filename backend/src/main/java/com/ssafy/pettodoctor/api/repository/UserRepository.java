@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -20,21 +21,8 @@ public class UserRepository {
         em.persist(user);
     }
 
-    // 이메일 중복 확인
-    public Boolean isDuplicated(String email) {
-        try {
-            em.createQuery("select u from User u where u.email = :email", User.class)
-                    .setParameter("email", email)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return false;
-        }
-
-        return true;
-    }
-
     // 이메일로 유저 찾기
-    public User findByEmail(String email){
+    public User findByEmail(String email) {
         try {
             return em.createQuery("select u from User u where u.email = :email", User.class)
                     .setParameter("email", email)
@@ -42,6 +30,12 @@ public class UserRepository {
         } catch (NoResultException e) {
             return null;
         }
+    }
+
+    // Id로 유저 찾기
+    public Optional<User> findById(Long id) {
+        User findUser =  em.find(User.class, id);
+        return Optional.ofNullable(findUser);
     }
 
 }
