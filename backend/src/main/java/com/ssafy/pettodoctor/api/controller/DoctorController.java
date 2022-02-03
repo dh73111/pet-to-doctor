@@ -114,19 +114,21 @@ public class DoctorController {
             @ApiResponse(responseCode = "404", description = "사용자 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
-    public ResponseEntity<Map<String, Object>> getDoctor(
+    public ResponseEntity<ResVO<DoctorRes>> getDoctor(
             @RequestParam @Parameter(description = "의사 아이디") Long doctor_id
     ) {
-        Map<String, Object> resultMap = new HashMap<>();
+        ResVO<DoctorRes> result = new ResVO<>();
         HttpStatus status = null;
         try {
-            resultMap.put("doctor_info", doctorService.findById(doctor_id));
+            Doctor doctor = doctorService.findById(doctor_id);
+            result.setData(DoctorRes.converToRes(doctor));
+            result.setMessage("성공");
             status = HttpStatus.OK;
         } catch (Exception e) {
             status = HttpStatus.INTERNAL_SERVER_ERROR;
-            resultMap.put("message", "서버 오류");
+            result.setMessage("서버오류");
         }
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        return new ResponseEntity<ResVO<DoctorRes>>(result, status);
     }
 
     @PostMapping("/password")
