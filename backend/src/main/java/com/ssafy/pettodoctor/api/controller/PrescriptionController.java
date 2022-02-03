@@ -1,7 +1,11 @@
 package com.ssafy.pettodoctor.api.controller;
 
+import com.ssafy.pettodoctor.api.domain.Prescription;
 import com.ssafy.pettodoctor.api.domain.TreatmentType;
 import com.ssafy.pettodoctor.api.request.PrescriptionPostReq;
+import com.ssafy.pettodoctor.api.response.DoctorRes;
+import com.ssafy.pettodoctor.api.response.PrescriptionRes;
+import com.ssafy.pettodoctor.api.response.ResVO;
 import com.ssafy.pettodoctor.api.service.PrescriptionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -59,20 +63,21 @@ public class PrescriptionController {
             @ApiResponse(responseCode = "404", description = "사용자 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
-    public ResponseEntity<Map<String, Object>> getPrescription(
+    public ResponseEntity<ResVO<PrescriptionRes>> getPrescription(
             @RequestParam @Parameter(description = "리스트 아이디") Long prescription_id
     ) {
-        Map<String, Object> resultMap = new HashMap<>();
+        ResVO<PrescriptionRes> result = new ResVO<>();
         HttpStatus status = null;
         try {
-
-            resultMap.put("prescription_info", prescriptionService.findById(prescription_id));
+            Prescription prescription = prescriptionService.findById(prescription_id);
+            result.setData(PrescriptionRes.converToRes(prescription));
+            result.setMessage("성공");
             status = HttpStatus.OK;
         } catch (Exception e) {
             status = HttpStatus.INTERNAL_SERVER_ERROR;
-            resultMap.put("message", "서버 오류");
+            result.setMessage("서버오류");
         }
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        return new ResponseEntity<ResVO<PrescriptionRes>>(result, status);
     }
 
     @GetMapping("/list")
@@ -83,11 +88,11 @@ public class PrescriptionController {
             @ApiResponse(responseCode = "404", description = "사용자 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
-    public ResponseEntity<Map<String, Object>> getPrescriptionList(
+    public ResponseEntity<ResVO<PrescriptionRes>> getPrescriptionList(
             @RequestParam @Parameter(description = "의사 아이디") Long doctor_id ,
             @RequestParam @Parameter(description = "상태(전,후,전취,후취,완)") TreatmentType type
     ) {
-        Map<String, Object> resultMap = new HashMap<>();
+        ResVO<PrescriptionRes> result = new ResVO<>();
         HttpStatus status = null;
         try {
 
@@ -99,9 +104,9 @@ public class PrescriptionController {
             status = HttpStatus.OK;
         } catch (Exception e) {
             status = HttpStatus.INTERNAL_SERVER_ERROR;
-            resultMap.put("message", "서버 오류");
+            result.setMessage("서버오류");
         }
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        return new ResponseEntity<ResVO<PrescriptionRes>>(result, status);
     }
 
     @PutMapping("/shipping")
