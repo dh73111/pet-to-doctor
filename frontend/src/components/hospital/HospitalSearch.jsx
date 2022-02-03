@@ -17,6 +17,7 @@ import StarIcon from "@mui/icons-material/Star";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/system";
 import { NavLink } from "react-router-dom";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 /* global kakao */
 function HospitalSearch(props) {
     const { kakao } = window;
@@ -340,6 +341,15 @@ function HospitalSearch(props) {
         return (
             <Grid container>
                 <Grid item xs={3.3}>
+                    <Box
+                        sx={{ position: "absolute", left: "780px", top: "550px" }}
+                        onClick={() => {
+                            setMode("list");
+                        }}
+                    >
+                        <ChevronLeftIcon sx={{ fontSize: 40 }}></ChevronLeftIcon>
+                    </Box>
+
                     <Paper style={{ maxHeight: 890, overflow: "auto" }} elevation={0}>
                         <img
                             src="./img/hospital.png"
@@ -399,7 +409,7 @@ function HospitalSearch(props) {
                 <SearchForm></SearchForm>
                 {isSearch === true ? (
                     <MyDiv sx={{ mx: 3.4 }} variant="contained">
-                        <div id="searchList"> </div>
+                        <div id="searchList" style={{ display: "none" }}></div>
                     </MyDiv>
                 ) : (
                     ""
