@@ -1,12 +1,14 @@
 package com.ssafy.pettodoctor.api.service;
 
 import com.ssafy.pettodoctor.api.domain.Prescription;
+import com.ssafy.pettodoctor.api.domain.TreatmentType;
 import com.ssafy.pettodoctor.api.repository.PrescriptionRepository;
 import com.ssafy.pettodoctor.api.request.PrescriptionPostReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -14,6 +16,10 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class PrescriptionService {
     private final PrescriptionRepository prescriptionRepository;
+
+    public List<Prescription> findByIdList(Long doctor_id, TreatmentType type) {
+        return prescriptionRepository.findByIdList(doctor_id, type);
+    }
 
     @Transactional
     public void writeCertificate(PrescriptionPostReq certificateInfo){

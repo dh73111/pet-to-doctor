@@ -6,6 +6,9 @@ import com.ssafy.pettodoctor.api.domain.Prescription;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter @Setter
 public class PrescriptionRes {
     private Long id;
@@ -39,11 +42,19 @@ public class PrescriptionRes {
         this.shippingTel = shippingTel;
     }
 
-    public static PrescriptionRes converToRes(Prescription p){
+    public static PrescriptionRes convertToRes(Prescription p){
         PrescriptionRes pr = new PrescriptionRes(p.getId(), p.getAdministration(), p.getMedicine()
         , p.getDiagnosis(), p.getOpinion(), p.getPrice(), p.getType(), p.getIsShipping(), p.getInvoiceCode()
         , p.getPaymentCode(), p.getShippingAddress(), p.getShippingName(), p.getShippingTel());
 
         return pr;
+    }
+
+    public static List<PrescriptionRes> convertToResList(List<Prescription> prescriptions) {
+        List<PrescriptionRes> result = new ArrayList<>();
+        for(Prescription p : prescriptions){
+            result.add(convertToRes(p));
+        }
+        return result;
     }
 }
