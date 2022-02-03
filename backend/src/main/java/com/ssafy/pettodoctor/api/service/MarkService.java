@@ -19,12 +19,13 @@ import java.util.Optional;
 public class MarkService {
 
     private final MarkRepository markRepository;
-    private final UserService userService;
+    private final HospitalService hospitalService;
 
     @Transactional
-    public Optional<Mark> addMark(User user, Hospital hospital) { // 테스트를 위해 user를 인자로 쓸 수 있게했지만 실제로 쓸때는 없앨 것.
+    public Optional<Mark> addMark(User user, Long hospitalId) { // 테스트를 위해 user를 인자로 쓸 수 있게했지만 실제로 쓸때는 없앨 것.
 
         Mark mark = new Mark();
+        Hospital hospital = hospitalService.findById(hospitalId);
         mark.setUser(user);
         mark.setHospital(hospital);     //hospital 서비스에서 가져오기
         mark = markRepository.save(mark);
