@@ -40,12 +40,13 @@ public class TreatmentController {
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
     public ResponseEntity<ResVO<List<TreatmentRes>>> findTreatmentsByDoctorId(
-            @PathVariable @Parameter(description = "의사키") Long doctorId) {
+            @PathVariable @Parameter(description = "의사키") Long doctorId,
+            @RequestParam @Parameter(description = "상태") TreatmentType treatmentType) {
         ResVO<List<TreatmentRes>> result = new ResVO<>();
         HttpStatus status = null;
 
         try{
-            List<Treatment> treatments = treatmentService.findByDoctorId(doctorId);
+            List<Treatment> treatments = treatmentService.findByDoctorId(doctorId, treatmentType);
             result.setData(TreatmentRes.convertToResList(treatments));
             result.setMessage("성공");
             status = HttpStatus.OK;
@@ -66,12 +67,13 @@ public class TreatmentController {
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
     public ResponseEntity<ResVO<List<TreatmentRes>>> findTreatmentsByUserId(
-            @PathVariable @Parameter(description = "사용자키") Long userId) {
+            @PathVariable @Parameter(description = "사용자키") Long userId,
+            @RequestParam @Parameter(description = "상태") TreatmentType treatmentType) {
         ResVO<List<TreatmentRes>> result = new ResVO<>();
         HttpStatus status = null;
 
         try{
-            List<Treatment> treatments = treatmentService.findByUserId(userId);
+            List<Treatment> treatments = treatmentService.findByUserId(userId, treatmentType);
             result.setData(TreatmentRes.convertToResList(treatments));
             result.setMessage("성공");
             status = HttpStatus.OK;

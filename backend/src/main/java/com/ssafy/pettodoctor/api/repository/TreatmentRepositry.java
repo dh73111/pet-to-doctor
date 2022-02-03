@@ -17,17 +17,19 @@ public class TreatmentRepositry {
         return em.find(Treatment.class, id);
     }
 
-    public List<Treatment> findByUserId(Long id){
-        return em.createQuery("select t from Treatment t join t.user u where u.id = :id",
+    public List<Treatment> findByUserId(Long id, TreatmentType treatmentType){
+        return em.createQuery("select t from Treatment t join t.user u where u.id = :id and t.type = :treatmentType",
                 Treatment.class)
                 .setParameter("id", id)
+                .setParameter("treatmentType", treatmentType)
                 .getResultList();
     }
 
-    public List<Treatment> findByDoctorId(Long id){
-        return em.createQuery("select t from Treatment t join t.doctor d where d.id = :id",
+    public List<Treatment> findByDoctorId(Long id, TreatmentType treatmentType){
+        return em.createQuery("select t from Treatment t join t.doctor d where d.id = :id and t.type =: treatmentType",
                         Treatment.class)
                 .setParameter("id", id)
+                .setParameter("treatmentType", treatmentType)
                 .getResultList();
     }
 

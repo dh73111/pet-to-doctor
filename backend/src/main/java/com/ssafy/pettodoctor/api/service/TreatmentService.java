@@ -25,12 +25,12 @@ public class TreatmentService {
         return treatmentRepositry.findByTreatmentId(id);
     }
 
-    public List<Treatment> findByDoctorId(Long id){
-        return treatmentRepositry.findByDoctorId(id);
+    public List<Treatment> findByDoctorId(Long id, TreatmentType treatmentType){
+        return treatmentRepositry.findByDoctorId(id, treatmentType);
     }
 
-    public List<Treatment> findByUserId(Long id){
-        return treatmentRepositry.findByUserId(id);
+    public List<Treatment> findByUserId(Long id, TreatmentType treatmentType){
+        return treatmentRepositry.findByUserId(id, treatmentType);
     }
 
     @Transactional
