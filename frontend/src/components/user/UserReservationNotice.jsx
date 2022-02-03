@@ -17,6 +17,8 @@ function UserReservationNotice() {
         },
     },
   });
+
+
   return (
     <ThemeProvider theme={newTheme}>
       <NavBar />
