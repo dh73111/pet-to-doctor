@@ -1,9 +1,9 @@
 import "./App.css";
-import Container from "@mui/material/Container";
 import NavBar from "./components/NavBar";
 import Home from "./components/Home";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HospitalReservation from "./components/hospital/HospitalReservation";
+import HospitalSearchReservation from "./components/hospital/HospitalSearchReservation";
 import HospitalSearch from "./components/hospital/HospitalSearch";
 import Notice from "./components/Notice";
 // import UserLoginModal from "./components/UserLoginModal";
@@ -22,6 +22,10 @@ function App() {
                 <Routes>
                     <Route path="/hospitalsearch" element={<HospitalSearch></HospitalSearch>}></Route>
                     <Route path="/hospitalreservation" element={<HospitalReservation></HospitalReservation>}></Route>
+                    <Route
+                        path="/hospitalsearchreservation"
+                        element={<HospitalSearchReservation></HospitalSearchReservation>}
+                    ></Route>
                     <Route path="/notice" element={<Notice></Notice>}></Route>
                 </Routes>
             </div>
