@@ -36,7 +36,7 @@ public class TreatmentService {
     @Transactional
     public Long registerTreatment(TreatmentPostReq treatmentPostReq) {
         Doctor doctor = doctorRepository.findById(treatmentPostReq.getDoctorId());
-        User user = userRepository.findById(treatmentPostReq.getUserId());
+        User user = userRepository.findById(treatmentPostReq.getUserId()).get();
         Hospital hospital = hospitalRepository.findById(treatmentPostReq.getHospitalId());
 
         return treatmentRepositry.registerTreatment(treatmentPostReq, doctor, user, hospital);

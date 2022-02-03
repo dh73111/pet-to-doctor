@@ -27,7 +27,7 @@ public class ReviewService {
 
     @Transactional
     public Long registerReview(ReviewPostReq reviewPostReq){
-        User user = userRepository.findById(reviewPostReq.getUserId());
+        User user = userRepository.findById(reviewPostReq.getUserId()).get();
         Hospital hospital = hospitalRepository.findById(reviewPostReq.getHospitalId());
         return reviewRepository.registerReview(user, hospital
                 , reviewPostReq.getContent(), reviewPostReq.getRate());
