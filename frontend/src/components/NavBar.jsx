@@ -36,7 +36,7 @@ const style = {
 };
 
 const NavBarEl = (props) => {
-    console.log(props);
+    // console.log(props);
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [open, setOpen] = React.useState(false);
