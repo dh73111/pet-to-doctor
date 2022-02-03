@@ -34,8 +34,8 @@ public class PetController {
     private final PetService petService;
     private final UserService userService;
 
-    @PostMapping("/")
-    @Operation(summary = "반려동물 등록", description = "반려동물을 추가로 등록한다.")
+    @PostMapping("")
+    @Operation(summary = "반려동물 등록", description = "반려동물을 추가로 등록한다.(로그인필요)")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공"),
             @ApiResponse(responseCode = "404", description = "사용자 없음"),
@@ -69,7 +69,7 @@ public class PetController {
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
     public ResponseEntity<ResVO<PetRes>> getPet(
-            @RequestParam @Parameter(description = "펫 ID") Long petId) {
+            @PathVariable("petId") @Parameter(description = "펫 ID") Long petId) {
         ResVO<PetRes> result = new ResVO<>();
         HttpStatus status = null;
 
@@ -87,8 +87,8 @@ public class PetController {
         return new ResponseEntity<ResVO<PetRes>>(result, status);
     }
 
-    @GetMapping("/")
-    @Operation(summary = "사용자의 반려동물 목록", description = "요청에 있는 jwt토큰 주인 사용자의 반려동물 리스트를 반환한다.")
+    @GetMapping("/list")
+    @Operation(summary = "사용자의 반려동물 목록", description = "로그인 되어있는 사용자의 반려동물 리스트를 반환한다.(로그인필요)")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공"),
             @ApiResponse(responseCode = "404", description = "사용자 없음"),
@@ -114,15 +114,15 @@ public class PetController {
         return new ResponseEntity<ResVO<List<PetRes>>>(result, status);
     }
 
-    @DeleteMapping("")
-    @Operation(summary = "반려동물 데이터 삭제", description = "로그인한 사용자의 반려동물 데이터 하나를 삭제한다.")
+    @DeleteMapping("/{petId}")
+    @Operation(summary = "반려동물 데이터 삭제", description = "로그인한 사용자의 반려동물 데이터 하나를 삭제한다.(로그인필요)")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공"),
             @ApiResponse(responseCode = "404", description = "해당 petId 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
     public ResponseEntity<Map<String, Object>> deletePet(
-            @RequestParam @Parameter(description = "펫 ID") Long petId) {
+            @PathVariable("petId") @Parameter(description = "펫 ID") Long petId) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         HttpStatus status = null;
 
@@ -149,13 +149,12 @@ public class PetController {
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
     public ResponseEntity<ResVO<PetRes>> changePet(
-            @RequestParam @Parameter(description = "펫 ID") Long petId,
-            @RequestParam @Parameter(description = "애완동물 입력 폼")PetPostReq petReq) {
+            @PathVariable("petId") @Parameter(description = "펫 ID") Long petId,
+            @RequestBody @Parameter(description = "애완동물 입력 폼")PetPostReq petReq) {
         ResVO<PetRes> result = new ResVO<>();
         HttpStatus status = null;
 
         try {
-            Pet findPet = petService.getPetById(petId);
             Pet newPet = petService.change(petId, petReq);
             result.setData(PetRes.convertToPetRes(newPet));
             result.setMessage("반려동물 정보 수정 성공");
