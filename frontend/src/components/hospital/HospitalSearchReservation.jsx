@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import FilledInput from "@mui/material/FilledInput";
@@ -42,8 +43,14 @@ function HospitalSearchReservation(props) {
 
     function MyButton(props) {
         return (
-            <Button variant="outlined" sx={{ width: "98%" }}>
-                Primary
+            <Button
+                variant="outlined"
+                sx={{ width: "98%", mt: 1, mx: 1 }}
+                onClick={() => {
+                    console.log(props.time);
+                }}
+            >
+                {props.time}
             </Button>
         );
     }
@@ -131,41 +138,42 @@ function HospitalSearchReservation(props) {
                             <Box sx={{ fontSize: 20, fontWeight: "bold", mt: 2 }}>한마디 : 최선을 다하겠습니다.</Box>
                         </Grid>
                     </Grid>
-                    <Box sx={{ fontWeight: "bold", mt: 3, fontSize: 22 }}> 기본정보</Box>
-                    <Box>
-                        <FormControl fullWidth sx={{ m: 1 }} variant="filled">
-                            <InputLabel htmlFor="filled-adornment-name">이름</InputLabel>
-                            <FilledInput
-                                id="filled-adornment-name"
-                                value={values.amount}
-                                onChange={handleChange("name")}
-                                startAdornment={<InputAdornment position="start"></InputAdornment>}
-                            />
-                        </FormControl>
-                        <FormControl fullWidth sx={{ m: 1 }} variant="filled">
-                            <InputLabel htmlFor="filled-adornment-specific">종</InputLabel>
-                            <FilledInput
-                                id="filled-adornment-specific"
-                                value={values.specific}
-                                onChange={handleChange("specific")}
-                                startAdornment={<InputAdornment position="start"></InputAdornment>}
-                            />
-                        </FormControl>
-                        <FormControl fullWidth sx={{ m: 1 }} variant="filled">
-                            <InputLabel htmlFor="filled-adornment-weight">몸무게</InputLabel>
-                            <FilledInput
-                                id="filled-adornment-weight"
-                                value={values.weight}
-                                onChange={handleChange("weight")}
-                                startAdornment={<InputAdornment position="start"></InputAdornment>}
-                            />
-                        </FormControl>
-                    </Box>
-                    <Box sx={{ fontWeight: "bold", mt: 3, fontSize: 22 }}> 예약 날짜</Box>
                     <Box>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <Grid container>
-                                <Grid item xs={12} md={2}>
+                                <Grid item xs={8}>
+                                    <Box sx={{ fontWeight: "bold", mt: 3, fontSize: 22 }}> 기본정보</Box>
+                                    <FormControl fullWidth sx={{ m: 1 }} variant="filled">
+                                        <InputLabel htmlFor="filled-adornment-name">이름</InputLabel>
+                                        <FilledInput
+                                            id="filled-adornment-name"
+                                            value={values.amount}
+                                            onChange={handleChange("name")}
+                                            startAdornment={<InputAdornment position="start"></InputAdornment>}
+                                        />
+                                    </FormControl>
+                                    <FormControl fullWidth sx={{ m: 1 }} variant="filled">
+                                        <InputLabel htmlFor="filled-adornment-specific">종</InputLabel>
+                                        <FilledInput
+                                            id="filled-adornment-specific"
+                                            value={values.specific}
+                                            onChange={handleChange("specific")}
+                                            startAdornment={<InputAdornment position="start"></InputAdornment>}
+                                        />
+                                    </FormControl>
+                                    <FormControl fullWidth sx={{ m: 1 }} variant="filled">
+                                        <InputLabel htmlFor="filled-adornment-weight">몸무게</InputLabel>
+                                        <FilledInput
+                                            id="filled-adornment-weight"
+                                            value={values.weight}
+                                            onChange={handleChange("weight")}
+                                            startAdornment={<InputAdornment position="start"></InputAdornment>}
+                                        />
+                                    </FormControl>
+                                </Grid>
+
+                                <Grid item xs={4} md={2}>
+                                    <Box sx={{ fontWeight: "bold", mt: 3, fontSize: 22, mx: 2 }}> 예약 날짜</Box>
                                     <CalendarPicker
                                         date={date}
                                         onChange={(newDate) => {
@@ -180,30 +188,62 @@ function HospitalSearchReservation(props) {
                     <Box sx={{ fontWeight: "bold", mt: 3, fontSize: 22 }}>
                         <AccessTimeIcon /> 시간 선택
                     </Box>
-                    <Grid container>
+                    <Grid container sx={{ mt: 2 }}>
                         <Grid item xs={1.5}>
-                            <MyButton time="12:15" />
-                            <Button variant="outlined">Primary</Button>
+                            <MyButton time="10:00" />
+                            <MyButton time="12:55" />
+                            <MyButton time="15:50" />
+                            <MyButton time="18:45" />
                         </Grid>
                         <Grid item xs={1.5}>
-                            <Button variant="outlined">Primary</Button>
+                            <MyButton time="10:25" />
+                            <MyButton time="13:20" />
+                            <MyButton time="16:15" />
                         </Grid>
                         <Grid item xs={1.5}>
-                            <Button variant="outlined">Primary</Button>
+                            <MyButton time="10:50" />
+                            <MyButton time="13:45" />
+                            <MyButton time="16:40" />
                         </Grid>
                         <Grid item xs={1.5}>
-                            <Button variant="outlined">Primary</Button>
+                            <MyButton time="11:15" />
+                            <MyButton time="14:10" />
+                            <MyButton time="17:05" />
                         </Grid>
                         <Grid item xs={1.5}>
-                            <Button variant="outlined">Primary</Button>
+                            <MyButton time="11:40" />
+                            <MyButton time="14:35" />
+                            <MyButton time="17:30" />
                         </Grid>
                         <Grid item xs={1.5}>
-                            <Button variant="outlined">Primary</Button>
+                            <MyButton time="12:05" />
+                            <MyButton time="15:00" />
+                            <MyButton time="17:55" />
                         </Grid>
                         <Grid item xs={1.5}>
-                            <Button variant="outlined">Primary</Button>
+                            <MyButton time="12:30" />
+                            <MyButton time="15:25" />
+                            <MyButton time="18:20" />
                         </Grid>
                     </Grid>
+                    <Box sx={{ fontWeight: "bold", mt: 5, fontSize: 22 }}>
+                        특이사항(이전 병력, 증상, 상담을 원하는 이유 작성 부탁드립니다.)
+                    </Box>
+                    <Box sx={{ mt: 2 }}>
+                        <TextField
+                            id="filled-multiline-static"
+                            label="특이사항"
+                            multiline
+                            rows={4}
+                            variant="filled"
+                            sx={{ width: "100%" }}
+                        />
+                    </Box>
+                    <Box sx={{ mx: 130, width: "100px", mt: 3 }}>
+                        <Button variant="contained" onClick={() => {}}>
+                            예약하기
+                        </Button>
+                    </Box>
                 </Paper>
             </Grid>
             <Grid item xs={2.5}></Grid>
