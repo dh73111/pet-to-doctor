@@ -24,7 +24,7 @@ public class Mark {
     private User user;
 
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)   //  Hospital 서비스 만들기 전 테스트 용. 끝나면 cascaede 지울 것.
+    @ManyToOne(fetch = FetchType.LAZY)  
     @JoinColumn(name = "hospital_id")
     private Hospital hospital;
 }
