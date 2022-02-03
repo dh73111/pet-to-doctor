@@ -2,6 +2,7 @@ package com.ssafy.pettodoctor.api.controller;
 
 import com.ssafy.pettodoctor.api.domain.Doctor;
 import com.ssafy.pettodoctor.api.domain.Hospital;
+import com.ssafy.pettodoctor.api.response.ResVO;
 import com.ssafy.pettodoctor.api.service.DoctorService;
 import com.ssafy.pettodoctor.api.service.HospitalService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,22 +35,22 @@ public class HospitalController {
             @ApiResponse(responseCode = "404", description = "사용자 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
-    public ResponseEntity<Map<String, Object>> findById(
+    public ResponseEntity<ResVO<Hospital>> findById(
             @PathVariable @Parameter(description = "병원키") Long hospitalId ) {
-        Map<String, Object> resultMap = new HashMap<>();
+        ResVO<Hospital> result = new ResVO<>();
         HttpStatus status = null;
 
         try{
             Hospital hospital = hospitalService.findById(hospitalId);
-            resultMap.put("hospital", hospital);
-            resultMap.put("message", "성공");
+            result.setData(hospital);
+            result.setMessage("성공");
             status = HttpStatus.OK;
         } catch (Exception e){
             status = HttpStatus.INTERNAL_SERVER_ERROR;
-            resultMap.put("message", "서버 오류");
+            result.setMessage("서버 오류");
         }
 
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        return new ResponseEntity<ResVO<Hospital>>(result, status);
     }
 
     @GetMapping("/dong/{dongCode}")
@@ -60,22 +61,22 @@ public class HospitalController {
             @ApiResponse(responseCode = "404", description = "사용자 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
-    public ResponseEntity<Map<String, Object>> findByDongCode(
+    public ResponseEntity<ResVO<List<Hospital>>> findByDongCode(
             @PathVariable @Parameter(description = "동코드") String dongCode ) {
-        Map<String, Object> resultMap = new HashMap<>();
+        ResVO<List<Hospital>> result = new ResVO<>();
         HttpStatus status = null;
 
         try{
             List<Hospital> hospitals = hospitalService.findByDongCode(dongCode);
-            resultMap.put("hospitals", hospitals);
-            resultMap.put("message", "성공");
+            result.setData(hospitals);
+            result.setMessage("성공");
             status = HttpStatus.OK;
         } catch (Exception e){
             status = HttpStatus.INTERNAL_SERVER_ERROR;
-            resultMap.put("message", "서버 오류");
+            result.setMessage("서버 오류");
         }
 
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        return new ResponseEntity<ResVO<List<Hospital>>>(result, status);
     }
 
     @GetMapping("/name")
@@ -86,21 +87,21 @@ public class HospitalController {
             @ApiResponse(responseCode = "404", description = "사용자 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
-    public ResponseEntity<Map<String, Object>> findByName(
+    public ResponseEntity<ResVO<List<Hospital>>> findByName(
             @RequestParam @Parameter(description = "이름") String name ) {
-        Map<String, Object> resultMap = new HashMap<>();
+        ResVO<List<Hospital>> result = new ResVO<>();
         HttpStatus status = null;
 
         try{
             List<Hospital> hospitals = hospitalService.findByName(name);
-            resultMap.put("hospitals", hospitals);
-            resultMap.put("message", "성공");
+            result.setData(hospitals);
+            result.setMessage("성공");
             status = HttpStatus.OK;
         } catch (Exception e){
             status = HttpStatus.INTERNAL_SERVER_ERROR;
-            resultMap.put("message", "서버 오류");
+            result.setMessage("서버 오류");
         }
 
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        return new ResponseEntity<ResVO<List<Hospital>>>(result, status);
     }
 }

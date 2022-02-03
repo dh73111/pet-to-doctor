@@ -1,11 +1,14 @@
 package com.ssafy.pettodoctor.api.response;
 
+import com.ssafy.pettodoctor.api.domain.Treatment;
 import com.ssafy.pettodoctor.api.domain.TreatmentType;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter @Setter
 public class TreatmentRes {
@@ -49,5 +52,22 @@ public class TreatmentRes {
         this.petWeight = petWeight;
         this.price = price;
         this.url = url;
+    }
+
+    public static TreatmentRes convertToRes(Treatment t){
+        TreatmentRes tr = new TreatmentRes(t.getId(), t.getUser().getId(), t.getDoctor().getId()
+                ,t.getPrescription() != null ? t.getPrescription().getId() : null, t.getHospital().getId()
+                ,t.getPaymentCode(), t.getScheduleDate(), t.getType()
+                ,t.getReVisit(), t.getPetName(), t.getSymptom(), t.getBirthDate()
+                ,t.getPetSpecies(), t.getPetWeight(), t.getPrice(), t.getUrl());
+        return tr;
+    }
+
+    public static List<TreatmentRes> convertToResList(List<Treatment> treatments){
+        List<TreatmentRes> result = new ArrayList<>();
+        for(Treatment t : treatments){
+            result.add(convertToRes(t));
+        }
+        return result;
     }
 }

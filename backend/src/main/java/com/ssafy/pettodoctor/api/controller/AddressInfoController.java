@@ -2,6 +2,7 @@ package com.ssafy.pettodoctor.api.controller;
 
 import com.ssafy.pettodoctor.api.domain.AddressInfo;
 import com.ssafy.pettodoctor.api.domain.Hospital;
+import com.ssafy.pettodoctor.api.response.ResVO;
 import com.ssafy.pettodoctor.api.service.AddressInfoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -33,21 +34,21 @@ public class AddressInfoController {
             @ApiResponse(responseCode = "404", description = "사용자 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
-    public ResponseEntity<Map<String, Object>> findByName(
+    public ResponseEntity<ResVO<List<AddressInfo>>> findByName(
             @RequestParam @Parameter(description = "이름") String name ) {
-        Map<String, Object> resultMap = new HashMap<>();
+        ResVO<List<AddressInfo>> result = new ResVO<>();
         HttpStatus status = null;
 
         try{
             List<AddressInfo> addressInfos = addressInfoService.findByAddress(name);
-            resultMap.put("addressInfos", addressInfos);
-            resultMap.put("message", "성공");
+            result.setData(addressInfos);
+            result.setMessage("성공");
             status = HttpStatus.OK;
         } catch (Exception e){
             status = HttpStatus.INTERNAL_SERVER_ERROR;
-            resultMap.put("message", "서버 오류");
+            result.setMessage("서버오류");
         }
 
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        return new ResponseEntity<ResVO<List<AddressInfo>>>(result, status);
     }
 }

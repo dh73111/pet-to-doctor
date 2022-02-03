@@ -2,6 +2,7 @@ package com.ssafy.pettodoctor.api.controller;
 
 import com.ssafy.pettodoctor.api.domain.Doctor;
 import com.ssafy.pettodoctor.api.domain.Schedule;
+import com.ssafy.pettodoctor.api.response.ResVO;
 import com.ssafy.pettodoctor.api.response.ScheduleRes;
 import com.ssafy.pettodoctor.api.service.ScheduleService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,23 +36,23 @@ public class ScheduleController {
             @ApiResponse(responseCode = "404", description = "사용자 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
-    public ResponseEntity<Map<String, Object>> findSchedule(
+    public ResponseEntity<ResVO<ScheduleRes>> findSchedule(
             @PathVariable @Parameter(description = "의사키") Long doctorId,
             @RequestParam @Parameter(description = "몇일 후") Integer plusDay) {
-        Map<String, Object> resultMap = new HashMap<>();
+        ResVO<ScheduleRes> result = new ResVO<>();
         HttpStatus status = null;
 
         try{
             Schedule schedule = scheduleService.findOneByDoctorId(doctorId, plusDay);
-            resultMap.put("schedule", convertToRes(schedule));
-            resultMap.put("message", "성공");
+            result.setData(ScheduleRes.convertToRes(schedule));
+            result.setMessage("성공");
             status = HttpStatus.OK;
         } catch (Exception e){
             status = HttpStatus.INTERNAL_SERVER_ERROR;
-            resultMap.put("message", "서버 오류");
+            result.setMessage("서버 오류");
         }
 
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        return new ResponseEntity<ResVO<ScheduleRes>>(result, status);
     }
 
     @PostMapping("/{doctorId}")
@@ -62,29 +63,23 @@ public class ScheduleController {
             @ApiResponse(responseCode = "404", description = "사용자 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
-    public ResponseEntity<Map<String, Object>> updateSchdule(
+    public ResponseEntity<ResVO<ScheduleRes>> updateSchdule(
             @PathVariable @Parameter(description = "의사키") Long doctorId,
             @RequestParam @Parameter(description = "몇일 후") Integer plusDay,
             @RequestParam @Parameter(description = "갱신할 스케쥴 정보") String bitmask) {
-        Map<String, Object> resultMap = new HashMap<>();
+        ResVO<ScheduleRes> result = new ResVO<>();
         HttpStatus status = null;
 
         try{
             Schedule schedule = scheduleService.updateOneByDoctorId(doctorId, plusDay, bitmask);
-            resultMap.put("schedule", convertToRes(schedule));
-            resultMap.put("message", "성공");
+            result.setData(ScheduleRes.convertToRes(schedule));
+            result.setMessage("성공");
             status = HttpStatus.OK;
         } catch (Exception e){
             status = HttpStatus.INTERNAL_SERVER_ERROR;
-            resultMap.put("message", "서버 오류");
+            result.setMessage("서버 오류");
         }
 
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
-    }
-
-    public ScheduleRes convertToRes(Schedule s){
-        ScheduleRes sr = new ScheduleRes(s.getId(), s.getPlusDay(),
-                s.getBitmask(), s.getDoctor().getId());
-        return sr;
+        return new ResponseEntity<ResVO<ScheduleRes>>(result, status);
     }
 }

@@ -1,9 +1,12 @@
 package com.ssafy.pettodoctor.api.response;
 
+import com.ssafy.pettodoctor.api.domain.Doctor;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter @Setter
 public class DoctorRes {
@@ -33,5 +36,23 @@ public class DoctorRes {
         this.specialty = specialty;
         this.price = price;
         this.hospitalId = hospitalId;
+    }
+
+    public static DoctorRes converToRes(Doctor d){
+        DoctorRes dr = new DoctorRes(d.getId(), d.getEmail(), d.getName()
+                , d.getRole(), d.getTel(),d.getJoinDate(),
+                d.getPysicianLicenseNumber(), d.getSpecialty()
+                , d.getPrice(), d.getHospital().getId());
+        return dr;
+    }
+
+    // Doctor 엔티티 리스트를 반환형 타입 리스트로 변환하는 함수
+    public static List<DoctorRes> convertToResList(List<Doctor> doctors){
+        List<DoctorRes> result = new ArrayList<>();
+        for(Doctor d : doctors){
+            result.add(converToRes(d));
+        }
+
+        return result;
     }
 }

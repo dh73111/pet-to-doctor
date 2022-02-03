@@ -4,6 +4,7 @@ import com.ssafy.pettodoctor.api.domain.Schedule;
 import com.ssafy.pettodoctor.api.domain.Treatment;
 import com.ssafy.pettodoctor.api.domain.TreatmentType;
 import com.ssafy.pettodoctor.api.request.TreatmentPostReq;
+import com.ssafy.pettodoctor.api.response.ResVO;
 import com.ssafy.pettodoctor.api.response.TreatmentRes;
 import com.ssafy.pettodoctor.api.service.TreatmentService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,22 +39,22 @@ public class TreatmentController {
             @ApiResponse(responseCode = "404", description = "사용자 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
-    public ResponseEntity<Map<String, Object>> findTreatmentsByDoctorId(
+    public ResponseEntity<ResVO<List<TreatmentRes>>> findTreatmentsByDoctorId(
             @PathVariable @Parameter(description = "의사키") Long doctorId) {
-        Map<String, Object> resultMap = new HashMap<>();
+        ResVO<List<TreatmentRes>> result = new ResVO<>();
         HttpStatus status = null;
 
         try{
             List<Treatment> treatments = treatmentService.findByDoctorId(doctorId);
-            resultMap.put("treatments", converToResList(treatments));
-            resultMap.put("message", "성공");
+            result.setData(TreatmentRes.convertToResList(treatments));
+            result.setMessage("성공");
             status = HttpStatus.OK;
         } catch (Exception e){
             status = HttpStatus.INTERNAL_SERVER_ERROR;
-            resultMap.put("message", "서버 오류");
+            result.setMessage("서버오류");
         }
 
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        return new ResponseEntity<ResVO<List<TreatmentRes>>>(result, status);
     }
 
     @GetMapping("/user/{userId}")
@@ -64,22 +65,22 @@ public class TreatmentController {
             @ApiResponse(responseCode = "404", description = "사용자 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
-    public ResponseEntity<Map<String, Object>> findTreatmentsByUserId(
+    public ResponseEntity<ResVO<List<TreatmentRes>>> findTreatmentsByUserId(
             @PathVariable @Parameter(description = "사용자키") Long userId) {
-        Map<String, Object> resultMap = new HashMap<>();
+        ResVO<List<TreatmentRes>> result = new ResVO<>();
         HttpStatus status = null;
 
         try{
             List<Treatment> treatments = treatmentService.findByUserId(userId);
-            resultMap.put("treatments", converToResList(treatments));
-            resultMap.put("message", "성공");
+            result.setData(TreatmentRes.convertToResList(treatments));
+            result.setMessage("성공");
             status = HttpStatus.OK;
         } catch (Exception e){
             status = HttpStatus.INTERNAL_SERVER_ERROR;
-            resultMap.put("message", "서버 오류");
+            result.setMessage("서버오류");
         }
 
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        return new ResponseEntity<ResVO<List<TreatmentRes>>>(result, status);
     }
 
     @GetMapping("/{treatmentId}")
@@ -90,22 +91,22 @@ public class TreatmentController {
             @ApiResponse(responseCode = "404", description = "사용자 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
-    public ResponseEntity<Map<String, Object>> findTreatmentById(
+    public ResponseEntity<ResVO<TreatmentRes>> findTreatmentById(
             @PathVariable @Parameter(description = "진료키") Long treatmentId) {
-        Map<String, Object> resultMap = new HashMap<>();
+        ResVO<TreatmentRes> result = new ResVO<>();
         HttpStatus status = null;
 
         try{
             Treatment treatment = treatmentService.findById(treatmentId);
-            resultMap.put("treatment", convertToRes(treatment));
-            resultMap.put("message", "성공");
+            result.setData(TreatmentRes.convertToRes(treatment));
+            result.setMessage("성공");
             status = HttpStatus.OK;
         } catch (Exception e){
             status = HttpStatus.INTERNAL_SERVER_ERROR;
-            resultMap.put("message", "서버 오류");
+            result.setMessage("서버오류");
         }
 
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        return new ResponseEntity<ResVO<TreatmentRes>>(result, status);
     }
 
     @PostMapping
@@ -116,22 +117,22 @@ public class TreatmentController {
             @ApiResponse(responseCode = "404", description = "사용자 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
-    public ResponseEntity<Map<String, Object>> registerTreatment(
+    public ResponseEntity<ResVO<Long>> registerTreatment(
             @RequestBody @Parameter(description = "진료 정보") TreatmentPostReq treatmentPostReq) {
-        Map<String, Object> resultMap = new HashMap<>();
+        ResVO<Long> result = new ResVO<>();
         HttpStatus status = null;
 
         try{
             Long treatmentId = treatmentService.registerTreatment(treatmentPostReq);
-            resultMap.put("treatmentId", treatmentId);
-            resultMap.put("message", "성공");
+            result.setData(treatmentId);
+            result.setMessage("성공");
             status = HttpStatus.OK;
         } catch (Exception e){
             status = HttpStatus.INTERNAL_SERVER_ERROR;
-            resultMap.put("message", "서버 오류");
+            result.setMessage("서버 오류");
         }
 
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        return new ResponseEntity<ResVO<Long>>(result, status);
     }
 
     @PutMapping("/{treatmentId}")
@@ -142,39 +143,22 @@ public class TreatmentController {
             @ApiResponse(responseCode = "404", description = "사용자 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
-    public ResponseEntity<Map<String, Object>> updateTreatmentState(
+    public ResponseEntity<ResVO<TreatmentRes>> updateTreatmentState(
             @PathVariable @Parameter(description = "진료키") Long treatmentId,
             @RequestBody @Parameter(description = "진료 정보 상태")TreatmentType treatmentType) {
-        Map<String, Object> resultMap = new HashMap<>();
+        ResVO<TreatmentRes> result = new ResVO<>();
         HttpStatus status = null;
 
         try{
             Treatment treatment = treatmentService.updateTreatment(treatmentId, treatmentType);
-            resultMap.put("treatment", convertToRes(treatment));
-            resultMap.put("message", "성공");
+            result.setData(TreatmentRes.convertToRes(treatment));
+            result.setMessage("성공");
             status = HttpStatus.OK;
         } catch (Exception e){
             status = HttpStatus.INTERNAL_SERVER_ERROR;
-            resultMap.put("message", "서버 오류");
+            result.setMessage("서버오류");
         }
 
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
-    }
-
-    private TreatmentRes convertToRes(Treatment t){
-        TreatmentRes tr = new TreatmentRes(t.getId(), t.getUser().getId(), t.getDoctor().getId()
-                ,t.getPrescription() != null ? t.getPrescription().getId() : null, t.getHospital().getId()
-                ,t.getPaymentCode(), t.getScheduleDate(), t.getType()
-        ,t.getReVisit(), t.getPetName(), t.getSymptom(), t.getBirthDate()
-        ,t.getPetSpecies(), t.getPetWeight(), t.getPrice(), t.getUrl());
-        return tr;
-    }
-
-    private List<TreatmentRes> converToResList(List<Treatment> treatments){
-        List<TreatmentRes> result = new ArrayList<>();
-        for(Treatment t : treatments){
-            result.add(convertToRes(t));
-        }
-        return result;
+        return new ResponseEntity<ResVO<TreatmentRes>>(result, status);
     }
 }

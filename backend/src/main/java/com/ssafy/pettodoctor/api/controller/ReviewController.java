@@ -2,6 +2,7 @@ package com.ssafy.pettodoctor.api.controller;
 
 import com.ssafy.pettodoctor.api.domain.Review;
 import com.ssafy.pettodoctor.api.request.ReviewPostReq;
+import com.ssafy.pettodoctor.api.response.ResVO;
 import com.ssafy.pettodoctor.api.response.ReviewRes;
 import com.ssafy.pettodoctor.api.service.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,22 +36,22 @@ public class ReviewController {
             @ApiResponse(responseCode = "404", description = "사용자 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
-    public ResponseEntity<Map<String, Object>> findDoctorsByHospitalId(
+    public ResponseEntity<ResVO<List<ReviewRes>>> findDoctorsByHospitalId(
             @PathVariable @Parameter(description = "병원키") Long hospitalId ) {
-        Map<String, Object> resultMap = new HashMap<>();
+        ResVO<List<ReviewRes>> result = new ResVO<>();
         HttpStatus status = null;
 
         try{
             List<Review> reviews = reviewService.findByHospitalId(hospitalId);
-            resultMap.put("reviews", convertToResList(reviews));
-            resultMap.put("message", "성공");
+            result.setData(ReviewRes.convertToResList(reviews));
+            result.setMessage("성공");
             status = HttpStatus.OK;
         } catch (Exception e){
             status = HttpStatus.INTERNAL_SERVER_ERROR;
-            resultMap.put("message", "서버 오류");
+            result.setMessage("서버 오류");
         }
 
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        return new ResponseEntity<ResVO<List<ReviewRes>>>(result, status);
     }
 
     @PostMapping
@@ -61,32 +62,21 @@ public class ReviewController {
             @ApiResponse(responseCode = "404", description = "사용자 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
-    public ResponseEntity<Map<String, Object>> registerReview(
+    public ResponseEntity<ResVO<Long>> registerReview(
             @RequestBody @Parameter(description = "리뷰 내용") ReviewPostReq reviewPostReq ) {
-        Map<String, Object> resultMap = new HashMap<>();
+        ResVO<Long> result = new ResVO<>();
         HttpStatus status = null;
 
         try{
             Long reviewId = reviewService.registerReview(reviewPostReq);
-            resultMap.put("reviewId", reviewId);
-            resultMap.put("message", "성공");
+            result.setData(reviewId);
+            result.setMessage("성공");
             status = HttpStatus.OK;
         } catch (Exception e){
             status = HttpStatus.INTERNAL_SERVER_ERROR;
-            resultMap.put("message", "서버 오류");
+            result.setMessage("서버 오류");
         }
 
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
-    }
-
-    private List<ReviewRes> convertToResList(List<Review> reviews){
-        List<ReviewRes> result = new ArrayList<>();
-        for(Review r : reviews){
-            ReviewRes rr = new ReviewRes(r.getId(), r.getUser().getId()
-                    , r.getHospital().getId(), r.getContent(), r.getRate());
-            result.add(rr);
-        }
-
-        return result;
+        return new ResponseEntity<ResVO<Long>>(result, status);
     }
 }

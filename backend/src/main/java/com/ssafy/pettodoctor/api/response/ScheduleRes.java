@@ -1,5 +1,6 @@
 package com.ssafy.pettodoctor.api.response;
 
+import com.ssafy.pettodoctor.api.domain.Schedule;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,5 +18,11 @@ public class ScheduleRes {
         this.plusDay = plusDay;
         this.bitmask = bitmask;
         this.doctorId = doctorId;
+    }
+
+    public static ScheduleRes convertToRes(Schedule s){
+        ScheduleRes sr = new ScheduleRes(s.getId(), s.getPlusDay(),
+                s.getBitmask(), s.getDoctor().getId());
+        return sr;
     }
 }
