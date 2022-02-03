@@ -29,7 +29,7 @@ public class MarkServiceTest {
         User u1 = userService.signup(ur1);
         Hospital hospital = new Hospital();
 
-        Mark mark = markService.addMark(u1, hospital).get();
+        Mark mark = markService.addMark(u1, hospital.getId()).get();
 
         Assertions.assertThat(mark.getUser()).isEqualTo(u1);
     }
@@ -40,8 +40,8 @@ public class MarkServiceTest {
         UserCommonSignupPostReq ur1 = new UserCommonSignupPostReq();
         User user = userService.signup(ur1);
         Hospital hospital = new Hospital();
-        Mark mark1 = markService.addMark(user, hospital).get();
-        Mark mark2 = markService.addMark(user, hospital).get();
+        Mark mark1 = markService.addMark(user, hospital.getId()).get();
+        Mark mark2 = markService.addMark(user, hospital.getId()).get();
 
         List<Mark> getMarks = markService.getMarksOfUser(user);
 
@@ -58,8 +58,8 @@ public class MarkServiceTest {
         UserCommonSignupPostReq ur1 = new UserCommonSignupPostReq();
         User user = userService.signup(ur1);
         Hospital hospital = new Hospital();
-        Mark mark1 = markService.addMark(user, hospital).get();
-        Mark mark2 = markService.addMark(user, hospital).get();
+        Mark mark1 = markService.addMark(user, hospital.getId()).get();
+        Mark mark2 = markService.addMark(user, hospital.getId()).get();
         Mark mark3 = new Mark();
         mark3.setId(5214l);
 

@@ -44,12 +44,11 @@ public class MarkController {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         HttpStatus status = null;
 
-        Hospital hospital = new Hospital(); // hospitalService에서 받아오는 걸로 바꿔야 함
 
         try {
             AccountUserDetails userDetails = (AccountUserDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
             User nowUser = userService.getUserById(userDetails.getUserId()).get();
-            markService.addMark(nowUser, hospital);
+            markService.addMark(nowUser, hospitalId);
             resultMap.put("message", "성공");
             status = HttpStatus.OK;
 
