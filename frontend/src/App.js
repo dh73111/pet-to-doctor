@@ -1,7 +1,7 @@
 import "./App.css";
 import Container from "@mui/material/Container";
-import NavBar from "./components/NavBar";
-import Home from "./components/Home";
+import NavBar from "./pages/NavBar";
+import Home from ".//Home";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HospitalReservation from "./pages/hospital/HospitalReservation";
 import HospitalSearch from "./pages/hospital/HospitalSearch";
