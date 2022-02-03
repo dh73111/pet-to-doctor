@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.*;
+import com.ssafy.pettodoctor.api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -43,22 +44,24 @@ public class JwtTokenUtil {
                 .build();
     }
     
-    public static String getToken(String userId) {
-    		Date expires = JwtTokenUtil.getTokenExpiration(expirationTime);
+    public static String getToken(String userId, String userRole) {
+        Date expires = JwtTokenUtil.getTokenExpiration(expirationTime);
         return JWT.create()
                 .withSubject(userId)
                 .withExpiresAt(expires)
                 .withIssuer(ISSUER)
                 .withIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
+                .withClaim("role", userRole)
                 .sign(Algorithm.HMAC512(secretKey.getBytes()));
     }
 
-    public static String getToken(Instant expires, String userId) {
+    public static String getToken(Instant expires, String userId, String userRole) {
         return JWT.create()
                 .withSubject(userId)
                 .withExpiresAt(Date.from(expires))
                 .withIssuer(ISSUER)
                 .withIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
+                .withClaim("role", userRole)
                 .sign(Algorithm.HMAC512(secretKey.getBytes()));
     }
     

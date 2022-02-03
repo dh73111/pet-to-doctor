@@ -35,13 +35,11 @@ class UserRepositoryTest {
     }
 
     @Test
-    public void 이메일로_유저찾기(){
+    public void 아이디로_유저찾기() {
         User u1 = new User();
-        u1.setEmail("aaa");
-
         userRepository.save(u1);
 
-        Assertions.assertThat(userRepository.findByEmail(u1.getEmail()).getEmail()).isEqualTo("aaa");
+        Assertions.assertThat(userRepository.findById(u1.getId())).isEqualTo(u1);
     }
 
 

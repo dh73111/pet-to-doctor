@@ -21,11 +21,12 @@ public class AccountUserDetailService implements UserDetailsService{
 	
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		//실제로는 username이 아니고 email이지만 UsernameNotFoundException과 맞추기 위해 여기서만 username으로 사용
 		Account account = accountService.findByEmail(username);
 		if(account != null) {
     			AccountUserDetails accountDetails = new AccountUserDetails(account);
     			return accountDetails;
     		}
-    		return null;
+		return null;
     }
 }
