@@ -65,7 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/home", "/api/user/login","/api/user", "/api/prescription/**","/pet-to-doctor.html", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .antMatchers("/hello", "/api/user/duplication").hasRole("USER")
                 .antMatchers("/api/v1/users/me").authenticated()       //인증이 필요한 URL과 필요하지 않은 URL에 대하여 설정
-    	        	    .anyRequest().authenticated()
+    	        	    .anyRequest().permitAll()
                 .and().cors();
     }
 }
