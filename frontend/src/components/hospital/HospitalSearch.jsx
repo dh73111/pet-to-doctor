@@ -40,7 +40,7 @@ function HospitalSearch(props) {
         console.log(event, newValue);
         setValue(newValue);
     };
-    function kakaoMap(lat, lng, mode) {
+    function kakaoMap(lat, lng) {
         lat = 33.450701;
         lng = 126.570667;
         const container = document.getElementById("map");
