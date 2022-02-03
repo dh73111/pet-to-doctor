@@ -32,4 +32,16 @@ public class Prescription {
     private String shippingName;
     private String shippingTel;
 
+    //== 생성 메소드 ==//
+    public static Prescription createPrescription(String administration, String medicine, String diagnosis, String opinion, Integer price, PaymentType type){
+        Prescription prescription = new Prescription();
+        prescription.setAdministration(administration);
+        prescription.setMedicine(medicine);
+        prescription.setDiagnosis(diagnosis);
+        prescription.setOpinion(opinion);
+        prescription.setPrice(price);
+        prescription.setType(type);
+
+        return prescription;
+    }
 }
