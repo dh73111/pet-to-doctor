@@ -4,6 +4,8 @@ import com.ssafy.pettodoctor.api.auth.AccountUserDetails;
 import com.ssafy.pettodoctor.api.domain.Hospital;
 import com.ssafy.pettodoctor.api.domain.Mark;
 import com.ssafy.pettodoctor.api.domain.User;
+import com.ssafy.pettodoctor.api.response.MarkRes;
+import com.ssafy.pettodoctor.api.response.ResVO;
 import com.ssafy.pettodoctor.api.service.MarkService;
 import com.ssafy.pettodoctor.api.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -68,8 +70,8 @@ public class MarkController {
             @ApiResponse(responseCode = "404", description = "사용자 또는 병원 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
-    public ResponseEntity<Map<String, Object>> getMarkList() {
-        Map<String, Object> resultMap = new HashMap<String, Object>();
+    public ResponseEntity<ResVO<List<MarkRes>>> getMarkList() {
+        ResVO<List<MarkRes>> result = new ResVO<>();
         HttpStatus status = null;
 
         try {
@@ -77,16 +79,15 @@ public class MarkController {
             User nowUser = userService.getUserById(userDetails.getUserId()).get();
             List<Mark> marksOfUser = markService.getMarksOfUser(nowUser);
 
-            resultMap.put("message", "성공");
-            resultMap.put("marks", marksOfUser);
-            resultMap.put("marksNum", marksOfUser.size());
+            result.setMessage("사용자의 마크 리스트를 불러오는데 성공했습니다.");
+            result.setData(MarkRes.convertToMarkResList(marksOfUser));
             status = HttpStatus.OK;
         } catch (Exception e) {
             status = HttpStatus.INTERNAL_SERVER_ERROR;
-            resultMap.put("message", "서버 오류");
+            result.setMessage("서버 오류");
         }
 
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        return new ResponseEntity<ResVO<List<MarkRes>>>(result, status);
     }
 
 
