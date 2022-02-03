@@ -197,7 +197,6 @@ function NavBar(props) {
     let [selectedNav, setSelectedNav] = useState(0);
     let [isLogin, setIsLogin] = useState(false);
     function clickNav(selected) {
-        console.log(selected);
         setSelectedNav(selected);
     }
     return <NavBarEl selectedNav={selectedNav} isLogin={isLogin} clickNav={clickNav}></NavBarEl>;
