@@ -46,4 +46,9 @@ public class TreatmentService {
     public Treatment updateTreatment(Long id, TreatmentType type){
         return treatmentRepositry.updateTreatment(id, type);
     }
+
+    @Transactional
+    public Treatment setPrescription(Long treatmentId, Prescription certificateInfo) {
+        return treatmentRepositry.setPrescription(treatmentId, certificateInfo);
+    }
 }
