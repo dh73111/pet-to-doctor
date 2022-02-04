@@ -9,6 +9,7 @@ import DoctorReservation from "./components/doctor/DoctorReservation";
 import DoctorDianosis from "./components/doctor/DoctorDiagnosis";
 import DoctorPerscription from "./components/doctor/DoctorPerscription";
 import Notice from "./components/Notice";
+<<<<<<< .merge_file_a06012
 import UserJoin from "./components/user/UserJoin";
 // import UserLoginModal from "./components/UserLoginModal";
 import UserReservationPayment from './components/user/UserReservationPayment';
@@ -16,7 +17,9 @@ import UserReservationPaymenting from './components/user/UserReservationPaymenti
 import UserReservationComplete from './components/user/UserReservationComplete';
 import UserMedicinePayment from "./components/user/UserMedicinePayment";
 import UserMypageChange from "./components/user/UserMypageChange";
+=======
 // import UserReservationPayment from "./components/user/UserReservationPayment";
+>>>>>>> .merge_file_a19152
 
 function App() {
     return (

@@ -21,6 +21,11 @@ const pages = [
     { id: 2, path: "/hospitalreservation", name: "예약하기" },
     { id: 3, path: "/notice", name: "공지사항" },
 ];
+const doctorpages = [
+    { id: 1, path: "/doctorreservation", name: "받은예약" },
+    { id: 2, path: "/doctordiagnosis", name: "진료현황" },
+    { id: 3, path: "/doctorperscripton", name: "처방현황" },
+];
 const settings = ["내 예약", "마이페이지", "Logout"];
 
 const style = {
@@ -28,11 +33,10 @@ const style = {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 1440,
+    width: 1200,
+    height: 800,
     bgcolor: "background.paper",
-    border: "2px solid #000",
     boxShadow: 24,
-    p: 4,
 };
 
 const NavBarEl = (props) => {
@@ -40,6 +44,7 @@ const NavBarEl = (props) => {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [open, setOpen] = React.useState(false);
+    const [mode, setMode] = useState("user");
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const handleOpenNavMenu = (event) => {
@@ -69,6 +74,29 @@ const NavBarEl = (props) => {
             <Typography>{page.name}</Typography>
         </Button>
     );
+    const NavItem = () => {
+        if (mode === "user") {
+            return (
+                <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+                    {pages.map((page) => (
+                        <NavLink to={page.path} key={page.path} style={{ textDecoration: "none" }}>
+                            {props.selectedNav === page.id ? MyButton(page, "#29A1B1") : MyButton(page, "black")}
+                        </NavLink>
+                    ))}
+                </Box>
+            );
+        } else {
+            return (
+                <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+                    {doctorpages.map((page) => (
+                        <NavLink to={page.path} key={page.path} style={{ textDecoration: "none" }}>
+                            {props.selectedNav === page.id ? MyButton(page, "#29A1B1") : MyButton(page, "black")}
+                        </NavLink>
+                    ))}
+                </Box>
+            );
+        }
+    };
 
     return (
         <AppBar color="inherit" position="sticky">
@@ -115,6 +143,7 @@ const NavBarEl = (props) => {
                             }}
                         >
                             {/* 모바일 화면일 때 메뉴 */}
+
                             {pages.map((page) => (
                                 <NavLink to={page.path} key={page.path} style={{ textDecoration: "none" }}>
                                     {props.selectedNav === page.id
@@ -132,13 +161,7 @@ const NavBarEl = (props) => {
                     >
                         <img src="img/logo.png" height="50px" alt=""></img>
                     </Typography>
-                    <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-                        {pages.map((page) => (
-                            <NavLink to={page.path} key={page.path} style={{ textDecoration: "none" }}>
-                                {props.selectedNav === page.id ? MyButton(page, "#29A1B1") : MyButton(page, "black")}
-                            </NavLink>
-                        ))}
-                    </Box>
+                    <NavItem />
                     {props.isLogin ? (
                         <Box sx={{ flexGrow: 0 }}>
                             <Tooltip title="Open settings">

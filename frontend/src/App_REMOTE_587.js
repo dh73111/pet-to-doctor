@@ -9,13 +9,6 @@ import DoctorReservation from "./components/doctor/DoctorReservation";
 import DoctorDianosis from "./components/doctor/DoctorDiagnosis";
 import DoctorPerscription from "./components/doctor/DoctorPerscription";
 import Notice from "./components/Notice";
-import UserJoin from "./components/user/UserJoin";
-// import UserLoginModal from "./components/UserLoginModal";
-import UserReservationPayment from './components/user/UserReservationPayment';
-import UserReservationPaymenting from './components/user/UserReservationPaymenting';
-import UserReservationComplete from './components/user/UserReservationComplete';
-import UserMedicinePayment from "./components/user/UserMedicinePayment";
-import UserMypageChange from "./components/user/UserMypageChange";
 // import UserReservationPayment from "./components/user/UserReservationPayment";
 
 function App() {
@@ -42,8 +35,6 @@ function App() {
                         element={<HospitalSearchReservation></HospitalSearchReservation>}
                     ></Route>
                     <Route path="/notice" element={<Notice></Notice>}></Route>
-                    <Route path="/UserJoin" element={<UserJoin></UserJoin>}></Route>
-                    <Route path="/UserMypageChange" element={<UserMypageChange></UserMypageChange>}></Route>
                 </Routes>
             </div>
         </BrowserRouter>

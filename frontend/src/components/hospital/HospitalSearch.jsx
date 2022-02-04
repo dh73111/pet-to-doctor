@@ -357,7 +357,7 @@ function HospitalSearch(props) {
                             alt="병원 이미지"
                         ></img>
                         <Box display="flex" justifyContent="center" alignItems="center" sx={{ mt: 1 }}>
-                            <img src="./img/24시병원.png" alt="24시여부"></img>
+                            <img src="./img/24hospital.png" alt="24시여부"></img>
                         </Box>
                         <Box
                             display="flex"

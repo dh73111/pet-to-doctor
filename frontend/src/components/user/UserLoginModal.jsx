@@ -18,7 +18,7 @@ function UserLoginModal(props) {
     return (
         <ThemeProvider theme={newTheme}>
             <div>
-                <Grid container maxWidth="1200px" component={Paper} sx={{ mx: "auto", mt: 6 }}>
+                <Grid container maxHeight="800px" sx={{ height: "100vh" }}>
                     <Grid
                         item
                         xs={false}
@@ -102,7 +102,7 @@ function UserLoginModal(props) {
                                     sx={{ mt: 3, mb: 1 }}
                                     style={{ backgroundColor: "#03C75A" }}
                                 >
-                                    <img src="img/네이버_btnG_아이콘사각.png" width="24px" alt="네이버로고" />
+                                    <img src="img/naver.png" width="24px" alt="네이버로고" />
                                     네이버로 로그인
                                 </Button>
                                 {/* 네이버그린 #03C75A */}
