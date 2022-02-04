@@ -1,29 +1,35 @@
 import "./App.css";
 import NavBar from "./components/NavBar";
-import Grid from "@mui/material/Grid";
+import Home from "./components/Home";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import HospitalReservation from "./pages/hospital/HospitalReservation";
-import HospitalSearch from "./pages/hospital/HospitalSearch";
-import Notice from "./pages/Notice";
+import HospitalReservation from "./components/hospital/HospitalReservation";
+import HospitalSearchReservation from "./components/hospital/HospitalSearchReservation";
+import HospitalSearch from "./components/hospital/HospitalSearch";
+import Notice from "./components/Notice";
+// import UserLoginModal from "./components/UserLoginModal";
+import UserReservationPayment from './components/user/UserReservationPayment';
 
 function App() {
     return (
         <BrowserRouter>
             <div className="App">
-                <Routes>
+                <UserReservationPayment />
+                {/* <UserLoginModal /> */}
+                {/* <Routes>
                     <Route path="/*" element={<NavBar></NavBar>}></Route>
                 </Routes>
-                <div>
-                    <Grid container spacing={1}>
-                        <Grid item xs={12}></Grid>
-                    </Grid>
-                </div>
                 <Routes>
-                    <Route path="/" element={<HospitalSearch></HospitalSearch>}></Route>
+                    <Route path="/" element={<Home></Home>}></Route>
+                </Routes>
+                <Routes>
                     <Route path="/hospitalsearch" element={<HospitalSearch></HospitalSearch>}></Route>
                     <Route path="/hospitalreservation" element={<HospitalReservation></HospitalReservation>}></Route>
+                    <Route
+                        path="/hospitalsearchreservation"
+                        element={<HospitalSearchReservation></HospitalSearchReservation>}
+                    ></Route>
                     <Route path="/notice" element={<Notice></Notice>}></Route>
-                </Routes>
+                </Routes> */}
             </div>
         </BrowserRouter>
     );
