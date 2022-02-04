@@ -7,7 +7,7 @@ import HospitalSearchReservation from "./components/hospital/HospitalSearchReser
 import HospitalSearch from "./components/hospital/HospitalSearch";
 import Notice from "./components/Notice";
 // import UserLoginModal from "./components/UserLoginModal";
-import UserReservationPayment from './components/user/UserReservationPayment';
+import UserReservationPayment from "./components/user/UserReservationPayment";
 
 function App() {
     return (
@@ -20,6 +20,7 @@ function App() {
                 </Routes>
                 <Routes>
                     <Route path="/" element={<Home></Home>}></Route>
+                    <Route path="/kakaooauth*" element={<Home></Home>}></Route>
                 </Routes>
                 <Routes>
                     <Route path="/hospitalsearch" element={<HospitalSearch></HospitalSearch>}></Route>
