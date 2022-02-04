@@ -1,10 +1,16 @@
 package com.ssafy.pettodoctor.api.domain;
 
 public enum TreatmentType {
-    RESERVATION
-    , RESERVATION_CANCLE
-    , RESERVATION_REJECT
-    , ACCEPTED
-    , ACCEPTED_CANCLE
-    , COMPLETE
+    RES_REQUEST
+    , RES_CANCEL
+    , RES_REJECT
+    , RES_ACCEPTED
+    , RES_ACCEPTED_CANCEL
+    , RES_COMPLETE
+    , VST_REQUEST
+    , VST_REJECT
+    , VST_CANCEL
+    , VST_ACCEPTED
+    , VST_ACCEPTED_CANCEL
+    , VST_COMPLETE
 }

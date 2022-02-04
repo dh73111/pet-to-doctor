@@ -36,7 +36,7 @@ const style = {
 };
 
 const NavBarEl = (props) => {
-    console.log(props);
+    // console.log(props);
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [open, setOpen] = React.useState(false);
@@ -197,7 +197,6 @@ function NavBar(props) {
     let [selectedNav, setSelectedNav] = useState(0);
     let [isLogin, setIsLogin] = useState(false);
     function clickNav(selected) {
-        console.log(selected);
         setSelectedNav(selected);
     }
     return <NavBarEl selectedNav={selectedNav} isLogin={isLogin} clickNav={clickNav}></NavBarEl>;

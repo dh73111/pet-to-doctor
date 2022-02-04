@@ -19,7 +19,7 @@ const newTheme = createTheme({
   }
 });
 const userEmail = 'petToDoctor@test.com';
-function UserRegisterConfirm(props) {
+function UserSignupConfirm(props) {
   return (
     <div>
       <ThemeProvider theme={newTheme}>
@@ -59,4 +59,4 @@ function UserRegisterConfirm(props) {
   );
 }
 
-export default UserRegisterConfirm;
+export default UserSignupConfirm;

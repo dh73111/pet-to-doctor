@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 //@Rollback(false)
+@Transactional
 class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
@@ -32,5 +33,14 @@ class UserRepositoryTest {
         // then
 //        Assertions.assertThat(userRepository.isDuplicated(u2.)).isEqualTo(true);
     }
+
+    @Test
+    public void 아이디로_유저찾기() {
+        User u1 = new User();
+        userRepository.save(u1);
+
+        Assertions.assertThat(userRepository.findById(u1.getId())).isEqualTo(u1);
+    }
+
 
 }

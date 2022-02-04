@@ -13,17 +13,35 @@ import PlaceIcon from "@mui/icons-material/Place";
 import HomeIcon from "@mui/icons-material/Home";
 import Link from "@mui/material/Link";
 import PhoneIcon from "@mui/icons-material/Phone";
+import StarIcon from "@mui/icons-material/Star";
+import Button from "@mui/material/Button";
+import { styled } from "@mui/system";
+import { NavLink } from "react-router-dom";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 /* global kakao */
 function HospitalSearch(props) {
     const { kakao } = window;
     const [mode, setMode] = useState("list");
+    const [isSearch, setSearch] = useState(false);
+    const [doneSearch, setDoneSearch] = useState(true);
     const [value, setValue] = React.useState(0);
+
+    const MyDiv = styled("div")({
+        position: "absolute",
+        top: "150px",
+        width: "344px",
+        height: "500px",
+        overflow: "auto",
+        fontWeight: "bold",
+        zIndex: 1251,
+        background: "white",
+    });
 
     const handleChange = (event, newValue) => {
         console.log(event, newValue);
         setValue(newValue);
     };
-    function kakaoMap(lat, lng, mode) {
+    function kakaoMap(lat, lng) {
         lat = 33.450701;
         lng = 126.570667;
         const container = document.getElementById("map");
@@ -53,6 +71,7 @@ function HospitalSearch(props) {
 
     function TabItems() {
         if (value === 0) {
+            // 정보
             return (
                 <Box>
                     <Box sx={{ fontSize: 14, fontWeight: "bold" }}>
@@ -129,7 +148,7 @@ function HospitalSearch(props) {
                             <Grid item sx={{ color: "black", fontWeight: "bold", fontSize: "16px" }} xs={2.5}>
                                 수의사 수
                             </Grid>
-                            <Grid xs={0.3}></Grid>
+                            <Grid item xs={0.3}></Grid>
                             <Grid item sx={{ color: "#309FB3", fontWeight: "bold", fontSize: "12px" }} xs={9.2}>
                                 17
                             </Grid>
@@ -137,18 +156,248 @@ function HospitalSearch(props) {
                     </Box>
                 </Box>
             );
-        } else {
+        } else if (value === 1) {
+            // 예약하기
             return (
                 <Box>
                     <Grid container>
-                        <Grid item xs={3}>
-                            <img src="./img/loginDog.jpg" alt="의사사진" width="150px" height="150"></img>
+                        <Grid item xs={4.3}>
+                            <img src="img/loginDog.jpg" alt="의사사진" width="150px" height="150"></img>
                         </Grid>
-                        <Grid item xs={9}></Grid>
+                        <Grid item xs={7.7} sx={{ mt: 2 }}>
+                            <Box>
+                                <Box component="span" sx={{ mx: 2, fontWeight: "bold" }}>
+                                    김덕배
+                                </Box>
+                                <Box component="span" sx={{ mx: 0.1, fontSize: 12, fontWeight: "bold", color: "gray" }}>
+                                    수의사
+                                </Box>
+                            </Box>
+                            <Box sx={{ mt: 2 }}>
+                                <Grid container>
+                                    <Grid Item xs={1}></Grid>
+                                    <Grid Item xs={3} sx={{ fontWeight: "bold", fontSize: 10 }}>
+                                        전문
+                                    </Grid>
+                                    <Grid Item xs={8} sx={{ fontSize: 12, fontWeight: "bold" }}>
+                                        행동교정, 피부 , 산소특화진료, 중증질병, 심장특화진료
+                                    </Grid>
+                                </Grid>
+                            </Box>
+                            <Box>
+                                <Grid container>
+                                    <Grid Item xs={7.5}></Grid>
+                                    <Grid Item xs={4.5}>
+                                        <Button variant="contained" sx={{ mt: 3 }}>
+                                            <NavLink
+                                                to={"/hospitalsearchreservation"}
+                                                key={"/hospitalsearchreservation"}
+                                                style={{ textDecoration: "none" }}
+                                            >
+                                                예약하기
+                                            </NavLink>
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            </Box>
+                        </Grid>
                     </Grid>
                 </Box>
             );
+        } else {
+            // 리뷰
+            return (
+                <Box>
+                    <Box>
+                        <Grid container sx={{ mt: 0.7 }}>
+                            <Grid item xs={1.2} sx={{ mx: 0.4, fontWeight: "bold" }}>
+                                전체
+                            </Grid>
+                            <Grid item xs={1.8} sx={{ fontSize: 13, mt: 0.15, fontWeight: "bold" }}>
+                                142
+                            </Grid>
+                            <Grid item xs={4.5} sx={{ color: "#FC4C4E", fontSize: 25 }}></Grid>
+                            <Grid item xs={0.8} sx={{ color: "#FC4C4E", fontSize: 25 }}>
+                                ★
+                            </Grid>
+                            <Grid item xs={1.5} sx={{ color: "#FC4C4E", fontSize: 25 }}>
+                                4.79
+                            </Grid>
+                            <Grid item xs={0.5} sx={{ color: "gray", fontSize: 25 }}>
+                                /
+                            </Grid>
+                            <Grid item xs={0.5} sx={{ color: "gray", fontSize: 25 }}>
+                                5.0
+                            </Grid>
+                        </Grid>
+                    </Box>
+                    <UserReview></UserReview>
+                </Box>
+            );
         }
+    }
+    function UserReview() {
+        return (
+            <Box>
+                <Grid container sx={{ mt: 2 }}>
+                    <Grid item xs={2} sx={{ fontWeight: "bold" }}>
+                        <img src="/img/user.png" alt="user"></img>
+                    </Grid>
+                    <Grid item xs={1.7} sx={{ fontSize: 14, mt: 0.15, fontWeight: "bold" }}>
+                        닉네임닉네임
+                    </Grid>
+                    <Grid item xs={3} sx={{ color: "gray", fontSize: 10 }}>
+                        22.01.28 진료
+                    </Grid>
+                    <Grid item xs={1.3}></Grid>
+                    <Grid item xs={3} sx={{ color: "#29A1B1", fontSize: 25 }}>
+                        ★★★★☆
+                    </Grid>
+                </Grid>
+                <Box sx={{ mt: 2, fontSize: 13 }}>
+                    리뷰 작성 리뷰 작성 리뷰 작성 리뷰 작성 리뷰 작성 리뷰 작성리뷰 작성리뷰 작성리뷰 작성
+                </Box>
+            </Box>
+        );
+    }
+
+    function SearchForm() {
+        return (
+            <Box
+                sx={{
+                    my: 2,
+                    mx: 3,
+                }}
+            >
+                <TextField
+                    sx={{ width: "100%", color: "#29A1B1" }}
+                    id="hospitalSearch"
+                    name="hospitalSearch"
+                    placeholder="병원, 지역 검색"
+                    focused
+                    onClick={() => {
+                        setSearch(true);
+                    }}
+                    onKeyUp={(event) => {
+                        let id = document.getElementById("searchList");
+                        let list = [{ dong: "와동동", location: "전라북도 전주시 00동 000" }];
+                        id.innerHTML = `
+                        <div id="clickList" style="border-bottom : solid 1px;">
+                            <div>${list[0].dong} </div>
+                            <div>${list[0].location}</div>
+                        </div>
+                        <div id="clickList" style="border-bottom : solid 1px;">
+                            <div>${list[0].dong} </div>
+                            <div>${list[0].location}</div>
+                        </div>
+                        `;
+                        let item = document.getElementById("clickList");
+                        item.addEventListener("click", () => {
+                            id.innerHTML = null;
+                            setMode("list");
+                            setSearch(false);
+                        });
+                    }}
+                />
+            </Box>
+        );
+    }
+
+    function Hosiptal(props) {
+        return (
+            <Card sx={{ minWidth: 275 }}>
+                <CardContent>
+                    <Typography
+                        variant="h6"
+                        component="div"
+                        onClick={() => {
+                            detailHospital(1);
+                        }}
+                    >
+                        {props.name}
+                    </Typography>
+                    <Typography sx={{ mt: 0.8, mb: 1.5 }} color="text.secondary">
+                        영업시간 {props.time}
+                    </Typography>
+                    <Typography variant="body2">{props.location}</Typography>
+                    <Grid container>
+                        <Grid Item xs={0.7}>
+                            <StarIcon sx={{ fontSize: 18, mt: 0.35, color: "#29A1B1" }} />
+                        </Grid>
+                        <Grid Item xs={1.5} sx={{ fontSize: 14, mt: 0.2, color: "#29A1B1" }}>
+                            {props.rating}
+                        </Grid>
+                        <Grid Item xs={2.3} sx={{ fontSize: 12, mt: 0.4, color: "gray" }}>
+                            리뷰 : {props.review}
+                        </Grid>
+                    </Grid>
+                </CardContent>
+            </Card>
+        );
+    }
+
+    function HospitalDetail(props) {
+        console.log(props);
+        return (
+            <Grid container>
+                <Grid item xs={3.3}>
+                    <Box
+                        sx={{ position: "absolute", left: "780px", top: "550px" }}
+                        onClick={() => {
+                            setMode("list");
+                        }}
+                    >
+                        <ChevronLeftIcon sx={{ fontSize: 40 }}></ChevronLeftIcon>
+                    </Box>
+
+                    <Paper style={{ maxHeight: 890, overflow: "auto" }} elevation={0}>
+                        <img
+                            src="./img/hospital.png"
+                            style={{ height: "200px", width: "100%" }}
+                            alt="병원 이미지"
+                        ></img>
+                        <Box display="flex" justifyContent="center" alignItems="center" sx={{ mt: 1 }}>
+                            <img src="./img/24시병원.png" alt="24시여부"></img>
+                        </Box>
+                        <Box
+                            display="flex"
+                            justifyContent="center"
+                            alignItems="center"
+                            sx={{ mt: 2, fontSize: 25, fontWeight: "bold" }}
+                        >
+                            {props.name}
+                        </Box>
+                        <Box
+                            display="flex"
+                            justifyContent="center"
+                            alignItems="center"
+                            sx={{ mt: 1, fontSize: 15, fontWeight: "bold" }}
+                        >
+                            <Grid container>
+                                <Grid item xs={4} />
+                                <Grid item xs={2} sx={{ color: "#29A1B1" }}>
+                                    ★ {props.rating}
+                                </Grid>
+                                <Grid item xs={3} sx={{ fontSize: 12, mt: 0.3, color: "gray" }}>
+                                    리뷰 : {props.review}
+                                </Grid>
+                            </Grid>
+                        </Box>
+                        <Box sx={{ mt: 2, fontSize: 15, fontWeight: "bold" }}>
+                            <Tabs value={value} onChange={handleChange} aria-label="nav tabs example">
+                                <LinkTab label="정보" href="/drafts" sx={{ mx: 1, width: "120px" }} />
+                                <LinkTab label="예약하기" href="/trash" sx={{ mx: 1, width: "120px" }} />
+                                <LinkTab label="리뷰" href="/spam" sx={{ mx: 1, width: "120px" }} />
+                            </Tabs>
+                        </Box>
+                        <TabItems></TabItems>
+                    </Paper>
+                </Grid>
+                <Grid item xs={8.7}>
+                    <div id="map" style={{ width: "100%", height: "890px" }}></div>
+                </Grid>
+            </Grid>
+        );
     }
 
     useEffect(() => {
@@ -157,98 +406,27 @@ function HospitalSearch(props) {
     return (
         <Grid container>
             <Grid item xs={2.5}>
-                <Box
-                    sx={{
-                        my: 2,
-                        mx: 3,
-                    }}
-                >
-                    <TextField
-                        sx={{ width: "100%", color: "#29A1B1" }}
-                        id="hospitalSearch"
-                        name="hospitalSearch"
-                        placeholder="병원, 지역 검색"
-                        focused
-                    />
-                </Box>
-                <Paper style={{ maxHeight: 800, overflow: "auto" }}>
-                    <Card sx={{ minWidth: 275 }}>
-                        <CardContent>
-                            <Typography
-                                variant="h6"
-                                component="div"
-                                onClick={() => {
-                                    detailHospital(1);
-                                }}
-                            >
-                                로이병원
-                            </Typography>
-                            <Typography sx={{ mt: 0.8, mb: 1.5 }} color="text.secondary">
-                                영업시간 00:00 ~ 24:00
-                            </Typography>
-                            <Typography variant="body2">
-                                인천광역시 남동구 논현동 751-1 에코메트로3차 더타워상가 C동 1층 24시 소래동물병원
-                            </Typography>
-                            <Typography sx={{ mt: 0.8, mb: 0, fontSize: 14 }}>별점 : 리뷰</Typography>
-                        </CardContent>
-                    </Card>
-                    <Card sx={{ minWidth: 275 }}>
-                        <CardContent>
-                            <Typography variant="h6" component="div">
-                                로이병원
-                            </Typography>
-                            <Typography sx={{ mt: 0.8, mb: 1.5 }} color="text.secondary">
-                                영업시간 00:00 ~ 24:00
-                            </Typography>
-                            <Typography variant="body2">
-                                인천광역시 남동구 논현동 751-1 에코메트로3차 더타워상가 C동 1층 24시 소래동물병원
-                            </Typography>
-                            <Typography sx={{ mt: 0.8, mb: 0, fontSize: 14 }}>별점 : 리뷰</Typography>
-                        </CardContent>
-                    </Card>
-                    <Card sx={{ minWidth: 275 }}>
-                        <CardContent>
-                            <Typography variant="h6" component="div">
-                                로이병원
-                            </Typography>
-                            <Typography sx={{ mt: 0.8, mb: 1.5 }} color="text.secondary">
-                                영업시간 00:00 ~ 24:00
-                            </Typography>
-                            <Typography variant="body2">
-                                인천광역시 남동구 논현동 751-1 에코메트로3차 더타워상가 C동 1층 24시 소래동물병원
-                            </Typography>
-                            <Typography sx={{ mt: 0.8, mb: 0, fontSize: 14 }}>별점 : 리뷰</Typography>
-                        </CardContent>
-                    </Card>
-                    <Card sx={{ minWidth: 275 }}>
-                        <CardContent>
-                            <Typography variant="h6" component="div">
-                                로이병원
-                            </Typography>
-                            <Typography sx={{ mt: 0.8, mb: 1.5 }} color="text.secondary">
-                                영업시간 00:00 ~ 24:00
-                            </Typography>
-                            <Typography variant="body2">
-                                인천광역시 남동구 논현동 751-1 에코메트로3차 더타워상가 C동 1층 24시 소래동물병원
-                            </Typography>
-                            <Typography sx={{ mt: 0.8, mb: 0, fontSize: 14 }}>별점 : 리뷰</Typography>
-                        </CardContent>
-                    </Card>
-                    <Card sx={{ minWidth: 275 }}>
-                        <CardContent>
-                            <Typography variant="h6" component="div">
-                                로이병원
-                            </Typography>
-                            <Typography sx={{ mt: 0.8, mb: 1.5 }} color="text.secondary">
-                                영업시간 00:00 ~ 24:00
-                            </Typography>
-                            <Typography variant="body2">
-                                인천광역시 남동구 논현동 751-1 에코메트로3차 더타워상가 C동 1층 24시 소래동물병원
-                            </Typography>
-                            <Typography sx={{ mt: 0.8, mb: 0, fontSize: 14 }}>별점 : 리뷰</Typography>
-                        </CardContent>
-                    </Card>
-                </Paper>
+                <SearchForm></SearchForm>
+                {isSearch === true ? (
+                    <MyDiv sx={{ mx: 3.4 }} variant="contained">
+                        <div id="searchList" style={{ display: "none" }}></div>
+                    </MyDiv>
+                ) : (
+                    ""
+                )}
+                {doneSearch === true ? (
+                    <Paper style={{ maxHeight: 800, overflow: "auto" }}>
+                        <Hosiptal
+                            name="로이병원"
+                            time="00:00 ~ 24:00"
+                            location="인천광역시 남동구 논현동 751-1 에코메트로3차 더타워상가 C동 1층 24시 소래동물병원"
+                            rating="4.79"
+                            review="253"
+                        ></Hosiptal>
+                    </Paper>
+                ) : (
+                    ""
+                )}
             </Grid>
             <Grid item xs={9.5}>
                 {mode === "list" ? (
@@ -256,47 +434,20 @@ function HospitalSearch(props) {
                     <div id="map" style={{ width: "100%", height: "890px" }}></div>
                 ) : (
                     // 상세 보기 페이지
-                    <Grid container>
-                        <Grid item xs={3.3}>
-                            <Paper style={{ maxHeight: 890, overflow: "auto" }}>
-                                <img
-                                    src="./img/hospital.png"
-                                    style={{ height: "200px", width: "100%" }}
-                                    alt="병원 이미지"
-                                ></img>
-                                <Box display="flex" justifyContent="center" alignItems="center" sx={{ mt: 1 }}>
-                                    <img src="./img/24시병원.png" alt="24시여부"></img>
-                                </Box>
-                                <Box
-                                    display="flex"
-                                    justifyContent="center"
-                                    alignItems="center"
-                                    sx={{ mt: 2, fontSize: 25, fontWeight: "bold" }}
-                                >
-                                    로이병원
-                                </Box>
-                                <Box
-                                    display="flex"
-                                    justifyContent="center"
-                                    alignItems="center"
-                                    sx={{ mt: 1, fontSize: 15, fontWeight: "bold" }}
-                                >
-                                    ★ 4.79 리뷰 259
-                                </Box>
-                                <Box sx={{ mt: 2, fontSize: 15, fontWeight: "bold" }}>
-                                    <Tabs value={value} onChange={handleChange} aria-label="nav tabs example">
-                                        <LinkTab label="정보" href="/drafts" sx={{ mx: 1, width: "120px" }} />
-                                        <LinkTab label="예약하기" href="/trash" sx={{ mx: 1, width: "120px" }} />
-                                        <LinkTab label="리뷰" href="/spam" sx={{ mx: 1, width: "120px" }} />
-                                    </Tabs>
-                                </Box>
-                                <TabItems></TabItems>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={8.7}>
-                            <div id="map" style={{ width: "100%", height: "890px" }}></div>
-                        </Grid>
-                    </Grid>
+
+                    <HospitalDetail
+                        name="로이병원"
+                        time="00:00 ~ 24:00"
+                        location="인천광역시 남동구 논현동 751-1 에코메트로3차 더타워상가 C동 1층 24시 소래동물병원"
+                        rating="4.79"
+                        review="253"
+                        url="http://petToDoctor.com"
+                        phone_num="02-1234-5678"
+                        subject="드래거 마취기 고난이도 수술 및 CT, MRI 검사, 분과진료"
+                        doctors="김싸피, 박삼성, 이전자, 나에스원, 에스파, 오마걸, 어쩌고, 저꼬고 , 김김김, 이이이,
+                        박박박, 나나나, 제갈공명, 광개토대왕, 조건, 태연"
+                        doctors_num="17"
+                    ></HospitalDetail>
                 )}
             </Grid>
         </Grid>
