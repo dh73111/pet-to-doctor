@@ -3,7 +3,6 @@ package com.ssafy.pettodoctor.api.controller;
 import com.ssafy.pettodoctor.api.domain.Prescription;
 import com.ssafy.pettodoctor.api.domain.TreatmentType;
 import com.ssafy.pettodoctor.api.request.PrescriptionPostReq;
-import com.ssafy.pettodoctor.api.response.DoctorRes;
 import com.ssafy.pettodoctor.api.response.PrescriptionRes;
 import com.ssafy.pettodoctor.api.response.ResVO;
 import com.ssafy.pettodoctor.api.service.PrescriptionService;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -70,7 +70,7 @@ public class PrescriptionController {
         HttpStatus status = null;
         try {
             Prescription prescription = prescriptionService.findById(prescription_id);
-            result.setData(PrescriptionRes.converToRes(prescription));
+            result.setData(PrescriptionRes.convertToRes(prescription));
             result.setMessage("성공");
             status = HttpStatus.OK;
         } catch (Exception e) {
@@ -88,25 +88,24 @@ public class PrescriptionController {
             @ApiResponse(responseCode = "404", description = "사용자 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
-    public ResponseEntity<ResVO<PrescriptionRes>> getPrescriptionList(
+    public ResponseEntity<ResVO<List<PrescriptionRes>>> getPrescriptionList(
             @RequestParam @Parameter(description = "의사 아이디") Long doctor_id ,
             @RequestParam @Parameter(description = "상태(전,후,전취,후취,완)") TreatmentType type
     ) {
-        ResVO<PrescriptionRes> result = new ResVO<>();
+        ResVO<List<PrescriptionRes>> result = new ResVO<>();
         HttpStatus status = null;
         try {
 
-            /*
-            진료 테이블에 의사키와 상태값에 일치하는 처방키를 알아내서, 처방테이블의 처방키에 해당하는 값을 출력...?
-            ...
-            */
+            List<Prescription> prescriptions = prescriptionService.findByIdList(doctor_id, type);
+            result.setData(PrescriptionRes.convertToResList(prescriptions));
+            result.setMessage("성공");
 
             status = HttpStatus.OK;
         } catch (Exception e) {
             status = HttpStatus.INTERNAL_SERVER_ERROR;
             result.setMessage("서버오류");
         }
-        return new ResponseEntity<ResVO<PrescriptionRes>>(result, status);
+        return new ResponseEntity<ResVO<List<PrescriptionRes>>>(result, status);
     }
 
     @PutMapping("/shipping")

@@ -1,6 +1,7 @@
 package com.ssafy.pettodoctor.api.repository;
 
 import com.ssafy.pettodoctor.api.domain.*;
+import com.ssafy.pettodoctor.api.request.PrescriptionPostReq;
 import com.ssafy.pettodoctor.api.request.TreatmentPostReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -43,6 +44,12 @@ public class TreatmentRepositry {
     public Treatment updateTreatment(Long id, TreatmentType type){
         Treatment treatment = em.find(Treatment.class, id);
         treatment.setType(type);
+        return treatment;
+    }
+
+    public Treatment setPrescription(Long treatmentId, Prescription certificateInfo) {
+        Treatment treatment = em.find(Treatment.class, treatmentId);
+        treatment.setPrescription(certificateInfo);
         return treatment;
     }
 }
