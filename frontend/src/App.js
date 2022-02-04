@@ -5,6 +5,9 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HospitalReservation from "./components/hospital/HospitalReservation";
 import HospitalSearchReservation from "./components/hospital/HospitalSearchReservation";
 import HospitalSearch from "./components/hospital/HospitalSearch";
+import DoctorReservation from "./components/doctor/DoctorReservation";
+import DoctorDianosis from "./components/doctor/DoctorDiagnosis";
+import DoctorPerscription from "./components/doctor/DoctorPerscription";
 import Notice from "./components/Notice";
 // import UserReservationPayment from "./components/user/UserReservationPayment";
 
@@ -20,6 +23,11 @@ function App() {
                     <Route path="/kakaooauth*" element={<Home></Home>}></Route>
                 </Routes>
                 <Routes>
+                    {/* doctor */}
+                    <Route path="/doctorreservation" element={<DoctorReservation></DoctorReservation>}></Route>
+                    <Route path="/doctordiagnosis" element={<DoctorDianosis></DoctorDianosis>}></Route>
+                    <Route path="/doctorperscripton" element={<DoctorPerscription></DoctorPerscription>}></Route>
+                    {/* user */}
                     <Route path="/hospitalsearch" element={<HospitalSearch></HospitalSearch>}></Route>
                     <Route path="/hospitalreservation" element={<HospitalReservation></HospitalReservation>}></Route>
                     <Route
