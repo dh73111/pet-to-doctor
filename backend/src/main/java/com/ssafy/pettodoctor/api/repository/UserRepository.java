@@ -38,4 +38,8 @@ public class UserRepository {
         return Optional.ofNullable(findUser);
     }
 
+    public void delete(User user) {
+        em.remove(user);
+    }
+
 }
