@@ -29,7 +29,7 @@ import java.util.Map;
 public class PrescriptionController {
     private final PrescriptionService prescriptionService;
 
-    @PostMapping
+    @PostMapping("/{treatmentId}")
     @Operation(summary = "진단서 작성", description = "진단서를 작성한다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공"),
@@ -38,13 +38,14 @@ public class PrescriptionController {
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
     public ResponseEntity<Map<String, Object>> writeCertificate(
-            @RequestBody @Parameter(description = "진단서 작성 정보") PrescriptionPostReq certificateInfo
+            @RequestBody @Parameter(description = "진단서 작성 정보") PrescriptionPostReq certificateInfo,
+            @PathVariable @Parameter(description = "진료 아이디") Long treatmentId
     ) {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
         try {
-            prescriptionService.writeCertificate(certificateInfo);
+            prescriptionService.writeCertificate(certificateInfo, treatmentId);
             resultMap.put("message", "성공");
             status = HttpStatus.OK;
         } catch (Exception e) {

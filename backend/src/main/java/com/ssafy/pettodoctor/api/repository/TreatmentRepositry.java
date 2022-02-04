@@ -46,10 +46,4 @@ public class TreatmentRepositry {
         treatment.setType(type);
         return treatment;
     }
-
-    public Treatment setPrescription(Long treatmentId, Prescription certificateInfo) {
-        Treatment treatment = em.find(Treatment.class, treatmentId);
-        treatment.setPrescription(certificateInfo);
-        return treatment;
-    }
 }

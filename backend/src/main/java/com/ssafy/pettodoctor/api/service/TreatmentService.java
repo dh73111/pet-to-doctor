@@ -1,10 +1,7 @@
 package com.ssafy.pettodoctor.api.service;
 
 import com.ssafy.pettodoctor.api.domain.*;
-import com.ssafy.pettodoctor.api.repository.DoctorRepository;
-import com.ssafy.pettodoctor.api.repository.HospitalRepository;
-import com.ssafy.pettodoctor.api.repository.TreatmentRepositry;
-import com.ssafy.pettodoctor.api.repository.UserRepository;
+import com.ssafy.pettodoctor.api.repository.*;
 import com.ssafy.pettodoctor.api.request.TreatmentPostReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +17,7 @@ public class TreatmentService {
     private final DoctorRepository doctorRepository;
     private final UserRepository userRepository;
     private final HospitalRepository hospitalRepository;
+    private final PrescriptionRepository prescriptionRepository;
 
     public Treatment findById(Long id){
         return treatmentRepositry.findByTreatmentId(id);
@@ -45,10 +43,5 @@ public class TreatmentService {
     @Transactional
     public Treatment updateTreatment(Long id, TreatmentType type){
         return treatmentRepositry.updateTreatment(id, type);
-    }
-
-    @Transactional
-    public Treatment setPrescription(Long treatmentId, Prescription certificateInfo) {
-        return treatmentRepositry.setPrescription(treatmentId, certificateInfo);
     }
 }
