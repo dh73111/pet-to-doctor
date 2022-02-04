@@ -14,7 +14,7 @@ function UserLoginModal(props) {
     return (
         <ThemeProvider theme={newTheme}>
             <div>
-                <Grid container maxWidth="1200px" component={Paper} sx={{ mx: "auto", mt: 6 }}>
+                <Grid container maxHeight="800px" sx={{ height: '100vh' }}>
                     <Grid
                         item
                         xs={false}

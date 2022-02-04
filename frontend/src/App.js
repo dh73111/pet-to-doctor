@@ -8,14 +8,16 @@ import HospitalSearch from "./components/hospital/HospitalSearch";
 import Notice from "./components/Notice";
 // import UserLoginModal from "./components/UserLoginModal";
 import UserReservationPayment from './components/user/UserReservationPayment';
+import UserReservationPaymenting from './components/user/UserReservationPaymenting';
+import UserReservationComplete from './components/user/UserReservationComplete';
+import UserMedicinePayment from "./components/user/UserMedicinePayment";
 
 function App() {
     return (
         <BrowserRouter>
             <div className="App">
-                <UserReservationPayment />
                 {/* <UserLoginModal /> */}
-                {/* <Routes>
+                <Routes>
                     <Route path="/*" element={<NavBar></NavBar>}></Route>
                 </Routes>
                 <Routes>
@@ -27,9 +29,17 @@ function App() {
                     <Route
                         path="/hospitalsearchreservation"
                         element={<HospitalSearchReservation></HospitalSearchReservation>}
-                    ></Route>
+                        ></Route>
                     <Route path="/notice" element={<Notice></Notice>}></Route>
-                </Routes> */}
+                </Routes>
+                <Routes>
+                    <Route path="/reservpayment" element={<UserReservationPayment />} />
+                    <Route path="/reserpaymenting" element={<UserReservationPaymenting />} />
+                    <Route path="/reserpaymentcomplete" element={<UserReservationComplete />} />
+                </Routes>
+                <Routes>
+                    <Route path="/medipayment" element={<UserMedicinePayment />} />
+                </Routes>
             </div>
         </BrowserRouter>
     );
