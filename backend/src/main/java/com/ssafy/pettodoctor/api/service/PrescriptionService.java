@@ -1,8 +1,10 @@
 package com.ssafy.pettodoctor.api.service;
 
 import com.ssafy.pettodoctor.api.domain.Prescription;
+import com.ssafy.pettodoctor.api.domain.Treatment;
 import com.ssafy.pettodoctor.api.domain.TreatmentType;
 import com.ssafy.pettodoctor.api.repository.PrescriptionRepository;
+import com.ssafy.pettodoctor.api.repository.TreatmentRepositry;
 import com.ssafy.pettodoctor.api.request.PrescriptionPostReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,13 +18,14 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class PrescriptionService {
     private final PrescriptionRepository prescriptionRepository;
+    private final TreatmentRepositry treatmentRepositry;
 
     public List<Prescription> findByIdList(Long doctor_id, TreatmentType type) {
         return prescriptionRepository.findByIdList(doctor_id, type);
     }
 
     @Transactional
-    public void writeCertificate(PrescriptionPostReq certificateInfo){
+    public void writeCertificate(PrescriptionPostReq certificateInfo, Long treatmentId){
         Prescription prescription = Prescription.createPrescription(
                 certificateInfo.getAdministration(),
                 certificateInfo.getDiagnosis(),
@@ -33,7 +36,8 @@ public class PrescriptionService {
         );
 
         prescriptionRepository.save(prescription);
-
+        Treatment treatment = treatmentRepositry.findByTreatmentId(treatmentId);
+        treatment.setPrescription(prescription);
     }
 
     @Transactional
