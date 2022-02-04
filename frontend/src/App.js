@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HospitalReservation from "./components/hospital/HospitalReservation";
 import HospitalSearch from "./components/hospital/HospitalSearch";
 import Notice from "./components/Notice";
+import UserJoin from "./components/user/UserJoin";
 // import UserLoginModal from "./components/UserLoginModal";
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
                     <Route path="/hospitalsearch" element={<HospitalSearch></HospitalSearch>}></Route>
                     <Route path="/hospitalreservation" element={<HospitalReservation></HospitalReservation>}></Route>
                     <Route path="/notice" element={<Notice></Notice>}></Route>
+                    <Route path="/UserJoin" element={<UserJoin></UserJoin>}></Route>
                 </Routes>
             </div>
         </BrowserRouter>
