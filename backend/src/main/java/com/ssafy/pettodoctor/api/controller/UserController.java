@@ -7,6 +7,7 @@ import com.ssafy.pettodoctor.api.request.*;
 import com.ssafy.pettodoctor.api.response.PetRes;
 import com.ssafy.pettodoctor.api.response.ResVO;
 import com.ssafy.pettodoctor.api.response.UserRes;
+import com.ssafy.pettodoctor.api.service.SendMailService;
 import com.ssafy.pettodoctor.api.service.UserService;
 //import io.swagger.annotations.*;
 import com.ssafy.pettodoctor.common.util.JwtTokenUtil;
@@ -265,4 +266,28 @@ public class UserController {
 
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
+
+    @GetMapping("/password/sendToEmail/{userEmail}")
+    @Operation(summary = "비밀번호 찾기", description = "메일로 비밀번호 보내주기")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "500", description = "서버 오류")
+    })
+    public ResponseEntity<Map<String, Object>> sendPassword(
+            @PathVariable("userEmail") @Parameter(description = "회원 이메일") String userEmail) {
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        HttpStatus status = null;
+
+        try {
+            SendMailService.sendMail();
+            status = HttpStatus.OK;
+
+        } catch (Exception e) {
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            resultMap.put("message", "서버 오류");
+        }
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
 }

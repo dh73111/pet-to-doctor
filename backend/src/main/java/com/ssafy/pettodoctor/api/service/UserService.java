@@ -101,4 +101,10 @@ public class UserService {
         }
         return false;
     }
+
+    @Transactional
+    public String getUserPassByEmail(String email) {
+        User user = userRepository.findByEmail(email);
+        return user.getPassword();
+    }
 }
