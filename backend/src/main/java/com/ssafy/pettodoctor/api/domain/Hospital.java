@@ -3,10 +3,7 @@ package com.ssafy.pettodoctor.api.domain;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -16,7 +13,9 @@ public class Hospital {
     @Column(name = "hospital_id")
     private Long id;
 
-    private String address;
+    @Embedded
+    private Address address;
+
     private String tel;
     private String url;
     private String operatingTime;
@@ -27,4 +26,5 @@ public class Hospital {
     private String longitude;
     private String businessNumber;
     private String dongCode;
+    private String name;
 }

@@ -20,7 +20,7 @@ public class Pet {
     private String species;
     private String weight;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;
 

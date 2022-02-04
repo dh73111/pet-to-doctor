@@ -41,4 +41,15 @@ class UserServiceTest {
 //        Assertions.
     }
 
+    @Test
+    @Transactional
+    public void 이메일_중복확인() {
+        UserCommonSignupPostReq ur1 = new UserCommonSignupPostReq();
+        ur1.setEmail("aaa");
+
+        userService.signup(ur1);
+
+        Assertions.assertThat(userService.isDuplicated("aaa")).isEqualTo(true);
+        Assertions.assertThat(userService.isDuplicated("bbb")).isEqualTo(false);
+    }
 }
