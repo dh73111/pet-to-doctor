@@ -11,6 +11,10 @@ const newTheme = createTheme({
 });
 
 function UserLoginModal(props) {
+    const REST_API_KEY = "c9d9cd706215602e662da44e2c2150a2";
+    const REDIRECT_URI = "http://localhost:3000/kakaooauth";
+    const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
     return (
         <ThemeProvider theme={newTheme}>
             <div>
@@ -102,16 +106,19 @@ function UserLoginModal(props) {
                                     네이버로 로그인
                                 </Button>
                                 {/* 네이버그린 #03C75A */}
-                                <Button
-                                    type="submit"
-                                    fullWidth
-                                    variant="contained"
-                                    sx={{ mb: 2 }}
-                                    style={{ backgroundColor: "#FEE500", color: "#000000" }}
-                                >
-                                    <img src="img/kakaolink_btn_small.png" width="24px" alt="카카오로고" />
-                                    카카오로 로그인
-                                </Button>
+                                <a href={KAKAO_AUTH_URL} style={{ textDecoration: "none" }}>
+                                    <Button
+                                        type="submit"
+                                        fullWidth
+                                        variant="contained"
+                                        sx={{ mb: 2 }}
+                                        style={{ backgroundColor: "#FEE500", color: "#000000" }}
+                                        to={KAKAO_AUTH_URL}
+                                    >
+                                        <img src="img/kakaolink_btn_small.png" width="24px" alt="카카오로고" />
+                                        카카오로 로그인
+                                    </Button>
+                                </a>
                                 {/* 카카오옐로 #FEE500 */}
                                 <Typography variant="body2" align="center" sx={{ color: "#aeaeae" }}>
                                     펫투닥터가 처음이신가요?

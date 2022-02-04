@@ -11,6 +11,10 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import CalendarPicker from "@mui/lab/CalendarPicker";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormLabel from "@mui/material/FormLabel";
 import { Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 
@@ -21,7 +25,9 @@ function HospitalSearchReservation(props) {
         name: "",
         weight: "",
         specific: "",
-        old: "",
+        diagonose: "",
+        time: "",
+        symptom: "",
     });
     const [date, setDate] = React.useState(new Date());
 
@@ -118,6 +124,21 @@ function HospitalSearchReservation(props) {
                             </Box>
                         </Grid>
                     </Grid>
+                    <Box>
+                        <FormControl>
+                            <FormLabel id="demo-row-radio-buttons-group-label">진료 종료</FormLabel>
+                            <RadioGroup
+                                row
+                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                name="row-radio-buttons-group"
+                                value={values.diagonose}
+                                onChange={handleChange("diagonose")}
+                            >
+                                <FormControlLabel value="visit" control={<Radio />} label="방문" />
+                                <FormControlLabel value="video" control={<Radio />} label="화상" />
+                            </RadioGroup>
+                        </FormControl>
+                    </Box>
                     <div id="map" style={{ width: "100%", height: "300px" }}></div>
                     <Grid container sx={{ mt: 3 }}>
                         <Grid item xs={4}>
@@ -178,7 +199,7 @@ function HospitalSearchReservation(props) {
                                         date={date}
                                         onChange={(newDate) => {
                                             setDate(newDate);
-                                            console.log(newDate);
+                                            
                                         }}
                                     />
                                 </Grid>
@@ -237,10 +258,17 @@ function HospitalSearchReservation(props) {
                             rows={4}
                             variant="filled"
                             sx={{ width: "100%" }}
+                            value={values.symptom}
+                            onChange={handleChange("symptom")}
                         />
                     </Box>
                     <Box sx={{ mx: 130, width: "100px", mt: 3 }}>
-                        <Button variant="contained" onClick={() => {}}>
+                        <Button
+                            variant="contained"
+                            onClick={() => {
+                                console.log(values , date);
+                            }}
+                        >
                             예약하기
                         </Button>
                     </Box>
