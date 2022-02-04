@@ -6,7 +6,6 @@ import NavBar from "../NavBar";
 function UserReservationComplete(props) {
   return (
     <>
-      <NavBar />
       <Container align="center" maxWidth="sm" sx={{ mt: 24 }}>
         <CheckCircleIcon sx={{ fontSize: 60 }} color="success"/>
         <Typography variant='h4' sx={{ fontWeight: 600, mt: 3, mb: 1 }}>상담예약 결제가 완료되었습니다!</Typography>
