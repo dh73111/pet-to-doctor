@@ -5,14 +5,16 @@ import com.ssafy.pettodoctor.api.domain.PaymentType;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter @Setter
 public class PrescriptionPostReq {
     // 필수
     private String administration;
     private String diagnosis;
-    private String medicine;
     private String opinion;
-    private Integer price;
+    private Integer additionalCost;
+    private Integer medicineCost;
     private PaymentType type;
 
     // 선택
@@ -25,5 +27,8 @@ public class PrescriptionPostReq {
     private Address address;
     private String shippingName;
     private String shippingTel;
+    private Integer shippingCost;
+
+    private List<MedicineReq> medicines;
 
 }

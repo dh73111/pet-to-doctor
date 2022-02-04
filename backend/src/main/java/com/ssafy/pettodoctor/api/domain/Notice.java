@@ -27,4 +27,5 @@ public class Notice {
     @Enumerated(value = EnumType.STRING)
     private NoticeType type;
 
+    private Boolean isChecked;
 }
