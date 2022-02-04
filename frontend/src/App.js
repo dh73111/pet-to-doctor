@@ -6,16 +6,13 @@ import HospitalReservation from "./components/hospital/HospitalReservation";
 import HospitalSearchReservation from "./components/hospital/HospitalSearchReservation";
 import HospitalSearch from "./components/hospital/HospitalSearch";
 import Notice from "./components/Notice";
-// import UserLoginModal from "./components/UserLoginModal";
-import UserReservationPayment from './components/user/UserReservationPayment';
+// import UserReservationPayment from "./components/user/UserReservationPayment";
 
 function App() {
     return (
         <BrowserRouter>
             <div className="App">
-                <UserReservationPayment />
-                {/* <UserLoginModal /> */}
-                {/* <Routes>
+                <Routes>
                     <Route path="/*" element={<NavBar></NavBar>}></Route>
                 </Routes>
                 <Routes>
@@ -30,7 +27,7 @@ function App() {
                         element={<HospitalSearchReservation></HospitalSearchReservation>}
                     ></Route>
                     <Route path="/notice" element={<Notice></Notice>}></Route>
-                </Routes> */}
+                </Routes>
             </div>
         </BrowserRouter>
     );
