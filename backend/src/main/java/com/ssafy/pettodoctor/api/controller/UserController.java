@@ -3,6 +3,7 @@ package com.ssafy.pettodoctor.api.controller;
 import com.ssafy.pettodoctor.api.domain.User;
 import com.ssafy.pettodoctor.api.request.LoginPostReq;
 import com.ssafy.pettodoctor.api.request.UserCommonSignupPostReq;
+import com.ssafy.pettodoctor.api.response.ResVO;
 import com.ssafy.pettodoctor.api.service.UserService;
 //import io.swagger.annotations.*;
 import com.ssafy.pettodoctor.common.util.JwtTokenUtil;
@@ -14,8 +15,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,21 +41,21 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "사용자 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
-    public ResponseEntity<Map<String, Object>> isDuplicated(
+    public ResponseEntity<ResVO<Boolean>> isDuplicated(
             @RequestParam @Parameter(description = "사용자 이메일") String email) {
-        Map<String, Object> resultMap = new HashMap<>();
+        ResVO<Boolean> result = new ResVO<>();
         HttpStatus status = null;
         try {
             Boolean isDuplicated = userService.isDuplicated(email);
-            resultMap.put("isDuplicated", isDuplicated);
-            resultMap.put("message", "성공");
+            result.setData(isDuplicated);
+            result.setMessage("성공");
             status = HttpStatus.OK;
         } catch (Exception e) {
             status = HttpStatus.INTERNAL_SERVER_ERROR;
-            resultMap.put("message", "서버 오류");
+            result.setMessage("서버 오류");
         }
 
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        return new ResponseEntity<ResVO<Boolean>>(result, status);
     }
 
 
@@ -61,22 +67,22 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "사용자 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
-    public ResponseEntity<Map<String, Object>> signup (
+    public ResponseEntity<ResVO<Long>> signup (
             @RequestBody @Parameter(description = "사용자 가입 정보") UserCommonSignupPostReq signupInfo
     ) {
-        Map<String, Object> resultMap = new HashMap<>();
+        ResVO<Long> result = new ResVO<>();
         HttpStatus status = null;
 
         try{
             userService.signup(signupInfo);
-            resultMap.put("message", "성공");
+            result.setMessage("성공");
             status = HttpStatus.OK;
         } catch (Exception e) {
             status = HttpStatus.INTERNAL_SERVER_ERROR;
-            resultMap.put("message", "서버 오류");
+            result.setMessage("서버 오류");
         }
 
-        return new ResponseEntity(resultMap, status);
+        return new ResponseEntity<ResVO<Long>>(result, status);
     }
 
 
@@ -88,29 +94,59 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "사용자 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
-    public ResponseEntity<Map<String, Object>> login (@RequestBody LoginPostReq loginPostReq){
-        Map<String, Object> resultMap = new HashMap<String, Object>();
+    public ResponseEntity<ResVO<String>> login (@RequestBody LoginPostReq loginPostReq){
+        ResVO<String> result = new ResVO<>();
         HttpStatus status = null;
 
         try{
             User user = userService.getUserByEmail(loginPostReq.getEmail());
             if(user == null) {
                 status = HttpStatus.NOT_ACCEPTABLE;
-                resultMap.put("message", "존재하지 않는 이메일입니다.");
+                result.setMessage("존재하지 않는 이메일입니다.");
             } else if (!loginPostReq.getPassword().equals(user.getPassword())) {
                 status = HttpStatus.UNAUTHORIZED;
-                resultMap.put("message", "비밀번호가 일치하지 않습니다.");
+                result.setMessage("비밀번호가 일치하지 않습니다.");
             } else {
                 status = HttpStatus.OK;
                 String accessToken = JwtTokenUtil.getToken(user.getId().toString(), user.getRole());
-                resultMap.put("access-token", accessToken);
+                result.setData(accessToken);
+                result.setMessage("성공");
             }
 
         }catch (Exception e){
             status = HttpStatus.INTERNAL_SERVER_ERROR;
-            resultMap.put("message", "서버 오류");
+            result.setMessage("서버 오류");
         }
 
-        return new ResponseEntity(resultMap, status);
+        return new ResponseEntity<ResVO<String>>(result, status);
+    }
+
+    // 사용자 프로필 업데이트
+    @PostMapping("/profile/{userId}")
+    @Operation(summary = "프로필 업데이트", description = "프로필 사진을 업데이트한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "401", description = "인증 실패"),
+            @ApiResponse(responseCode = "404", description = "사용자 없음"),
+            @ApiResponse(responseCode = "500", description = "서버 오류")
+    })
+    public ResponseEntity<ResVO<String>> updateProfile(
+            @PathVariable @Parameter(description = "사용자 아이디") Long userId,
+            @RequestParam("profileImgUrl") @Parameter(description = "프로필 사진") MultipartFile multipartFile,
+            HttpServletRequest req) {
+        ResVO<String> result = new ResVO<>();
+        HttpStatus status = null;
+
+        try{
+            status = HttpStatus.OK;
+            userService.updateProfile(userId, multipartFile);
+            result.setMessage("성공");
+        } catch (Exception e){
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            result.setMessage("서버 오류");
+            e.printStackTrace();
+        }
+
+        return new ResponseEntity<ResVO<String>>(result, status);
     }
 }

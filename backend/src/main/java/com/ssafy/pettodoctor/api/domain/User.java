@@ -15,6 +15,7 @@ public class User extends Account {
     private Address address;
     private Boolean isOauth;
     private Boolean isCertificated;
+    private String profileImgUrl;
 
     //== 생성 메소드 ==//
     public static User createCommonUser(String email, String name, String password, Address address){

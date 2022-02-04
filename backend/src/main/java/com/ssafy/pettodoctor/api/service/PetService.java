@@ -8,9 +8,17 @@ import com.ssafy.pettodoctor.api.repository.MarkRepository;
 import com.ssafy.pettodoctor.api.repository.PetRepository;
 import com.ssafy.pettodoctor.api.request.PetPostReq;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FilenameUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -19,8 +27,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional
 public class PetService {
-
     private final PetRepository petRepository;
+
+    @Value("${profileImg.path}")
+    private String uploadFolder;
 
     @Transactional
     public Optional<Pet> addPet(User user, PetPostReq petReq) { // 테스트를 위해 user를 인자로 쓸 수 있게했지만 실제로 쓸때는 없앨 것.
@@ -62,5 +72,27 @@ public class PetService {
         }
 
         return pet;
+    }
+
+    @Transactional
+    public void updateProfile(Long petId, MultipartFile multipartFile) {
+        Pet pet = petRepository.findOne(petId).get();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        String imageFileName = "pet_" + pet.getId() + "." + FilenameUtils.getExtension(multipartFile.getOriginalFilename());
+        Path imageFilePath = Paths.get(uploadFolder + imageFileName);
+
+        if (multipartFile.getSize() != 0) { // 파일이 업로드 되었는지 확인
+            try {
+                if (pet.getProfileImgUrl() != null) { // 이미 프로필 사진이 있을 경우
+                    File file = new File(uploadFolder + pet.getProfileImgUrl());
+                    file.delete(); // 원래 파일 삭제
+                }
+                Files.write(imageFilePath, multipartFile.getBytes());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            pet.setProfileImgUrl(imageFileName);
+        }
     }
 }
