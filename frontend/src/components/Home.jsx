@@ -18,7 +18,7 @@ function Home(props) {
     return (
         <div>
             <MyImage>
-                <img src="./img/메인.png" width="100%" height="550px" alt=""></img>
+                <img src="./img/main.png" width="100%" height="550px" alt=""></img>
             </MyImage>
             <MyDiv>
                 <Grid container>
