@@ -86,10 +86,7 @@ public class UserService {
 
     @Transactional
     public boolean checkPassword(String inputPass, User user) {
-        if (user.getPassword().equals(inputPass)) {
-            return true;
-        }
-        return false;
+        return user.getPassword().equals(inputPass);
     }
 
     @Transactional
