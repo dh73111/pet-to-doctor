@@ -40,6 +40,7 @@ import java.util.Map;
 @CrossOrigin("*")
 public class UserController {
     private final UserService userService;
+    private final SendMailService sendMailService;
 
     @GetMapping("/duplication")
     @Operation(summary = "이메일 중복 확인", description = "이메일 중복을 확인해준다. 중복이라면 true 반환")
@@ -317,7 +318,7 @@ public class UserController {
         HttpStatus status = null;
 
         try {
-            SendMailService.sendMail();
+            sendMailService.sendPassword(userEmail);
             status = HttpStatus.OK;
 
         } catch (Exception e) {
