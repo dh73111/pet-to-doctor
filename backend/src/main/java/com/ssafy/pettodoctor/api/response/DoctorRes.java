@@ -20,12 +20,13 @@ public class DoctorRes {
     private String specialty;
     private Integer price;
     private Long hospitalId;
+    private String profileImgUrl;
 
     public DoctorRes() {
 
     }
 
-    public DoctorRes(Long id, String email, String name, String role, String tel, LocalDateTime joinDate, String pysicianLicenseNumber, String specialty, Integer price, Long hospitalId) {
+    public DoctorRes(Long id, String email, String name, String role, String tel, LocalDateTime joinDate, String pysicianLicenseNumber, String specialty, Integer price, Long hospitalId, String profileImgUrl) {
         this.id = id;
         this.email = email;
         this.name = name;
@@ -36,13 +37,14 @@ public class DoctorRes {
         this.specialty = specialty;
         this.price = price;
         this.hospitalId = hospitalId;
+        this.profileImgUrl = profileImgUrl;
     }
 
     public static DoctorRes converToRes(Doctor d){
         DoctorRes dr = new DoctorRes(d.getId(), d.getEmail(), d.getName()
                 , d.getRole(), d.getTel(),d.getJoinDate(),
                 d.getPysicianLicenseNumber(), d.getSpecialty()
-                , d.getPrice(), d.getHospital().getId());
+                , d.getPrice(), d.getHospital().getId(), d.getProfileImgUrl());
         return dr;
     }
 
