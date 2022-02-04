@@ -33,11 +33,10 @@ const style = {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 1440,
+    width: 1200,
+    height: 800,
     bgcolor: "background.paper",
-    border: "2px solid #000",
     boxShadow: 24,
-    p: 4,
 };
 
 const NavBarEl = (props) => {
@@ -45,7 +44,7 @@ const NavBarEl = (props) => {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [open, setOpen] = React.useState(false);
-    const [mode, setMode] = useState("doctor");
+    const [mode, setMode] = useState("user");
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const handleOpenNavMenu = (event) => {
