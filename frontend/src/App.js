@@ -20,6 +20,7 @@ function App() {
                 </Routes>
                 <Routes>
                     <Route path="/" element={<Home></Home>}></Route>
+                    <Route path="/kakaooauth*" element={<Home></Home>}></Route>
                 </Routes>
                 <Routes>
                     <Route path="/hospitalsearch" element={<HospitalSearch></HospitalSearch>}></Route>
