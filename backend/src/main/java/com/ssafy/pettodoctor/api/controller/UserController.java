@@ -337,7 +337,7 @@ public class UserController {
 
 
     @GetMapping("/certification/{certificationKey}")
-    @Operation(summary = "비밀번호 찾기", description = "메일로 비밀번호 보내주기")
+    @Operation(summary = "서버 이메일 인증", description = "이메일로 날아온 인증 url클릭하면 인증해준다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
