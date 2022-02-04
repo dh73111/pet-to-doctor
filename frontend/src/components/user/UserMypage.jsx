@@ -5,7 +5,6 @@ import NavBar from '../NavBar';
 function UserMypage(props) {
   return (
     <div>
-      <NavBar/>
       <Container>
         <Typography variant="h4" component="h1" sx={{mt:10}}>
           마이페이지

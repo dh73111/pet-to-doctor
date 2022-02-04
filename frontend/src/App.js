@@ -9,6 +9,9 @@ import DoctorReservation from "./components/doctor/DoctorReservation";
 import DoctorDianosis from "./components/doctor/DoctorDiagnosis";
 import DoctorPerscription from "./components/doctor/DoctorPerscription";
 import Notice from "./components/Notice";
+import UserMedicinePayment from "./components/user/UserMedicinePayment";
+import UserMypage from "./components/user/UserMypage";
+import UserRating from "./components/user/UserRating";
 // import UserReservationPayment from "./components/user/UserReservationPayment";
 
 function App() {
@@ -16,7 +19,7 @@ function App() {
         <BrowserRouter>
             <div className="App">
                 <Routes>
-                    <Route path="/*" element={<NavBar></NavBar>}></Route>
+                    <Route path="/*" element={<NavBar />}></Route>
                 </Routes>
                 <Routes>
                     <Route path="/" element={<Home></Home>}></Route>
@@ -35,6 +38,11 @@ function App() {
                         element={<HospitalSearchReservation></HospitalSearchReservation>}
                     ></Route>
                     <Route path="/notice" element={<Notice></Notice>}></Route>
+
+                    {/* test */}
+                    <Route path="/drugpayment" element={<UserMedicinePayment />}></Route>
+                    <Route path="/userating" element={<UserRating />}></Route>
+                    <Route path="/mypage" element={<UserMypage />}></Route>
                 </Routes>
             </div>
         </BrowserRouter>
