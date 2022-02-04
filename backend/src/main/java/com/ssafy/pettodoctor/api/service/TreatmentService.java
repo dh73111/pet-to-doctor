@@ -5,6 +5,7 @@ import com.ssafy.pettodoctor.api.repository.DoctorRepository;
 import com.ssafy.pettodoctor.api.repository.HospitalRepository;
 import com.ssafy.pettodoctor.api.repository.TreatmentRepositry;
 import com.ssafy.pettodoctor.api.repository.UserRepository;
+import com.ssafy.pettodoctor.api.request.PaymentReq;
 import com.ssafy.pettodoctor.api.request.TreatmentPostReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -50,5 +51,12 @@ public class TreatmentService {
     @Transactional
     public Treatment setPrescription(Long treatmentId, Prescription certificateInfo) {
         return treatmentRepositry.setPrescription(treatmentId, certificateInfo);
+    }
+
+    @Transactional
+    public Treatment updatePaymentInfo(Long treatmentId, PaymentReq paymentReq) {
+        Treatment treatment = treatmentRepositry.findByTreatmentId(treatmentId);
+        treatment.updatePaymentInfo(paymentReq.getPaymentCode(), paymentReq.getPrice());
+        return treatment;
     }
 }
