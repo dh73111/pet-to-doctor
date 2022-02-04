@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/system';
-import { Button, Checkbox, FormControlLabel, TextField, Typography } from '@mui/material';
-import PostcodeAPI from './PostcodeAPI';
+import { Button, Checkbox, FormControlLabel, Grid, TextField, Typography } from '@mui/material';
 
 function ShipmentInfo(props) {
   const [zonecode, setZonecode] = useState();
@@ -48,25 +47,31 @@ function ShipmentInfo(props) {
           control={<Checkbox />}
         />
       </Box>
-      <Box>
-        <Box sx={{ display: 'flex' }}>
-          <Typography sx={{ fontWeight: '600', width: "100px" }}>수령자</Typography>
-          <TextField id="outlined-basic" variant="outlined" size="small"/>
-        </Box>
-        <Box sx={{ display: 'flex' }}>
-          <Typography sx={{ fontWeight: '600', width: "100px" }}>전화번호</Typography>
-          <TextField id="outlined-basic" variant="outlined" size="small"/>
-        </Box>
-        <Box sx={{ display: 'flex' }}>
-          <Typography sx={{ fontWeight: '600', width: "100px" }}>주소</Typography>
-          <TextField id="outlined-basic" variant="outlined" size="small" value={zonecode} disabled/>
-          <Button onClick={openPopup} variant="contained">우편번호 검색</Button>
-          <TextField id="outlined-basic" variant="outlined" size="small" value={address} disabled/>
-          <TextField id="outlined-basic" variant="outlined" size="small" />
-        </Box>
-        <Box sx={{ display: 'flex' }}>
-          <Typography sx={{ fontWeight: '600', width: "100px" }}>배송메세지</Typography>
-          <TextField id="outlined-basic" variant="outlined" size="small"/>
+      <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', /* backgroundColor: '#CDEEF4' */ }}>
+          <Box sx={{ display: 'flex', mb: 1 }}>
+            <Typography sx={{ width: '260px', fontWeight: '600', lineHeight: '40px' }}>수령자</Typography>
+            <TextField id="outlined-basic" variant="outlined" size="small"/>
+          </Box>
+          <Box sx={{ display: 'flex', mb: 1 }}>
+            <Typography sx={{ width: '260px', fontWeight: '600', lineHeight: '40px' }}>전화번호</Typography>
+            <TextField id="outlined-basic" variant="outlined" size="small"/>
+          </Box>
+          <Box sx={{ display: 'flex', mb: 1 }}>
+            <Typography sx={{ width: '260px', fontWeight: '600', lineHeight: '40px' }}>주소</Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+              <Box>
+                <TextField sx={{ mb: 1 }} variant="outlined" size="small" value={zonecode} disabled/>
+                <Button onClick={openPopup} variant="contained">우편번호 검색</Button>
+              </Box>
+              <TextField  variant="outlined" size="small" value={address} disabled/>
+              <TextField variant="outlined" size="small" />
+            </Box>
+          </Box>
+          <Box sx={{ display: 'flex', mb: 1 }}>
+            <Typography sx={{ width: '260px', fontWeight: '600', lineHeight: '40px' }}>배송메세지</Typography>
+            <TextField id="outlined-basic" variant="outlined" size="small"/>
+          </Box>
         </Box>
       </Box>
     </Box>

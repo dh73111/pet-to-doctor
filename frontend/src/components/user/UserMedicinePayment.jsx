@@ -75,10 +75,10 @@ function UserMedicinePayment(props) {
               </ul>
             </Box>
             <Box sx={{ mb: 2, p: 3, backgroundColor: '#F5F6F7' }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                <Typography variant="h6" sx={{ fontWeight: 600 }}>주문자정보</Typography>
-                <Typography>고객님의 화원정보에 등록되어 있는 주소입니다.</Typography>
-              </Box>
+              <Grid container sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                <Typography item xs={12} variant="h6" sx={{ fontWeight: 600 }}>주문자정보</Typography>
+                <Typography item xs={12}>고객님의 회원정보에 등록되어 있는 주소입니다.</Typography>
+              </Grid>
               <Box container sx={{ mt: 2, display: 'flex' }}>
                 <Box sx={{ border: 1 }}>목록</Box>
                 <Box>인풋들</Box>
