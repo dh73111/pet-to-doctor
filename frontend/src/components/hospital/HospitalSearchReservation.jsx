@@ -108,6 +108,7 @@ function HospitalSearchReservation(props) {
                                         <Box sx={{ height: "45px" }}>드래거, 마취기 ,고난이도 수술, </Box>
                                         <Box>00:00 ~ 24:00</Box>
                                     </Grid>
+                                    d
                                     <Grid item xs={2}>
                                         <Box>
                                             <Box sx={{ fontWeight: "bold" }}>대표 수의사</Box>
@@ -168,7 +169,7 @@ function HospitalSearchReservation(props) {
                                         <InputLabel htmlFor="filled-adornment-name">이름</InputLabel>
                                         <FilledInput
                                             id="filled-adornment-name"
-                                            value={values.amount}
+                                            value={values.name}
                                             onChange={handleChange("name")}
                                             startAdornment={<InputAdornment position="start"></InputAdornment>}
                                         />
@@ -199,7 +200,6 @@ function HospitalSearchReservation(props) {
                                         date={date}
                                         onChange={(newDate) => {
                                             setDate(newDate);
-                                            
                                         }}
                                     />
                                 </Grid>
@@ -266,7 +266,7 @@ function HospitalSearchReservation(props) {
                         <Button
                             variant="contained"
                             onClick={() => {
-                                console.log(values , date);
+                                console.log(values, date);
                             }}
                         >
                             예약하기

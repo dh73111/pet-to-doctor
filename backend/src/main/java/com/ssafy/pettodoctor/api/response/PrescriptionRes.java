@@ -14,10 +14,10 @@ public class PrescriptionRes {
     private Long id;
 
     private String administration;
-    private String medicine;
     private String diagnosis;
     private String opinion;
-    private Integer price;
+    private Integer medicineCost;
+    private Integer additionalCost;
     private PaymentType type;
     private Boolean isShipping;
     private String invoiceCode;
@@ -25,14 +25,17 @@ public class PrescriptionRes {
     private Address shippingAddress;
     private String shippingName;
     private String shippingTel;
+    private Integer shippingCost;
 
-    public PrescriptionRes(Long id, String administration, String medicine, String diagnosis, String opinion, Integer price, PaymentType type, Boolean isShipping, String invoiceCode, String paymentCode, Address shippingAddress, String shippingName, String shippingTel) {
+    // 배송 정보 없는 경우
+    public PrescriptionRes(Long id, String administration, String diagnosis, String opinion,
+                           PaymentType type, Boolean isShipping, String invoiceCode, String paymentCode,
+                           Address shippingAddress, String shippingName, String shippingTel,
+                           Integer additionalCost, Integer medicineCost, Integer shippingCost) {
         this.id = id;
         this.administration = administration;
-        this.medicine = medicine;
         this.diagnosis = diagnosis;
         this.opinion = opinion;
-        this.price = price;
         this.type = type;
         this.isShipping = isShipping;
         this.invoiceCode = invoiceCode;
@@ -40,12 +43,16 @@ public class PrescriptionRes {
         this.shippingAddress = shippingAddress;
         this.shippingName = shippingName;
         this.shippingTel = shippingTel;
+        this.additionalCost = additionalCost;
+        this.medicineCost = medicineCost;
+        this.shippingCost = shippingCost;
     }
 
-    public static PrescriptionRes convertToRes(Prescription p){
-        PrescriptionRes pr = new PrescriptionRes(p.getId(), p.getAdministration(), p.getMedicine()
-        , p.getDiagnosis(), p.getOpinion(), p.getPrice(), p.getType(), p.getIsShipping(), p.getInvoiceCode()
-        , p.getPaymentCode(), p.getShippingAddress(), p.getShippingName(), p.getShippingTel());
+    public static PrescriptionRes convertToRes(Prescription p) {
+        PrescriptionRes pr = new PrescriptionRes(p.getId(), p.getAdministration()
+        , p.getDiagnosis(), p.getOpinion(), p.getType(), p.getIsShipping(), p.getInvoiceCode()
+        , p.getPaymentCode(), p.getShippingAddress(), p.getShippingName(), p.getShippingTel()
+        , p.getAdditionalCost(), p.getMedicineCost(), p.getShippingCost());
 
         return pr;
     }

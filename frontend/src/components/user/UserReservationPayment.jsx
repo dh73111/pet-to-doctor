@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Checkbox, Container, createTheme, Divider, FormControlLabel, FormGroup, Grid, Radio, RadioGroup, ThemeProvider } from '@mui/material';
-import NavBar from '../NavBar';
+// import NavBar from '../NavBar';
 import StepBar from './resources/StepBar';
 
 
@@ -30,7 +30,7 @@ function UserReservationPayment(props) {
       total_amount: 2200,
       vat_amount: 200,
       tax_free_amount: 0,
-      approval_url: "http://localhost:3000",
+      approval_url: "http://localhost:3000/reserpaymentcomplete",
       fail_url: "http://localhost:3000",
       cancel_url: "http://localhost:3000",
     },
@@ -54,9 +54,12 @@ function UserReservationPayment(props) {
     }).catch((err) => {console.log(err)})
   }
 
+  const testSubmit = (e) => {
+    console.log(e)
+  }
+
   return (
     <ThemeProvider theme={newTheme}>
-      <NavBar />
       <Container maxWidth="xl">
       <Box container>
         <Box item xs={12} sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -129,6 +132,7 @@ function UserReservationPayment(props) {
                     <RadioGroup
                       aria-labelledby="demo-radio-buttons-group-label"
                       name="radio-buttons-group"
+                      onSubmit={testSubmit}
                     >
                       <FormControlLabel value="kakaopay" control={<Radio />} label="카카오페이" />
                       <FormControlLabel value="naverpay" control={<Radio />} label="네이버페이" />

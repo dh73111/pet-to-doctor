@@ -48,7 +48,7 @@ public class Treatment {
     private Integer price;
     private String url;
 
-
+    // 생성자
     public static Treatment createTreatment(TreatmentPostReq req
             , Doctor doctor, User user, Hospital hospital) {
         Treatment treatment = new Treatment();
@@ -69,5 +69,16 @@ public class Treatment {
         treatment.setPetWeight(req.getPetWeight());
 
         return treatment;
+    }
+
+    // 비즈니스 메소드
+    public void updatePaymentInfo(String paymentCode, Integer price){
+        this.setPaymentCode(paymentCode);
+        this.setPrice(price);
+        if(this.getType() == TreatmentType.RES_REQUEST)
+            this.setType(TreatmentType.RES_PAID);
+        else if(this.getType() == TreatmentType.VST_REQUEST){
+            this.setType(TreatmentType.VST_PAID);
+        }
     }
 }

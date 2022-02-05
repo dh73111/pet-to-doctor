@@ -25,7 +25,6 @@ function HospitalSearch(props) {
     const [isSearch, setSearch] = useState(false);
     const [doneSearch, setDoneSearch] = useState(true);
     const [value, setValue] = React.useState(0);
-
     const MyDiv = styled("div")({
         position: "absolute",
         top: "150px",
@@ -100,9 +99,9 @@ function HospitalSearch(props) {
                             </Grid>
                             <Grid item xs={10.4} sx={{ mt: 2 }}>
                                 <Link
-                                    herf="#"
                                     onClick={() => {
                                         console.log("클릭");
+                                        window.location.href = "https://www.naver.com/";
                                     }}
                                 >
                                     http://petToDoctor.com
@@ -337,12 +336,11 @@ function HospitalSearch(props) {
     }
 
     function HospitalDetail(props) {
-        console.log(props);
         return (
             <Grid container>
                 <Grid item xs={3.3}>
                     <Box
-                        sx={{ position: "absolute", left: "780px", top: "550px" }}
+                        sx={{ position: "absolute", left: "780px", top: "50%" }}
                         onClick={() => {
                             setMode("list");
                         }}
@@ -357,7 +355,7 @@ function HospitalSearch(props) {
                             alt="병원 이미지"
                         ></img>
                         <Box display="flex" justifyContent="center" alignItems="center" sx={{ mt: 1 }}>
-                            <img src="./img/24시병원.png" alt="24시여부"></img>
+                            <img src="./img/24hospital.png" alt="24시여부"></img>
                         </Box>
                         <Box
                             display="flex"
