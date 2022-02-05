@@ -47,7 +47,6 @@ const style = {
 };
 
 const NavBarEl = (props) => {
-    // test
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
     const [open, setOpen] = useState(false);
