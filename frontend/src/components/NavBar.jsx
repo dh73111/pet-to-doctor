@@ -19,8 +19,8 @@ import UserLoginModal from "./user/UserLoginModal";
 import Banner from "./user/resources/Banner";
 const pages = [
     { id: 1, path: "/hospitalsearch", name: "병원찾기" },
-    { id: 2, path: "/hospitalreservation", name: "예약하기" },
-    { id: 3, path: "/notice", name: "공지사항" },
+    { id: 2, path: "/hospitalreservation", name: "즐겨찾기" },
+    { id: 3, path: "/notice", name: "내 예약" },
 ];
 const doctorpages = [
     { id: 1, path: "/doctorreservation", name: "받은예약" },
