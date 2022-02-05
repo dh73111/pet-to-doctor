@@ -51,7 +51,7 @@ const NavBarEl = (props) => {
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
     const [open, setOpen] = useState(false);
-    const [mode, setMode] = useState("user");
+    const [mode, setMode] = useState("doctor");
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const handleOpenNavMenu = (event) => {
