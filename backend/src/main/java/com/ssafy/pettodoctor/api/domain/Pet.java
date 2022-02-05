@@ -19,6 +19,7 @@ public class Pet {
     private LocalDate birthDate;
     private String species;
     private String weight;
+    private String profileImgUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")

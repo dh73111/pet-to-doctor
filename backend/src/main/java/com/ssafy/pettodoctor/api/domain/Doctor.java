@@ -14,6 +14,7 @@ public class Doctor extends Account {
     private String pysicianLicenseNumber;
     private String specialty;
     private Integer price;
+    private String profileImgUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hospital_id")
