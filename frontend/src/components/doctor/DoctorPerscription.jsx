@@ -1,10 +1,19 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/system";
 import TablePaginationUnstyled from "@mui/base/TablePaginationUnstyled";
-
+import PerscriptionDetail from "../commons/PerscriptionDetail";
+import DatePicker from "@mui/lab/DatePicker";
+import TextField from "@mui/material/TextField";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 function createData(no, state, deliveryNo) {
     return { no, state, deliveryNo };
 }
@@ -67,10 +76,33 @@ const CustomTablePagination = styled(TablePaginationUnstyled)`
 function DoctorPerscription(props) {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [value, setValue] = React.useState(new Date());
+    const [state, setState] = React.useState("");
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = (event) => {
+        console.log(event.target.value);
+        setOpen(true);
+    };
+    const handleClose = () => setOpen(false);
+
+    const handleChange = (event) => {
+        setState(event.target.value);
+    };
+
+    const style = {
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        width: 1200,
+        height: 800,
+        bgcolor: "background.paper",
+        boxShadow: 24,
+    };
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -102,7 +134,41 @@ function DoctorPerscription(props) {
                 </Grid>
                 <Grid item xs={4}></Grid>
             </Grid>
-
+            <Grid container>
+                <Grid item xs={8}></Grid>
+                <Grid item xs={2} sx={{ px: 4 }}>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <DatePicker
+                            disableFuture
+                            label="날짜"
+                            openTo="year"
+                            views={["year", "month", "day"]}
+                            value={value}
+                            onChange={(newValue) => {
+                                setValue(newValue);
+                            }}
+                            renderInput={(params) => <TextField {...params} />}
+                        />
+                    </LocalizationProvider>
+                </Grid>
+                <Grid item xs={2}>
+                    <Box sx={{ width: 120 }}>
+                        <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-label">ALL</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={state}
+                                label="state"
+                                onChange={handleChange}
+                            >
+                                <MenuItem value={10}>결제 대기</MenuItem>
+                                <MenuItem value={20}>결제 완료</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box>
+                </Grid>
+            </Grid>
             <Grid container>
                 <Grid item xs={2}></Grid>
                 <Grid item xs={8}>
@@ -121,7 +187,16 @@ function DoctorPerscription(props) {
                                     : rows
                                 ).map((row) => (
                                     <tr key={row.no}>
-                                        <td style={{ width: 160 }}> {row.no}</td>
+                                        <td style={{ width: 160 }}>
+                                            {" "}
+                                            <Button
+                                                sx={{ fontWeight: "bold", display: "block" }}
+                                                value={row.no}
+                                                onClick={handleOpen}
+                                            >
+                                                {row.no}
+                                            </Button>
+                                        </td>
                                         <td style={{ width: 160 }} align="right">
                                             {row.state}
                                         </td>
@@ -170,6 +245,16 @@ function DoctorPerscription(props) {
                 </Grid>
                 <Grid item xs={2}></Grid>
             </Grid>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <PerscriptionDetail></PerscriptionDetail>
+                </Box>
+            </Modal>
         </Box>
     );
 }

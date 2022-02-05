@@ -26,7 +26,11 @@ const doctorpages = [
     { id: 2, path: "/doctordiagnosis", name: "진료현황" },
     { id: 3, path: "/doctorperscripton", name: "처방현황" },
 ];
-const settings = ["내 예약", "마이페이지", "Logout"];
+const settings = [
+    { title: "내 예약", link: "/userreservation" },
+    { title: "마이페이지", link: "/usermypage" },
+    { title: "Logout", link: "/" },
+];
 
 const style = {
     position: "absolute",
@@ -44,7 +48,7 @@ const NavBarEl = (props) => {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [open, setOpen] = React.useState(false);
-    const [mode, setMode] = useState("user");
+    const [mode, setMode] = useState("doctor");
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const handleOpenNavMenu = (event) => {
@@ -100,7 +104,7 @@ const NavBarEl = (props) => {
 
     return (
         <AppBar color="inherit" position="sticky">
-            <Container maxWidth="xl">
+            <Container maxWidth="lg">
                 <Toolbar disableGutters>
                     <NavLink to="/">
                         <Typography
@@ -186,8 +190,10 @@ const NavBarEl = (props) => {
                                 onClose={handleCloseUserMenu}
                             >
                                 {settings.map((setting) => (
-                                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                        <Typography textAlign="center">{setting}</Typography>
+                                    <MenuItem key={setting.link} onClick={handleCloseUserMenu}>
+                                        <Typography textAlign="center">
+                                            <NavLink to={setting.link}>{setting.title}</NavLink>
+                                        </Typography>
                                     </MenuItem>
                                 ))}
                             </Menu>
@@ -218,7 +224,7 @@ const NavBarEl = (props) => {
 
 function NavBar(props) {
     let [selectedNav, setSelectedNav] = useState(0);
-    let [isLogin, setIsLogin] = useState(false);
+    let [isLogin, setIsLogin] = useState(true);
     function clickNav(selected) {
         setSelectedNav(selected);
     }

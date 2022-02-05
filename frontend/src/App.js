@@ -9,6 +9,7 @@ import DoctorReservation from "./components/doctor/DoctorReservation";
 import DoctorDianosis from "./components/doctor/DoctorDiagnosis";
 import DoctorPerscription from "./components/doctor/DoctorPerscription";
 import Notice from "./components/Notice";
+
 import UserJoin from "./components/user/UserJoin";
 // import UserLoginModal from "./components/UserLoginModal";
 import UserReservationPayment from './components/user/UserReservationPayment';
@@ -16,6 +17,8 @@ import UserReservationPaymenting from './components/user/UserReservationPaymenti
 import UserReservationComplete from './components/user/UserReservationComplete';
 import UserMedicinePayment from "./components/user/UserMedicinePayment";
 import UserMypageChange from "./components/user/UserMypageChange";
+import UserMypage from "./components/user/UserMypage";
+import UserReservation from "./components/user/UserReservation";
 // import UserReservationPayment from "./components/user/UserReservationPayment";
 
 function App() {
@@ -23,7 +26,7 @@ function App() {
         <BrowserRouter>
             <div className="App">
                 <Routes>
-                    <Route path="/*" element={<NavBar></NavBar>}></Route>
+                    <Route path="/*" element={<NavBar />}></Route>
                 </Routes>
                 <Routes>
                     <Route path="/" element={<Home></Home>}></Route>
@@ -44,6 +47,8 @@ function App() {
                     <Route path="/notice" element={<Notice></Notice>}></Route>
                     <Route path="/UserJoin" element={<UserJoin></UserJoin>}></Route>
                     <Route path="/UserMypageChange" element={<UserMypageChange></UserMypageChange>}></Route>
+                    <Route path="/usermypage" element={<UserMypage></UserMypage>}></Route>
+                    <Route path="/userreservation" element={<UserReservation></UserReservation>}></Route>
                 </Routes>
             </div>
         </BrowserRouter>

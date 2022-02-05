@@ -8,14 +8,21 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import TablePaginationUnstyled from "@mui/base/TablePaginationUnstyled";
+import { Typography, Modal } from "@mui/material";
+import ReservationDetail from "../commons/ReservationDetail";
+import DatePicker from "@mui/lab/DatePicker";
+import TextField from "@mui/material/TextField";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
 
 function createData(no, date, time, state, detail) {
     return { no, date, time, state, detail };
 }
 
-const rows = [createData(1, "2022-01-19", "15:30", "RES_REQUEST", "자세히 보기")].sort((a, b) =>
-    a.no < b.no ? -1 : 1
-);
+const rows = [
+    createData(1, "2022-01-19", "15:30", "RES_REQUEST", "자세히 보기"),
+    createData(2, "2022-01-19", "15:30", "RES_REQUEST", "자세히 보기"),
+].sort((a, b) => (a.no < b.no ? -1 : 1));
 
 const Root = styled("div")`
     table {
@@ -73,11 +80,29 @@ const CustomTablePagination = styled(TablePaginationUnstyled)`
 function DoctorReservation(props) {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
+    const [value, setValue] = React.useState(new Date());
     const [state, setState] = React.useState("");
+
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = (event) => {
+        console.log(event.target.value);
+        setOpen(true);
+    };
+    const handleClose = () => setOpen(false);
 
     const handleChange = (event) => {
         setState(event.target.value);
+    };
+
+    const style = {
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        width: 1200,
+        height: 800,
+        bgcolor: "background.paper",
+        boxShadow: 24,
     };
 
     // Avoid a layout jump when reaching the last page with empty rows.
@@ -115,7 +140,22 @@ function DoctorReservation(props) {
                 <Grid item xs={4}></Grid>
             </Grid>
             <Grid container>
-                <Grid item xs={10}></Grid>
+                <Grid item xs={8}></Grid>
+                <Grid item xs={2} sx={{ px: 4 }}>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <DatePicker
+                            disableFuture
+                            label="날짜"
+                            openTo="year"
+                            views={["year", "month", "day"]}
+                            value={value}
+                            onChange={(newValue) => {
+                                setValue(newValue);
+                            }}
+                            renderInput={(params) => <TextField {...params} />}
+                        />
+                    </LocalizationProvider>
+                </Grid>
                 <Grid item xs={2}>
                     <Box sx={{ width: 120 }}>
                         <FormControl fullWidth>
@@ -146,7 +186,7 @@ function DoctorReservation(props) {
                                     <th>예약일</th>
                                     <th>예약시간</th>
                                     <th>예약상태</th>
-                                    <th>자세히 보기</th>
+                                    <th>자세히보기</th>
                                     <th> </th>
                                 </tr>
                             </thead>
@@ -167,7 +207,13 @@ function DoctorReservation(props) {
                                             {row.state}
                                         </td>
                                         <td style={{ width: 160 }} align="right">
-                                            {row.detail}
+                                            <Button
+                                                sx={{ fontWeight: "bold", display: "block" }}
+                                                value={row.no}
+                                                onClick={handleOpen}
+                                            >
+                                                {row.detail}
+                                            </Button>
                                         </td>
                                         <td style={{ width: 160 }} align="right">
                                             <Button variant="contained">승인</Button>
@@ -211,6 +257,17 @@ function DoctorReservation(props) {
                 </Grid>
                 <Grid item xs={2}></Grid>
             </Grid>
+
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <ReservationDetail></ReservationDetail>
+                </Box>
+            </Modal>
         </Box>
     );
 }
