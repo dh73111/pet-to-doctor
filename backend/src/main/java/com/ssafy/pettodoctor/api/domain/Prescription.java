@@ -14,10 +14,10 @@ public class Prescription {
     private Long id;
 
     private String administration;
-    private String medicine;
     private String diagnosis;
     private String opinion;
-    private Integer price;
+    private Integer additionalCost;
+    private Integer medicineCost;
 
     @Enumerated(value=EnumType.STRING)
     private PaymentType type;
@@ -28,20 +28,30 @@ public class Prescription {
 
     @Embedded
     private Address shippingAddress;
-
     private String shippingName;
     private String shippingTel;
+    private Integer shippingCost;
 
     //== 생성 메소드 ==//
-    public static Prescription createPrescription(String administration, String medicine, String diagnosis, String opinion, Integer price, PaymentType type){
+    public static Prescription createPrescription(String administration, String diagnosis, String opinion, PaymentType type, Integer medicineCost, Integer additionalCost, Boolean isShipping){
         Prescription prescription = new Prescription();
         prescription.setAdministration(administration);
-        prescription.setMedicine(medicine);
         prescription.setDiagnosis(diagnosis);
         prescription.setOpinion(opinion);
-        prescription.setPrice(price);
         prescription.setType(type);
+        prescription.setMedicineCost(medicineCost);
+        prescription.setAdditionalCost(additionalCost);
+        prescription.isShipping = isShipping;
 
         return prescription;
+    }
+
+    // 비즈니스 메소드
+    public void updateShippingInfo(String invoiceCode, Address address, String shippingName, String shippingTel, Integer shippingCost){
+        this.invoiceCode = invoiceCode;
+        this.shippingAddress = address;
+        this.shippingName = shippingName;
+        this.shippingTel = shippingTel;
+        this.shippingCost = shippingCost;
     }
 }

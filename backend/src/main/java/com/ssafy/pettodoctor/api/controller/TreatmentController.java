@@ -1,11 +1,15 @@
 package com.ssafy.pettodoctor.api.controller;
 
+import com.ssafy.pettodoctor.api.domain.Prescription;
 import com.ssafy.pettodoctor.api.domain.Schedule;
 import com.ssafy.pettodoctor.api.domain.Treatment;
 import com.ssafy.pettodoctor.api.domain.TreatmentType;
+import com.ssafy.pettodoctor.api.request.PaymentReq;
+import com.ssafy.pettodoctor.api.request.PrescriptionPostReq;
 import com.ssafy.pettodoctor.api.request.TreatmentPostReq;
 import com.ssafy.pettodoctor.api.response.ResVO;
 import com.ssafy.pettodoctor.api.response.TreatmentRes;
+import com.ssafy.pettodoctor.api.service.PrescriptionService;
 import com.ssafy.pettodoctor.api.service.TreatmentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -30,6 +34,7 @@ import java.util.Map;
 @CrossOrigin("*")
 public class TreatmentController {
     private final TreatmentService treatmentService;
+    private final PrescriptionService prescriptionService;
 
     @GetMapping("/doctor/{doctorId}")
     @Operation(summary = "의사의 진료 정보 반환", description = "의사의 진료 정보 리스트 반환한다.")
@@ -153,6 +158,33 @@ public class TreatmentController {
 
         try{
             Treatment treatment = treatmentService.updateTreatment(treatmentId, treatmentType);
+            result.setData(TreatmentRes.convertToRes(treatment));
+            result.setMessage("성공");
+            status = HttpStatus.OK;
+        } catch (Exception e){
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            result.setMessage("서버오류");
+        }
+
+        return new ResponseEntity<ResVO<TreatmentRes>>(result, status);
+    }
+
+    @PutMapping("/payment/{treatmentId}")
+    @Operation(summary = "결제 정보 수정", description = "진료 정보 수정한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "401", description = "인증 실패"),
+            @ApiResponse(responseCode = "404", description = "사용자 없음"),
+            @ApiResponse(responseCode = "500", description = "서버 오류")
+    })
+    public ResponseEntity<ResVO<TreatmentRes>> updatePaymentInfo(
+            @PathVariable @Parameter(description = "진료키") Long treatmentId,
+            @RequestBody @Parameter(description = "결제 정보")PaymentReq paymentReq) {
+        ResVO<TreatmentRes> result = new ResVO<>();
+        HttpStatus status = null;
+
+        try{
+            Treatment treatment = treatmentService.updatePaymentInfo(treatmentId, paymentReq);
             result.setData(TreatmentRes.convertToRes(treatment));
             result.setMessage("성공");
             status = HttpStatus.OK;

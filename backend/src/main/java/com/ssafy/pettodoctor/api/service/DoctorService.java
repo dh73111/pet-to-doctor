@@ -1,14 +1,24 @@
 package com.ssafy.pettodoctor.api.service;
 
 import com.ssafy.pettodoctor.api.domain.Doctor;
+import com.ssafy.pettodoctor.api.domain.Pet;
 import com.ssafy.pettodoctor.api.repository.DoctorRepository;
 import com.ssafy.pettodoctor.api.request.DoctorPostReq;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import java.util.Optional;
@@ -19,6 +29,9 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class DoctorService {
     private final DoctorRepository doctorRepository;
+
+    @Value("${profileImg.path}")
+    private String uploadFolder;
 
     public List<Doctor> findByHospitalId(Long id){
         return doctorRepository.findByHospitalId(id);
@@ -64,5 +77,27 @@ public class DoctorService {
         });
 
         return updateDoctor;
+    }
+
+    @Transactional
+    public void updateProfile(Long doctorId, MultipartFile multipartFile) {
+        Doctor doctor = doctorRepository.findById(doctorId);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        String imageFileName = "doctor_" + doctor.getId() + "." + FilenameUtils.getExtension(multipartFile.getOriginalFilename());
+        Path imageFilePath = Paths.get(uploadFolder + imageFileName);
+
+        if (multipartFile.getSize() != 0) { // 파일이 업로드 되었는지 확인
+            try {
+                if (doctor.getProfileImgUrl() != null) { // 이미 프로필 사진이 있을 경우
+                    File file = new File(uploadFolder + doctor.getProfileImgUrl());
+                    file.delete(); // 원래 파일 삭제
+                }
+                Files.write(imageFilePath, multipartFile.getBytes());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            doctor.setProfileImgUrl(imageFileName);
+        }
     }
 }

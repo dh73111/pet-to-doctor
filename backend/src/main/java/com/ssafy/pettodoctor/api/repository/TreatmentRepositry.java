@@ -1,6 +1,7 @@
 package com.ssafy.pettodoctor.api.repository;
 
 import com.ssafy.pettodoctor.api.domain.*;
+import com.ssafy.pettodoctor.api.request.PrescriptionPostReq;
 import com.ssafy.pettodoctor.api.request.TreatmentPostReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

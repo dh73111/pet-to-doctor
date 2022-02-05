@@ -1,11 +1,14 @@
 package com.ssafy.pettodoctor.api.controller;
 
+import com.ssafy.pettodoctor.api.domain.Medicine;
 import com.ssafy.pettodoctor.api.domain.Prescription;
 import com.ssafy.pettodoctor.api.domain.TreatmentType;
 import com.ssafy.pettodoctor.api.request.PrescriptionPostReq;
-import com.ssafy.pettodoctor.api.response.DoctorRes;
+import com.ssafy.pettodoctor.api.request.ShippingReq;
+import com.ssafy.pettodoctor.api.response.MedicineRes;
 import com.ssafy.pettodoctor.api.response.PrescriptionRes;
 import com.ssafy.pettodoctor.api.response.ResVO;
+import com.ssafy.pettodoctor.api.service.MedicineService;
 import com.ssafy.pettodoctor.api.service.PrescriptionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -28,8 +32,9 @@ import java.util.Map;
 @CrossOrigin("*")
 public class PrescriptionController {
     private final PrescriptionService prescriptionService;
+    private final MedicineService medicineService;
 
-    @PostMapping
+    @PostMapping("/{treatmentId}")
     @Operation(summary = "진단서 작성", description = "진단서를 작성한다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공"),
@@ -38,13 +43,14 @@ public class PrescriptionController {
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
     public ResponseEntity<Map<String, Object>> writeCertificate(
-            @RequestBody @Parameter(description = "진단서 작성 정보") PrescriptionPostReq certificateInfo
+            @RequestBody @Parameter(description = "진단서 작성 정보") PrescriptionPostReq certificateInfo,
+            @PathVariable @Parameter(description = "진료 아이디") Long treatmentId
     ) {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
         try {
-            prescriptionService.writeCertificate(certificateInfo);
+            prescriptionService.writeCertificate(certificateInfo, treatmentId);
             resultMap.put("message", "성공");
             status = HttpStatus.OK;
         } catch (Exception e) {
@@ -70,7 +76,7 @@ public class PrescriptionController {
         HttpStatus status = null;
         try {
             Prescription prescription = prescriptionService.findById(prescription_id);
-            result.setData(PrescriptionRes.converToRes(prescription));
+            result.setData(PrescriptionRes.convertToRes(prescription));
             result.setMessage("성공");
             status = HttpStatus.OK;
         } catch (Exception e) {
@@ -88,25 +94,24 @@ public class PrescriptionController {
             @ApiResponse(responseCode = "404", description = "사용자 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
-    public ResponseEntity<ResVO<PrescriptionRes>> getPrescriptionList(
+    public ResponseEntity<ResVO<List<PrescriptionRes>>> getPrescriptionList(
             @RequestParam @Parameter(description = "의사 아이디") Long doctor_id ,
             @RequestParam @Parameter(description = "상태(전,후,전취,후취,완)") TreatmentType type
     ) {
-        ResVO<PrescriptionRes> result = new ResVO<>();
+        ResVO<List<PrescriptionRes>> result = new ResVO<>();
         HttpStatus status = null;
         try {
 
-            /*
-            진료 테이블에 의사키와 상태값에 일치하는 처방키를 알아내서, 처방테이블의 처방키에 해당하는 값을 출력...?
-            ...
-            */
+            List<Prescription> prescriptions = prescriptionService.findByIdList(doctor_id, type);
+            result.setData(PrescriptionRes.convertToResList(prescriptions));
+            result.setMessage("성공");
 
             status = HttpStatus.OK;
         } catch (Exception e) {
             status = HttpStatus.INTERNAL_SERVER_ERROR;
             result.setMessage("서버오류");
         }
-        return new ResponseEntity<ResVO<PrescriptionRes>>(result, status);
+        return new ResponseEntity<ResVO<List<PrescriptionRes>>>(result, status);
     }
 
     @PutMapping("/shipping")
@@ -117,20 +122,46 @@ public class PrescriptionController {
             @ApiResponse(responseCode = "404", description = "사용자 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
-    public ResponseEntity<Map<String, Object>> setShipping(
-            @RequestParam @Parameter(description = "리스트 아이디") Long prescription_id,
-            @RequestBody  @Parameter(description = "진단서 정보") PrescriptionPostReq certificateInfo
-    ) {
-        Map<String, Object> resultMap = new HashMap<>();
+    public ResponseEntity<ResVO<PrescriptionRes>> setShipping(
+            @RequestParam @Parameter(description = "리스트 아이디") Long prescriptionId,
+            @RequestBody  @Parameter(description = "배송 정보")ShippingReq shippingReq
+            ) {
+        ResVO<PrescriptionRes> result = new ResVO<>();
         HttpStatus status = null;
         try {
-            prescriptionService.updateCertificate(prescription_id, certificateInfo);
-            resultMap.put("prescription_info", prescriptionService.findById(prescription_id));
+            Prescription prescription = prescriptionService.updateShippingInfo(prescriptionId, shippingReq);
+
+            result.setData(PrescriptionRes.convertToRes(prescription));
+            status = HttpStatus.OK;
+            result.setMessage("성공");
+        } catch (Exception e) {
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            result.setMessage("서버 오류");
+        }
+        return new ResponseEntity<ResVO<PrescriptionRes>>(result, status);
+    }
+
+    @PostMapping("/medicine/{prescriptionId}")
+    @Operation(summary = "약 리스트 정보", description = "약 리스트를 가져온다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "401", description = "인증 실패"),
+            @ApiResponse(responseCode = "404", description = "사용자 없음"),
+            @ApiResponse(responseCode = "500", description = "서버 오류")
+    })
+    public ResponseEntity<ResVO<List<MedicineRes>>> writeCertificate(
+            @PathVariable @Parameter(description = "진단서 아이디") Long prescriptionId){
+        ResVO<List<MedicineRes>> result = new ResVO<>();
+        HttpStatus status = null;
+        try{
+            List<Medicine> medicines = medicineService.findByPrescriptionId(prescriptionId);
+            result.setData(MedicineRes.convertToResList(medicines));
+            result.setMessage("성공");
             status = HttpStatus.OK;
         } catch (Exception e) {
             status = HttpStatus.INTERNAL_SERVER_ERROR;
-            resultMap.put("message", "서버 오류");
+            result.setMessage("서버 오류");
         }
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        return new ResponseEntity<ResVO<List<MedicineRes>>>(result, status);
     }
 }

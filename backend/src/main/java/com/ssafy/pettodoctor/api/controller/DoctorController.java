@@ -16,7 +16,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,8 +33,6 @@ import java.util.Map;
 @CrossOrigin("*")
 public class DoctorController {
     private final DoctorService doctorService;
-
-
     @GetMapping("/hospital/{hospitalId}")
     @Operation(summary = "병원키에 해당하는 의사 정보 반환", description = "병원키에 해당하는 의사 정보 리스트를 반환한다.")
     @ApiResponses({
@@ -186,5 +187,32 @@ public class DoctorController {
             resultMap.put("message", "서버 오류");
         }
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
+    // 의사 프로필 업데이트
+    @PostMapping("/profile/{doctorId}")
+    @Operation(summary = "프로필 업데이트", description = "프로필 사진을 업데이트한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "401", description = "인증 실패"),
+            @ApiResponse(responseCode = "404", description = "사용자 없음"),
+            @ApiResponse(responseCode = "500", description = "서버 오류")
+    })
+    public ResponseEntity<ResVO<String>> updateProfile(
+            @PathVariable @Parameter(description = "의사 아이디") Long doctorId,
+            @RequestParam("profileImgUrl") @Parameter(description = "프로필 사진") MultipartFile multipartFile,
+            HttpServletRequest req) {
+        ResVO<String> result = new ResVO<>();
+        HttpStatus status = null;
+        try{
+            status = HttpStatus.OK;
+            doctorService.updateProfile(doctorId, multipartFile);
+            result.setMessage("성공");
+        } catch (Exception e){
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            result.setMessage("서버 오류");
+        }
+
+        return new ResponseEntity<ResVO<String>>(result, status);
     }
 }
