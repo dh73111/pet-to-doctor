@@ -21,7 +21,7 @@ function UserMypage(props) {
     return (
         <div>
             <Container>
-                <Typography variant="h4" component="h1" sx={{ mt: 5 }}>
+                <Typography variant="h4" component="h1" sx={{ mt: 10 }}>
                     마이페이지
                 </Typography>
                 <UserInfo />

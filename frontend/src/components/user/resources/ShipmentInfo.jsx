@@ -38,6 +38,9 @@ function ShipmentInfo(props) {
     }
   }, []);
 
+  const gridContainer = { display: 'flex', mb: 1 };
+  const shipmentLabel = { width: '260px', fontWeight: '600', lineHeight: '40px' };
+
   return (
     <Box sx={{ mb: 2, p: 3, backgroundColor: '#F5F6F7' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
@@ -45,33 +48,36 @@ function ShipmentInfo(props) {
         <FormControlLabel
           label="주문자정보와 동일"
           control={<Checkbox />}
+          onChange={function () {
+            console.log('changed')
+          }}
         />
       </Box>
       <Box sx={{ display: 'flex' }}>
         <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', /* backgroundColor: '#CDEEF4' */ }}>
-          <Box sx={{ display: 'flex', mb: 1 }}>
-            <Typography sx={{ width: '260px', fontWeight: '600', lineHeight: '40px' }}>수령자</Typography>
-            <TextField id="outlined-basic" variant="outlined" size="small"/>
-          </Box>
-          <Box sx={{ display: 'flex', mb: 1 }}>
-            <Typography sx={{ width: '260px', fontWeight: '600', lineHeight: '40px' }}>전화번호</Typography>
-            <TextField id="outlined-basic" variant="outlined" size="small"/>
-          </Box>
-          <Box sx={{ display: 'flex', mb: 1 }}>
-            <Typography sx={{ width: '260px', fontWeight: '600', lineHeight: '40px' }}>주소</Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Grid container sx={gridContainer}>
+            <Typography item xs={12} sx={shipmentLabel}>수령자</Typography>
+            <TextField sx={{ flex: 1, maxWidth: '260px' }} id="outlined-basic" variant="outlined" size="small"/>
+          </Grid>
+          <Grid container sx={gridContainer}>
+            <Typography item xs={12} sx={shipmentLabel}>전화번호</Typography>
+            <TextField sx={{ flex: 1, maxWidth: '260px' }} id="outlined-basic" variant="outlined" size="small"/>
+          </Grid>
+          <Grid container sx={gridContainer}>
+            <Typography item xs={12} sx={shipmentLabel}>주소</Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
               <Box>
                 <TextField sx={{ mb: 1 }} variant="outlined" size="small" value={zonecode} disabled/>
-                <Button onClick={openPopup} variant="contained">우편번호 검색</Button>
+                <Button sx={{ ml: 1 }} onClick={openPopup} variant="contained">우편번호 검색</Button>
               </Box>
-              <TextField  variant="outlined" size="small" value={address} disabled/>
+              <TextField sx={{ mb: 1 }} variant="outlined" size="small" value={address} disabled/>
               <TextField variant="outlined" size="small" />
             </Box>
-          </Box>
-          <Box sx={{ display: 'flex', mb: 1 }}>
-            <Typography sx={{ width: '260px', fontWeight: '600', lineHeight: '40px' }}>배송메세지</Typography>
-            <TextField id="outlined-basic" variant="outlined" size="small"/>
-          </Box>
+          </Grid>
+          <Grid container sx={gridContainer}>
+            <Typography item xs={12} sx={shipmentLabel}>배송메세지</Typography>
+            <TextField item xs={12} sx={{ flex: 1 }} id="outlined-basic" variant="outlined" size="small"/>
+          </Grid>
         </Box>
       </Box>
     </Box>

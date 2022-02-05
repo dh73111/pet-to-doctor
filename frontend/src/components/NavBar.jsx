@@ -104,7 +104,7 @@ const NavBarEl = (props) => {
 
     return (
         <AppBar color="inherit" position="sticky">
-            <Container maxWidth="xl">
+            <Container maxWidth="lg">
                 <Toolbar disableGutters>
                     <NavLink to="/">
                         <Typography
