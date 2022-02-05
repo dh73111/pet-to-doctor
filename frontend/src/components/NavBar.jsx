@@ -25,6 +25,7 @@ const doctorpages = [
     { id: 1, path: "/doctorreservation", name: "받은예약" },
     { id: 2, path: "/doctordiagnosis", name: "진료현황" },
     { id: 3, path: "/doctorperscripton", name: "처방현황" },
+    { id: 4, path: "/doctorperscriptonform", name: "처방작성 테스트용" },
 ];
 const settings = [
     { title: "내 예약", link: "/userreservation" },

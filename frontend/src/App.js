@@ -8,6 +8,7 @@ import HospitalSearch from "./components/hospital/HospitalSearch";
 import DoctorReservation from "./components/doctor/DoctorReservation";
 import DoctorDianosis from "./components/doctor/DoctorDiagnosis";
 import DoctorPerscription from "./components/doctor/DoctorPerscription";
+import DoctorPerscriptionForm from "./components/doctor/DoctorPerscriptionForm";
 import Notice from "./components/Notice";
 import UserMypage from "./components/user/UserMypage";
 import UserReservation from "./components/user/UserReservation";
@@ -29,6 +30,10 @@ function App() {
                     <Route path="/doctorreservation" element={<DoctorReservation></DoctorReservation>}></Route>
                     <Route path="/doctordiagnosis" element={<DoctorDianosis></DoctorDianosis>}></Route>
                     <Route path="/doctorperscripton" element={<DoctorPerscription></DoctorPerscription>}></Route>
+                    <Route
+                        path="/doctorperscriptonform"
+                        element={<DoctorPerscriptionForm></DoctorPerscriptionForm>}
+                    ></Route>
                     {/* user */}
                     <Route path="/hospitalsearch" element={<HospitalSearch></HospitalSearch>}></Route>
                     <Route path="/hospitalreservation" element={<HospitalReservation></HospitalReservation>}></Route>
