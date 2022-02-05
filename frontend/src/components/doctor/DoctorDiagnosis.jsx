@@ -8,6 +8,10 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
+import DatePicker from "@mui/lab/DatePicker";
+import TextField from "@mui/material/TextField";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
 
 function createData(no, date, time, name, state) {
     return { no, date, time, name, state };
@@ -71,11 +75,10 @@ const CustomTablePagination = styled(TablePaginationUnstyled)`
 function DoctorDiagnosis(props) {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
+    const [value, setValue] = React.useState(new Date());
+    const [state, setState] = React.useState("");
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
-    const [state, setState] = React.useState("");
 
     const handleChange = (event) => {
         setState(event.target.value);
@@ -112,7 +115,22 @@ function DoctorDiagnosis(props) {
                 <Grid item xs={4}></Grid>
             </Grid>
             <Grid container>
-                <Grid item xs={10}></Grid>
+                <Grid item xs={8}></Grid>
+                <Grid item xs={2} sx={{ px: 4 }}>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <DatePicker
+                            disableFuture
+                            label="날짜"
+                            openTo="year"
+                            views={["year", "month", "day"]}
+                            value={value}
+                            onChange={(newValue) => {
+                                setValue(newValue);
+                            }}
+                            renderInput={(params) => <TextField {...params} />}
+                        />
+                    </LocalizationProvider>
+                </Grid>
                 <Grid item xs={2}>
                     <Box sx={{ width: 120 }}>
                         <FormControl fullWidth>
