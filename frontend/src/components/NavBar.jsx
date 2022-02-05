@@ -12,6 +12,7 @@ import {
     Tooltip,
     MenuItem,
     Modal,
+    Link,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { NavLink } from "react-router-dom";
@@ -42,14 +43,13 @@ const style = {
     width: 1200,
     height: 800,
     bgcolor: "background.paper",
-    boxShadow: 24,
+    // boxShadow: 24,
 };
 
 const NavBarEl = (props) => {
-    // console.log(props);
-    const [anchorElNav, setAnchorElNav] = React.useState(null);
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
-    const [open, setOpen] = React.useState(false);
+    const [anchorElNav, setAnchorElNav] = useState(null);
+    const [anchorElUser, setAnchorElUser] = useState(null);
+    const [open, setOpen] = useState(false);
     const [mode, setMode] = useState("user");
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -70,7 +70,7 @@ const NavBarEl = (props) => {
     };
 
     let MyButton = (page, selectedColor) => (
-        <Button
+        <Box
             key={page}
             onClick={() => {
                 props.clickNav(page.id);
@@ -78,8 +78,11 @@ const NavBarEl = (props) => {
             sx={{ mx: 8, my: 2, color: selectedColor, display: "block", fontWeight: "bold" }}
         >
             <Typography sx={{ fontSize: 17 }}>{page.name}</Typography>
-        </Button>
+        </Box>
     );
+    
+    
+
     const NavItem = () => {
         if (mode === "user") {
             return (
@@ -104,11 +107,55 @@ const NavBarEl = (props) => {
         }
     };
 
+    const LoginMenu = () => {
+        const style = [
+            {   
+                padding: '0 10px',
+                textDecoration: 'none',
+                color: '#5a5a5a',
+                fontSize: '14px',
+                lineHeight: '42px',
+                borderRight: '1px solid',
+                borderColor: '#5a5a5a',
+                cursor: 'pointer',
+            },
+            {
+                textDecoration: 'none',
+                color: '#5a5a5a',
+                fontSize: '14px',
+                lineHeight: '42px',
+                cursor: 'pointer',
+            }
+        ];
+        const isLogin = props.isLogin;
+        const loginControls = [
+            { title: "회원가입", link: "/UserJoin"},
+            { title: "로그인", link: "/"},
+        ];
+        const logoutControls = [
+            { title: "마이페이지", link: "/usermypage"},
+            { title: "로그아웃", link: "/"},
+        ];
+        return (
+            <Box sx={{ width: '100%' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', height: '36px' }}>
+                    {!isLogin ? loginControls.map(cont => {
+                        return <Typography><NavLink style={style[0]} to={cont.link} key={cont}>{cont.title}</NavLink></Typography>
+                    }) : logoutControls.map(cont => {
+                        return <Typography><NavLink style={style[0]} to={cont.link} key={cont}>{cont.title}</NavLink></Typography>
+                    })}
+                    <Typography sx={{ pl: 1 }}><NavLink style={style[1]} key={2} to="/">고객센터</NavLink></Typography>
+                </Box>
+            </Box>
+        );
+    }
+
     return (
         <Box>
             <Banner></Banner>
             <AppBar color="inherit" position="sticky">
                 <Container maxWidth="lg">
+                    <LoginMenu />
                     <Toolbar disableGutters>
                         <NavLink to="/">
                             <Typography
@@ -167,10 +214,10 @@ const NavBarEl = (props) => {
                             component="div"
                             sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
                         >
-                            <img src="img/logo.png" height="50px" alt=""></img>
+                            <img src="img/logo.png" height="50px" alt="logo"></img>
                         </Typography>
                         <NavItem />
-                        {props.isLogin ? (
+                        {/* {props.isLogin ? (
                             <Box sx={{ flexGrow: 0 }}>
                                 <Tooltip title="Open settings">
                                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -208,7 +255,7 @@ const NavBarEl = (props) => {
                                     <Typography variant="h6">Login</Typography>
                                 </Button>
                             </Box>
-                        )}
+                        )} */}
 
                         <Modal
                             open={open}
@@ -226,6 +273,8 @@ const NavBarEl = (props) => {
         </Box>
     );
 };
+
+
 
 function NavBar(props) {
     let [selectedNav, setSelectedNav] = useState(0);
