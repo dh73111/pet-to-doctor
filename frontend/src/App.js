@@ -9,6 +9,8 @@ import DoctorReservation from "./components/doctor/DoctorReservation";
 import DoctorDianosis from "./components/doctor/DoctorDiagnosis";
 import DoctorPerscription from "./components/doctor/DoctorPerscription";
 import Notice from "./components/Notice";
+import UserMypage from "./components/user/UserMypage";
+import UserReservation from "./components/user/UserReservation";
 // import UserReservationPayment from "./components/user/UserReservationPayment";
 
 function App() {
@@ -35,6 +37,8 @@ function App() {
                         element={<HospitalSearchReservation></HospitalSearchReservation>}
                     ></Route>
                     <Route path="/notice" element={<Notice></Notice>}></Route>
+                    <Route path="/usermypage" element={<UserMypage></UserMypage>}></Route>
+                    <Route path="/userreservation" element={<UserReservation></UserReservation>}></Route>
                 </Routes>
             </div>
         </BrowserRouter>
