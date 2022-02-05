@@ -403,7 +403,7 @@ function HospitalSearch(props) {
     });
     return (
         <Grid container>
-            <Grid item xs={2.5}>
+            <Grid item xs={12} md={2.5}>
                 <SearchForm></SearchForm>
                 {isSearch === true ? (
                     <MyDiv sx={{ mx: 3.4 }} variant="contained">
@@ -426,10 +426,10 @@ function HospitalSearch(props) {
                     ""
                 )}
             </Grid>
-            <Grid item xs={9.5}>
+            <Grid item xs={12} md={9.5}>
                 {mode === "list" ? (
                     // 리스트 페이지
-                    <div id="map" style={{ width: "100%", height: "890px" }}></div>
+                    <Box id="map" style={{ width: "100%", height: "890px" }}></Box>
                 ) : (
                     // 상세 보기 페이지
 
