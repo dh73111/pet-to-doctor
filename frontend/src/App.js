@@ -24,7 +24,14 @@ import UserReservation from "./components/user/UserReservation";
 
 import Box from "@mui/material/Box";
 
+import { userInfo } from "./api/user.js";
+
 function App() {
+    console.log(
+        userInfo(1, (data) => {
+            console.log(data);
+        })
+    );
     return (
         <Box sx={{ fontFamily: "noto sans" }}>
             <BrowserRouter>
