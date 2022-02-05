@@ -5,6 +5,8 @@ import PayMethod from './resources/PayMethod';
 import ShipmentInfo from './resources/ShipmentInfo';
 import TotalPrice from './resources/TotalPrice';
 import PaymentHeading from './resources/PaymentHeading';
+import PaymentUserInfo from './resources/PaymentUserInfo';
+import Banner from './resources/Banner';
 
 function UserMedicinePayment(props) {
   const newTheme = createTheme({
@@ -14,6 +16,14 @@ function UserMedicinePayment(props) {
         },
     },
   });
+
+  const userInfo = {
+    "name": "김덕배",
+    "tel": "01012341234",
+    "city": "경기",
+    "street": "성남시 분당구 삼평동 681",
+    "zipcode": 13494,
+  }
 
   const prescription = {
     "message": "string",
@@ -63,7 +73,8 @@ function UserMedicinePayment(props) {
 
   return (
     <ThemeProvider theme={newTheme}>
-      <Container maxWidth="xl">
+      <Banner />
+      <Container maxWidth="lg">
       <Box container>
         <PaymentHeading title={'처방받은 약을 결제해주세요'}/>
         <Grid container spacing={2}>
@@ -80,8 +91,9 @@ function UserMedicinePayment(props) {
                 <Typography item xs={12}>고객님의 회원정보에 등록되어 있는 주소입니다.</Typography>
               </Grid>
               <Box container sx={{ mt: 2, display: 'flex' }}>
-                <Box sx={{ border: 1 }}>목록</Box>
-                <Box>인풋들</Box>
+                <PaymentUserInfo user={userInfo} />
+                {/* <Box sx={{ border: 1 }}>목록</Box>
+                <Box>인풋들</Box> */}
               </Box>
             </Box>
             <ShipmentInfo />

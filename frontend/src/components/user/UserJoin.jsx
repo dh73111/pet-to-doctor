@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import logo from "../../components/logo.png";
 import DaumPostCode from "react-daum-postcode";
+import { border } from "@mui/system";
 
 function UserJoin(props) {
   const [email, setEmail] = useState("");
@@ -129,23 +130,41 @@ function UserJoin(props) {
           id="number"
           name="number"
         />
-        <Typography component="h1" variant="h6">
-          주소
-        </Typography>
-        <Button onClick={handleOpen}>주소 검색</Button>
-        <Modal
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            <DaumPostCode onComplete={handleComplete} className="post-code" />
+        <Box>
+          <Box>
+            <Typography align="center" component="h1" variant="h6">
+              주소
+            </Typography>
+            <Button onClick={handleOpen}>주소 검색</Button>
+            <Modal
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={style}>
+                <DaumPostCode
+                  onComplete={handleComplete}
+                  className="post-code"
+                />
+              </Box>
+            </Modal>
           </Box>
-        </Modal>
-        <Typography component="h1" variant="h6">
-          {city} , {zipcode} , {address}
-        </Typography>
+          <TextField
+            style={{ width: 400 }}
+            margin="dense"
+            disabled
+            value={address}
+          ></TextField>
+        </Box>
+        <TextField
+          style={{ width: 400 }}
+          margin="dense"
+          placeholder="상세 주소"
+          required //값 반드시 입력
+          id="addressdetail"
+          name="addressdetail"
+        />
         <Typography mt={5} align="right" component="h1" variant="h6">
           반려동물 정보(선택)
         </Typography>

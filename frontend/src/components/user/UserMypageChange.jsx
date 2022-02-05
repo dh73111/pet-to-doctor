@@ -63,6 +63,7 @@ function UserMypageChange(props) {
   const [address, setAddress] = useState("");
   const [zipcode, setZipcode] = useState("");
   const [city, setCity] = useState("");
+
   // 주소 찾기
   const style = {
     position: "absolute",
@@ -74,6 +75,7 @@ function UserMypageChange(props) {
     boxShadow: 1,
     p: 2,
   };
+
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -136,74 +138,92 @@ function UserMypageChange(props) {
                   <br />
                   <Button variant="outlined">이미지 수정</Button>
                 </Grid>
+                <Grid item>
+                  <Typography
+                    gutterBottom
+                    variant="subtitle1"
+                    component="div"
+                    pb={1}
+                  >
+                    닉네임
+                  </Typography>
+                  <Typography
+                    gutterBottom
+                    variant="subtitle1"
+                    component="div"
+                    pb={1}
+                  >
+                    이메일
+                  </Typography>
+                  <Typography
+                    gutterBottom
+                    variant="subtitle1"
+                    component="div"
+                    pb={1}
+                  >
+                    연락처
+                  </Typography>
+                  <Typography
+                    gutterBottom
+                    variant="subtitle1"
+                    component="div"
+                    pb={1}
+                  >
+                    주소
+                  </Typography>
+                </Grid>
                 <Grid item xs={12} sm container>
                   <Grid item xs container direction="column" spacing={2}>
                     <Grid item xs>
-                      <Typography
-                        gutterBottom
-                        variant="subtitle1"
-                        component="div"
-                        pb={1}
+                      <TextField
+                        size="small"
+                        placeholder="닉네임"
+                        required //값 반드시 입력
+                        name="nickname"
+                      />
+                      <br />
+                      <TextField
+                        size="small"
+                        placeholder="example@example.com"
+                        required //값 반드시 입력
+                        name="email"
+                      />
+
+                      <br />
+                      <TextField
+                        size="small"
+                        placeholder="number"
+                        required //값 반드시 입력
+                        name="number"
+                      />
+                      <br />
+                      <TextField
+                        size="small"
+                        required //값 반드시 입력
+                        name="address"
+                        disabled
+                        value={address}
+                      ></TextField>
+                      <TextField
+                        size="small"
+                        placeholder="상세주소"
+                        required //값 반드시 입력
+                        name="addressdetail"
+                      />
+                      <Button onClick={handleOpen}>주소 검색</Button>
+                      <Modal
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
                       >
-                        닉네임
-                        <TextField
-                          size="small"
-                          placeholder="닉네임"
-                          required //값 반드시 입력
-                          name="nickname"
-                        />
-                      </Typography>
-                      <Typography
-                        gutterBottom
-                        variant="subtitle1"
-                        component="div"
-                        pb={1}
-                      >
-                        이메일
-                        <TextField
-                          size="small"
-                          placeholder="example@example.com"
-                          required //값 반드시 입력
-                          name="email"
-                        />
-                      </Typography>
-                      <Typography
-                        gutterBottom
-                        variant="subtitle1"
-                        component="div"
-                        pb={1}
-                      >
-                        연락처
-                        <TextField
-                          size="small"
-                          placeholder="number"
-                          required //값 반드시 입력
-                          name="number"
-                        />
-                      </Typography>
-                      <Typography
-                        gutterBottom
-                        variant="subtitle1"
-                        component="div"
-                        pb={1}
-                      >
-                        주소
-                        {city} , {zipcode} , {address}
-                        <Button onClick={handleOpen}>주소 검색</Button>
-                        <Modal
-                          open={open}
-                          onClose={handleClose}
-                          aria-labelledby="modal-modal-title"
-                          aria-describedby="modal-modal-description"
-                        >
-                          <Box sx={style}>
-                            <DaumPostCode
-                              onComplete={handleComplete}
-                              className="post-code"
-                            />
-                          </Box>
-                        </Modal>
-                      </Typography>
+                        <Box sx={style}>
+                          <DaumPostCode
+                            onComplete={handleComplete}
+                            className="post-code"
+                          />
+                        </Box>
+                      </Modal>
                     </Grid>
                   </Grid>
                 </Grid>
