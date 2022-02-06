@@ -9,6 +9,8 @@ import DoctorReservation from "./components/doctor/DoctorReservation";
 import DoctorDianosis from "./components/doctor/DoctorDiagnosis";
 import DoctorPerscription from "./components/doctor/DoctorPerscription";
 import DoctorPerscriptionForm from "./components/doctor/DoctorPerscriptionForm";
+import DoctorPasswordChange from "./components/doctor/DoctorPasswordChange";
+import DoctorMypage from "./components/doctor/DoctorMypage";
 import Notice from "./components/Notice";
 
 import UserJoin from "./components/user/UserJoin";
@@ -16,7 +18,6 @@ import UserJoin from "./components/user/UserJoin";
 import UserReservationPayment from "./components/user/UserReservationPayment";
 import UserReservationPaymenting from "./components/user/UserReservationPaymenting";
 import UserReservationComplete from "./components/user/UserReservationComplete";
-import UserMedicinePayment from "./components/user/UserMedicinePayment";
 import UserMypageChange from "./components/user/UserMypageChange";
 import UserMypage from "./components/user/UserMypage";
 import UserReservation from "./components/user/UserReservation";
@@ -48,10 +49,12 @@ function App() {
                         <Route path="/doctorreservation" element={<DoctorReservation></DoctorReservation>}></Route>
                         <Route path="/doctordiagnosis" element={<DoctorDianosis></DoctorDianosis>}></Route>
                         <Route path="/doctorperscripton" element={<DoctorPerscription></DoctorPerscription>}></Route>
+                        <Route path="/DoctorPasswordChange" element={<DoctorPasswordChange></DoctorPasswordChange>}></Route>
                         <Route
                             path="/doctorperscriptonform"
                             element={<DoctorPerscriptionForm></DoctorPerscriptionForm>}
                         ></Route>
+                        <Route path="/DoctorMypage" element={<DoctorMypage></DoctorMypage>}></Route>
                         {/* user */}
                         <Route path="/hospitalsearch" element={<HospitalSearch></HospitalSearch>}></Route>
                         <Route

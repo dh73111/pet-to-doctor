@@ -72,7 +72,7 @@ function UserJoin(props) {
           이메일
         </Typography>
         <TextField
-          style={{ width: 400 }}
+          style={{ width: 350 }}
           margin="dense"
           placeholder="example@example.com"
           required //값 반드시 입력
@@ -86,7 +86,7 @@ function UserJoin(props) {
           비밀번호
         </Typography>
         <TextField
-          style={{ width: 400 }}
+          style={{ width: 350 }}
           margin="dense"
           placeholder="비밀번호 입력"
           required //값 반드시 입력
@@ -98,7 +98,7 @@ function UserJoin(props) {
           비밀번호 재확인
         </Typography>
         <TextField
-          style={{ width: 400 }}
+          style={{ width: 350 }}
           margin="dense"
           placeholder="비밀번호 재확인"
           required //값 반드시 입력
@@ -110,7 +110,7 @@ function UserJoin(props) {
           이름
         </Typography>
         <TextField
-          style={{ width: 400 }}
+          style={{ width: 350 }}
           margin="dense"
           placeholder="이름"
           required //값 반드시 입력
@@ -122,7 +122,7 @@ function UserJoin(props) {
           휴대전화
         </Typography>
         <TextField
-          style={{ width: 400 }}
+          style={{ width: 350 }}
           margin="dense"
           placeholder="01012345678"
           required //값 반드시 입력
@@ -151,14 +151,14 @@ function UserJoin(props) {
             </Modal>
           </Box>
           <TextField
-            style={{ width: 400 }}
+            style={{ width: 350 }}
             margin="dense"
             disabled
             value={address}
           ></TextField>
         </Box>
         <TextField
-          style={{ width: 400 }}
+          style={{ width: 350 }}
           margin="dense"
           placeholder="상세 주소"
           required //값 반드시 입력
@@ -166,7 +166,7 @@ function UserJoin(props) {
           name="addressdetail"
         />
         <Typography mt={5} align="right" component="h1" variant="h6">
-          반려동물 정보(선택)
+          반려동물 정보(선택입력사항)
         </Typography>
         <Grid
           container
@@ -182,7 +182,7 @@ function UserJoin(props) {
             </Typography>
           </Grid>
           <Grid>
-            <TextField style={{ width: 400 }} margin="dense" label={""} />
+            <TextField style={{ width: 350 }} margin="dense" />
           </Grid>
         </Grid>
         <Grid
@@ -199,7 +199,7 @@ function UserJoin(props) {
             </Typography>
           </Grid>
           <Grid>
-            <TextField style={{ width: 400 }} margin="dense" label={""} />
+            <TextField style={{ width: 350 }} margin="dense" />
           </Grid>
         </Grid>
         <Grid
@@ -216,7 +216,7 @@ function UserJoin(props) {
             </Typography>
           </Grid>
           <Grid>
-            <TextField style={{ width: 400 }} margin="dense" label={""} />
+            <TextField style={{ width: 350 }} margin="dense" />
           </Grid>
         </Grid>
         <Grid
@@ -234,9 +234,8 @@ function UserJoin(props) {
           </Grid>
           <Grid>
             <TextField
-              style={{ width: 400 }}
+              style={{ width: 350 }}
               margin="dense"
-              label={""}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">kg</InputAdornment>
@@ -245,9 +244,6 @@ function UserJoin(props) {
             />
           </Grid>
         </Grid>
-        <Button variant="contained" color="success" sx={{ mt: 5 }}>
-          반려동물 추가하기
-        </Button>
         <Button type="submit" variant="contained" size="large" sx={{ mt: 3 }}>
           가입하기
         </Button>
