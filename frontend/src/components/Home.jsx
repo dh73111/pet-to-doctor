@@ -16,9 +16,9 @@ const MyDiv = styled("div")({
 });
 const cardStyle = {
     backgroundColor: '#fff',
-    maxWidth: '1200px',
+    maxWidth: '1152px',
     position: 'absolute',
-    top: '670px',
+    top: '36rem',
     left: '50%',
     borderRadius: '4px',
 }
@@ -33,7 +33,7 @@ function Home(props) {
     return (
         <div>
             <MyImage>
-                <img src="./img/main.png" width="100%" height="550px" alt=""></img>
+                <img src="./img/image132.png" width="100%" alt="mainVisual"></img>
             </MyImage>
             <Container>
             <Grid container style={cardStyle} className="card">

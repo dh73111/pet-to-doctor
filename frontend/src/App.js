@@ -24,6 +24,7 @@ import UserMypage from "./components/user/UserMypage";
 import UserReservation from "./components/user/UserReservation";
 import UserMedicinePayment from "./components/user/UserMedicinePayment";
 import UserRating from "./components/user/UserRating";
+import Qna from "./components/user/Qna";
 
 import Box from "@mui/material/Box";
 
@@ -71,6 +72,7 @@ function App() {
                         <Route path="/userreservationpaymenting" element={<UserReservationPaymenting />}></Route>
                         <Route path="/userreservationcomplete" element={<UserReservationComplete />}></Route>
                         <Route path="/usermedipayment" element={<UserMedicinePayment />}></Route>
+                        <Route path="/qna" element={<Qna />}></Route>
                     </Routes>
                 </div>
             </BrowserRouter>

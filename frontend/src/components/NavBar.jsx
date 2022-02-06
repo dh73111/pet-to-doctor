@@ -22,10 +22,10 @@ import Banner from "./user/resources/Banner";
 import MainSearchBar from "./user/resources/MainSearchBar";
 import { CallOutlined, PersonOutlineOutlined, SupportAgent } from "@mui/icons-material";
 const pages = [
-    { id: 3, path: "/notice", name: "내 예약" },
-    { id: 1, path: "/hospitalsearch", name: "주변 병원찾기" },
-    { id: 1, path: "/hospitalsearch", name: "진료/상담후기" },
-    { id: 2, path: "/hospitalreservation", name: "QnA" },
+    { id: 1, path: "/userreservation", name: "내 예약" },
+    { id: 2, path: "/hospitalsearch", name: "주변 병원찾기" },
+    { id: 3, path: "/", name: "진료/상담후기" },
+    { id: 4, path: "/qna", name: "QnA" },
 ];
 const doctorpages = [
     { id: 1, path: "/doctorreservation", name: "받은예약" },
@@ -111,7 +111,7 @@ const NavBarEl = (props) => {
         }
     };
 
-    const LoginMenu = () => {
+    const LoginMenu = (props) => {
         const style = [
             {   
                 padding: '0 10px',
@@ -148,7 +148,7 @@ const NavBarEl = (props) => {
                     }) : logoutControls.map(cont => {
                         return <Typography><NavLink style={style[0]} to={cont.link} key={cont}>{cont.title}</NavLink></Typography>
                     })}
-                    <Typography sx={{ pl: 1 }}><NavLink style={style[1]} key={2} to="/">고객센터</NavLink></Typography>
+                    <Typography sx={{ pl: 1 }}><NavLink style={style[1]} key={2} to="/qna">고객센터</NavLink></Typography>
                 </Box>
             </Box>
         );
