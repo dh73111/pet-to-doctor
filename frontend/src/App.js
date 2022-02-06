@@ -21,6 +21,7 @@ import UserReservationComplete from "./components/user/UserReservationComplete";
 import UserMypageChange from "./components/user/UserMypageChange";
 import UserMypage from "./components/user/UserMypage";
 import UserReservation from "./components/user/UserReservation";
+import UserMedicinePayment from "./components/user/UserMedicinePayment";
 // import UserReservationPayment from "./components/user/UserReservationPayment";
 
 import Box from "@mui/material/Box";
@@ -46,16 +47,9 @@ function App() {
                     </Routes>
                     <Routes>
                         {/* doctor */}
-<<<<<<< HEAD
-                        <Route path="/doctorreservation" element={<DoctorReservation></DoctorReservation>}></Route>
-                        <Route path="/doctordiagnosis" element={<DoctorDianosis></DoctorDianosis>}></Route>
-                        <Route path="/doctorperscripton" element={<DoctorPerscription></DoctorPerscription>}></Route>
-                        <Route path="/DoctorPasswordChange" element={<DoctorPasswordChange></DoctorPasswordChange>}></Route>
-=======
                         <Route path="/doctorreservation" element={<DoctorReservation />}></Route>
                         <Route path="/doctordiagnosis" element={<DoctorDianosis />}></Route>
                         <Route path="/doctorperscripton" element={<DoctorPerscription />}></Route>
->>>>>>> eeb0f95cca3a5c75def2aeec407281a24a079efa
                         <Route
                             path="/doctorperscriptonform"
                             element={<DoctorPerscriptionForm />}
