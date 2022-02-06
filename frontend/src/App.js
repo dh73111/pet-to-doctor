@@ -41,35 +41,42 @@ function App() {
                         <Route path="/*" element={<NavBar />}></Route>
                     </Routes>
                     <Routes>
-                        <Route path="/" element={<Home></Home>}></Route>
-                        <Route path="/kakaooauth*" element={<Home></Home>}></Route>
+                        <Route path="/" element={<Home />}></Route>
+                        <Route path="/kakaooauth*" element={<Home />}></Route>
                     </Routes>
                     <Routes>
                         {/* doctor */}
+<<<<<<< HEAD
                         <Route path="/doctorreservation" element={<DoctorReservation></DoctorReservation>}></Route>
                         <Route path="/doctordiagnosis" element={<DoctorDianosis></DoctorDianosis>}></Route>
                         <Route path="/doctorperscripton" element={<DoctorPerscription></DoctorPerscription>}></Route>
                         <Route path="/DoctorPasswordChange" element={<DoctorPasswordChange></DoctorPasswordChange>}></Route>
+=======
+                        <Route path="/doctorreservation" element={<DoctorReservation />}></Route>
+                        <Route path="/doctordiagnosis" element={<DoctorDianosis />}></Route>
+                        <Route path="/doctorperscripton" element={<DoctorPerscription />}></Route>
+>>>>>>> eeb0f95cca3a5c75def2aeec407281a24a079efa
                         <Route
                             path="/doctorperscriptonform"
-                            element={<DoctorPerscriptionForm></DoctorPerscriptionForm>}
+                            element={<DoctorPerscriptionForm />}
                         ></Route>
                         <Route path="/DoctorMypage" element={<DoctorMypage></DoctorMypage>}></Route>
                         {/* user */}
-                        <Route path="/hospitalsearch" element={<HospitalSearch></HospitalSearch>}></Route>
+                        <Route path="/hospitalsearch" element={<HospitalSearch />}></Route>
                         <Route
                             path="/hospitalreservation"
-                            element={<HospitalReservation></HospitalReservation>}
+                            element={<HospitalReservation />}
                         ></Route>
                         <Route
                             path="/hospitalsearchreservation"
-                            element={<HospitalSearchReservation></HospitalSearchReservation>}
+                            element={<HospitalSearchReservation />}
                         ></Route>
-                        <Route path="/notice" element={<Notice></Notice>}></Route>
-                        <Route path="/UserJoin" element={<UserJoin></UserJoin>}></Route>
-                        <Route path="/UserMypageChange" element={<UserMypageChange></UserMypageChange>}></Route>
-                        <Route path="/usermypage" element={<UserMypage></UserMypage>}></Route>
-                        <Route path="/userreservation" element={<UserReservation></UserReservation>}></Route>
+                        <Route path="/notice" element={<Notice />}></Route>
+                        <Route path="/UserJoin" element={<UserJoin />}></Route>
+                        <Route path="/UserMypageChange" element={<UserMypageChange />}></Route>
+                        <Route path="/usermypage" element={<UserMypage />}></Route>
+                        <Route path="/userreservation" element={<UserReservation />}></Route>
+                        <Route path="/usermedipayment" element={<UserMedicinePayment />}></Route>
                     </Routes>
                 </div>
             </BrowserRouter>
