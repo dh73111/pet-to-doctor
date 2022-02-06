@@ -20,6 +20,7 @@ import UserMedicinePayment from "./components/user/UserMedicinePayment";
 import UserMypageChange from "./components/user/UserMypageChange";
 import UserMypage from "./components/user/UserMypage";
 import UserReservation from "./components/user/UserReservation";
+import UserConsulting from "./components/user/UserConsulting";
 // import UserReservationPayment from "./components/user/UserReservationPayment";
 
 import Box from "@mui/material/Box";
@@ -67,6 +68,7 @@ function App() {
                         <Route path="/UserMypageChange" element={<UserMypageChange></UserMypageChange>}></Route>
                         <Route path="/usermypage" element={<UserMypage></UserMypage>}></Route>
                         <Route path="/userreservation" element={<UserReservation></UserReservation>}></Route>
+                        <Route path="/userconsulting" element={<UserConsulting></UserConsulting>}></Route>
                     </Routes>
                 </div>
             </BrowserRouter>

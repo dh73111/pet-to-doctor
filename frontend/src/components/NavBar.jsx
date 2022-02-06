@@ -17,6 +17,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { NavLink } from "react-router-dom";
 import UserLoginModal from "./user/UserLoginModal";
 import Banner from "./user/resources/Banner";
+
 const pages = [
     { id: 1, path: "/hospitalsearch", name: "병원찾기" },
     { id: 2, path: "/hospitalreservation", name: "즐겨찾기" },

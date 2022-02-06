@@ -429,7 +429,7 @@ function HospitalSearch(props) {
             <Grid item xs={9.5}>
                 {mode === "list" ? (
                     // 리스트 페이지
-                    <div id="map" style={{ width: "100%", height: "890px" }}></div>
+                    <Box id="map" style={{ width: "100%", height: "890px" }}></Box>
                 ) : (
                     // 상세 보기 페이지
 

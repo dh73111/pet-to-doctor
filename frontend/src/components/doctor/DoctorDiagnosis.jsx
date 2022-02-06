@@ -12,6 +12,8 @@ import DatePicker from "@mui/lab/DatePicker";
 import TextField from "@mui/material/TextField";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 function createData(no, date, time, name, state) {
     return { no, date, time, name, state };
@@ -208,33 +210,14 @@ function DoctorDiagnosis(props) {
                                     </tr>
                                 )}
                             </tbody>
-                            <tfoot>
-                                <tr sx={{ width: 1200 }}>
-                                    <CustomTablePagination
-                                        rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-                                        colSpan={6}
-                                        count={rows.length}
-                                        rowsPerPage={rowsPerPage}
-                                        page={page}
-                                        componentsProps={{
-                                            select: {
-                                                "aria-label": "rows per page",
-                                            },
-                                            actions: {
-                                                showFirstButton: true,
-                                                showLastButton: true,
-                                            },
-                                        }}
-                                        onPageChange={handleChangePage}
-                                        onRowsPerPageChange={handleChangeRowsPerPage}
-                                    />
-                                </tr>
-                            </tfoot>
                         </table>
                     </Root>
                 </Grid>
                 <Grid item xs={2}></Grid>
             </Grid>
+            <Box sx={{ mx: "auto" }}>
+                <Pagination count={10} color="primary" sx={{ px: 100 }} />
+            </Box>
         </Box>
     );
 }

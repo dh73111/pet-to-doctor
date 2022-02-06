@@ -14,6 +14,7 @@ import DatePicker from "@mui/lab/DatePicker";
 import TextField from "@mui/material/TextField";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import { NavLink } from "react-router-dom";
 function createData(no, date, time, hospital, doctor, state, perscription, shipNo) {
     return { no, date, time, hospital, doctor, state, perscription, shipNo };
 }
@@ -215,7 +216,9 @@ function UserReservation(props) {
                                             {row.state}
                                         </td>
                                         <td style={{ width: 140 }} align="right">
-                                            <Button variant="contained">들어가기</Button>
+                                            <NavLink to="/userconsulting">
+                                                <Button variant="contained">들어가기</Button>
+                                            </NavLink>
                                         </td>
                                         <td style={{ width: 140 }} align="right">
                                             <Button variant="contained">{row.perscription}</Button>
