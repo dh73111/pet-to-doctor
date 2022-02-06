@@ -46,7 +46,7 @@ const style = {
     transform: "translate(-50%, -50%)",
     width: 1200,
     height: 800,
-    bgcolor: "background.paper",
+    // bgcolor: "background.paper",
     // boxShadow: 24,
 };
 
@@ -155,9 +155,9 @@ const NavBarEl = (props) => {
     }
 
     return (
-        <Box>
+        <Box sx={{ position: 'relative' }}>
             <Banner></Banner>
-            <AppBar color="inherit" position="sticky">
+            <Box color="inherit">
                 <Container maxWidth="lg">
                     <LoginMenu />
                     <Box sx={{ display: { xs: "none", md: 'flex' }, position: 'relative', height: '46px', justifyContent: 'space-between' }}>
@@ -169,7 +169,11 @@ const NavBarEl = (props) => {
                             <SupportAgent sx={{ fontSize: '36px' }}/>
                         </Box>
                     </Box>
-                    <Toolbar sx={{ mt: 2 }}>
+                </Container>
+            </Box>                
+            <Box sx={{ mt: 2, backgroundColor: '#fff', border: 1, position: 'sticky', top: '0' }}>
+                <Container>
+                    <Toolbar sx={{ border: '1px solid blue' }} >
                         <Box sx={{ display: { xs: "flex", md: "none" }, flexGrow: 1 }}>
                             <IconButton
                                 //  모바일화면 햄버거아이콘
@@ -231,7 +235,7 @@ const NavBarEl = (props) => {
                         </Modal>
                     </Toolbar>
                 </Container>
-            </AppBar>
+            </Box>
         </Box>
     );
 };
