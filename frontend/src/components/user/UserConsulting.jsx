@@ -119,9 +119,9 @@ function UserConsulting(props) {
             <Grid container>
                 <Grid Item md={0}></Grid>
                 <Grid Item md={6}>
-                    <Box sx={{ width: "500px", height: 240 }}>
+                    <Box>
                         <video
-                            style={{ margin: 5, background: "black" }}
+                            style={{ width: "98%", height: 500, margin: 5, background: "black" }}
                             muted="true"
                             ref={localVideoRef}
                             autoPlay="true"
@@ -130,9 +130,9 @@ function UserConsulting(props) {
                 </Grid>
                 <Grid Item md={0}></Grid>
                 <Grid Item md={6}>
-                    <Box sx={{ width: "500px", height: 240 }}>
+                    <Box>
                         <video
-                            style={{ margin: 5, background: "black" }}
+                            style={{ width: "98%", height: 500, margin: 5, background: "black" }}
                             muted="true"
                             ref={remoteVideoRef}
                             autoPlay="true"
