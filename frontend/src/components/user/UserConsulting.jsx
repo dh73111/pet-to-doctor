@@ -1,5 +1,7 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import io from "socket.io-client";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 
 const pc_config = {
     iceServer: [{ urls: "stun:stun.l.google.com:19302" }],
@@ -13,8 +15,8 @@ function UserConsulting(props) {
     const remoteVideoRef = useRef(null);
     const setVideoTracks = async () => {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({
-                video: true,
+            let stream = await navigator.mediaDevices.getUserMedia({
+                video: false,
                 audio: true,
             });
             if (localVideoRef.current) localVideoRef.current.srcObject = stream;
@@ -40,7 +42,7 @@ function UserConsulting(props) {
                 }
             };
             socketRef.current.emit("join_room", {
-                room: "doctor_id",
+                room: "1234",
             });
         } catch (e) {
             console.error(e);
@@ -111,32 +113,61 @@ function UserConsulting(props) {
             }
         };
     }, []);
-    return React.createElement(
-        "div",
-        null,
-        React.createElement("video", {
-            style: {
-                width: 240,
-                height: 240,
-                margin: 5,
-                backgroundColor: "black",
-            },
-            muted: true,
-            ref: localVideoRef,
-            autoPlay: true,
-        }),
-        React.createElement("video", {
-            id: "remotevideo",
-            style: {
-                width: 240,
-                height: 240,
-                margin: 5,
-                backgroundColor: "black",
-            },
-            ref: remoteVideoRef,
-            autoPlay: true,
-        })
+
+    return (
+        <Box>
+            <Grid container>
+                <Grid Item md={0}></Grid>
+                <Grid Item md={6}>
+                    <Box sx={{ width: "500px", height: 240 }}>
+                        <video
+                            style={{ margin: 5, background: "black" }}
+                            muted="true"
+                            ref={localVideoRef}
+                            autoPlay="true"
+                        ></video>
+                    </Box>
+                </Grid>
+                <Grid Item md={0}></Grid>
+                <Grid Item md={6}>
+                    <Box sx={{ width: "500px", height: 240 }}>
+                        <video
+                            style={{ margin: 5, background: "black" }}
+                            muted="true"
+                            ref={remoteVideoRef}
+                            autoPlay="true"
+                        ></video>
+                    </Box>
+                </Grid>
+            </Grid>
+        </Box>
     );
+    // return React.createElement(
+    //     "div",
+    //     null,
+    //     React.createElement("video", {
+    //         style: {
+    //             width: 240,
+    //             height: 240,
+    //             margin: 5,
+    //             backgroundColor: "black",
+    //         },
+    //         muted: true,
+    //         ref: localVideoRef,
+    //         autoPlay: true,
+    //     }),
+    //     React.createElement("video", {
+    //         id: "remotevideo",
+    //         style: {
+    //             width: 240,
+    //             height: 240,
+    //             margin: 5,
+    //             backgroundColor: "black",
+    //         },
+    //         ref: remoteVideoRef,
+    //         autoPlay: true,
+    //     })
+    // );
 }
 
 export default UserConsulting;
