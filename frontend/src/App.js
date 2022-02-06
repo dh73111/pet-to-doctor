@@ -26,11 +26,11 @@ import UserMedicinePayment from "./components/user/UserMedicinePayment";
 
 import Box from "@mui/material/Box";
 
-import { userInfo } from "./api/user.js";
+import { userInfo, findUserPassword, checkDuplication } from "./api/user.js";
 
 function App() {
     console.log(
-        userInfo(1, (data) => {
+        checkDuplication('strrr', (data) => {
             console.log(data);
         })
     );
