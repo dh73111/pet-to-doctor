@@ -10,7 +10,7 @@ import { CallOutlined, PersonOutlineOutlined, SupportAgent } from "@mui/icons-ma
 const pages = [
   { id: 1, path: "/userreservation", name: "내 예약" },
   { id: 2, path: "/hospitalsearch", name: "주변 병원찾기" },
-  { id: 3, path: "/", name: "진료/상담후기" },
+  { id: 3, path: "/review", name: "진료/상담후기" },
   { id: 4, path: "/qna", name: "QnA" },
 ];
 const doctorpages = [
