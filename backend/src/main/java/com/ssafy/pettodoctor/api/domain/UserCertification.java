@@ -15,7 +15,7 @@ public class UserCertification {
     @Column(name="userCert_id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;
 

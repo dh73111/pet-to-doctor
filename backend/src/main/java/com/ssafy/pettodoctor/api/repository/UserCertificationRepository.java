@@ -24,4 +24,13 @@ public class UserCertificationRepository {
         User user = certKey.getUser();
         return Optional.ofNullable(user);
     }
+
+    public void delete(long id){
+        UserCertification findUC = em.find(UserCertification.class, id);
+        em.remove(findUC);
+    }
+
+    public UserCertification find(Long id) {
+        return em.find(UserCertification.class, id);
+    }
 }
