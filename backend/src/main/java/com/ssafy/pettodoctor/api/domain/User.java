@@ -5,6 +5,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="users")
@@ -16,6 +18,9 @@ public class User extends Account {
     private Boolean isOauth;
     private Boolean isCertificated;
     private String profileImgUrl;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Pet> pets = new ArrayList<>();
 
     //== 생성 메소드 ==//
     public static User createCommonUser(String email, String name, String password, Address address){
