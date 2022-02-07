@@ -6,6 +6,7 @@ function apiInstance() {
         baseURL: API_BASE_URL,
         headers: {
             "Content-type": "application/json",
+            // Authorization: `Bearer ${jwtToken}`,
         },
     });
     return instance;

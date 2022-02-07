@@ -28,14 +28,9 @@ import Qna from "./components/user/Qna";
 
 import Box from "@mui/material/Box";
 
-import { userInfo, findUserPassword, checkDuplication } from "./api/user.js";
+import { registerUser, userInfo, findUserPassword, checkDuplication } from "./api/user.js";
 
 function App() {
-    console.log(
-        checkDuplication('strrr', (data) => {
-            console.log(data);
-        })
-    );
     return (
         <Box sx={{ fontFamily: "noto sans" }}>
             <BrowserRouter>
@@ -53,9 +48,7 @@ function App() {
                         <Route path="/doctordiagnosis" element={<DoctorDianosis />}></Route>
                         <Route path="/doctorperscripton" element={<DoctorPerscription />}></Route>
                         <Route path="/doctormypage" element={<DoctorMypage />}></Route>
-                        <Route path="/doctorpwchange" element={<DoctorPasswordChange />}></Route>
                         <Route path="/doctorperscriptonform" element={<DoctorPerscriptionForm />}></Route>
-                        <Route path="/DoctorMypage" element={<DoctorMypage></DoctorMypage>}></Route>
 
                         {/* user */}
                         <Route path="/notice" element={<Notice />}></Route>
