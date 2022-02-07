@@ -79,4 +79,56 @@ public class ReviewController {
 
         return new ResponseEntity<ResVO<Long>>(result, status);
     }
+
+    @GetMapping
+    @Operation(summary = "모든 리뷰 정보 반환", description = "모든 리뷰 정보 리스트를 반환한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "401", description = "인증 실패"),
+            @ApiResponse(responseCode = "404", description = "사용자 없음"),
+            @ApiResponse(responseCode = "500", description = "서버 오류")
+    })
+    public ResponseEntity<ResVO<List<ReviewRes>>> findAll() {
+        ResVO<List<ReviewRes>> result = new ResVO<>();
+        HttpStatus status = null;
+
+        try{
+            List<Review> reviews = reviewService.findAll();
+            result.setData(ReviewRes.convertToResList(reviews));
+            result.setMessage("성공");
+            status = HttpStatus.OK;
+        } catch (Exception e){
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            result.setMessage("서버 오류");
+        }
+
+        return new ResponseEntity<ResVO<List<ReviewRes>>>(result, status);
+    }
+
+    @GetMapping("/recent")
+    @Operation(summary = "최근 리뷰 10개 정보 반환", description = "최근 리뷰 10개 정보 리스트를 반환한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "401", description = "인증 실패"),
+            @ApiResponse(responseCode = "404", description = "사용자 없음"),
+            @ApiResponse(responseCode = "500", description = "서버 오류")
+    })
+    public ResponseEntity<ResVO<List<ReviewRes>>> findRecentReview(
+            @RequestParam @Parameter(description = "요청 개수") int count
+    ) {
+        ResVO<List<ReviewRes>> result = new ResVO<>();
+        HttpStatus status = null;
+
+        try{
+            List<Review> reviews = reviewService.findRecentReview(count);
+            result.setData(ReviewRes.convertToResList(reviews));
+            result.setMessage("성공");
+            status = HttpStatus.OK;
+        } catch (Exception e){
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            result.setMessage("서버 오류");
+        }
+
+        return new ResponseEntity<ResVO<List<ReviewRes>>>(result, status);
+    }
 }
