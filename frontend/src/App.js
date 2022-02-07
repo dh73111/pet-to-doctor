@@ -9,6 +9,7 @@ import DoctorReservation from "./components/doctor/DoctorReservation";
 import DoctorDianosis from "./components/doctor/DoctorDiagnosis";
 import DoctorPerscription from "./components/doctor/DoctorPerscription";
 import DoctorPerscriptionForm from "./components/doctor/DoctorPerscriptionForm";
+import DoctorConsuliting from "./components/doctor/DoctorConsuliting";
 import DoctorPasswordChange from "./components/doctor/DoctorPasswordChange";
 import DoctorMypage from "./components/doctor/DoctorMypage";
 import Notice from "./components/Notice";
@@ -50,6 +51,7 @@ function App() {
             <Route path="/doctorperscripton" element={<DoctorPerscription />}></Route>
             <Route path="/doctormypage" element={<DoctorMypage />}></Route>
             <Route path="/doctorperscriptonform" element={<DoctorPerscriptionForm />}></Route>
+            <Route path="/doctorconsulting" element={<DoctorConsuliting />}></Route>
 
             {/* user */}
             <Route path="/notice" element={<Notice />}></Route>
