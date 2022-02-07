@@ -1,11 +1,16 @@
-import React from 'react';
+import React from "react";
 
 function DoctorConsuliting(props) {
-    return (
-        <div>
-            
-        </div>
-    );
+  // 진단서 작성 새창열기 테스트
+  const openDiagForm = () => {
+    window.open("http://localhost:3000/doctordiagnosis", "", "_blank");
+  };
+
+  return (
+    <div>
+      <button onClick={openDiagForm}>진단서작성</button>
+    </div>
+  );
 }
 
 export default DoctorConsuliting;

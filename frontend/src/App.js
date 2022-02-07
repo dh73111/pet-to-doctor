@@ -9,6 +9,7 @@ import DoctorReservation from "./components/doctor/DoctorReservation";
 import DoctorDianosis from "./components/doctor/DoctorDiagnosis";
 import DoctorPerscription from "./components/doctor/DoctorPerscription";
 import DoctorPerscriptionForm from "./components/doctor/DoctorPerscriptionForm";
+import DoctorConsuliting from "./components/doctor/DoctorConsuliting";
 import DoctorPasswordChange from "./components/doctor/DoctorPasswordChange";
 import DoctorMypage from "./components/doctor/DoctorMypage";
 import Notice from "./components/Notice";
@@ -31,46 +32,47 @@ import Box from "@mui/material/Box";
 import { registerUser, userInfo, findUserPassword, checkDuplication } from "./api/user.js";
 
 function App() {
-    return (
-        <Box sx={{ fontFamily: "noto sans" }}>
-            <BrowserRouter>
-                <div className="App">
-                    <Routes>
-                        <Route path="/*" element={<NavBar />}></Route>
-                    </Routes>
-                    <Routes>
-                        <Route path="/" element={<Home />}></Route>
-                        <Route path="/kakaooauth*" element={<Home />}></Route>
-                    </Routes>
-                    <Routes>
-                        {/* doctor */}
-                        <Route path="/doctorreservation" element={<DoctorReservation />}></Route>
-                        <Route path="/doctordiagnosis" element={<DoctorDianosis />}></Route>
-                        <Route path="/doctorperscripton" element={<DoctorPerscription />}></Route>
-                        <Route path="/doctormypage" element={<DoctorMypage />}></Route>
-                        <Route path="/doctorperscriptonform" element={<DoctorPerscriptionForm />}></Route>
+  return (
+    <Box sx={{ fontFamily: "noto sans" }}>
+      <BrowserRouter>
+        <div className="App">
+          <Routes>
+            <Route path="/*" element={<NavBar />}></Route>
+          </Routes>
+          <Routes>
+            <Route path="/" element={<Home />}></Route>
+            <Route path="/kakaooauth*" element={<Home />}></Route>
+          </Routes>
+          <Routes>
+            {/* doctor */}
+            <Route path="/doctorreservation" element={<DoctorReservation />}></Route>
+            <Route path="/doctordiagnosis" element={<DoctorDianosis />}></Route>
+            <Route path="/doctorperscripton" element={<DoctorPerscription />}></Route>
+            <Route path="/doctormypage" element={<DoctorMypage />}></Route>
+            <Route path="/doctorperscriptonform" element={<DoctorPerscriptionForm />}></Route>
+            <Route path="/doctorconsulting" element={<DoctorConsuliting />}></Route>
 
-                        {/* user */}
-                        <Route path="/notice" element={<Notice />}></Route>
-                        <Route path="/hospitalsearch" element={<HospitalSearch />}></Route>
-                        <Route path="/hospitalreservation" element={<HospitalReservation />}></Route>
-                        <Route path="/hospitalsearchreservation" element={<HospitalSearchReservation />}></Route>
-                        <Route path="/userjoin" element={<UserJoin />}></Route>
-                        <Route path="/usersignupconfirm" element={<UserSignupConfirm />}></Route>
-                        <Route path="/usermypage" element={<UserMypage />}></Route>
-                        <Route path="/usernmypagechange" element={<UserMypageChange />}></Route>
-                        <Route path="/userrating" element={<UserRating />}></Route>
-                        <Route path="/userreservation" element={<UserReservation />}></Route>
-                        <Route path="/userreservationpayment" element={<UserReservationPayment />}></Route>
-                        <Route path="/userreservationpaymenting" element={<UserReservationPaymenting />}></Route>
-                        <Route path="/userreservationcomplete" element={<UserReservationComplete />}></Route>
-                        <Route path="/usermedipayment" element={<UserMedicinePayment />}></Route>
-                        <Route path="/qna" element={<Qna />}></Route>
-                    </Routes>
-                </div>
-            </BrowserRouter>
-        </Box>
-    );
+            {/* user */}
+            <Route path="/notice" element={<Notice />}></Route>
+            <Route path="/hospitalsearch" element={<HospitalSearch />}></Route>
+            <Route path="/hospitalreservation" element={<HospitalReservation />}></Route>
+            <Route path="/hospitalsearchreservation" element={<HospitalSearchReservation />}></Route>
+            <Route path="/userjoin" element={<UserJoin />}></Route>
+            <Route path="/usersignupconfirm" element={<UserSignupConfirm />}></Route>
+            <Route path="/usermypage" element={<UserMypage />}></Route>
+            <Route path="/usernmypagechange" element={<UserMypageChange />}></Route>
+            <Route path="/userrating" element={<UserRating />}></Route>
+            <Route path="/userreservation" element={<UserReservation />}></Route>
+            <Route path="/userreservationpayment" element={<UserReservationPayment />}></Route>
+            <Route path="/userreservationpaymenting" element={<UserReservationPaymenting />}></Route>
+            <Route path="/userreservationcomplete" element={<UserReservationComplete />}></Route>
+            <Route path="/usermedipayment" element={<UserMedicinePayment />}></Route>
+            <Route path="/qna" element={<Qna />}></Route>
+          </Routes>
+        </div>
+      </BrowserRouter>
+    </Box>
+  );
 }
 
 export default App;
