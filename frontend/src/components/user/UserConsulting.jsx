@@ -19,11 +19,11 @@ function UserConsulting(props) {
     const remoteVideoRef = useRef(null);
     const [state, setState] = useState("doctor");
     let stream;
-    const setVideoTracks = async () => {
+    const setVideoTracks = async (videoFlag, micFlag) => {
         try {
             stream = await navigator.mediaDevices.getUserMedia({
-                video: true,
-                audio: false,
+                video: videoFlag,
+                audio: true,
             });
             if (localVideoRef.current) localVideoRef.current.srcObject = stream;
             if (!(pcRef.current && socketRef.current)) return;
@@ -122,6 +122,21 @@ function UserConsulting(props) {
 
     const [video, setVideo] = useState(false);
     const [mic, setMic] = useState(false);
+
+    const startOrStop = (videoFlag, micFlag) => {
+        console.log(videoFlag, "비디오", micFlag, "마이크");
+        console.dir(localVideoRef.current);
+        if (videoFlag) {
+            setVideoTracks(videoFlag, micFlag);
+        } else {
+            localVideoRef.current.srcObject.getVideoTracks()[0].stop();
+        }
+        if (micFlag) {
+            setVideoTracks(videoFlag, micFlag);
+        } else {
+            localVideoRef.current.srcObject.getAudioTracks()[0].stop();
+        }
+    };
     return (
         <Box>
             <Grid container>
@@ -153,18 +168,20 @@ function UserConsulting(props) {
                     <BottomNavigationAction
                         onClick={() => {
                             setVideo(!video);
+                            startOrStop(!video, mic);
                         }}
                         label={
-                            <Box sx={{ fontSize: 20, fontWeight: "bold" }}>{video ? "비디오 켜기" : "비디오 끄기"}</Box>
+                            <Box sx={{ fontSize: 20, fontWeight: "bold" }}>{video ? "비디오 끄기" : "비디오 켜기"}</Box>
                         }
                         icon={<VideoCameraFrontIcon color={video ? "primary" : ""} sx={{ fontSize: 35 }} />}
                     />
                     <BottomNavigationAction
                         onClick={() => {
                             setMic(!mic);
+                            startOrStop(video, !mic);
                         }}
                         label={
-                            <Box sx={{ fontSize: 20, fontWeight: "bold" }}>{mic ? "마이크 켜기" : "마이크 끄기"}</Box>
+                            <Box sx={{ fontSize: 20, fontWeight: "bold" }}>{mic ? "마이크 끄기" : "마이크 켜기"}</Box>
                         }
                         icon={<MicIcon sx={{ fontSize: 35 }} color={mic ? "primary" : ""} />}
                     />
@@ -180,7 +197,6 @@ function UserConsulting(props) {
                         onClick={({ history }) => {
                             console.log("나가기");
                             socketRef.current.emit("disconnect");
-                            // window.location.href = "/";
 
                             navigate("/");
                         }}
