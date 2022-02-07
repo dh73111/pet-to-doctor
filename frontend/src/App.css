@@ -23,6 +23,15 @@
 }
 
 .favhospital {
+  border-spacing: 0;
   width: 100%;
-  border: 1px solid blue;
+  /* border: 1px solid blue; */
+  border-top: 2px solid black;
+  margin-bottom: 200px;
+}
+.favhospital thead tr {
+  border-bottom: 1px solid black;
+}
+.favhospital tbody tr td {
+  border-top: 1px solid #e5e5e5;
 }

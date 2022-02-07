@@ -1,5 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { Avatar, Box, Button, cardContentClasses, Checkbox, Container, Grid, Input, Paper, TableCell, TableHead, TableRow, TableSortLabel, TextField, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  cardContentClasses,
+  Checkbox,
+  Container,
+  Grid,
+  Input,
+  Paper,
+  TableCell,
+  TableHead,
+  TableRow,
+  TableSortLabel,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { userInfo, petInfo, userFavHospital } from "../../api/user.js";
 
 function UserMypage(props) {
@@ -33,16 +49,14 @@ function UserMypage(props) {
     userFavHospital((data) => [console.log("(요청)즐겨찾는병원", data)]);
   }, []);
   return (
-    <div>
-      <Container>
-        <Typography variant="h4" component="h1" sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
-          마이페이지
-        </Typography>
-        <UserInfo user={user} />
-        <UserPetInfo pets={pets} />
-        <FavoriteHospital hospitals={favHospitals} />
-      </Container>
-    </div>
+    <Container>
+      <Typography variant="h4" component="h1" sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
+        마이페이지
+      </Typography>
+      <UserInfo user={user} />
+      <UserPetInfo pets={pets} />
+      <FavoriteHospital hospitals={favHospitals} />
+    </Container>
   );
 }
 
