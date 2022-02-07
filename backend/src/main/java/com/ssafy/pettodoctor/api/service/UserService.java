@@ -3,6 +3,7 @@ package com.ssafy.pettodoctor.api.service;
 import com.ssafy.pettodoctor.api.domain.Pet;
 import com.ssafy.pettodoctor.api.domain.User;
 import com.ssafy.pettodoctor.api.repository.PetRepository;
+import com.ssafy.pettodoctor.api.repository.UserCertificationRepository;
 import com.ssafy.pettodoctor.api.repository.UserRepository;
 import com.ssafy.pettodoctor.api.request.PetPostReq;
 import com.ssafy.pettodoctor.api.request.UserChangeReq;
@@ -31,6 +32,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PetRepository petRepository;
+    private final UserCertificationRepository userCertificationRepository;
 
     @Transactional
     public User signup(UserCommonSignupPostReq signupInfo) {
@@ -135,5 +137,11 @@ public class UserService {
             }
             user.setProfileImgUrl(imageFileName);
         }
+    }
+
+    @Transactional
+    public void mailCertification(String certificationKey) {
+        User user = userCertificationRepository.certificate(certificationKey).get();
+        user.setIsCertificated(true);
     }
 }
