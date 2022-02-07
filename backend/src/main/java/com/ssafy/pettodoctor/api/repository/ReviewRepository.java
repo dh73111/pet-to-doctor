@@ -26,4 +26,14 @@ public class ReviewRepository {
         em.persist(review);
         return review.getId();
     }
+
+    public List<Review> findAll(){
+        return em.createQuery("select r from Review r", Review.class).getResultList();
+    }
+
+    public List<Review> findRecentReview(int count){
+        return em.createQuery("select r from Review r order by r.createTime desc")
+                .setMaxResults(count)
+                .getResultList();
+    }
 }
