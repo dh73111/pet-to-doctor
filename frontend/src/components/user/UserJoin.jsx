@@ -1,27 +1,10 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Typography, Grid, Button, Box, TextField, InputAdornment, Modal } from "@mui/material";
 import logo from "../../components/logo.png";
 import DaumPostCode from "react-daum-postcode";
 import { border } from "@mui/system";
-import { registerUser } from "../../api/user.js";
+import { registerUser, userInfo } from "../../api/user.js";
 import { PestControl } from "@mui/icons-material";
-// {
-//   "email": "12345@gmail.com",
-//   "password": "1234",
-//   "address": {
-//     "city": "",
-//     "street": "",
-//     "zipcode": ""
-//   },
-//   "tel": "",
-//   "name": "",
-//   "pets": []
-// }
-
-// "name": "string",
-//       "birthDate": "2022-02-07",
-//       "species": "string",
-//       "weight": "string"
 function UserJoin(props) {
     const [values, setValues] = useState({
         email: "",
@@ -35,13 +18,16 @@ function UserJoin(props) {
         },
         pets: [],
     });
+
+    const [user, setUser] = useState({});
+
     const [addressDetail, setAddress] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value });
     };
 
-    const [pet, setPet] = useState({ name: "test", birthDate: "test", species: "test", weight: "11" });
+    const [pet, setPet] = useState({ name: "test", birthDate: "2022-02-07", species: "test", weight: "11" });
     // 주소 찾기
     const style = {
         position: "absolute",
@@ -57,7 +43,6 @@ function UserJoin(props) {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const handleAddressChange = (event) => {
-        console.log(event.target.value);
         setAddress(event.target.value);
     };
     const handleComplete = (data) => {
@@ -75,10 +60,15 @@ function UserJoin(props) {
         console.log(fullAddress, data.zonecode, data.sido);
         setValues({ ...values, ["address"]: { street: fullAddress, zipcode: data.zonecode, city: data.sido } });
         console.log(values);
-        console.log("주소검색완료");
+        handleClose();
         //fullAddress -> 전체 주소반환
     };
 
+    // useEffect(() => {
+    //     userInfo(221, (data) => {
+    //         setUser(data.data);
+    //     });
+    // }, []);
     return (
         <div>
             <Box
@@ -179,7 +169,7 @@ function UserJoin(props) {
                             </Box>
                         </Modal>
                     </Box>
-                    <TextField style={{ width: 350 }} margin="dense" disabled></TextField>
+                    <TextField style={{ width: 350 }} value={values.address.street} margin="dense" disabled></TextField>
                 </Box>
                 <TextField
                     style={{ width: 350 }}

@@ -21,7 +21,7 @@ import Button from "@mui/material/Button";
 function HospitalSearchReservation(props) {
     const { kakao } = window;
 
-    const [values, setValues] = React.useState({
+    const [values, setValues] = useState({
         name: "",
         weight: "",
         specific: "",
@@ -29,7 +29,7 @@ function HospitalSearchReservation(props) {
         time: "",
         symptom: "",
     });
-    const [date, setDate] = React.useState(new Date());
+    const [date, setDate] = useState(new Date());
 
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value });

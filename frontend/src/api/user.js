@@ -7,6 +7,7 @@ function modifyMember(user, success, fail) {
 }
 
 function registerUser(user, success, fail) {
+    console.log(JSON.stringify(user));
     api.post(`/user`, JSON.stringify(user)).then(success).catch(fail);
 }
 
@@ -42,8 +43,15 @@ function checkDuplication(userEmail, success, fail) {
     api.get(`/user/duplication/?email=${userEmail}`).then(success).catch(fail);
 }
 
-
-
-
-
-export { userInfo, registerUser, modifyMember, deleteUser, modifyUserPic, checkPassword, changePassword, loginUser, findUserPassword, checkDuplication };
+export {
+    userInfo,
+    registerUser,
+    modifyMember,
+    deleteUser,
+    modifyUserPic,
+    checkPassword,
+    changePassword,
+    loginUser,
+    findUserPassword,
+    checkDuplication,
+};
