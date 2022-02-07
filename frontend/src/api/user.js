@@ -2,7 +2,7 @@ import { apiInstance } from "./index.js";
 
 const api = apiInstance();
 
-function modifyMember(user, success, fail) {
+function modifyUser(user, success, fail) {
     api.put(`/user`, JSON.stringify(user)).then(success).catch(fail);
 }
 
@@ -43,6 +43,7 @@ function checkDuplication(userEmail, success, fail) {
     api.get(`/user/duplication/?email=${userEmail}`).then(success).catch(fail);
 }
 
+<<<<<<< Updated upstream
 export {
     userInfo,
     registerUser,
@@ -55,3 +56,10 @@ export {
     findUserPassword,
     checkDuplication,
 };
+=======
+
+
+
+
+export { userInfo, registerUser, modifyUser, deleteUser, modifyUserPic, checkPassword, changePassword, loginUser, findUserPassword, checkDuplication };
+>>>>>>> Stashed changes
