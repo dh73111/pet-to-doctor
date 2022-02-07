@@ -69,6 +69,7 @@ function UserJoin(props) {
     //         setUser(data.data);
     //     });
     // }, []);
+    // user.data.email
     return (
         <div>
             <Box

@@ -48,9 +48,7 @@ function App() {
                         <Route path="/doctordiagnosis" element={<DoctorDianosis />}></Route>
                         <Route path="/doctorperscripton" element={<DoctorPerscription />}></Route>
                         <Route path="/doctormypage" element={<DoctorMypage />}></Route>
-                        <Route path="/doctorpwchange" element={<DoctorPasswordChange />}></Route>
                         <Route path="/doctorperscriptonform" element={<DoctorPerscriptionForm />}></Route>
-                        <Route path="/DoctorMypage" element={<DoctorMypage></DoctorMypage>}></Route>
 
                         {/* user */}
                         <Route path="/notice" element={<Notice />}></Route>
