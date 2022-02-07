@@ -24,7 +24,7 @@ import { CallOutlined, PersonOutlineOutlined, SupportAgent } from "@mui/icons-ma
 const pages = [
     { id: 3, path: "/userreservation", name: "내 예약" },
     { id: 1, path: "/hospitalsearch", name: "주변 병원찾기" },
-    { id: 1, path: "/hospitalsearch", name: "진료/상담후기" },
+    { id: 1, path: "/hospitalreview", name: "진료/상담후기" },
     { id: 2, path: "/hospitalreservation", name: "QnA" },
 ];
 const doctorpages = [
@@ -47,7 +47,7 @@ const style = {
     width: 1200,
     height: 800,
     bgcolor: "background.paper",
-    // boxShadow: 24,
+    boxShadow: 24,
 };
 
 const NavBarEl = (props) => {
@@ -79,7 +79,7 @@ const NavBarEl = (props) => {
             onClick={() => {
                 props.clickNav(page.id);
             }}
-            sx={{ color: selectedColor, display: "block", fontWeight: "bold" }}
+            sx={{ color: selectedColor, display: "block" }}
         >
             <Typography sx={{ fontSize: 17 }}>{page.name}</Typography>
         </Box>
@@ -109,7 +109,7 @@ const NavBarEl = (props) => {
         }
     };
 
-    const LoginMenu = () => {
+    const LoginMenu = (props) => {
         const style = [
             {
                 padding: "0 10px",
@@ -131,8 +131,8 @@ const NavBarEl = (props) => {
         ];
         const isLogin = props.isLogin;
         const loginControls = [
-            { title: "회원가입", link: "/UserJoin" },
-            { title: "로그인", link: "/" },
+            { title: "회원가입", link: "/userjoin" },
+            { title: "로그인", link: "/", func: handleOpen },
         ];
         const logoutControls = [
             { title: "마이페이지", link: "/usermypage" },
@@ -141,27 +141,35 @@ const NavBarEl = (props) => {
         return (
             <Box sx={{ width: "100%", mb: 2 }}>
                 <Box sx={{ display: "flex", justifyContent: "flex-end", height: "36px" }}>
-                    {!isLogin
-                        ? loginControls.map((cont) => {
-                              return (
-                                  <Typography>
-                                      <NavLink style={style[0]} to={cont.link} key={cont}>
-                                          {cont.title}
-                                      </NavLink>
-                                  </Typography>
-                              );
-                          })
-                        : logoutControls.map((cont) => {
-                              return (
-                                  <Typography>
-                                      <NavLink style={style[0]} to={cont.link} key={cont}>
-                                          {cont.title}
-                                      </NavLink>
-                                  </Typography>
-                              );
-                          })}
+                    {!isLogin ? (
+                        <>
+                            <Typography>
+                                <NavLink style={style[0]} to="/userjoin">
+                                    회원가입
+                                </NavLink>
+                            </Typography>
+                            <Typography>
+                                <Link style={style[0]} onClick={handleOpen}>
+                                    로그인
+                                </Link>
+                            </Typography>
+                        </>
+                    ) : (
+                        <>
+                            <Typography>
+                                <NavLink style={style[0]} to="/usermypage">
+                                    마이페이지
+                                </NavLink>
+                            </Typography>
+                            <Typography>
+                                <NavLink style={style[0]} to="/">
+                                    로그아웃
+                                </NavLink>
+                            </Typography>
+                        </>
+                    )}
                     <Typography sx={{ pl: 1 }}>
-                        <NavLink style={style[1]} key={2} to="/">
+                        <NavLink style={style[1]} key={8} to="/">
                             고객센터
                         </NavLink>
                     </Typography>
@@ -171,9 +179,9 @@ const NavBarEl = (props) => {
     };
 
     return (
-        <Box>
+        <Box sx={{ position: "relative" }}>
             <Banner></Banner>
-            <AppBar color="inherit" position="sticky">
+            <Box color="inherit">
                 <Container maxWidth="lg">
                     <LoginMenu />
                     <Box
@@ -189,12 +197,24 @@ const NavBarEl = (props) => {
                         </NavLink>
                         <MainSearchBar />
                         <Box>
-                            <NotificationsNoneIcon sx={{ fontSize: "36px", paddingRight: "4px", color: "#cacaca" }} />
-                            <PersonOutlineOutlined sx={{ fontSize: "36px", paddingRight: "4px" }} />
-                            <SupportAgent sx={{ fontSize: "36px" }} />
+                            <NavLink to="/">
+                                <NotificationsNoneIcon
+                                    sx={{ fontSize: "36px", marginRight: "10px", color: "#cacaca" }}
+                                />
+                            </NavLink>
+                            <NavLink to="/usermypage">
+                                <PersonOutlineOutlined sx={{ fontSize: "36px", marginRight: "10px" }} />
+                            </NavLink>
+                            <NavLink to="/qna">
+                                <SupportAgent sx={{ fontSize: "36px" }} />
+                            </NavLink>
                         </Box>
                     </Box>
-                    <Toolbar sx={{ mt: 2 }}>
+                </Container>
+            </Box>
+            <Box sx={{ mt: 2, backgroundColor: "#fff", border: 1, position: "sticky", top: "0" }}>
+                <Container>
+                    <Toolbar sx={{ border: "1px solid blue" }}>
                         <Box sx={{ display: { xs: "flex", md: "none" }, flexGrow: 1 }}>
                             <IconButton
                                 //  모바일화면 햄버거아이콘
@@ -256,7 +276,7 @@ const NavBarEl = (props) => {
                         </Modal>
                     </Toolbar>
                 </Container>
-            </AppBar>
+            </Box>
         </Box>
     );
 };

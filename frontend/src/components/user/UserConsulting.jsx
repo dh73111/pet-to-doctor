@@ -1,166 +1,178 @@
 import React, { useRef, useEffect, useState } from "react";
-import io from "socket.io-client";
+import { OpenVidu } from "openvidu-browser";
 import { Box, Grid, BottomNavigation, BottomNavigationAction } from "@mui/material";
 import { NavLink, useNavigate } from "react-router-dom";
 import MicIcon from "@mui/icons-material/Mic";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
 import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
-const pc_config = {
-    iceServer: [{ urls: "stun:stun.l.google.com:19302" }],
-};
-const SOCKET_SERVER_URL = "http://192.168.35.26:9000";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+const OPENVIDU_SERVER_URL = "https://" + window.location.hostname + ":4443";
+const OPENVIDU_SERVER_SECRET = "MY_SECRET";
 
 function UserConsulting(props) {
-    const navigate = useNavigate();
-    const socketRef = useRef();
-    const pcRef = useRef();
-    const localVideoRef = useRef(null);
-    const remoteVideoRef = useRef(null);
-    const [state, setState] = useState("doctor");
-    let stream;
-    const setVideoTracks = async (videoFlag, micFlag) => {
-        try {
-            stream = await navigator.mediaDevices.getUserMedia({
-                video: videoFlag,
-                audio: true,
+    const { id } = useParams();
+    const [state, setState] = useState({
+        mySessionId: id,
+        myUserName: "userId" + Math.floor(Math.random() * 100),
+        session: undefined,
+        mainStreamManager: undefined,
+        publisher: undefined,
+        subscribers: [],
+    });
+    let OV;
+    const getToken = () => {
+        return createSession(this.state.mySessionId).then((sessionId) => createToken(sessionId));
+    };
+    const createToken = (sessionId) => {
+        return new Promise((resolve, reject) => {
+            let data = {};
+            axios
+                .post(OPENVIDU_SERVER_URL + "/openvidu/api/sessions/" + sessionId + "/connection", data, {
+                    headers: {
+                        Authorization: "Basic " + btoa("OPENVIDUAPP:" + OPENVIDU_SERVER_SECRET),
+                        "Content-Type": "application/json",
+                    },
+                })
+                .then((response) => {
+                    console.log("TOKEN", response);
+                    resolve(response.data.token);
+                })
+                .catch((error) => reject(error));
+        });
+    };
+
+    const createSession = (sessionId) => {
+        return new Promise((resolve, reject) => {
+            let data = JSON.stringify({ customSessionId: sessionId });
+            axios
+                .post(OPENVIDU_SERVER_URL + "/openvidu/api/sessions", data, {
+                    headers: {
+                        Authorization: "Basic " + btoa("OPENVIDUAPP:" + OPENVIDU_SERVER_SECRET),
+                        "Content-Type": "application/json",
+                    },
+                })
+                .then((response) => {
+                    console.log("CREATE SESION", response);
+                    resolve(response.data.id);
+                })
+                .catch((response) => {
+                    let error = Object.assign({}, response);
+                    if (error?.response?.status === 409) {
+                        resolve(sessionId);
+                    } else {
+                        console.log(error);
+                        console.warn(
+                            "No connection to OpenVidu Server. This may be a certificate error at " +
+                                OPENVIDU_SERVER_URL
+                        );
+                        if (
+                            window.confirm(
+                                'No connection to OpenVidu Server. This may be a certificate error at "' +
+                                    OPENVIDU_SERVER_URL +
+                                    '"\n\nClick OK to navigate and accept it. ' +
+                                    'If no certificate warning is shown, then check that your OpenVidu Server is up and running at "' +
+                                    OPENVIDU_SERVER_URL +
+                                    '"'
+                            )
+                        ) {
+                            window.location.assign(OPENVIDU_SERVER_URL + "/accept-certificate");
+                        }
+                    }
+                });
+        });
+    };
+
+    const deleteSubscriber = (streamManager) => {
+        let subscribers = this.state.subscribers;
+        let index = subscribers.indexOf(streamManager, 0);
+        if (index > -1) {
+            subscribers.splice(index, 1);
+            this.setState({
+                subscribers: subscribers,
             });
-            if (localVideoRef.current) localVideoRef.current.srcObject = stream;
-            if (!(pcRef.current && socketRef.current)) return;
-            stream.getTracks().forEach((track) => {
-                if (!pcRef.current) return;
-                pcRef.current.addTrack(track, stream);
-            });
-            pcRef.current.onicecandidate = (e) => {
-                if (e.candidate) {
-                    if (!socketRef.current) return;
-                    console.log("onicecandidate");
-                    socketRef.current.emit("candidate", e.candidate);
-                }
-            };
-            pcRef.current.oniceconnectionstatechange = (e) => {
-                console.log(e);
-            };
-            pcRef.current.ontrack = (ev) => {
-                console.log("add remotetrack success");
-                if (remoteVideoRef.current) {
-                    remoteVideoRef.current.srcObject = ev.streams[0];
-                }
-            };
-            socketRef.current.emit("join_room", {
-                room: "1234",
-            });
-        } catch (e) {
-            console.error(e);
         }
     };
-    const createOffer = async () => {
-        console.log("create offer");
-        if (!(pcRef.current && socketRef.current)) return;
-        try {
-            const sdp = await pcRef.current.createOffer({
-                offerToReceiveAudio: true,
-                offerToReceiveVideo: true,
-            });
-            await pcRef.current.setLocalDescription(new RTCSessionDescription(sdp));
-            socketRef.current.emit("offer", sdp);
-        } catch (e) {
-            console.error(e);
-        }
+
+    const joinSession = () => {
+        OV = new OpenVidu();
+
+        setState(
+            {
+                session: OV.initSession(),
+            },
+            () => {
+                console.log("joinSession");
+                let mySession = state.session;
+                console.log("ddd");
+                mySession.on("streamCreated", (event) => {
+                    let subscriber = mySession.subscribe(event.stream, undefined);
+                    let subscribers = state.subscribers;
+                    subscribers.push(subscriber);
+                    setState({
+                        subscribers: subscribers,
+                    });
+                });
+
+                mySession.on("streamDestroyed", (event) => {
+                    deleteSubscriber(event.stream.streamManager);
+                });
+
+                mySession.on("exception", (exception) => {
+                    console.warn(exception);
+                });
+
+                getToken().then((token) => {
+                    mySession
+                        .connect(token, { clientData: state.myUserName })
+                        .then(() => {
+                            let publisher = this.OV.initPublisher(undefined, {
+                                audioSource: undefined, // The source of audio. If undefined default microphone
+                                videoSource: undefined, // The source of video. If undefined default webcam
+                                publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+                                publishVideo: true, // Whether you want to start publishing with your video enabled or not
+                                resolution: "640x480", // The resolution of your video
+                                frameRate: 30, // The frame rate of your video
+                                insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
+                                mirror: false, // Whether to mirror your local video or not
+                            });
+                            mySession.publish(publisher);
+                            setState({
+                                mainStreamManager: publisher,
+                                publisher: publisher,
+                            });
+                        })
+                        .catch((error) => {
+                            console.log("There was an error connecting to the session:", error.code, error.message);
+                        });
+                });
+            }
+        );
     };
-    const createAnswer = async (sdp) => {
-        if (!(pcRef.current && socketRef.current)) return;
-        try {
-            await pcRef.current.setRemoteDescription(new RTCSessionDescription(sdp));
-            console.log("answer set remote description success");
-            const mySdp = await pcRef.current.createAnswer({
-                offerToReceiveVideo: true,
-                offerToReceiveAudio: true,
-            });
-            console.log("create answer");
-            await pcRef.current.setLocalDescription(new RTCSessionDescription(mySdp));
-            socketRef.current.emit("answer", mySdp);
-        } catch (e) {
-            console.error(e);
-        }
-    };
+
     useEffect(() => {
-        socketRef.current = io.connect(SOCKET_SERVER_URL);
-        pcRef.current = new RTCPeerConnection(pc_config);
-        socketRef.current.on("all_users", (allUsers) => {
-            console.log("all_user");
-            if (allUsers.length > 0) {
-                createOffer();
-            }
-        });
-        socketRef.current.on("getOffer", (sdp) => {
-            console.log(sdp);
-            console.log("get offer");
-            createAnswer(sdp);
-        });
-        socketRef.current.on("getAnswer", (sdp) => {
-            console.log("get answer");
-            if (!pcRef.current) return;
-            pcRef.current.setRemoteDescription(new RTCSessionDescription(sdp));
-            console.log(sdp);
-        });
-        socketRef.current.on("getCandidate", async (candidate) => {
-            if (!pcRef.current) return;
-            await pcRef.current.addIceCandidate(new RTCIceCandidate(candidate));
-            console.log("candidate add success");
-        });
-        setVideoTracks();
-        return () => {
-            if (socketRef.current) {
-                socketRef.current.disconnect();
-            }
-            if (pcRef.current) {
-                pcRef.current.close();
-            }
-        };
+        // window.addEventListener("beforeunload", onbeforeunload);
+        // window.removeEventListener("beforeunload", onbeforeunload);
     }, []);
 
-    const [video, setVideo] = useState(false);
-    const [mic, setMic] = useState(false);
-
-    const startOrStop = (videoFlag, micFlag) => {
-        console.log(videoFlag, "비디오", micFlag, "마이크");
-        console.dir(localVideoRef.current);
-        if (videoFlag) {
-            setVideoTracks(videoFlag, micFlag);
-        } else {
-            localVideoRef.current.srcObject.getVideoTracks()[0].stop();
-        }
-        if (micFlag) {
-            setVideoTracks(videoFlag, micFlag);
-        } else {
-            localVideoRef.current.srcObject.getAudioTracks()[0].stop();
-        }
-    };
+    const navigate = useNavigate();
+    const [video, setVideo] = useState(true);
+    const [mic, setMic] = useState(true);
+    const [isUser, setUser] = useState("doctor");
     return (
         <Box>
             <Grid container>
-                <Grid Item md={0}></Grid>
-                <Grid Item md={6}>
+                <Grid item md={6}>
                     <Box>
-                        <video
-                            style={{ width: "98%", height: 500, margin: 5, background: "black" }}
-                            muted="true"
-                            ref={localVideoRef}
-                            autoPlay="true"
-                        ></video>
+                        <video style={{ width: "98%", height: 500, margin: 5, background: "black" }} autoPlay></video>
                     </Box>
                 </Grid>
-                <Grid Item md={0}></Grid>
-                <Grid Item md={6}>
+                <Grid item md={6}>
                     <Box>
-                        <video
-                            style={{ width: "98%", height: 500, margin: 5, background: "black" }}
-                            muted="true"
-                            ref={remoteVideoRef}
-                            autoPlay="true"
-                        ></video>
+                        <video style={{ width: "98%", height: 500, margin: 5, background: "black" }} autoPlay></video>
                     </Box>
+                    <Box></Box>
                 </Grid>
             </Grid>
             <Box sx={{ mt: 3 }}>
@@ -168,7 +180,6 @@ function UserConsulting(props) {
                     <BottomNavigationAction
                         onClick={() => {
                             setVideo(!video);
-                            startOrStop(!video, mic);
                         }}
                         label={
                             <Box sx={{ fontSize: 20, fontWeight: "bold" }}>{video ? "비디오 끄기" : "비디오 켜기"}</Box>
@@ -178,14 +189,13 @@ function UserConsulting(props) {
                     <BottomNavigationAction
                         onClick={() => {
                             setMic(!mic);
-                            startOrStop(video, !mic);
                         }}
                         label={
                             <Box sx={{ fontSize: 20, fontWeight: "bold" }}>{mic ? "마이크 끄기" : "마이크 켜기"}</Box>
                         }
                         icon={<MicIcon sx={{ fontSize: 35 }} color={mic ? "primary" : ""} />}
                     />
-                    {state === "doctor" ? (
+                    {isUser === "doctor" ? (
                         <BottomNavigationAction
                             label={<Box sx={{ fontSize: 20, fontWeight: "bold" }}>처방작성</Box>}
                             icon={<MedicalServicesIcon sx={{ fontSize: 35, color: "red" }} />}
@@ -195,9 +205,6 @@ function UserConsulting(props) {
                     )}
                     <BottomNavigationAction
                         onClick={({ history }) => {
-                            console.log("나가기");
-                            socketRef.current.emit("disconnect");
-
                             navigate("/");
                         }}
                         label={<Box sx={{ fontSize: 20, fontWeight: "bold" }}>나가기</Box>}

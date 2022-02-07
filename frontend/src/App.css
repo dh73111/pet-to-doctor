@@ -1,18 +1,28 @@
 * {
-    margin: 0;
+  margin: 0;
+}
+.card {
+  transform: translateX(-50%);
+  box-shadow: rgb(0 0 0 / 20%) 0px 2px 1px -1px, rgb(0 0 0 / 14%) 0px 1px 1px 0px, rgb(0 0 0 / 12%) 0px 1px 3px 0px;
+  padding: 20px;
 }
 .searchbar {
-    position: relative;
-    padding: 2px 0;
+  position: relative;
+  padding: 2px 0;
 }
 .mainSearchBar {
-    width: 380px;
-    height: 100%;
-    border: 4px solid #1DC6F6;
-    box-sizing: border-box;
-    padding-left: 10px;
-    font-size: 16px;
+  width: 380px;
+  height: 100%;
+  border: 4px solid #1dc6f6;
+  box-sizing: border-box;
+  padding-left: 10px;
+  font-size: 16px;
 }
 .mainSearchBar:focus {
-    outline: none;
+  outline: none;
+}
+
+.favhospital {
+  width: 100%;
+  border: 1px solid blue;
 }

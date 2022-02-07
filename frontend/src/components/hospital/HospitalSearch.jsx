@@ -190,7 +190,6 @@ function HospitalSearch(props) {
                                         <Button variant="contained" sx={{ mt: 3 }}>
                                             <NavLink
                                                 to={"/hospitalsearchreservation"}
-                                                key={"/hospitalsearchreservation"}
                                                 style={{ textDecoration: "none" }}
                                             >
                                                 예약하기
