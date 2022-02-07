@@ -37,6 +37,7 @@ const style = {
   boxShadow: 24,
 };
 
+// ------------- 상단 NAVBAR -------------
 const NavTop = (props) => {
   // const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -174,7 +175,7 @@ const NavTop = (props) => {
           <LoginMenu />
           <Box sx={{ display: { xs: "none", md: "flex" }, position: "relative", height: "46px", justifyContent: "space-between" }}>
             <NavLink to="/">
-              <img src="img/logo.png" height="50px" alt="logo" />
+              <img src="img/web_logo.png" width="150px" alt="logo" />
             </NavLink>
             <MainSearchBar />
             <Box>
@@ -253,6 +254,7 @@ const NavTop = (props) => {
   );
 };
 
+// ------------- 스크롤 STICKY 하단 NAVBAR -------------
 function NavBottom(props) {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [open, setOpen] = useState(false);
@@ -280,7 +282,7 @@ function NavBottom(props) {
 
   const NavItem = () => {
     // 네비 모드 바꾸기
-    if (mode === "doctor") {
+    if (mode === "user") {
       return (
         <Box sx={{ width: "100%", display: { xs: "none", md: "flex" }, justifyContent: "space-between" }}>
           {pages.map((page) => (
@@ -308,7 +310,16 @@ function NavBottom(props) {
       <Box sx={{ backgroundColor: "#fff" }}>
         <Container>
           <Toolbar>
-            <Box sx={{ display: { xs: "flex", md: "none" }, flexGrow: 1 }}>
+            <Typography
+              // 모바일 로고
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{ display: { xs: "flex", md: "none" }, flexGrow: 1 }}
+            >
+              <img src="img/web_logo.png" width="150px" alt="logo"></img>
+            </Typography>
+            <Box sx={{ display: { xs: "flex", md: "none" } }}>
               <IconButton
                 //  모바일화면 햄버거아이콘
                 size="large"
@@ -339,21 +350,12 @@ function NavBottom(props) {
                 }}
               >
                 {pages.map((page) => (
-                  <NavLink to={page.path} key={page.path} style={{ textDecoration: "none" }}>
+                  <NavLink to={page.path} key={page.path} style={{ textDecoration: "none", p: 1 }}>
                     {props.selectedNav === page.id ? MyButton(page, "#29A1B1") : MyButton(page, "black")}
                   </NavLink>
                 ))}
               </Menu>
             </Box>
-            <Typography
-              // 모바일 로고
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{ display: { xs: "flex", md: "none" } }}
-            >
-              <img src="img/logo.png" height="50px" alt="logo"></img>
-            </Typography>
             <NavItem />
             <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
               <Box sx={style}>
@@ -367,7 +369,7 @@ function NavBottom(props) {
   );
 }
 
-function NavBar(props) {
+function NavBar() {
   const [open, setOpen] = useState(false);
   let [selectedNav, setSelectedNav] = useState(0);
   let [isLogin, setIsLogin] = useState(true);
