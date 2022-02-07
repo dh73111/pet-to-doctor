@@ -26,14 +26,9 @@ import UserMedicinePayment from "./components/user/UserMedicinePayment";
 
 import Box from "@mui/material/Box";
 
-import { userInfo, findUserPassword, checkDuplication } from "./api/user.js";
+import { registerUser, userInfo, findUserPassword, checkDuplication } from "./api/user.js";
 
 function App() {
-    console.log(
-        checkDuplication('strrr', (data) => {
-            console.log(data);
-        })
-    );
     return (
         <Box sx={{ fontFamily: "noto sans" }}>
             <BrowserRouter>
@@ -50,21 +45,12 @@ function App() {
                         <Route path="/doctorreservation" element={<DoctorReservation />}></Route>
                         <Route path="/doctordiagnosis" element={<DoctorDianosis />}></Route>
                         <Route path="/doctorperscripton" element={<DoctorPerscription />}></Route>
-                        <Route
-                            path="/doctorperscriptonform"
-                            element={<DoctorPerscriptionForm />}
-                        ></Route>
+                        <Route path="/doctorperscriptonform" element={<DoctorPerscriptionForm />}></Route>
                         <Route path="/DoctorMypage" element={<DoctorMypage></DoctorMypage>}></Route>
                         {/* user */}
                         <Route path="/hospitalsearch" element={<HospitalSearch />}></Route>
-                        <Route
-                            path="/hospitalreservation"
-                            element={<HospitalReservation />}
-                        ></Route>
-                        <Route
-                            path="/hospitalsearchreservation"
-                            element={<HospitalSearchReservation />}
-                        ></Route>
+                        <Route path="/hospitalreservation" element={<HospitalReservation />}></Route>
+                        <Route path="/hospitalsearchreservation" element={<HospitalSearchReservation />}></Route>
                         <Route path="/notice" element={<Notice />}></Route>
                         <Route path="/UserJoin" element={<UserJoin />}></Route>
                         <Route path="/UserMypageChange" element={<UserMypageChange />}></Route>
