@@ -1,23 +1,29 @@
 import React, { useRef, useEffect, useState } from "react";
 import io from "socket.io-client";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-
+import { Box, Grid, BottomNavigation, BottomNavigationAction } from "@mui/material";
+import { NavLink, useNavigate } from "react-router-dom";
+import MicIcon from "@mui/icons-material/Mic";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
+import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
 const pc_config = {
     iceServer: [{ urls: "stun:stun.l.google.com:19302" }],
 };
 const SOCKET_SERVER_URL = "http://192.168.35.26:9000";
 
 function UserConsulting(props) {
+    const navigate = useNavigate();
     const socketRef = useRef();
     const pcRef = useRef();
     const localVideoRef = useRef(null);
     const remoteVideoRef = useRef(null);
+    const [state, setState] = useState("doctor");
+    let stream;
     const setVideoTracks = async () => {
         try {
-            let stream = await navigator.mediaDevices.getUserMedia({
-                video: false,
-                audio: true,
+            stream = await navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: false,
             });
             if (localVideoRef.current) localVideoRef.current.srcObject = stream;
             if (!(pcRef.current && socketRef.current)) return;
@@ -114,6 +120,8 @@ function UserConsulting(props) {
         };
     }, []);
 
+    const [video, setVideo] = useState(false);
+    const [mic, setMic] = useState(false);
     return (
         <Box>
             <Grid container>
@@ -140,34 +148,49 @@ function UserConsulting(props) {
                     </Box>
                 </Grid>
             </Grid>
+            <Box sx={{ mt: 3 }}>
+                <BottomNavigation showLabels>
+                    <BottomNavigationAction
+                        onClick={() => {
+                            setVideo(!video);
+                        }}
+                        label={
+                            <Box sx={{ fontSize: 20, fontWeight: "bold" }}>{video ? "비디오 켜기" : "비디오 끄기"}</Box>
+                        }
+                        icon={<VideoCameraFrontIcon color={video ? "primary" : ""} sx={{ fontSize: 35 }} />}
+                    />
+                    <BottomNavigationAction
+                        onClick={() => {
+                            setMic(!mic);
+                        }}
+                        label={
+                            <Box sx={{ fontSize: 20, fontWeight: "bold" }}>{mic ? "마이크 켜기" : "마이크 끄기"}</Box>
+                        }
+                        icon={<MicIcon sx={{ fontSize: 35 }} color={mic ? "primary" : ""} />}
+                    />
+                    {state === "doctor" ? (
+                        <BottomNavigationAction
+                            label={<Box sx={{ fontSize: 20, fontWeight: "bold" }}>처방작성</Box>}
+                            icon={<MedicalServicesIcon sx={{ fontSize: 35, color: "red" }} />}
+                        />
+                    ) : (
+                        <></>
+                    )}
+                    <BottomNavigationAction
+                        onClick={({ history }) => {
+                            console.log("나가기");
+                            socketRef.current.emit("disconnect");
+                            // window.location.href = "/";
+
+                            navigate("/");
+                        }}
+                        label={<Box sx={{ fontSize: 20, fontWeight: "bold" }}>나가기</Box>}
+                        icon={<ExitToAppIcon sx={{ fontSize: 35, color: "blue" }} />}
+                    ></BottomNavigationAction>
+                </BottomNavigation>
+            </Box>
         </Box>
     );
-    // return React.createElement(
-    //     "div",
-    //     null,
-    //     React.createElement("video", {
-    //         style: {
-    //             width: 240,
-    //             height: 240,
-    //             margin: 5,
-    //             backgroundColor: "black",
-    //         },
-    //         muted: true,
-    //         ref: localVideoRef,
-    //         autoPlay: true,
-    //     }),
-    //     React.createElement("video", {
-    //         id: "remotevideo",
-    //         style: {
-    //             width: 240,
-    //             height: 240,
-    //             margin: 5,
-    //             backgroundColor: "black",
-    //         },
-    //         ref: remoteVideoRef,
-    //         autoPlay: true,
-    //     })
-    // );
 }
 
 export default UserConsulting;

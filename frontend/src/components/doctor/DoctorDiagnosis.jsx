@@ -12,8 +12,7 @@ import DatePicker from "@mui/lab/DatePicker";
 import TextField from "@mui/material/TextField";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import Pagination from "@mui/material/Pagination";
-import Stack from "@mui/material/Stack";
+import { Pagination, Stack } from "@mui/material";
 
 function createData(no, date, time, name, state) {
     return { no, date, time, name, state };
@@ -23,7 +22,7 @@ const rows = [createData(1, "2022-01-19", "15:30", "김싸피", "RES_ACCEPTED")]
 
 const Root = styled("div")`
     table {
-        font-family: arial, sans-serif;
+        font-family: noto sans, sans-serif;
         border-collapse: collapse;
         width: 100%;
     }
@@ -210,14 +209,35 @@ function DoctorDiagnosis(props) {
                                     </tr>
                                 )}
                             </tbody>
+                            <tfoot>
+                                <thead sx={{ width: 1200 }}>
+                                    {/* <CustomTablePagination
+                                        rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+                                        colSpan={6}
+                                        count={rows.length}
+                                        rowsPerPage={rowsPerPage}
+                                        page={page}
+                                        componentsProps={{
+                                            select: {
+                                                "aria-label": "rows per page",
+                                            },
+                                            actions: {
+                                                showFirstButton: true,
+                                                showLastButton: true,
+                                            },
+                                        }}
+                                        onPageChange={handleChangePage}
+                                        onRowsPerPageChange={handleChangeRowsPerPage}
+                                        labelRowsPerPage={"글 개수"}
+                                    /> */}
+                                </thead>
+                            </tfoot>
                         </table>
                     </Root>
                 </Grid>
                 <Grid item xs={2}></Grid>
             </Grid>
-            <Box sx={{ mx: "auto" }}>
-                <Pagination count={10} color="primary" sx={{ px: 100 }} />
-            </Box>
+            <Pagination count={10} sx={{ border: 1, mx: "auto", maxWidth: "414px" }} size="large" />
         </Box>
     );
 }

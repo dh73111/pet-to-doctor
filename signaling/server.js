@@ -51,16 +51,12 @@ io.on("connection", (socket) => {
     // offer를 보낸 user에게 answer을 보냄 (자신의 RTCSessionDescription)
     socket.on("answer", (sdp) => {
         console.log("answer: " + socket.id);
-        // room에는 두 명 밖에 없으므로 broadcast 사용해서 전달
-        // 여러 명 있는 처리는 다음 포스트 1:N에서...
         socket.broadcast.emit("getAnswer", sdp);
     });
 
     // 자신의 ICECandidate 정보를 signal(offer 또는 answer)을 주고 받은 상대에게 전달
     socket.on("candidate", (candidate) => {
         console.log("candidate: " + socket.id);
-        // room에는 두 명 밖에 없으므로 broadcast 사용해서 전달
-        // 여러 명 있는 처리는 다음 포스트 1:N에서...
         socket.broadcast.emit("getCandidate", candidate);
     });
 
