@@ -15,26 +15,17 @@ import Link from "@mui/material/Link";
 import PhoneIcon from "@mui/icons-material/Phone";
 import StarIcon from "@mui/icons-material/Star";
 import Button from "@mui/material/Button";
-import { styled } from "@mui/system";
 import { NavLink } from "react-router-dom";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import { listHospital, listDong } from "../../api/hospital.js";
 /* global kakao */
+
 function HospitalSearch(props) {
     const { kakao } = window;
     const [mode, setMode] = useState("list");
     const [isSearch, setSearch] = useState(false);
     const [doneSearch, setDoneSearch] = useState(true);
     const [value, setValue] = React.useState(0);
-    const MyDiv = styled("div")({
-        position: "absolute",
-        top: "150px",
-        width: "344px",
-        height: "500px",
-        overflow: "auto",
-        fontWeight: "bold",
-        zIndex: 1251,
-        background: "white",
-    });
 
     const handleChange = (event, newValue) => {
         console.log(event, newValue);
@@ -54,7 +45,6 @@ function HospitalSearch(props) {
 
     function detailHospital(id) {
         setMode("search");
-        console.log(mode);
     }
     function LinkTab(props) {
         return (
@@ -174,19 +164,19 @@ function HospitalSearch(props) {
                             </Box>
                             <Box sx={{ mt: 2 }}>
                                 <Grid container>
-                                    <Grid Item xs={1}></Grid>
-                                    <Grid Item xs={3} sx={{ fontWeight: "bold", fontSize: 10 }}>
+                                    <Grid item xs={1}></Grid>
+                                    <Grid item xs={3} sx={{ fontWeight: "bold", fontSize: 10 }}>
                                         전문
                                     </Grid>
-                                    <Grid Item xs={8} sx={{ fontSize: 12, fontWeight: "bold" }}>
+                                    <Grid item xs={8} sx={{ fontSize: 12, fontWeight: "bold" }}>
                                         행동교정, 피부 , 산소특화진료, 중증질병, 심장특화진료
                                     </Grid>
                                 </Grid>
                             </Box>
                             <Box>
                                 <Grid container>
-                                    <Grid Item xs={7.5}></Grid>
-                                    <Grid Item xs={4.5}>
+                                    <Grid item xs={7.5}></Grid>
+                                    <Grid item xs={4.5}>
                                         <Button variant="contained" sx={{ mt: 3 }}>
                                             <NavLink
                                                 to={"/hospitalsearchreservation"}
@@ -255,48 +245,6 @@ function HospitalSearch(props) {
                 <Box sx={{ mt: 2, fontSize: 13 }}>
                     리뷰 작성 리뷰 작성 리뷰 작성 리뷰 작성 리뷰 작성 리뷰 작성리뷰 작성리뷰 작성리뷰 작성
                 </Box>
-            </Box>
-        );
-    }
-
-    function SearchForm() {
-        return (
-            <Box
-                sx={{
-                    my: 2,
-                    mx: 3,
-                }}
-            >
-                <TextField
-                    sx={{ width: "100%", color: "#29A1B1" }}
-                    id="hospitalSearch"
-                    name="hospitalSearch"
-                    placeholder="병원, 지역 검색"
-                    focused
-                    onClick={() => {
-                        setSearch(true);
-                    }}
-                    onKeyUp={(event) => {
-                        let id = document.getElementById("searchList");
-                        let list = [{ dong: "와동동", location: "전라북도 전주시 00동 000" }];
-                        id.innerHTML = `
-                        <div id="clickList" style="border-bottom : solid 1px;">
-                            <div>${list[0].dong} </div>
-                            <div>${list[0].location}</div>
-                        </div>
-                        <div id="clickList" style="border-bottom : solid 1px;">
-                            <div>${list[0].dong} </div>
-                            <div>${list[0].location}</div>
-                        </div>
-                        `;
-                        let item = document.getElementById("clickList");
-                        item.addEventListener("click", () => {
-                            id.innerHTML = null;
-                            setMode("list");
-                            setSearch(false);
-                        });
-                    }}
-                />
             </Box>
         );
     }
@@ -397,29 +345,54 @@ function HospitalSearch(props) {
         );
     }
 
+    const [name, setName] = useState("");
+    const onHandleChange = (e) => {
+        setName(e.target.value);
+        console.log(name);
+    };
+    const [hospitalList, setHospitalList] = useState([]);
+
+    const searchHospitalList = async (name) => {
+        await listHospital(name, ({ data }) => {
+            console.log(data);
+            let list = data.data;
+            listDong(name, ({ data }) => {
+                setHospitalList(list.concat(data.data));
+            });
+        });
+    };
+
     useEffect(() => {
         kakaoMap();
     });
     return (
         <Grid container>
             <Grid item xs={12} md={2.5}>
-                <SearchForm></SearchForm>
-                {isSearch === true ? (
-                    <MyDiv sx={{ mx: 3.4 }} variant="contained">
-                        <div id="searchList" style={{ display: "none" }}></div>
-                    </MyDiv>
-                ) : (
-                    ""
-                )}
+                <Box sx={{ mt: 2 }}>
+                    <TextField
+                        id="outlined-basic"
+                        label="동,병원 이름검색"
+                        variant="outlined"
+                        value={name}
+                        onChange={onHandleChange}
+                        sx={{ width: 250, mx: 0.3 }}
+                    />
+                    <Button
+                        variant="contained"
+                        sx={{ mx: 2.5, width: 100, height: 55 }}
+                        onClick={() => {
+                            searchHospitalList(name);
+                        }}
+                    >
+                        검색
+                    </Button>
+                </Box>
+                {isSearch === true ? <></> : ""}
                 {doneSearch === true ? (
                     <Paper style={{ maxHeight: 800, overflow: "auto" }}>
-                        <Hosiptal
-                            name="로이병원"
-                            time="00:00 ~ 24:00"
-                            location="인천광역시 남동구 논현동 751-1 에코메트로3차 더타워상가 C동 1층 24시 소래동물병원"
-                            rating="4.79"
-                            review="253"
-                        ></Hosiptal>
+                        {hospitalList.map((hospital) => {
+                            <Hosiptal hospital={hospital}></Hosiptal>;
+                        })}
                     </Paper>
                 ) : (
                     ""

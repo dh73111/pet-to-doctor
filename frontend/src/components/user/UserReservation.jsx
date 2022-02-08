@@ -201,7 +201,7 @@ function UserReservation(props) {
                                             {row.state}
                                         </td>
                                         <td style={{ width: 140 }} align="right">
-                                            <NavLink to={`/userconsulting/${row.no}`}>
+                                            <NavLink to={`/petodoctor/userconsulting/${row.no}`}>
                                                 <Button variant="contained">들어가기</Button>
                                             </NavLink>
                                         </td>
