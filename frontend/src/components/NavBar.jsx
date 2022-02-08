@@ -181,7 +181,6 @@ const NavTop = (props) => {
             </Box>
         );
     };
-
     return (
         <Box sx={{ position: "relative", mb: 3 }}>
             <Banner></Banner>
@@ -428,4 +427,5 @@ function NavBar() {
         </>
     );
 }
+
 export default NavBar;
