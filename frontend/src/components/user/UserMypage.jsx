@@ -18,12 +18,15 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
-import { userInfo, petInfo, userFavHospital } from "../../api/user.js";
+import { userInfo, userFavMark, addFavMark } from "../../api/user.js";
+import { modifyPet, deletePet, registerPet, modifyPetPic, petList } from "../../api/pet.js";
 
+// 마이페이지 메인 컴포넌트
 function UserMypage(props) {
   const [user, setUser] = useState({
-    message: "회원정보 조회 성공",
+    message: "회원정보 조회 테스트",
     data: {
       id: 1,
       email: "strrr",
@@ -40,24 +43,30 @@ function UserMypage(props) {
       isCertificated: false,
     },
   });
-  const [pets, setPets] = useState([]);
-  const [favHospitals, setfavHospitals] = useState({});
+  // const currentUserInfo = useSelector((state) => state);
+  // console.log(currentUserInfo, "state 유저인포");
+  const [currentUserPet, setCurrentUserPets] = useState([]);
+  const [favHospitals, setfavHospitals] = useState([]);
+
   useEffect(() => {
-    userInfo(256, (data) => {
+    userInfo(user.data.id, (data) => {
+      console.log(data.data);
       setUser(data.data);
     });
-    petInfo((data) => {
-      console.log("(요청)유저강아지정보", data);
+    petList((res) => {
+      // console.log("(요청)유저강아지정보", res);
+      setCurrentUserPets(res.data.data);
     });
-    userFavHospital((data) => [console.log("(요청)즐겨찾는병원", data)]);
+    // userFavMark((data) => [console.log("(요청)즐겨찾는병원", data)]);
   }, []);
+
   return (
     <Container>
       <Typography variant="h4" component="h1" sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
         마이페이지
       </Typography>
       <UserInfo user={user} />
-      <UserPetInfo pets={pets} />
+      <UserPetInfo pets={currentUserPet} />
       <FavoriteHospital hospitals={favHospitals} />
     </Container>
   );
@@ -66,16 +75,14 @@ function UserMypage(props) {
 // 유저 정보 컴포넌트
 function UserInfo(props) {
   const user = props.user.data;
-  // console.log('userinfo', user)
+
   return (
     <Grid container>
       <Grid item xs={12} md={12}>
         {/* <Typography sx={{ mt: 5, fontWeight: "bold", fontSize: 25 }}>내 정보</Typography> */}
         <Grid container sx={{ mt: 1, p: 3, border: "2px solid #29A1B1" }}>
           <Grid item xs={12} md={4}>
-            <Box item xs={12} sx={{ backgroundColor: "#eaeaea" }}>
-              heyhye
-            </Box>
+            <Box item xs={12} sx={{ width: "100%", height: "100%", backgroundColor: "#eaeaea" }}></Box>
           </Grid>
           <Grid item xs={12} md={8} sx={{ border: 1 }}>
             <Box sx={{ typography: "h5" }}>{user.name}</Box>
@@ -84,7 +91,9 @@ function UserInfo(props) {
             <Box sx={{ typography: "body1" }}>{user.address.street}</Box>
           </Grid>
           <Box sx={{ mt: 2, mx: 2 }}>
-            <NavLink to="/petodoctor/usernmypagechange"><Button varient="contained">회원정보 수정</Button></NavLink>
+            <NavLink to="/petodoctor/usernmypagechange">
+              <Button varient="contained">회원정보 수정</Button>
+            </NavLink>
           </Box>
         </Grid>
       </Grid>
@@ -93,61 +102,71 @@ function UserInfo(props) {
 }
 
 // 유저 펫 정보 컴포넌트
-function UserPetInfo() {
+function UserPetInfo(props) {
   const [isAddNew, setIsAddNew] = useState(false);
-  const userPet = [
-    {
-      idx: 0,
-      pet_name: "쫑이",
-      birth: "2013.02.01",
-      breed: "푸들",
-      weight: "7.5",
-    },
-    {
-      idx: 1,
-      pet_name: "쌀이",
-      birth: "2017.07.15",
-      breed: "말티즈",
-      weight: "4.511",
-    },
-  ];
+  console.log(props, "유저펫들");
+  const userPet = props.pets;
 
   // 펫 추가 컴포넌트
   function AddPet() {
+    const [newPetInfo, setNewPetInfo] = useState({ name: "멍맹", birthDate: "2022-02-08", species: "말티즈", weight: "88" });
     let today = new Date();
     const year = today.getFullYear();
     const month = today.getMonth() + 1;
     const day = today.getDate();
+
+    const handlePetInfo = (dataTitle) => (e) => {
+      const dataTitle = e.target.name;
+      const data = e.target.value;
+      console.log(dataTitle, " ", data);
+      setNewPetInfo({ ...newPetInfo, [dataTitle]: data });
+    };
+    const requestNewPet = () => {
+      console.log(newPetInfo);
+      registerPet(
+        newPetInfo,
+        (res) => {
+          console.log(res, "새로운 펫 등록성공");
+        },
+        (res) => {
+          console.log(res, "새로운 펫 등록실패");
+        }
+      );
+    };
     return (
       <>
         <Grid container>
           <Grid item xs={12}>
-            <TextField label="이름" type="text" size="small" />
+            <TextField label="이름" name="name" type="text" size="small" onChange={handlePetInfo("name")} />
           </Grid>
           <Grid item xs={12}>
             <TextField
               label="생년월일"
+              name="birthDate"
               type="date"
-              // defaultValue="2017-05-24"
+              onChange={handlePetInfo("data")}
               defaultValue={year + "-" + ("00" + month.toString()).slice(-2) + "-" + ("00" + day.toString()).slice(-2)}
               size="small"
             />
           </Grid>
           <Grid item xs={12}>
-            <TextField label="종" type="text" size="small" />
+            <TextField label="종" name="species" type="text" size="small" onChange={handlePetInfo("species")} />
           </Grid>
           <Grid item xs={12}>
-            <TextField label="몸무게" type="number" size="small" />
+            <TextField label="몸무게" name="weight" type="number" size="small" onChange={handlePetInfo("weight")} />
           </Grid>
           <Grid item xs={12}>
             <Button variant="contained" onClick={doneAddNew}>
               추가
             </Button>
+            <button onClick={requestNewPet}>유저펫추가테스트</button>
           </Grid>
         </Grid>
       </>
     );
   }
+  const handleChangePetInfo = () => {};
+
   const changeAddNew = () => {
     if (!isAddNew) {
       setIsAddNew(true);
@@ -158,42 +177,38 @@ function UserPetInfo() {
   };
   return (
     <Grid container>
-      {/* <Grid item xs={12}>
-      <Grid container spacing={2} sx={{backgroundColor: '#121212'}}>
-        {userPet.map((info) => {
-          <Grid key={info.idx} item>
-            <Paper sx={{ width: 100, height: 140 }}>ㅅㅂ</Paper>
-          </Grid>
-        })}
-      </Grid>
-    </Grid> */}
       <Grid item xs={12} sx={{ mt: 4 }}>
         <Typography sx={{ mb: 2, fontWeight: "bold", fontSize: 25, borderBottom: 2, pb: 1 }}>함께하는 반려동물</Typography>
         <Button variant="contained" onClick={changeAddNew}>
           더 추가하기
         </Button>
         <Grid container>
-          {userPet.map((pet) => (
-            <Grid key={pet.idx} item sx={{ border: 1 }}>
-              <Card>
-                <CardMedia component="img" height="140" image="img/resHospital.png" alt="green iguana" />
-                <Grid container>
-                  <Grid item xs={12}>
-                    {pet.pet_name}
+          {userPet.map((pet) => {
+            return (
+              <Grid key={pet.idx} item sx={{ border: 1 }}>
+                <Card>
+                  <CardMedia component="img" height="140" image="img/resHospital.png" alt="petPhoto" />
+                  <Grid container>
+                    <Grid item xs={12}>
+                      {pet.name}
+                    </Grid>
+                    <Grid item xs={12}>
+                      {pet.birthDate}
+                    </Grid>
+                    <Grid item xs={12}>
+                      {pet.species}
+                    </Grid>
+                    <Grid item xs={12}>
+                      {pet.weight}
+                    </Grid>
+                    <Button onClick={handleChangePetInfo} variant="contained">
+                      펫정보수정
+                    </Button>
                   </Grid>
-                  <Grid item xs={12}>
-                    {pet.birth}
-                  </Grid>
-                  <Grid item xs={12}>
-                    {pet.breed}
-                  </Grid>
-                  <Grid item xs={12}>
-                    {pet.weight}
-                  </Grid>
-                </Grid>
-              </Card>
-            </Grid>
-          ))}
+                </Card>
+              </Grid>
+            );
+          })}
           <Grid item>
             <Paper sx={{ height: 280, width: 280 }}>{isAddNew ? <AddPet /> : null}</Paper>
           </Grid>
@@ -201,15 +216,48 @@ function UserPetInfo() {
       </Grid>
     </Grid>
   );
-}
+} // 유저 펫 정보 컴포넌트 끝
 
 // 유저 즐겨찾는 병원 컴포넌트
-function FavoriteHospital(props) {
-  const hospitals = props.hospitals;
+function FavoriteHospital() {
+  const [favHospitals, setfavHospitals] = useState([]);
 
+  // useEffect(() => {
+  //   userFavMark((res) => {
+  //     console.log("(요청)즐겨찾는병원", res);
+  //     setfavHospitals(res);
+  //   });
+  // }, []);
+
+  const markTest = () => {
+    userFavMark((res) => {
+      console.log("(요청)즐겨찾는병원", res);
+      setfavHospitals(res);
+    });
+  };
+
+  const handleFavMark = () => {
+    console.log("즐겨찾기삭제");
+  };
+
+  const addMark = () => {
+    addFavMark(
+      ("162",
+      (res) => {
+        console.log(res, "즐겨찾기추가성공");
+      },
+      (res) => {
+        console.log(res, "즐겨찾기추가실패");
+      })
+    );
+  };
   return (
     <Grid item xs={12} md={12} sx={{ mt: 4 }}>
       <Typography sx={{ mb: 2, fontWeight: "bold", fontSize: 25 }}>즐겨찾는 병원</Typography>
+      <button onClick={markTest}>즐겨찾기병원 조회 테스트</button>
+      <Button onClick={addMark} variant="contained">
+        즐겨찾는병원 넣기 테스트
+      </Button>
       <table className="favhospital">
         <thead>
           <tr>
@@ -218,7 +266,7 @@ function FavoriteHospital(props) {
             <th>병원이름</th>
             <th>주소</th>
             <th>연락처</th>
-            <th>선택</th>
+            <th>상태</th>
           </tr>
         </thead>
         <tbody>
@@ -231,9 +279,25 @@ function FavoriteHospital(props) {
             <td>인천광역시 남동구 논현동 751-1 에코메트로3차 더타워상가 C동 1층 24시 소래동물병원</td>
             <td>02-1234-5678</td>
             <td>
-              <Checkbox />
+              <Button onClick={handleFavMark}>즐겨찾기 삭제</Button>
             </td>
           </tr>
+          {/* {favHospitals.map((fav) => {
+            return (
+              <tr key={fav.id}>
+                <td>
+                  <Checkbox />
+                </td>
+                <td>이미지</td>
+                <td>{fav.hospital.name}</td>
+                <td>{fav.hospital.address.street}</td>
+                <td>{fav.hospital.tel}</td>
+                <td>
+                  <Button onClick={handleFavMark}>즐겨찾기 삭제</Button>
+                </td>
+              </tr>
+            );
+          })} */}
         </tbody>
         <tfoot>
           <tr></tr>
@@ -241,6 +305,6 @@ function FavoriteHospital(props) {
       </table>
     </Grid>
   );
-}
+} // 유저 즐겨찾는 병원 컴포넌트 끝
 
 export default UserMypage;
