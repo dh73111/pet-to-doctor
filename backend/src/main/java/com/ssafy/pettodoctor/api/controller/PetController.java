@@ -37,7 +37,7 @@ public class PetController {
     private final PetService petService;
     private final UserService userService;
 
-    @PostMapping("")
+    @PostMapping
     @Operation(summary = "반려동물 등록", description = "반려동물을 추가로 등록한다.(로그인필요)")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공"),
@@ -45,7 +45,7 @@ public class PetController {
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
     public ResponseEntity<Map<String, Object>> postPet(
-            @RequestParam @Parameter(description = "애완동물 입력 폼")PetPostReq petReq) {
+            @RequestBody @Parameter(description = "애완동물 입력 폼")PetPostReq petReq) {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
