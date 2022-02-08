@@ -21,14 +21,7 @@ function UserJoin(props) {
             city: "",
             street: "",
         },
-        pets: [
-            {
-                name: "",
-                birthDate: "",
-                species: "",
-                weight: "",
-            },
-        ],
+        pets: [],
     });
 
     const [user, setUser] = useState({});
@@ -48,9 +41,16 @@ function UserJoin(props) {
                 address: {
                     zipcode: user.zipcode,
                     city: user.city,
-                    street: user.street + ' ' + user.de,
+                    street: user.street + " " + user.de,
                 },
-                pets: [],
+                pets: [
+                    {
+                        name: "a",
+                        birthDate: "",
+                        species: user.pets.species,
+                        weight: "",
+                    },
+                ],
             },
             (res) => {
                 console.log(user);
@@ -64,11 +64,15 @@ function UserJoin(props) {
 
     const [pet, setPet] = useState({
         name: "",
-        birthDate: "",
+        birthDate: "2022-02-07",
         species: "",
         weight: "",
     });
 
+    const handlePetChange = (prop) => (event) => {
+        setPet({ ...pet, [prop]: event.target.value });
+        console.log(pet);
+    };
     // 주소 찾기
     const style = {
         position: "absolute",
@@ -162,6 +166,7 @@ function UserJoin(props) {
                     name="confirmPassword"
                     value={values.confirmPassword}
                     // onChange={handleChange("confirmPassword")}
+                    // 여기에 함수 넣어서 바로 처리~
                 />
                 <Typography component="h6" variant="h6">
                     이름
@@ -246,10 +251,9 @@ function UserJoin(props) {
                             style={{ width: 350 }}
                             margin="dense"
                             id="name"
-                            type={pet.name}
                             name="name"
                             value={pet.name}
-                            onChange={handleChange("name")}
+                            onChange={handlePetChange("name")}
                         />
                     </Grid>
                 </Grid>
@@ -272,8 +276,8 @@ function UserJoin(props) {
                             margin="dense"
                             id=""
                             name=""
-                            // value={values.}
-                            onChange={handleChange("")}
+                            value={pet.birthDate}
+                            onChange={handlePetChange("birthDate")}
                         />
                     </Grid>
                 </Grid>
@@ -294,10 +298,10 @@ function UserJoin(props) {
                         <TextField
                             style={{ width: 350 }}
                             margin="dense"
-                            id=""
-                            name=""
-                            // value={values.}
-                            onChange={handleChange("")}
+                            id="species"
+                            name="species"
+                            value={pet.species}
+                            onChange={handlePetChange("species")}
                         />
                     </Grid>
                 </Grid>
@@ -320,8 +324,8 @@ function UserJoin(props) {
                             margin="dense"
                             id=""
                             name=""
-                            // value={values.}
-                            onChange={handleChange("")}
+                            value={pet.weight}
+                            onChange={handlePetChange("weight")}
                             InputProps={{
                                 endAdornment: <InputAdornment position="end">kg</InputAdornment>,
                             }}
@@ -334,10 +338,10 @@ function UserJoin(props) {
                     size="large"
                     sx={{ mt: 3 }}
                     onClick={() => {
-                        // let pets = { ...values }.pets;
-                        // pets.push(pet);
-                        // setValues({ ...values, ["pets"]: pets });
-                        // console.log(values);
+                        let newValues = { ...values };
+                        newValues.pets.push(pet);
+                        setValues(newValues);
+                        console.log(values);
                         userRegister(values);
                     }}
                 >
