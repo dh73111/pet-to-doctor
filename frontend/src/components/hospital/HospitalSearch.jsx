@@ -24,7 +24,7 @@ function HospitalSearch(props) {
     const { kakao } = window;
     const [mode, setMode] = useState("list");
     const [isSearch, setSearch] = useState(false);
-    const [doneSearch, setDoneSearch] = useState(true);
+    const [doneSearch, setDoneSearch] = useState(false);
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
@@ -260,21 +260,21 @@ function HospitalSearch(props) {
                             detailHospital(1);
                         }}
                     >
-                        {props.name}
+                        {props.hospital.name}
                     </Typography>
                     <Typography sx={{ mt: 0.8, mb: 1.5 }} color="text.secondary">
-                        영업시간 {props.time}
+                        영업시간 {props.hospital.operatingTime}
                     </Typography>
-                    <Typography variant="body2">{props.location}</Typography>
+                    <Typography variant="body2">{props.hospital.address.street}</Typography>
                     <Grid container>
-                        <Grid Item xs={0.7}>
+                        <Grid item xs={0.7}>
                             <StarIcon sx={{ fontSize: 18, mt: 0.35, color: "#29A1B1" }} />
                         </Grid>
-                        <Grid Item xs={1.5} sx={{ fontSize: 14, mt: 0.2, color: "#29A1B1" }}>
-                            {props.rating}
+                        <Grid item xs={1.5} sx={{ fontSize: 14, mt: 0.2, color: "#29A1B1" }}>
+                            X
                         </Grid>
-                        <Grid Item xs={2.3} sx={{ fontSize: 12, mt: 0.4, color: "gray" }}>
-                            리뷰 : {props.review}
+                        <Grid item xs={2.3} sx={{ fontSize: 12, mt: 0.4, color: "gray" }}>
+                            리뷰 : X
                         </Grid>
                     </Grid>
                 </CardContent>
@@ -348,7 +348,6 @@ function HospitalSearch(props) {
     const [name, setName] = useState("");
     const onHandleChange = (e) => {
         setName(e.target.value);
-        console.log(name);
     };
     const [hospitalList, setHospitalList] = useState([]);
 
@@ -356,9 +355,12 @@ function HospitalSearch(props) {
         await listHospital(name, ({ data }) => {
             console.log(data);
             let list = data.data;
-            listDong(name, ({ data }) => {
-                setHospitalList(list.concat(data.data));
-            });
+            // listDong(name, ({ data }) => {
+            //
+            //     console.log(hospitalList, doneSearch);
+            // });
+            setHospitalList(list);
+            setDoneSearch(true);
         });
     };
 
@@ -387,12 +389,11 @@ function HospitalSearch(props) {
                         검색
                     </Button>
                 </Box>
-                {isSearch === true ? <></> : ""}
                 {doneSearch === true ? (
                     <Paper style={{ maxHeight: 800, overflow: "auto" }}>
-                        {hospitalList.map((hospital) => {
-                            <Hosiptal hospital={hospital}></Hosiptal>;
-                        })}
+                        {hospitalList.map((hospital) => (
+                            <Hosiptal key={hospital.no} hospital={hospital}></Hosiptal>
+                        ))}
                     </Paper>
                 ) : (
                     ""

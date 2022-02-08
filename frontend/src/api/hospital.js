@@ -25,10 +25,12 @@ function listHospital(name, success, fail) {
         .catch(fail);
 }
 function listDong(name, success, fail) {
-    console.log(name);
     api.get(`/address-info/name?name=${encodeURI(name)}`)
         .then(success)
         .catch(fail);
 }
+function listDongHospital(dongCode, success, fail) {
+    api.get(`/hospital/dong/${dongCode}`).then(success).catch(fail);
+}
 
-export { listDong, listHospital };
+export { listDong, listHospital, listDongHospital };
