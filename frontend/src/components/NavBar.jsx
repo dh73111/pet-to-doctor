@@ -23,21 +23,21 @@ import MainSearchBar from "./user/resources/MainSearchBar";
 import { CallOutlined, PersonOutlineOutlined, SupportAgent } from "@mui/icons-material";
 
 const pages = [
-    { id: 1, path: "/userreservation", name: "내 예약" },
-    { id: 2, path: "/hospitalsearch", name: "주변 병원찾기" },
-    { id: 3, path: "/review", name: "진료/상담후기" },
-    { id: 4, path: "/qna", name: "QnA" },
+    { id: 1, path: "/petodoctor/userreservation", name: "내 예약" },
+    { id: 2, path: "/petodoctor/hospitalsearch", name: "주변 병원찾기" },
+    { id: 3, path: "/petodoctor/review", name: "진료/상담후기" },
+    { id: 4, path: "/petodoctor/qna", name: "QnA" },
 ];
 const doctorpages = [
-    { id: 1, path: "/doctorreservation", name: "받은예약" },
-    { id: 2, path: "/doctordiagnosis", name: "진료현황" },
-    { id: 3, path: "/doctorperscripton", name: "처방현황" },
-    { id: 4, path: "/doctorperscriptonform", name: "처방작성 테스트용" },
+    { id: 1, path: "/petodoctor/doctorreservation", name: "받은예약" },
+    { id: 2, path: "/petodoctor/doctordiagnosis", name: "진료현황" },
+    { id: 3, path: "/petodoctor/doctorperscripton", name: "처방현황" },
+    { id: 4, path: "/petodoctor/doctorperscriptonform", name: "처방작성 테스트용" },
 ];
 const settings = [
-    { title: "내 예약", link: "/userreservation" },
-    { title: "마이페이지", link: "/usermypage" },
-    { title: "Logout", link: "/" },
+    { title: "내 예약", link: "/petodoctor/userreservation" },
+    { title: "마이페이지", link: "/petodoctor/usermypage" },
+    { title: "Logout", link: "/petodoctor" },
 ];
 
 const style = {
@@ -135,12 +135,12 @@ const NavTop = (props) => {
         ];
         const isLogin = props.isLogin;
         const loginControls = [
-            { title: "회원가입", link: "/userjoin" },
-            { title: "로그인", link: "/", func: handleOpen },
+            { title: "회원가입", link: "/petodoctor/userjoin" },
+            { title: "로그인", link: "/petodoctor", func: handleOpen },
         ];
         const logoutControls = [
-            { title: "마이페이지", link: "/usermypage" },
-            { title: "로그아웃", link: "/" },
+            { title: "마이페이지", link: "/petodoctor/usermypage" },
+            { title: "로그아웃", link: "/petodoctor" },
         ];
         return (
             <Box sx={{ width: "100%", mb: 2 }}>
@@ -148,7 +148,7 @@ const NavTop = (props) => {
                     {!isLogin ? (
                         <>
                             <Typography>
-                                <NavLink style={style[0]} to="/userjoin">
+                                <NavLink style={style[0]} to="/petodoctor/userjoin">
                                     회원가입
                                 </NavLink>
                             </Typography>
@@ -161,19 +161,19 @@ const NavTop = (props) => {
                     ) : (
                         <>
                             <Typography>
-                                <NavLink style={style[0]} to="/usermypage">
+                                <NavLink style={style[0]} to="/petodoctor/usermypage">
                                     마이페이지
                                 </NavLink>
                             </Typography>
                             <Typography>
-                                <NavLink style={style[0]} to="/">
+                                <NavLink style={style[0]} to="/petodoctor">
                                     로그아웃
                                 </NavLink>
                             </Typography>
                         </>
                     )}
                     <Typography sx={{ pl: 1 }}>
-                        <NavLink style={style[1]} key={2} to="/qna">
+                        <NavLink style={style[1]} key={2} to="/petodoctor/qna">
                             고객센터
                         </NavLink>
                     </Typography>
@@ -195,20 +195,20 @@ const NavTop = (props) => {
                             justifyContent: "space-between",
                         }}
                     >
-                        <NavLink to="/">
-                            <img src="img/web_logo.png" width="150px" alt="logo" />
+                        <NavLink to="/petodoctor">
+                            <img src="./img/web_logo.png" width="150px" alt="logo" />
                         </NavLink>
                         <MainSearchBar />
                         <Box>
-                            <NavLink to="/">
+                            <NavLink to="/petodoctor">
                                 <NotificationsNoneIcon
                                     sx={{ fontSize: "36px", marginRight: "10px", color: "#cacaca" }}
                                 />
                             </NavLink>
-                            <NavLink to="/usermypage">
+                            <NavLink to="/petodoctor/usermypage">
                                 <PersonOutlineOutlined sx={{ fontSize: "36px", marginRight: "10px" }} />
                             </NavLink>
-                            <NavLink to="/qna">
+                            <NavLink to="/petodoctor/qna">
                                 <SupportAgent sx={{ fontSize: "36px" }} />
                             </NavLink>
                         </Box>
