@@ -3,7 +3,9 @@ import {
   Avatar,
   Box,
   Button,
+  Card,
   cardContentClasses,
+  CardMedia,
   Checkbox,
   Container,
   Grid,
@@ -67,13 +69,15 @@ function UserInfo(props) {
   return (
     <Grid container>
       <Grid item xs={12} md={12}>
-        <Typography sx={{ mt: 5, fontWeight: "bold", fontSize: 25 }}>내 정보</Typography>
-        <Box elevation={3} sx={{ mt: 1, border: "2px solid #29A1B1" }}>
+        {/* <Typography sx={{ mt: 5, fontWeight: "bold", fontSize: 25 }}>내 정보</Typography> */}
+        <Grid container sx={{ mt: 1, p: 3, border: "2px solid #29A1B1" }}>
           <Grid item xs={12} md={4}>
-            <Avatar sx={{ width: 180, height: 180, mx: 3 }}>H</Avatar>
+            <Box item xs={12} sx={{ backgroundColor: "#eaeaea" }}>
+              heyhye
+            </Box>
           </Grid>
-          <Grid item xs={12} md={7} sx={{ mt: 4, mx: 4 }}>
-            <Box sx={{ typography: "h6" }}>{user.name}</Box>
+          <Grid item xs={12} md={8} sx={{ border: 1 }}>
+            <Box sx={{ typography: "h5" }}>{user.name}</Box>
             <Box sx={{ typography: "body1" }}>{user.email}</Box>
             <Box sx={{ typography: "body1" }}>{user.tel}</Box>
             <Box sx={{ typography: "body1" }}>{user.address.street}</Box>
@@ -81,7 +85,7 @@ function UserInfo(props) {
           <Box sx={{ mt: 2, mx: 2 }}>
             <Button varient="contained">회원정보 수정</Button>
           </Box>
-        </Box>
+        </Grid>
       </Grid>
     </Grid>
   );
@@ -115,10 +119,9 @@ function UserPetInfo() {
     const day = today.getDate();
     return (
       <>
-        <Avatar>Dog</Avatar>
         <Grid container>
           <Grid item xs={12}>
-            <TextField label="이름" type="text"></TextField>
+            <TextField label="이름" type="text" size="small" />
           </Grid>
           <Grid item xs={12}>
             <TextField
@@ -126,16 +129,19 @@ function UserPetInfo() {
               type="date"
               // defaultValue="2017-05-24"
               defaultValue={year + "-" + ("00" + month.toString()).slice(-2) + "-" + ("00" + day.toString()).slice(-2)}
-            ></TextField>
+              size="small"
+            />
           </Grid>
           <Grid item xs={12}>
-            <TextField label="종" type="text"></TextField>
+            <TextField label="종" type="text" size="small" />
           </Grid>
           <Grid item xs={12}>
-            <TextField label="몸무게" type="number"></TextField>
+            <TextField label="몸무게" type="number" size="small" />
           </Grid>
           <Grid item xs={12}>
-            <Button onClick={doneAddNew}>추가</Button>
+            <Button variant="contained" onClick={doneAddNew}>
+              추가
+            </Button>
           </Grid>
         </Grid>
       </>
@@ -161,12 +167,15 @@ function UserPetInfo() {
       </Grid>
     </Grid> */}
       <Grid item xs={12} sx={{ mt: 4 }}>
-        <Typography sx={{ mb: 2, fontWeight: "bold", fontSize: 25 }}>함께하는 반려동물</Typography>
-        <Grid container spacing={2}>
+        <Typography sx={{ mb: 2, fontWeight: "bold", fontSize: 25, borderBottom: 2, pb: 1 }}>함께하는 반려동물</Typography>
+        <Button variant="contained" onClick={changeAddNew}>
+          더 추가하기
+        </Button>
+        <Grid container>
           {userPet.map((pet) => (
-            <Grid key={pet.idx} item>
-              <Paper>
-                <Avatar>Dog</Avatar>
+            <Grid key={pet.idx} item sx={{ border: 1 }}>
+              <Card>
+                <CardMedia component="img" height="140" image="img/resHospital.png" alt="green iguana" />
                 <Grid container>
                   <Grid item xs={12}>
                     {pet.pet_name}
@@ -181,13 +190,11 @@ function UserPetInfo() {
                     {pet.weight}
                   </Grid>
                 </Grid>
-              </Paper>
+              </Card>
             </Grid>
           ))}
           <Grid item>
-            <Paper sx={{ height: 320, width: 280 }} onClick={changeAddNew}>
-              {isAddNew ? <AddPet /> : "더 추가하기"}
-            </Paper>
+            <Paper sx={{ height: 280, width: 280 }}>{isAddNew ? <AddPet /> : null}</Paper>
           </Grid>
         </Grid>
       </Grid>
@@ -200,7 +207,7 @@ function FavoriteHospital(props) {
   const hospitals = props.hospitals;
 
   return (
-    <Grid item xs={12} md={12}>
+    <Grid item xs={12} md={12} sx={{ mt: 4 }}>
       <Typography sx={{ mb: 2, fontWeight: "bold", fontSize: 25 }}>즐겨찾는 병원</Typography>
       <table className="favhospital">
         <thead>
