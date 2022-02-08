@@ -104,4 +104,30 @@ public class HospitalController {
 
         return new ResponseEntity<ResVO<List<Hospital>>>(result, status);
     }
+
+    @GetMapping("/dong/name")
+    @Operation(summary = "이름에 해당하는 병원 정보 반환", description = "입력과 유사한 이름의 병원 정보 리스트를 반환한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "401", description = "인증 실패"),
+            @ApiResponse(responseCode = "404", description = "사용자 없음"),
+            @ApiResponse(responseCode = "500", description = "서버 오류")
+    })
+    public ResponseEntity<ResVO<List<Hospital>>> findByDongName(
+            @RequestParam @Parameter(description = "동 이름") String dongName ) {
+        ResVO<List<Hospital>> result = new ResVO<>();
+        HttpStatus status = null;
+
+        try{
+            List<Hospital> hospitals = hospitalService.findByDongName(dongName);
+            result.setData(hospitals);
+            result.setMessage("성공");
+            status = HttpStatus.OK;
+        } catch (Exception e){
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            result.setMessage("서버 오류");
+        }
+
+        return new ResponseEntity<ResVO<List<Hospital>>>(result, status);
+    }
 }
