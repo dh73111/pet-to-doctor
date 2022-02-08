@@ -1,6 +1,7 @@
 package com.ssafy.pettodoctor.api.repository;
 
 import com.ssafy.pettodoctor.api.domain.User;
+import com.ssafy.pettodoctor.api.domain.UserCertification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -39,6 +40,8 @@ public class UserRepository {
     }
 
     public void delete(User user) {
+        em.createQuery("delete from UserCertification uc where uc.user.id =:userId")
+                        .setParameter("userId", user.getId()).executeUpdate();
         em.remove(user);
     }
 

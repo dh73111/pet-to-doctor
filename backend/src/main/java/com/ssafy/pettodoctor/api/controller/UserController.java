@@ -84,9 +84,11 @@ public class UserController {
 
         try{
             userService.signup(signupInfo);
+            sendMailService.sendCertification(signupInfo.getEmail());
             result.setMessage("성공");
             status = HttpStatus.OK;
         } catch (Exception e) {
+            e.printStackTrace();
             status = HttpStatus.INTERNAL_SERVER_ERROR;
             result.setMessage("서버 오류");
         }
@@ -115,6 +117,9 @@ public class UserController {
             } else if (!loginPostReq.getPassword().equals(user.getPassword())) {
                 status = HttpStatus.UNAUTHORIZED;
                 result.setMessage("비밀번호가 일치하지 않습니다.");
+            } else if (!user.getIsCertificated()){
+                status = HttpStatus.UNAUTHORIZED;
+                result.setMessage("이메일 인증이 되지 않은 회원입니다.");
             } else {
                 status = HttpStatus.OK;
                 String accessToken = JwtTokenUtil.getToken(user.getId().toString(), user.getRole());
@@ -322,6 +327,7 @@ public class UserController {
             status = HttpStatus.OK;
 
         } catch (Exception e) {
+            e.printStackTrace();
             status = HttpStatus.INTERNAL_SERVER_ERROR;
             resultMap.put("message", "서버 오류");
         }
@@ -329,4 +335,28 @@ public class UserController {
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
+
+    @GetMapping("/certification/{certificationKey}")
+    @Operation(summary = "서버 이메일 인증", description = "이메일로 날아온 인증 url클릭하면 인증해준다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "500", description = "서버 오류")
+    })
+    public ResponseEntity<Map<String, Object>> mailCertification(
+            @PathVariable("certificationKey") @Parameter(description = "이메일 인증 키") String certKey) {
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        HttpStatus status = null;
+
+        try {
+            userService.mailCertification(certKey);
+            status = HttpStatus.OK;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            resultMap.put("message", "서버 오류");
+        }
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
 }
