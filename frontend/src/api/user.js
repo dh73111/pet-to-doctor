@@ -47,6 +47,7 @@ function checkDuplication(userEmail, success, fail) {
 
 // 유저 즐겨찾는 병원 조회
 function userFavMark(success, fail) {
+  console.log("api mark 조회");
   loginApi.get(`/mark`).then(success).catch(fail);
 }
 function addFavMark(hospitalId, success, fail) {
