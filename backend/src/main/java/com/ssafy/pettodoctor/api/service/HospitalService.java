@@ -25,4 +25,8 @@ public class HospitalService {
     public List<Hospital> findByName(String name){
         return hospitalRepository.findByName(name);
     }
+
+    public List<Hospital> findByDongName(String dongName){
+        return hospitalRepository.findByDongName(dongName);
+    }
 }

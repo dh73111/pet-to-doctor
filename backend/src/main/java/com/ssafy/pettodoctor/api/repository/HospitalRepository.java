@@ -28,4 +28,11 @@ public class HospitalRepository {
                 .setParameter("name", name)
                 .getResultList();
     }
+
+    public List<Hospital> findByDongName(String dongName){
+        return em.createQuery("select h from Hospital h where h.address.street like concat('%',:dongName,'%')"
+                        ,Hospital.class)
+                .setParameter("dongName", dongName)
+                .getResultList();
+    }
 }
