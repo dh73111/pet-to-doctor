@@ -1,36 +1,21 @@
 import { apiInstance, loginApiInstance } from "./index.js";
 
 const api = apiInstance();
-const loginApi = loginApiInstance();
-// function modifyUser(user, success, fail) {
-//     api.put(`/user`, JSON.stringify(user)).then(success).catch(fail);
-// }
 
-// function registerUser(user, success, fail) {
-//     console.log(JSON.stringify(user));
-//     api.post(`/user`, JSON.stringify(user)).then(success).catch(fail);
-// }
-
-// function deleteUser(userId, success, fail) {
-//     api.delete(`/user/${userId}`).then(success).catch(fail);
-// }
-
-// function modifyUserPic(userId, success, fail) {
-//     api.post(`/user/profile/${userId}`).then(success).catch(fail);
-// }
-
+// 병원 정보 반환
+function getHosiptal(id, success, fail) {
+    api.get(`/hospital/${id}`).then(success).catch(fail);
+}
+// 이름에 해당하는 병원 리스트
 function listHospital(name, success, fail) {
     api.get(`/hospital/name?name=${encodeURI(name)}`)
         .then(success)
         .catch(fail);
 }
-function listDong(name, success, fail) {
-    api.get(`/address-info/name?name=${encodeURI(name)}`)
-        .then(success)
-        .catch(fail);
-}
+// 동에 해당하는 병원리스트
 function listDongHospital(dongCode, success, fail) {
     api.get(`/hospital/dong/${dongCode}`).then(success).catch(fail);
 }
 
-export { listDong, listHospital, listDongHospital };
+
+export { listHospital, listDongHospital ,getHosiptal};
