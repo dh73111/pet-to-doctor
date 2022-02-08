@@ -1,7 +1,9 @@
 import React from "react";
 import { TextField, Grid, Checkbox, Button, FormControlLabel, Typography, Box, Link, Paper } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { loginUser, changePassword } from "../../api/user.js";
 
+import jwt_decode from "jwt-decode";
 const newTheme = createTheme({
     palette: {
         primary: {
@@ -11,10 +13,30 @@ const newTheme = createTheme({
 });
 
 function UserLoginModal(props) {
+    console.log(props);
     const REST_API_KEY = "c9d9cd706215602e662da44e2c2150a2";
     const REDIRECT_URI = "http://localhost:3000/kakaooauth";
     const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-
+    async function userLogin() {
+        // test5555 , 123
+        await loginUser(
+            { email: "test5555", password: "123" },
+            (res) => {
+                console.log(jwt_decode(res.data.data));
+                sessionStorage.setItem("accessToken", res.data.data);
+            },
+            () => {}
+        );
+    }
+    async function userChangePwd() {
+        await changePassword(
+            { password: "123", passwordConf: "123", newPassword: "1234" },
+            (res) => {
+                console.log(res);
+            },
+            () => {}
+        );
+    }
     return (
         <ThemeProvider theme={newTheme}>
             <div>
@@ -71,7 +93,14 @@ function UserLoginModal(props) {
                                     control={<Checkbox value="remember" color="primary" />}
                                     label="Remember me"
                                 />
-                                <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 1, py: 1 }}>
+                                <Button
+                                    onClick={() => {
+                                        userLogin();
+                                    }}
+                                    fullWidth
+                                    variant="contained"
+                                    sx={{ mt: 3, mb: 1, py: 1 }}
+                                >
                                     로그인
                                 </Button>
                                 <Grid container justifyContent="flex-end">
@@ -81,6 +110,9 @@ function UserLoginModal(props) {
                                             variant="body2"
                                             sx={{ mr: 1, color: "#BABABA" }}
                                             underline="hover"
+                                            onClick={() => {
+                                                userChangePwd();
+                                            }}
                                         >
                                             이메일찾기
                                         </Link>
