@@ -26,19 +26,20 @@ import { modifyPet, deletePet, registerPet, modifyPetPic, petList } from "../../
 
 // 마이페이지 메인 컴포넌트
 function UserMypage(props) {
+    const userId = useSelector((store) => store.user.id);
     const [user, setUser] = useState({
         message: "회원정보 조회 테스트",
         data: {
-            id: 1,
-            email: "strrr",
-            name: "string",
+            id: "",
+            email: "",
+            name: "",
             role: null,
-            tel: "string",
-            joinDate: "2022-01-28T17:04:44.985888",
+            tel: "",
+            joinDate: "",
             address: {
-                city: "string",
-                street: "string",
-                zipcode: "string",
+                city: "",
+                street: "",
+                zipcode: "",
             },
             isOauth: true,
             isCertificated: false,
@@ -50,12 +51,11 @@ function UserMypage(props) {
     const [favHospitals, setfavHospitals] = useState([]);
 
     useEffect(() => {
-        userInfo(user.data.id, (data) => {
+        userInfo(userId, (data) => {
             console.log(data.data);
             setUser(data.data);
         });
         petList((res) => {
-            // console.log("(요청)유저강아지정보", res);
             setCurrentUserPets(res.data.data);
         });
         // userFavMark((data) => [console.log("(요청)즐겨찾는병원", data)]);
@@ -104,6 +104,7 @@ function UserInfo(props) {
 
 // 유저 펫 정보 컴포넌트
 function UserPetInfo(props) {
+    console.log(props, " UserPetInfo");
     const [isAddNew, setIsAddNew] = useState(false);
     console.log(props, "유저펫들");
     const userPet = props.pets;
@@ -209,37 +210,30 @@ function UserPetInfo(props) {
                     더 추가하기
                 </Button>
                 <Grid container>
-                    {userPet.map((pet) => {
-                        return (
-                            <Grid key={pet.idx} item sx={{ border: 1 }}>
-                                <Card>
-                                    <CardMedia
-                                        component="img"
-                                        height="140"
-                                        image="img/resHospital.png"
-                                        alt="petPhoto"
-                                    />
-                                    <Grid container>
-                                        <Grid item xs={12}>
-                                            {pet.name}
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            {pet.birthDate}
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            {pet.species}
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            {pet.weight}
-                                        </Grid>
-                                        <Button onClick={handleChangePetInfo} variant="contained">
-                                            펫정보수정
-                                        </Button>
+                    {userPet.map((pet) => (
+                        <Grid key={pet.idx} item sx={{ border: 1 }}>
+                            <Card>
+                                <CardMedia component="img" height="140" image="img/resHospital.png" alt="petPhoto" />
+                                <Grid container>
+                                    <Grid item xs={12}>
+                                        {pet.name}
                                     </Grid>
-                                </Card>
-                            </Grid>
-                        );
-                    })}
+                                    <Grid item xs={12}>
+                                        {pet.birthDate}
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        {pet.species}
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        {pet.weight}
+                                    </Grid>
+                                    <Button onClick={handleChangePetInfo} variant="contained">
+                                        펫정보수정
+                                    </Button>
+                                </Grid>
+                            </Card>
+                        </Grid>
+                    ))}
                     <Grid item>
                         <Paper sx={{ height: 280, width: 280 }}>{isAddNew ? <AddPet /> : null}</Paper>
                     </Grid>
@@ -253,12 +247,12 @@ function UserPetInfo(props) {
 function FavoriteHospital() {
     const [favHospitals, setfavHospitals] = useState([]);
 
-    // useEffect(() => {
-    //   userFavMark((res) => {
-    //     console.log("(요청)즐겨찾는병원", res);
-    //     setfavHospitals(res);
-    //   });
-    // }, []);
+    useEffect(() => {
+        userFavMark((res) => {
+            console.log("(요청)즐겨찾는병원", res);
+            setfavHospitals(res);
+        });
+    }, []);
 
     const markTest = () => {
         userFavMark((res) => {
@@ -313,22 +307,22 @@ function FavoriteHospital() {
                             <Button onClick={handleFavMark}>즐겨찾기 삭제</Button>
                         </td>
                     </tr>
-                    {/* {favHospitals.map((fav) => {
-            return (
-              <tr key={fav.id}>
-                <td>
-                  <Checkbox />
-                </td>
-                <td>이미지</td>
-                <td>{fav.hospital.name}</td>
-                <td>{fav.hospital.address.street}</td>
-                <td>{fav.hospital.tel}</td>
-                <td>
-                  <Button onClick={handleFavMark}>즐겨찾기 삭제</Button>
-                </td>
-              </tr>
-            );
-          })} */}
+                    {favHospitals.map((fav) => {
+                        return (
+                            <tr key={fav.id}>
+                                <td>
+                                    <Checkbox />
+                                </td>
+                                <td>이미지</td>
+                                <td>{fav.hospital.name}</td>
+                                <td>{fav.hospital.address.street}</td>
+                                <td>{fav.hospital.tel}</td>
+                                <td>
+                                    <Button onClick={handleFavMark}>즐겨찾기 삭제</Button>
+                                </td>
+                            </tr>
+                        );
+                    })}
                 </tbody>
                 <tfoot>
                     <tr></tr>

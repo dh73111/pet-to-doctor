@@ -47,7 +47,7 @@ function findUserPassword(userEmail, success, fail) {
 }
 //이메일 중복 조회
 function checkDuplication(userEmail, success, fail) {
-    api.get(`/user/duplication/?email=${userEmail}`).then(success).catch(fail);
+    api.get(`/user/duplication?email=${userEmail}`).then(success).catch(fail);
 }
 
 // 즐겨찾는 병원 조회

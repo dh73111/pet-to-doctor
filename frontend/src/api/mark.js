@@ -1,6 +1,5 @@
-import { apiInstance, loginApiInstance } from "./index.js";
+import { loginApiInstance } from "./index.js";
 
-const api = apiInstance();
 const loginApi = loginApiInstance();
 
 function userFavMark(success, fail) {

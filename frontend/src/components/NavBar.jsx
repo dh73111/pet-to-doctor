@@ -135,6 +135,7 @@ const NavTop = (props) => {
             },
         ];
         const isLogin = useSelector((store) => store.isLogin);
+
         const loginControls = [
             { title: "회원가입", link: "/petodoctor/userjoin" },
             { title: "로그인", link: "/petodoctor", func: handleOpen },
@@ -145,6 +146,13 @@ const NavTop = (props) => {
         ];
         return (
             <Box sx={{ width: "100%", mb: 2 }}>
+                <Button
+                    onClick={() => {
+                        console.log(isLogin);
+                    }}
+                >
+                    asda
+                </Button>
                 <Box sx={{ display: "flex", justifyContent: "flex-end", height: "36px" }}>
                     {!isLogin ? (
                         <>
