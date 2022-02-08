@@ -3,9 +3,14 @@ import { Typography, Grid, Button, Box, TextField, InputAdornment, Modal } from 
 import logo from "../../components/logo.png";
 import DaumPostCode from "react-daum-postcode";
 import { border } from "@mui/system";
-import { registerUser, userInfo } from "../../api/user.js";
+import { registerUser } from "../../api/user.js";
 import { PestControl } from "@mui/icons-material";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
 function UserJoin(props) {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [values, setValues] = useState({
         email: "",
         password: "",
@@ -16,18 +21,54 @@ function UserJoin(props) {
             city: "",
             street: "",
         },
-        pets: [],
+        pets: [
+            {
+                name: "",
+                birthDate: "",
+                species: "",
+                weight: "",
+            },
+        ],
     });
 
     const [user, setUser] = useState({});
-
     const [addressDetail, setAddress] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value });
     };
+    async function userRegister(user) {
+        await registerUser(
+            {
+                email: user.email,
+                password: user.password,
+                name: user.name,
+                tel: user.tel,
+                address: {
+                    zipcode: user.zipcode,
+                    city: user.city,
+                    street: user.street + ' ' + user.de,
+                },
+                pets: [],
+            },
+            (res) => {
+                console.log(user);
+                dispatch({ type: "register" });
+            },
+            () => {
+                alert("가입 실패");
+            }
+        );
+    }
 
-    const [pet, setPet] = useState({ name: "test", birthDate: "2022-02-07", species: "test", weight: "11" });
+    const [pet, setPet] = useState({
+        name: "",
+        birthDate: "",
+        species: "",
+        weight: "",
+    });
+
     // 주소 찾기
     const style = {
         position: "absolute",
@@ -58,18 +99,15 @@ function UserJoin(props) {
             fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
         }
         console.log(fullAddress, data.zonecode, data.sido);
-        setValues({ ...values, ["address"]: { street: fullAddress, zipcode: data.zonecode, city: data.sido } });
-        console.log(values);
+        setValues({
+            ...values,
+            ["address"]: { street: fullAddress, zipcode: data.zonecode, city: data.sido },
+        });
+        // console.log(values);
         handleClose();
         //fullAddress -> 전체 주소반환
     };
 
-    // useEffect(() => {
-    //     userInfo(221, (data) => {
-    //         setUser(data.data);
-    //     });
-    // }, []);
-    // user.data.email
     return (
         <div>
             <Box
@@ -170,7 +208,12 @@ function UserJoin(props) {
                             </Box>
                         </Modal>
                     </Box>
-                    <TextField style={{ width: 350 }} value={values.address.street} margin="dense" disabled></TextField>
+                    <TextField
+                        style={{ width: 350 }}
+                        value={values.address.street}
+                        margin="dense"
+                        disabled
+                    ></TextField>
                 </Box>
                 <TextField
                     style={{ width: 350 }}
@@ -199,7 +242,15 @@ function UserJoin(props) {
                         </Typography>
                     </Grid>
                     <Grid>
-                        <TextField style={{ width: 350 }} margin="dense" />
+                        <TextField
+                            style={{ width: 350 }}
+                            margin="dense"
+                            id="name"
+                            type={pet.name}
+                            name="name"
+                            value={pet.name}
+                            onChange={handleChange("name")}
+                        />
                     </Grid>
                 </Grid>
                 <Grid
@@ -216,7 +267,14 @@ function UserJoin(props) {
                         </Typography>
                     </Grid>
                     <Grid>
-                        <TextField style={{ width: 350 }} margin="dense" />
+                        <TextField
+                            style={{ width: 350 }}
+                            margin="dense"
+                            id=""
+                            name=""
+                            // value={values.}
+                            onChange={handleChange("")}
+                        />
                     </Grid>
                 </Grid>
                 <Grid
@@ -233,7 +291,14 @@ function UserJoin(props) {
                         </Typography>
                     </Grid>
                     <Grid>
-                        <TextField style={{ width: 350 }} margin="dense" />
+                        <TextField
+                            style={{ width: 350 }}
+                            margin="dense"
+                            id=""
+                            name=""
+                            // value={values.}
+                            onChange={handleChange("")}
+                        />
                     </Grid>
                 </Grid>
                 <Grid
@@ -253,6 +318,10 @@ function UserJoin(props) {
                         <TextField
                             style={{ width: 350 }}
                             margin="dense"
+                            id=""
+                            name=""
+                            // value={values.}
+                            onChange={handleChange("")}
                             InputProps={{
                                 endAdornment: <InputAdornment position="end">kg</InputAdornment>,
                             }}
@@ -265,19 +334,11 @@ function UserJoin(props) {
                     size="large"
                     sx={{ mt: 3 }}
                     onClick={() => {
-                        let pets = { ...values }.pets;
-                        pets.push(pet);
-                        setValues({ ...values, ["pets"]: pets });
-                        console.log(values);
-                        registerUser(
-                            values,
-                            () => {
-                                console.log("success");
-                            },
-                            () => {
-                                console.log("fail");
-                            }
-                        );
+                        // let pets = { ...values }.pets;
+                        // pets.push(pet);
+                        // setValues({ ...values, ["pets"]: pets });
+                        // console.log(values);
+                        userRegister(values);
                     }}
                 >
                     가입하기
