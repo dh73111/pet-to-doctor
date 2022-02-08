@@ -57,7 +57,7 @@ function UserMypage(props) {
       // console.log("(요청)유저강아지정보", res);
       setCurrentUserPets(res.data.data);
     });
-    userFavMark((data) => [console.log("(요청)즐겨찾는병원", data)]);
+    // userFavMark((data) => [console.log("(요청)즐겨찾는병원", data)]);
   }, []);
 
   return (
@@ -222,12 +222,19 @@ function UserPetInfo(props) {
 function FavoriteHospital() {
   const [favHospitals, setfavHospitals] = useState([]);
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   userFavMark((res) => {
+  //     console.log("(요청)즐겨찾는병원", res);
+  //     setfavHospitals(res);
+  //   });
+  // }, []);
+
+  const markTest = () => {
     userFavMark((res) => {
-      console.log("(요청)즐겨찾는병원", res.data.data);
-      setfavHospitals(res.data.data);
+      console.log("(요청)즐겨찾는병원", res);
+      setfavHospitals(res);
     });
-  }, []);
+  };
 
   const handleFavMark = () => {
     console.log("즐겨찾기삭제");
@@ -235,7 +242,7 @@ function FavoriteHospital() {
 
   const addMark = () => {
     addFavMark(
-      (162,
+      ("162",
       (res) => {
         console.log(res, "즐겨찾기추가성공");
       },
@@ -247,6 +254,7 @@ function FavoriteHospital() {
   return (
     <Grid item xs={12} md={12} sx={{ mt: 4 }}>
       <Typography sx={{ mb: 2, fontWeight: "bold", fontSize: 25 }}>즐겨찾는 병원</Typography>
+      <button onClick={markTest}>즐겨찾기병원 조회 테스트</button>
       <Button onClick={addMark} variant="contained">
         즐겨찾는병원 넣기 테스트
       </Button>
@@ -262,7 +270,7 @@ function FavoriteHospital() {
           </tr>
         </thead>
         <tbody>
-          {/* <tr>
+          <tr>
             <td>
               <Checkbox />
             </td>
@@ -273,10 +281,10 @@ function FavoriteHospital() {
             <td>
               <Button onClick={handleFavMark}>즐겨찾기 삭제</Button>
             </td>
-          </tr> */}
-          {favHospitals.map((fav) => {
+          </tr>
+          {/* {favHospitals.map((fav) => {
             return (
-              <tr id={fav.id}>
+              <tr key={fav.id}>
                 <td>
                   <Checkbox />
                 </td>
@@ -289,7 +297,7 @@ function FavoriteHospital() {
                 </td>
               </tr>
             );
-          })}
+          })} */}
         </tbody>
         <tfoot>
           <tr></tr>

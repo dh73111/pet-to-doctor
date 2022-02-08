@@ -41,24 +41,15 @@ function reducer(currentState, action) {
   }
   const newState = { ...currentState };
 
-<<<<<<< HEAD
   if (action.type === "login") {
     newState.user = action.userData;
     newState.isLogin = !newState.isLogin;
     return newState;
   }
-=======
-    if (action.type === "login") {
-        newState.user = action.userData;
-        newState.isLogin = !newState.isLogin;
-        return newState;
-    }
-    if (action.type === "register") {
-        newState.user = action.userData;
-        return newState;
-    }
-
->>>>>>> bcfeaafb9101bea6dae475915055dedbd7c1b6ba
+  if (action.type === "register") {
+    newState.user = action.userData;
+    return newState;
+  }
 }
 // 회원가입 진단서 팝업 doctorperscriptonform , usersignupconfirm
 const store = createStore(reducer);
