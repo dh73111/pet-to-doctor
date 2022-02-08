@@ -20,7 +20,7 @@ import {
 } from "@mui/material";
 import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
-import { userInfo, userFavMark } from "../../api/user.js";
+import { userInfo, userFavMark, addFavMark } from "../../api/user.js";
 import { modifyPet, deletePet, registerPet, modifyPetPic, petList } from "../../api/pet.js";
 
 // 마이페이지 메인 컴포넌트
@@ -232,9 +232,24 @@ function FavoriteHospital() {
   const handleFavMark = () => {
     console.log("즐겨찾기삭제");
   };
+
+  const addMark = () => {
+    addFavMark(
+      (162,
+      (res) => {
+        console.log(res, "즐겨찾기추가성공");
+      },
+      (res) => {
+        console.log(res, "즐겨찾기추가실패");
+      })
+    );
+  };
   return (
     <Grid item xs={12} md={12} sx={{ mt: 4 }}>
       <Typography sx={{ mb: 2, fontWeight: "bold", fontSize: 25 }}>즐겨찾는 병원</Typography>
+      <Button onClick={addMark} variant="contained">
+        즐겨찾는병원 넣기 테스트
+      </Button>
       <table className="favhospital">
         <thead>
           <tr>

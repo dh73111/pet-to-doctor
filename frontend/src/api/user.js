@@ -49,6 +49,9 @@ function checkDuplication(userEmail, success, fail) {
 function userFavMark(success, fail) {
   loginApi.get(`/mark`).then(success).catch(fail);
 }
+function addFavMark(hospitalId, success, fail) {
+  loginApi.post(`/mark/${hospitalId}`).then(success).catch(fail);
+}
 function deleteFavMark(markId, success, fail) {
   loginApi.delete(`/mark/${markId}`).then(success).catch(fail);
 }
@@ -70,6 +73,7 @@ export {
   findUserPassword,
   checkDuplication,
   userFavMark,
+  addFavMark,
   deleteFavMark,
   petInfo,
 };
