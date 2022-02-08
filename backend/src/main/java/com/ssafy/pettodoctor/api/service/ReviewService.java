@@ -32,4 +32,12 @@ public class ReviewService {
         return reviewRepository.registerReview(user, hospital
                 , reviewPostReq.getContent(), reviewPostReq.getRate());
     }
+
+    public List<Review> findAll(){
+        return reviewRepository.findAll();
+    }
+
+    public List<Review> findRecentReview(int count){
+        return reviewRepository.findRecentReview(count);
+    }
 }

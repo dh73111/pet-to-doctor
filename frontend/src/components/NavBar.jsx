@@ -58,6 +58,7 @@ const NavTop = (props) => {
     const [open, setOpen] = useState(false);
     // const [mode, setMode] = useState("user");
     const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
     // const handleClose = () => setOpen(false);
     // const handleOpenNavMenu = (event) => {
     //   setAnchorElNav(event.currentTarget);
@@ -195,7 +196,7 @@ const NavTop = (props) => {
                         }}
                     >
                         <NavLink to="/">
-                            <img src="img/logo.png" height="50px" alt="logo" />
+                            <img src="img/web_logo.png" width="150px" alt="logo" />
                         </NavLink>
                         <MainSearchBar />
                         <Box>
@@ -264,14 +265,20 @@ const NavTop = (props) => {
               <img src="img/logo.png" height="50px" alt="logo"></img>
             </Typography>
             <NavItem />
-            <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-              <Box sx={style}>
-                <UserLoginModal></UserLoginModal>
-              </Box>
-            </Modal>
+           
           </Toolbar>
         </Container>
       </Box> */}
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <UserLoginModal onClose={handleClose}></UserLoginModal>
+                </Box>
+            </Modal>
         </Box>
     );
 };

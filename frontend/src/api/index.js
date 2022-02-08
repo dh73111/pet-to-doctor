@@ -6,10 +6,21 @@ function apiInstance() {
         baseURL: API_BASE_URL,
         headers: {
             "Content-type": "application/json",
-            // Authorization: `Bearer ${jwtToken}`,
+        },
+    });
+    return instance;
+}
+function loginApiInstance() {
+    const jwtToken = sessionStorage.getItem("accessToken");
+    console.log(jwtToken, "jwtToken session");
+    const instance = axios.create({
+        baseURL: API_BASE_URL,
+        headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${jwtToken}`,
         },
     });
     return instance;
 }
 
-export { apiInstance };
+export { apiInstance, loginApiInstance };
