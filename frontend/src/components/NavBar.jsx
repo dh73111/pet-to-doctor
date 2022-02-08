@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import {
     AppBar,
     Box,
@@ -133,7 +134,7 @@ const NavTop = (props) => {
                 cursor: "pointer",
             },
         ];
-        const isLogin = props.isLogin;
+        const isLogin = useSelector((store) => store.isLogin);
         const loginControls = [
             { title: "회원가입", link: "/petodoctor/userjoin" },
             { title: "로그인", link: "/petodoctor", func: handleOpen },
@@ -416,14 +417,13 @@ function NavBottom(props) {
 function NavBar() {
     const [open, setOpen] = useState(false);
     let [selectedNav, setSelectedNav] = useState(0);
-    let [isLogin, setIsLogin] = useState(true);
     function clickNav(selected) {
         setSelectedNav(selected);
     }
     return (
         <>
-            <NavTop selectedNav={selectedNav} isLogin={isLogin} clickNav={clickNav}></NavTop>
-            <NavBottom selectedNav={selectedNav} isLogin={isLogin} clickNav={clickNav}></NavBottom>
+            <NavTop selectedNav={selectedNav} clickNav={clickNav}></NavTop>
+            <NavBottom selectedNav={selectedNav} clickNav={clickNav}></NavBottom>
         </>
     );
 }

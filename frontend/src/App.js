@@ -35,18 +35,15 @@ import Box from "@mui/material/Box";
 function reducer(currentState, action) {
     if (currentState === undefined) {
         return {
-            user: {
-                name: "112",
-                email: "112",
-            },
+            user: {},
+            isLogin: "false",
         };
     }
     const newState = { ...currentState };
-    if (action.type === "test") {
-        newState.user = {
-            name: "119",
-            email: "119",
-        };
+
+    if (action.type === "login") {
+        newState.user = action.userData;
+        newState.isLogin = !newState.isLogin;
         return newState;
     }
 }

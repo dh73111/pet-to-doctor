@@ -18,6 +18,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { NavLink } from "react-router-dom";
 import { userInfo, petInfo, userFavHospital } from "../../api/user.js";
 
 function UserMypage(props) {
@@ -83,7 +84,7 @@ function UserInfo(props) {
             <Box sx={{ typography: "body1" }}>{user.address.street}</Box>
           </Grid>
           <Box sx={{ mt: 2, mx: 2 }}>
-            <Button varient="contained">회원정보 수정</Button>
+            <NavLink to="/petodoctor/usernmypagechange"><Button varient="contained">회원정보 수정</Button></NavLink>
           </Box>
         </Grid>
       </Grid>
