@@ -7,7 +7,7 @@ function modifyUser(user, success, fail) {
 }
 
 function registerUser(user, success, fail) {
-    console.log(JSON.stringify(user));
+    // console.log(JSON.stringify(user));
     api.post(`/user`, JSON.stringify(user)).then(success).catch(fail);
 }
 

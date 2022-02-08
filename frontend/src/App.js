@@ -46,6 +46,11 @@ function reducer(currentState, action) {
         newState.isLogin = !newState.isLogin;
         return newState;
     }
+    if (action.type === "register") {
+        newState.user = action.userData;
+        return newState;
+    }
+
 }
 // 회원가입 진단서 팝업 doctorperscriptonform , usersignupconfirm
 const store = createStore(reducer);
