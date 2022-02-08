@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -25,6 +26,8 @@ public class Review {
 
     private Integer rate;
 
+    private LocalDateTime createTime;
+
     // 리뷰 생성 메소드
     public static Review createReview(User user, Hospital hospital, String content, Integer rate){
         Review review = new Review();
@@ -32,6 +35,8 @@ public class Review {
         review.setHospital(hospital);
         review.setContent(content);
         review.setRate(rate);
+        review.setCreateTime(LocalDateTime.now());
+
 
         return review;
     }
