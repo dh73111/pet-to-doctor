@@ -22,7 +22,10 @@ public class UserCertificationRepository {
                 .setParameter("certKey", CertificationKey)
                 .getSingleResult();
         User user = certKey.getUser();
-        return Optional.ofNullable(user);
+        if (user != null) {
+            return Optional.ofNullable(user);
+        }
+        return Optional.empty();
     }
 
     public void delete(long id){
@@ -32,5 +35,12 @@ public class UserCertificationRepository {
 
     public UserCertification find(Long id) {
         return em.find(UserCertification.class, id);
+    }
+
+    public Optional<UserCertification> findByKey(String key) {
+        UserCertification findUc = em.createQuery("select uc from UserCertification uc where uc.certificationKey = :key", UserCertification.class)
+                .setParameter("key", key)
+                .getSingleResult();
+        return Optional.ofNullable(findUc);
     }
 }

@@ -2,6 +2,7 @@ package com.ssafy.pettodoctor.api.service;
 
 import com.ssafy.pettodoctor.api.domain.Pet;
 import com.ssafy.pettodoctor.api.domain.User;
+import com.ssafy.pettodoctor.api.domain.UserCertification;
 import com.ssafy.pettodoctor.api.repository.PetRepository;
 import com.ssafy.pettodoctor.api.repository.UserCertificationRepository;
 import com.ssafy.pettodoctor.api.repository.UserRepository;
@@ -142,6 +143,8 @@ public class UserService {
     @Transactional
     public void mailCertification(String certificationKey) {
         User user = userCertificationRepository.certificate(certificationKey).get();
+        UserCertification uc = userCertificationRepository.findByKey(certificationKey).get();
+        userCertificationRepository.delete(uc.getId());
         user.setIsCertificated(true);
     }
 }
