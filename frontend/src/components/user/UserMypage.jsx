@@ -265,7 +265,7 @@ function FavoriteHospital() {
 
   const addMark = () => {
     addFavMark(
-      ("161",
+      ("164",
       (res) => {
         console.log(res, "즐겨찾기추가성공");
       },
