@@ -26,6 +26,7 @@ public class MarkService {
 
         Mark mark = new Mark();
         Hospital hospital = hospitalService.findById(hospitalId);
+
         mark.setUser(user);
         mark.setHospital(hospital);     //hospital 서비스에서 가져오기
         mark = markRepository.save(mark);
