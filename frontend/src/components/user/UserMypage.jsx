@@ -52,13 +52,24 @@ function UserMypage(props) {
   const [favHospitals, setfavHospitals] = useState([]);
 
   useEffect(() => {
-    userInfo(userId, (data) => {
-      console.log(data.data, "userInfo API");
-      setUser(data.data);
-    });
-    petList((res) => {
-      setCurrentUserPets(res.data.data, "pet API");
-    });
+    const init = async () => {
+      console.log(userId, " user ID");
+      const user = await userInfo(userId);
+      console.log(user);
+      const userPets = await petList();
+      console.log(user);
+      console.log(userPets);
+      setUser(user);
+      setCurrentUserPets(userPets);
+    };
+    init();
+    // userInfo(userId, (data) => {
+    //   console.log(data.data, "userInfo API");
+    //   setUser(data.data);
+    // });
+    // petList((res) => {
+    //   setCurrentUserPets(res.data.data, "pet API");
+    // });
     // userFavMark((data) => [console.log("(요청)즐겨찾는병원", data)]);
   }, []);
 
@@ -177,6 +188,15 @@ function UserPetInfo(props) {
   const handleChangePetInfo = () => {};
   const handleDeletePetInfo = (petId) => {
     console.log("펫삭제", petId);
+    deletePet(
+      petId,
+      (res) => {
+        console.log(res, "펫삭제성공");
+      },
+      (res) => {
+        console.log(res, "펫삭제실패");
+      }
+    );
   };
   const changeAddNew = () => {
     if (!isAddNew) {
@@ -275,7 +295,7 @@ function FavoriteHospital() {
   const addMark = async () => {
     console.log("11");
     await addFavMark(
-      162,
+      160,
       (res) => {
         console.log(res, "즐겨찾기추가성공");
       },

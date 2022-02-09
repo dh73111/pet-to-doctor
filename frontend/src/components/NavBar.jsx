@@ -353,7 +353,7 @@ function NavBottom(props) {
               component="div"
               sx={{ display: { xs: "flex", md: "none" }, flexGrow: 1 }}
             >
-              <img src="img/web_logo.png" width="150px" alt="logo"></img>
+              <img src="/img/web_logo.png" width="150px" alt="logo"></img>
             </Typography>
             <Box sx={{ display: { xs: "flex", md: "none" } }}>
               <IconButton
