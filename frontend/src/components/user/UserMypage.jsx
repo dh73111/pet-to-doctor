@@ -22,6 +22,7 @@ import { useSelector } from "react-redux";
 import { Link, NavLink, Outlet } from "react-router-dom";
 import { userFavMark, addFavMark } from "../../api/mark.js";
 import { userInfo } from "../../api/user.js";
+import { deleteFavMark } from "../../api/mark.js";
 import { modifyPet, deletePet, registerPet, modifyPetPic, petList } from "../../api/pet.js";
 
 // 마이페이지 메인 컴포넌트
@@ -75,7 +76,7 @@ function UserMypage(props) {
 
 // 유저 정보 컴포넌트
 function UserInfo(props) {
-  const user = props.user.data;
+  const informationUser = props.user.data;
 
   return (
     <Grid container>
@@ -86,13 +87,13 @@ function UserInfo(props) {
             <Box item xs={12} sx={{ width: "100%", height: "100%", backgroundColor: "#eaeaea" }}></Box>
           </Grid>
           <Grid item xs={12} md={8} sx={{ border: 1 }}>
-            <Box sx={{ typography: "h5" }}>{user.name}</Box>
-            <Box sx={{ typography: "body1" }}>{user.email}</Box>
-            <Box sx={{ typography: "body1" }}>{user.tel}</Box>
-            <Box sx={{ typography: "body1" }}>{user.address.street}</Box>
+            <Box sx={{ typography: "h5" }}>{informationUser.name}</Box>
+            <Box sx={{ typography: "body1" }}>{informationUser.email}</Box>
+            <Box sx={{ typography: "body1" }}>{informationUser.tel}</Box>
+            <Box sx={{ typography: "body1" }}>{informationUser.address.street}</Box>
           </Grid>
           <Box sx={{ mt: 2, mx: 2 }}>
-            <Link to={`/petodoctor/usermypage/${user.id}`}>
+            <Link to={`/petodoctor/usermypage/${informationUser.id}`} state={informationUser}>
               <Button varient="contained">회원정보 수정</Button>
             </Link>
             <Outlet />
@@ -193,7 +194,7 @@ function UserPetInfo(props) {
           {userPet.map((pet) => (
             <Grid key={pet.idx} item sx={{ border: 1 }}>
               <Card>
-                <CardMedia component="img" height="140" image="img/resHospital.png" alt="petPhoto" />
+                <CardMedia component="img" height="140" src="./img/resHospital.png" alt="petPhoto" />
                 <Grid container>
                   <Grid item xs={12}>
                     {pet.name}
@@ -210,6 +211,7 @@ function UserPetInfo(props) {
                   <Button onClick={handleChangePetInfo} variant="contained">
                     펫정보수정
                   </Button>
+                  <Button>펫정보삭제</Button>
                 </Grid>
               </Card>
             </Grid>
@@ -226,12 +228,13 @@ function UserPetInfo(props) {
 // 유저 즐겨찾는 병원 컴포넌트
 function FavoriteHospital() {
   const [favHospitals, setfavHospitals] = useState([]);
+  console.log(favHospitals, "즐겨찾는병원저장");
 
   useEffect(() => {
     userFavMark(
       (res) => {
         console.log("(요청)즐겨찾는병원", res);
-        setfavHospitals(res);
+        setfavHospitals(res.data.data);
       },
       () => {
         console.log("즐겨찾기 못가져옴");
@@ -246,13 +249,23 @@ function FavoriteHospital() {
     });
   };
 
-  const handleFavMark = () => {
-    console.log("즐겨찾기삭제");
+  const handleFavMark = (favId) => (e) => {
+    e.preventDefault();
+    console.log(favId, "즐겨찾기 markID인자받아오기");
+    deleteFavMark(
+      favId,
+      (res) => {
+        console.log(res, "즐겨찾기삭제성공");
+      },
+      (res) => {
+        console.log(res, "즐겨찾기삭제실패");
+      }
+    );
   };
 
   const addMark = () => {
     addFavMark(
-      ("162",
+      ("161",
       (res) => {
         console.log(res, "즐겨찾기추가성공");
       },
@@ -289,25 +302,26 @@ function FavoriteHospital() {
             <td>인천광역시 남동구 논현동 751-1 에코메트로3차 더타워상가 C동 1층 24시 소래동물병원</td>
             <td>02-1234-5678</td>
             <td>
-              <Button onClick={handleFavMark}>즐겨찾기 삭제</Button>
+              <Button>즐겨찾기 삭제 깡통</Button>
             </td>
           </tr>
-          {/* {favHospitals.map((fav, idx) => {
-                        return (
-                            <tr key={idx}>
-                                <td>
-                                    <Checkbox />
-                                </td>
-                                <td>이미지</td>
-                                <td>{fav.hospital.name}</td>
-                                <td>{fav.hospital.address.street}</td>
-                                <td>{fav.hospital.tel}</td>
-                                <td>
-                                    <Button onClick={handleFavMark}>즐겨찾기 삭제</Button>
-                                </td>
-                            </tr>
-                        );
-                    })} */}
+          {favHospitals.map((fav, idx) => {
+            const favId = fav.id;
+            return (
+              <tr key={idx}>
+                <td>
+                  <Checkbox />
+                </td>
+                <td>이미지</td>
+                <td>{fav.user_id} User ID"</td>
+                <td>{fav.hospital_id} Hospital ID"</td>
+                <td>{fav.id} Mark res ID"</td>
+                <td>
+                  <Button onClick={handleFavMark(favId)}>즐겨찾기 삭제</Button>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
         <tfoot>
           <tr></tr>
