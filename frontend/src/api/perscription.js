@@ -1,4 +1,4 @@
-import { apiInstance, loginApiInstance } from "./index.js";
+import { apiInstance } from "./index.js";
 
 const api = apiInstance();
 

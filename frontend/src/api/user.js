@@ -9,7 +9,6 @@ function modifyUser(user, success, fail) {
 
 // 회원 가입
 function registerUser(user, success, fail) {
-    console.log(JSON.stringify(user));
     api.post(`/user`, JSON.stringify(user)).then(success).catch(fail);
 }
 
@@ -28,7 +27,6 @@ function checkPassword(user, success, fail) {
 }
 // 비밀번호 변경
 function changePassword(user, success, fail) {
-    console.log(1);
     const loginApi = loginApiInstance();
     loginApi.post(`/user/password/change`, JSON.stringify(user)).then(success).catch(fail);
 }

@@ -34,7 +34,6 @@ function UserLoginModal(props) {
             { email: user.email, password: user.password },
             (res) => {
                 sessionStorage.setItem("accessToken", res.data.data);
-                console.log(sessionStorage.getItem("accessToken"));
                 let decode_token = jwtDecode(res.data.data);
                 userInfo(
                     decode_token.sub,
