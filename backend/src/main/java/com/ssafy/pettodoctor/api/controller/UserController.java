@@ -218,7 +218,7 @@ public class UserController {
     }
 
 
-    @PutMapping("")
+    @PutMapping
     @Operation(summary = "회원 정보 수정", description = "회원 정보 수정(로그인필요)")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공"),
@@ -226,7 +226,7 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
     public ResponseEntity<ResVO<UserRes>> changeUserData(
-            @RequestParam @Parameter(description = "유저 수정 폼") UserChangeReq usrChgReq) {
+            @RequestBody @Parameter(description = "유저 수정 폼") UserChangeReq usrChgReq) {
         ResVO<UserRes> result = new ResVO<>();
         HttpStatus status = null;
 
