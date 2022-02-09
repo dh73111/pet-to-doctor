@@ -50,11 +50,15 @@ public class MarkController {
         try {
             AccountUserDetails userDetails = (AccountUserDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
             User nowUser = userService.getUserById(userDetails.getUserId()).get();
-            markService.addMark(nowUser, hospitalId);
-            resultMap.put("message", "성공");
+            if (markService.addMark(nowUser, hospitalId).isPresent()) {
+                resultMap.put("message", "성공");
+            } else {
+                resultMap.put("message", "이미 즐겨찾기된 병원입니다.");
+            }
             status = HttpStatus.OK;
 
         } catch (Exception e) {
+            e.printStackTrace();
             status = HttpStatus.INTERNAL_SERVER_ERROR;
             resultMap.put("message", "서버 오류");
         }

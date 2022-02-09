@@ -15,7 +15,14 @@ public class MarkRepository {
 
     private final EntityManager em;
 
-    public Mark save(Mark mark) {   // 똑같은 회원, 의사로 중복 저장 안 되게 하는 로직 필요
+    public Mark save(Mark mark) {
+        List<Mark> resultList = em.createQuery("select m from Mark m where m.user.id = :userId and m.hospital.id = :hospitalId", Mark.class)
+                .setParameter("userId", mark.getUser().getId()).setParameter("hospitalId", mark.getHospital().getId())
+                .getResultList();
+
+        if (!resultList.isEmpty()) {
+            return null;
+        }
         em.persist(mark);
         return mark;
     }
