@@ -2,8 +2,10 @@ import React from "react";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
 import { styled } from "@mui/system";
 import InputLabel from "@mui/material/InputLabel";
+import Typography from "@mui/material/Typography";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
@@ -33,13 +35,12 @@ const Root = styled("div")`
 
     td,
     th {
-        border: 1px solid #ddd;
         text-align: left;
         padding: 8px;
     }
 
     th {
-        background-color: #ddd;
+        background-color: white;
     }
 `;
 
@@ -118,26 +119,11 @@ function UserReservation(props) {
     };
 
     return (
-        <Box>
+        <Container>
             <Grid container>
-                <Grid item xs={4}></Grid>
-                <Grid item xs={4}>
-                    <Box
-                        sx={{
-                            background: "#CDEEF4",
-                            mt: 10,
-                            width: "100%",
-                            height: "80px",
-                            fontWeight: "bold",
-                            textAlign: "center",
-                            fontSize: 30,
-                            pt: 5,
-                        }}
-                    >
-                        내 예약
-                    </Box>
-                </Grid>
-                <Grid item xs={4}></Grid>
+                <Typography variant="h4" component="h1" sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
+                    내 예약
+                </Typography>
             </Grid>
             <Grid container>
                 <Grid item xs={8}></Grid>
@@ -176,10 +162,9 @@ function UserReservation(props) {
                 </Grid>
             </Grid>
             <Grid container>
-                <Grid item xs={2}></Grid>
-                <Grid item xs={8}>
-                    <Root sx={{ width: 1400, mt: 3 }}>
-                        <table aria-label="custom pagination table">
+                <Grid item xs={12}>
+                    <Root sx={{ mt: 3 }}>
+                        <table className="favhospital">
                             <thead>
                                 <tr>
                                     <th>예약번호</th>
@@ -216,7 +201,7 @@ function UserReservation(props) {
                                             {row.state}
                                         </td>
                                         <td style={{ width: 140 }} align="right">
-                                            <NavLink to={`/userconsulting/${row.no}`}>
+                                            <NavLink to={`/petodoctor/userconsulting/${row.no}`}>
                                                 <Button variant="contained">들어가기</Button>
                                             </NavLink>
                                         </td>
@@ -260,7 +245,6 @@ function UserReservation(props) {
                         </table>
                     </Root>
                 </Grid>
-                <Grid item xs={2}></Grid>
             </Grid>
 
             <Modal
@@ -273,7 +257,7 @@ function UserReservation(props) {
                     <ReservationDetail></ReservationDetail>
                 </Box>
             </Modal>
-        </Box>
+        </Container>
     );
 }
 

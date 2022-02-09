@@ -15,27 +15,18 @@ import Link from "@mui/material/Link";
 import PhoneIcon from "@mui/icons-material/Phone";
 import StarIcon from "@mui/icons-material/Star";
 import Button from "@mui/material/Button";
-import { styled } from "@mui/system";
 import { NavLink } from "react-router-dom";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import { listHospital, listDongNameHospital } from "../../api/hospital.js";
 /* global kakao */
+
 function HospitalSearch(props) {
     const { kakao } = window;
     const [mode, setMode] = useState("list");
     const [isSearch, setSearch] = useState(false);
-    const [doneSearch, setDoneSearch] = useState(true);
-    const [value, setValue] = React.useState(0);
-    const MyDiv = styled("div")({
-        position: "absolute",
-        top: "150px",
-        width: "344px",
-        height: "500px",
-        overflow: "auto",
-        fontWeight: "bold",
-        zIndex: 1251,
-        background: "white",
-    });
-
+    const [doneSearch, setDoneSearch] = useState(false);
+    const [value, setValue] = useState(0);
+    const [hosipitalNo, setHosipitalNo] = useState(0);
     const handleChange = (event, newValue) => {
         console.log(event, newValue);
         setValue(newValue);
@@ -54,7 +45,7 @@ function HospitalSearch(props) {
 
     function detailHospital(id) {
         setMode("search");
-        console.log(mode);
+        setHosipitalNo(id);
     }
     function LinkTab(props) {
         return (
@@ -68,7 +59,9 @@ function HospitalSearch(props) {
         );
     }
 
-    function TabItems() {
+    function TabItems(props) {
+        const hospital = props.hospital;
+        console.log(hospital);
         if (value === 0) {
             // 정보
             return (
@@ -80,7 +73,7 @@ function HospitalSearch(props) {
                                 <PlaceIcon sx={{ height: "25px" }}></PlaceIcon>
                             </Grid>
                             <Grid item xs={10.4}>
-                                인천광역시 남동구 논현동 751-1 에코매트로 3차 더타워상가 c동 1층 24시 소래동물병원
+                                {`${hospital.address.city}  ${hospital.address.street}`}
                             </Grid>
                             <Grid item xs={0.3}></Grid>
 
@@ -104,7 +97,7 @@ function HospitalSearch(props) {
                                         window.location.href = "https://www.naver.com/";
                                     }}
                                 >
-                                    http://petToDoctor.com
+                                    {hospital.url ? hospital.url : "홈페이지 없음"}
                                 </Link>
                             </Grid>
 
@@ -114,7 +107,7 @@ function HospitalSearch(props) {
                                 <PhoneIcon sx={{ height: "20px" }}></PhoneIcon>
                             </Grid>
                             <Grid item xs={10.4} sx={{ mt: 2 }}>
-                                02-1234-5678
+                                {hospital.tel}
                             </Grid>
                         </Grid>
                     </Box>
@@ -124,20 +117,19 @@ function HospitalSearch(props) {
                                 진료과목
                             </Grid>
                             <Grid item xs={8} sx={{ color: "black" }}>
-                                드래거 마취기 고난이도 수술 및 CT, MRI 검사, 분과진료
+                                {hospital.treatmentSubject}
                             </Grid>
                             <Grid item xs={4} sx={{ mt: 1 }}>
                                 대표 수의사
                             </Grid>
                             <Grid item xs={8} sx={{ color: "black", mt: 1 }}>
-                                김싸피, 박삼성, 이전자, 나에스원, 에스파, 오마걸, 어쩌고, 저꼬고 , 김김김, 이이이,
-                                박박박, 나나나, 제갈공명, 광개토대왕, 조건, 태연
+                                의사 테이블에서 가져와야함
                             </Grid>
                             <Grid item xs={4} sx={{ mt: 1 }}>
                                 수의사 수
                             </Grid>
                             <Grid item xs={8} sx={{ color: "black", mt: 1 }}>
-                                17
+                                의사 테이블에서 가져와야함 length 처리
                             </Grid>
                         </Grid>
                     </Box>
@@ -149,7 +141,7 @@ function HospitalSearch(props) {
                             </Grid>
                             <Grid item xs={0.3}></Grid>
                             <Grid item sx={{ color: "#309FB3", fontWeight: "bold", fontSize: "12px" }} xs={9.2}>
-                                17
+                                의사 테이블에서 가져와야함 length 처리
                             </Grid>
                         </Grid>
                     </Box>
@@ -174,19 +166,19 @@ function HospitalSearch(props) {
                             </Box>
                             <Box sx={{ mt: 2 }}>
                                 <Grid container>
-                                    <Grid Item xs={1}></Grid>
-                                    <Grid Item xs={3} sx={{ fontWeight: "bold", fontSize: 10 }}>
+                                    <Grid item xs={1}></Grid>
+                                    <Grid item xs={3} sx={{ fontWeight: "bold", fontSize: 10 }}>
                                         전문
                                     </Grid>
-                                    <Grid Item xs={8} sx={{ fontSize: 12, fontWeight: "bold" }}>
+                                    <Grid item xs={8} sx={{ fontSize: 12, fontWeight: "bold" }}>
                                         행동교정, 피부 , 산소특화진료, 중증질병, 심장특화진료
                                     </Grid>
                                 </Grid>
                             </Box>
                             <Box>
                                 <Grid container>
-                                    <Grid Item xs={7.5}></Grid>
-                                    <Grid Item xs={4.5}>
+                                    <Grid item xs={7.5}></Grid>
+                                    <Grid item xs={4.5}>
                                         <Button variant="contained" sx={{ mt: 3 }}>
                                             <NavLink
                                                 to={"/hospitalsearchreservation"}
@@ -259,48 +251,6 @@ function HospitalSearch(props) {
         );
     }
 
-    function SearchForm() {
-        return (
-            <Box
-                sx={{
-                    my: 2,
-                    mx: 3,
-                }}
-            >
-                <TextField
-                    sx={{ width: "100%", color: "#29A1B1" }}
-                    id="hospitalSearch"
-                    name="hospitalSearch"
-                    placeholder="병원, 지역 검색"
-                    focused
-                    onClick={() => {
-                        setSearch(true);
-                    }}
-                    onKeyUp={(event) => {
-                        let id = document.getElementById("searchList");
-                        let list = [{ dong: "와동동", location: "전라북도 전주시 00동 000" }];
-                        id.innerHTML = `
-                        <div id="clickList" style="border-bottom : solid 1px;">
-                            <div>${list[0].dong} </div>
-                            <div>${list[0].location}</div>
-                        </div>
-                        <div id="clickList" style="border-bottom : solid 1px;">
-                            <div>${list[0].dong} </div>
-                            <div>${list[0].location}</div>
-                        </div>
-                        `;
-                        let item = document.getElementById("clickList");
-                        item.addEventListener("click", () => {
-                            id.innerHTML = null;
-                            setMode("list");
-                            setSearch(false);
-                        });
-                    }}
-                />
-            </Box>
-        );
-    }
-
     function Hosiptal(props) {
         return (
             <Card sx={{ minWidth: 275 }}>
@@ -309,24 +259,24 @@ function HospitalSearch(props) {
                         variant="h6"
                         component="div"
                         onClick={() => {
-                            detailHospital(1);
+                            detailHospital(props.index);
                         }}
                     >
-                        {props.name}
+                        {props.hospital.name}
                     </Typography>
                     <Typography sx={{ mt: 0.8, mb: 1.5 }} color="text.secondary">
-                        영업시간 {props.time}
+                        영업시간 {props.hospital.operatingTime}
                     </Typography>
-                    <Typography variant="body2">{props.location}</Typography>
+                    <Typography variant="body2">{props.hospital.address.street}</Typography>
                     <Grid container>
-                        <Grid Item xs={0.7}>
+                        <Grid item xs={0.7}>
                             <StarIcon sx={{ fontSize: 18, mt: 0.35, color: "#29A1B1" }} />
                         </Grid>
-                        <Grid Item xs={1.5} sx={{ fontSize: 14, mt: 0.2, color: "#29A1B1" }}>
-                            {props.rating}
+                        <Grid item xs={1.5} sx={{ fontSize: 14, mt: 0.2, color: "#29A1B1" }}>
+                            X
                         </Grid>
-                        <Grid Item xs={2.3} sx={{ fontSize: 12, mt: 0.4, color: "gray" }}>
-                            리뷰 : {props.review}
+                        <Grid item xs={2.3} sx={{ fontSize: 12, mt: 0.4, color: "gray" }}>
+                            리뷰 : X
                         </Grid>
                     </Grid>
                 </CardContent>
@@ -335,6 +285,7 @@ function HospitalSearch(props) {
     }
 
     function HospitalDetail(props) {
+        const hospital = props.hospital;
         return (
             <Grid container>
                 <Grid item xs={3.3}>
@@ -348,13 +299,9 @@ function HospitalSearch(props) {
                     </Box>
 
                     <Paper style={{ maxHeight: 890, overflow: "auto" }} elevation={0}>
-                        <img
-                            src="./img/hospital.png"
-                            style={{ height: "200px", width: "100%" }}
-                            alt="병원 이미지"
-                        ></img>
+                        <img src="/img/hospital.png" style={{ height: "200px", width: "100%" }} alt="병원 이미지"></img>
                         <Box display="flex" justifyContent="center" alignItems="center" sx={{ mt: 1 }}>
-                            <img src="./img/24hospital.png" alt="24시여부"></img>
+                            <img src="/img/24hospital.png" alt="24시여부"></img>
                         </Box>
                         <Box
                             display="flex"
@@ -362,7 +309,7 @@ function HospitalSearch(props) {
                             alignItems="center"
                             sx={{ mt: 2, fontSize: 25, fontWeight: "bold" }}
                         >
-                            {props.name}
+                            {hospital.name}
                         </Box>
                         <Box
                             display="flex"
@@ -373,10 +320,10 @@ function HospitalSearch(props) {
                             <Grid container>
                                 <Grid item xs={4} />
                                 <Grid item xs={2} sx={{ color: "#29A1B1" }}>
-                                    ★ {props.rating}
+                                    ★ {hospital.rating}
                                 </Grid>
                                 <Grid item xs={3} sx={{ fontSize: 12, mt: 0.3, color: "gray" }}>
-                                    리뷰 : {props.review}
+                                    리뷰 : {hospital.review}
                                 </Grid>
                             </Grid>
                         </Box>
@@ -387,7 +334,7 @@ function HospitalSearch(props) {
                                 <LinkTab label="리뷰" href="/spam" sx={{ mx: 1, width: "120px" }} />
                             </Tabs>
                         </Box>
-                        <TabItems></TabItems>
+                        <TabItems hospital={hospital}></TabItems>
                     </Paper>
                 </Grid>
                 <Grid item xs={8.7}>
@@ -397,29 +344,53 @@ function HospitalSearch(props) {
         );
     }
 
+    const [name, setName] = useState("");
+    const onHandleChange = (e) => {
+        setName(e.target.value);
+    };
+    const [hospitalList, setHospitalList] = useState([]);
+
+    const searchHospitalList = async (name) => {
+        await listHospital(name, ({ data }) => {
+            let list = data.data;
+
+            listDongNameHospital(name, ({ data }) => {
+                setHospitalList(Array.from(new Set(list.concat(data.data))));
+                setDoneSearch(true);
+            });
+        });
+    };
+
     useEffect(() => {
         kakaoMap();
     });
     return (
         <Grid container>
             <Grid item xs={12} md={2.5}>
-                <SearchForm></SearchForm>
-                {isSearch === true ? (
-                    <MyDiv sx={{ mx: 3.4 }} variant="contained">
-                        <div id="searchList" style={{ display: "none" }}></div>
-                    </MyDiv>
-                ) : (
-                    ""
-                )}
+                <Box sx={{ mt: 2 }}>
+                    <TextField
+                        id="outlined-basic"
+                        label="동,병원 이름검색"
+                        variant="outlined"
+                        value={name}
+                        onChange={onHandleChange}
+                        sx={{ width: 250, mx: 0.3 }}
+                    />
+                    <Button
+                        variant="contained"
+                        sx={{ mx: 2.5, width: 100, height: 55 }}
+                        onClick={() => {
+                            searchHospitalList(name);
+                        }}
+                    >
+                        검색
+                    </Button>
+                </Box>
                 {doneSearch === true ? (
                     <Paper style={{ maxHeight: 800, overflow: "auto" }}>
-                        <Hosiptal
-                            name="로이병원"
-                            time="00:00 ~ 24:00"
-                            location="인천광역시 남동구 논현동 751-1 에코메트로3차 더타워상가 C동 1층 24시 소래동물병원"
-                            rating="4.79"
-                            review="253"
-                        ></Hosiptal>
+                        {hospitalList.map((hospital, index) => (
+                            <Hosiptal key={hospital.no} hospital={hospital} index={index}></Hosiptal>
+                        ))}
                     </Paper>
                 ) : (
                     ""
@@ -432,19 +403,7 @@ function HospitalSearch(props) {
                 ) : (
                     // 상세 보기 페이지
 
-                    <HospitalDetail
-                        name="로이병원"
-                        time="00:00 ~ 24:00"
-                        location="인천광역시 남동구 논현동 751-1 에코메트로3차 더타워상가 C동 1층 24시 소래동물병원"
-                        rating="4.79"
-                        review="253"
-                        url="http://petToDoctor.com"
-                        phone_num="02-1234-5678"
-                        subject="드래거 마취기 고난이도 수술 및 CT, MRI 검사, 분과진료"
-                        doctors="김싸피, 박삼성, 이전자, 나에스원, 에스파, 오마걸, 어쩌고, 저꼬고 , 김김김, 이이이,
-                        박박박, 나나나, 제갈공명, 광개토대왕, 조건, 태연"
-                        doctors_num="17"
-                    ></HospitalDetail>
+                    <HospitalDetail key={hosipitalNo} hospital={hospitalList[hosipitalNo]}></HospitalDetail>
                 )}
             </Grid>
         </Grid>

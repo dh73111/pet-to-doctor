@@ -204,7 +204,7 @@ function UserConsulting(props) {
                             console.log("나가기");
                             socketRef.current.emit("disconnect");
 
-                            navigate("/");
+                            navigate("/petodoctor");
                         }}
                         label={<Box sx={{ fontSize: 20, fontWeight: "bold" }}>나가기</Box>}
                         icon={<ExitToAppIcon sx={{ fontSize: 35, color: "blue" }} />}

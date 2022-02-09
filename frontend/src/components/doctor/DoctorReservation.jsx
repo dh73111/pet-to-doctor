@@ -1,6 +1,7 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/system";
 import InputLabel from "@mui/material/InputLabel";
@@ -33,13 +34,8 @@ const Root = styled("div")`
 
     td,
     th {
-        border: 1px solid #ddd;
         text-align: left;
         padding: 8px;
-    }
-
-    th {
-        background-color: #ddd;
     }
 `;
 
@@ -118,9 +114,12 @@ function DoctorReservation(props) {
     };
 
     return (
-        <Box>
+        <Container>
             <Grid container>
-                <Grid item xs={4}></Grid>
+                <Typography variant="h4" component="h1" sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
+                    받은예약
+                </Typography>
+                {/* <Grid item xs={4}></Grid>
                 <Grid item xs={4}>
                     <Box
                         sx={{
@@ -137,11 +136,11 @@ function DoctorReservation(props) {
                         받은 예약
                     </Box>
                 </Grid>
-                <Grid item xs={4}></Grid>
+                <Grid item xs={4}></Grid> */}
             </Grid>
             <Grid container>
                 <Grid item xs={8}></Grid>
-                <Grid item xs={2} sx={{ px: 4 }}>
+                <Grid item xs={2}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DatePicker
                             disableFuture
@@ -176,10 +175,10 @@ function DoctorReservation(props) {
                 </Grid>
             </Grid>
             <Grid container>
-                <Grid item xs={2}></Grid>
-                <Grid item xs={8}>
-                    <Root sx={{ width: 1400, mt: 3 }}>
-                        <table aria-label="custom pagination table">
+                {/* <Grid item xs={2}></Grid> */}
+                <Grid item xs={12}>
+                    <Root sx={{ mt: 3 }}>
+                        <table aria-label="custom pagination table" className="favhospital">
                             <thead>
                                 <tr>
                                     <th>예약번호</th>
@@ -268,7 +267,7 @@ function DoctorReservation(props) {
                     <ReservationDetail></ReservationDetail>
                 </Box>
             </Modal>
-        </Box>
+        </Container>
     );
 }
 

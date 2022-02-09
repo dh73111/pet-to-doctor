@@ -1,6 +1,8 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/system";
 import TablePaginationUnstyled from "@mui/base/TablePaginationUnstyled";
@@ -29,13 +31,8 @@ const Root = styled("div")`
 
     td,
     th {
-        border: 1px solid #ddd;
         text-align: left;
         padding: 8px;
-    }
-
-    th {
-        background-color: #ddd;
     }
 `;
 
@@ -94,10 +91,13 @@ function DoctorDiagnosis(props) {
     };
 
     return (
-        <Box>
+        <Container>
             <Grid container>
-                <Grid item xs={4}></Grid>
-                <Grid item xs={4}>
+                <Typography variant="h4" component="h1" sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
+                    진료현황
+                </Typography>
+                {/* <Grid item xs={4}></Grid> */}
+                {/* <Grid item xs={4}>
                     <Box
                         sx={{
                             background: "#CDEEF4",
@@ -112,8 +112,8 @@ function DoctorDiagnosis(props) {
                     >
                         진료 현황
                     </Box>
-                </Grid>
-                <Grid item xs={4}></Grid>
+                </Grid> */}
+                {/* <Grid item xs={4}></Grid> */}
             </Grid>
             <Grid container>
                 <Grid item xs={8}></Grid>
@@ -151,10 +151,10 @@ function DoctorDiagnosis(props) {
                 </Grid>
             </Grid>
             <Grid container>
-                <Grid item xs={2}></Grid>
-                <Grid item xs={8}>
-                    <Root sx={{ width: 1400, mt: 3 }}>
-                        <table aria-label="custom pagination table">
+                {/* <Grid item xs={2}></Grid> */}
+                <Grid item xs={12}>
+                    <Root sx={{ width: "100%", mt: 3 }}>
+                        <table aria-label="custom pagination table" className="favhospital">
                             <thead>
                                 <tr>
                                     <th>예약번호</th>
@@ -238,7 +238,7 @@ function DoctorDiagnosis(props) {
                 <Grid item xs={2}></Grid>
             </Grid>
             <Pagination count={10} sx={{ border: 1, mx: "auto", maxWidth: "414px" }} size="large" />
-        </Box>
+        </Container>
     );
 }
 

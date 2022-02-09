@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { TextField, Grid, Checkbox, Button, FormControlLabel, Typography, Box, Link, Paper } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { loginUser, changePassword } from "../../api/user.js";
+import { loginUser, changePassword, userInfo } from "../../api/user.js";
+import { useNavigate } from "react-router-dom";
+import jwtDecode from "jwt-decode";
+import { useDispatch } from "react-redux";
 
-import jwt_decode from "jwt-decode";
 const newTheme = createTheme({
     palette: {
         primary: {
@@ -13,19 +15,41 @@ const newTheme = createTheme({
 });
 
 function UserLoginModal(props) {
-    console.log(props);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [values, setValues] = useState({
+        email: "",
+        password: "",
+    });
+
+    const handleChange = (prop) => (event) => {
+        setValues({ ...values, [prop]: event.target.value });
+    };
+
     const REST_API_KEY = "c9d9cd706215602e662da44e2c2150a2";
     const REDIRECT_URI = "http://localhost:3000/kakaooauth";
     const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-    async function userLogin() {
-        // test5555 , 123
+    async function userLogin(user) {
         await loginUser(
-            { email: "test5555", password: "123" },
+            { email: user.email, password: user.password },
             (res) => {
-                console.log(jwt_decode(res.data.data));
                 sessionStorage.setItem("accessToken", res.data.data);
+                let decode_token = jwtDecode(res.data.data);
+                userInfo(
+                    decode_token.sub,
+                    (res) => {
+                        dispatch({ type: "login", userData: res.data.data });
+                        props.onClose();
+                        navigate("/petodoctor");
+                    },
+                    () => {
+                        console.log("회원 정보가져오기 실패");
+                    }
+                );
             },
-            () => {}
+            () => {
+                alert("아이디나 비밀번호가 틀렸습니다.");
+            }
         );
     }
     async function userChangePwd() {
@@ -71,12 +95,13 @@ function UserLoginModal(props) {
                             <Box component="form" noValidate /*onSubmit={handleSubmit}*/ sx={{ mt: 1 }}>
                                 <TextField
                                     margin="normal"
-                                    required
                                     fullWidth
                                     id="email"
                                     label="Email Address"
                                     name="email"
                                     autoComplete="email"
+                                    value={values.email}
+                                    onChange={handleChange("email")}
                                     /*autoFocus*/
                                 />
                                 <TextField
@@ -88,6 +113,11 @@ function UserLoginModal(props) {
                                     type="password"
                                     id="password"
                                     autoComplete="current-password"
+                                    value={values.password}
+                                    onChange={handleChange("password")}
+                                    onKeyPress={(e) => {
+                                        if (e.key === "Enter") userLogin(values);
+                                    }}
                                 />
                                 <FormControlLabel
                                     control={<Checkbox value="remember" color="primary" />}
@@ -95,7 +125,7 @@ function UserLoginModal(props) {
                                 />
                                 <Button
                                     onClick={() => {
-                                        userLogin();
+                                        userLogin(values);
                                     }}
                                     fullWidth
                                     variant="contained"
@@ -128,7 +158,6 @@ function UserLoginModal(props) {
                                     </Grid>
                                 </Grid>
                                 <Button
-                                    type="submit"
                                     fullWidth
                                     variant="contained"
                                     sx={{ mt: 3, mb: 1 }}
@@ -140,7 +169,6 @@ function UserLoginModal(props) {
                                 {/* 네이버그린 #03C75A */}
                                 <a href={KAKAO_AUTH_URL} style={{ textDecoration: "none" }}>
                                     <Button
-                                        type="submit"
                                         fullWidth
                                         variant="contained"
                                         sx={{ mb: 2 }}

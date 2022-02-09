@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
@@ -27,13 +28,13 @@ function DoctorPerscriptionForm(props) {
         tempmedicineList.push(item);
         setMedicineList(tempmedicineList);
     };
-    
+
     const Medicine = (props) => {
         console.log(props, "이곳");
         return (
             <Box>
                 {props.medicineList.map((item, i) => (
-                    <Grid container key={i}>
+                    <Grid container key={i} spacing={2}>
                         <Grid item xs={5}>
                             <FormControl fullWidth sx={{ m: 1 }} variant="filled">
                                 <InputLabel htmlFor="filled-adornment-name">약 이름</InputLabel>
@@ -45,7 +46,6 @@ function DoctorPerscriptionForm(props) {
                                 />
                             </FormControl>
                         </Grid>
-                        <Grid item xs={2}></Grid>
                         <Grid item xs={5}>
                             <FormControl fullWidth sx={{ m: 1 }} variant="filled">
                                 <InputLabel htmlFor="filled-adornment-name">가격</InputLabel>
@@ -57,6 +57,9 @@ function DoctorPerscriptionForm(props) {
                                 />
                             </FormControl>
                         </Grid>
+                        <Grid item xs={2}>
+                            <Button variant="contained">DELETE</Button>
+                        </Grid>
                     </Grid>
                 ))}
             </Box>
@@ -64,54 +67,58 @@ function DoctorPerscriptionForm(props) {
     };
 
     return (
-        <Grid container>
-            <Grid item xs={12}>
-                <Box sx={{ fontSize: 40, mt: 7, fontWeight: "bold" }}>처방전</Box>;
+        <Container maxWidth="md">
+            <Grid container>
+                <Grid item xs={12}>
+                    <Box sx={{ fontSize: 40, mt: 7, fontWeight: "bold" }}>처방전</Box>
+                </Grid>
+                <Grid item xs={12} sx={{ fontWeight: "bold", fontSize: 25 }}>
+                    <Box sx={{ mt: 4 }}>증상</Box>
+                    <Box>
+                        <FormControl fullWidth sx={{ m: 1 }} variant="filled">
+                            <InputLabel htmlFor="filled-adornment-name">증상</InputLabel>
+                            <FilledInput
+                                id="filled-adornment-name"
+                                value={values.name}
+                                onChange={handleChange("name")}
+                                startAdornment={<InputAdornment position="start"></InputAdornment>}
+                            />
+                        </FormControl>
+                    </Box>
+                    <Box sx={{ mt: 6 }}>
+                        처방약 <Button onClick={clickBtn}> 추가 </Button>
+                        <Medicine medicineList={medicineList}></Medicine>
+                    </Box>
+                    <Box sx={{ mt: 6 }}>진단 결과</Box>
+                    <Box>
+                        <FormControl fullWidth sx={{ m: 1 }} variant="filled">
+                            <InputLabel htmlFor="filled-adornment-name">증상</InputLabel>
+                            <FilledInput
+                                id="filled-adornment-name"
+                                value={values.name}
+                                onChange={handleChange("name")}
+                                startAdornment={<InputAdornment position="start"></InputAdornment>}
+                            />
+                        </FormControl>
+                    </Box>
+                    <Box sx={{ mt: 6 }}>가격</Box>
+                    <Box>
+                        <FormControl fullWidth sx={{ m: 1 }} variant="filled">
+                            <InputLabel htmlFor="filled-adornment-name">증상</InputLabel>
+                            <FilledInput
+                                id="filled-adornment-name"
+                                value={values.name}
+                                onChange={handleChange("name")}
+                                startAdornment={<InputAdornment position="start"></InputAdornment>}
+                            />
+                        </FormControl>
+                    </Box>
+                    <Box sx={{ mt: 6 }}>
+                        배송여부 : <input type="checkbox" />
+                    </Box>
+                </Grid>
             </Grid>
-            <Grid item xs={12} sx={{ fontWeight: "bold", fontSize: 25 }}>
-                <Box sx={{ mt: 4 }}>증상</Box>
-                <Box>
-                    <FormControl fullWidth sx={{ m: 1 }} variant="filled">
-                        <InputLabel htmlFor="filled-adornment-name">증상</InputLabel>
-                        <FilledInput
-                            id="filled-adornment-name"
-                            value={values.name}
-                            onChange={handleChange("name")}
-                            startAdornment={<InputAdornment position="start"></InputAdornment>}
-                        />
-                    </FormControl>
-                </Box>
-                <Box sx={{ mt: 6 }}>
-                    처방약 <Button onClick={clickBtn}> 추가 </Button>
-                    <Medicine medicineList={medicineList}></Medicine>
-                </Box>
-                <Box sx={{ mt: 6 }}>진단 결과</Box>
-                <Box>
-                    <FormControl fullWidth sx={{ m: 1 }} variant="filled">
-                        <InputLabel htmlFor="filled-adornment-name">증상</InputLabel>
-                        <FilledInput
-                            id="filled-adornment-name"
-                            value={values.name}
-                            onChange={handleChange("name")}
-                            startAdornment={<InputAdornment position="start"></InputAdornment>}
-                        />
-                    </FormControl>
-                </Box>
-                <Box sx={{ mt: 6 }}>가격</Box>
-                <Box>
-                    <FormControl fullWidth sx={{ m: 1 }} variant="filled">
-                        <InputLabel htmlFor="filled-adornment-name">증상</InputLabel>
-                        <FilledInput
-                            id="filled-adornment-name"
-                            value={values.name}
-                            onChange={handleChange("name")}
-                            startAdornment={<InputAdornment position="start"></InputAdornment>}
-                        />
-                    </FormControl>
-                </Box>
-                <Box sx={{ mt: 6 }}>배송여부 :</Box>
-            </Grid>
-        </Grid>
+        </Container>
     );
 }
 

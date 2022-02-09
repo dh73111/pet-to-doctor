@@ -1,5 +1,4 @@
 import React from "react";
-
 function Notice(props) {
     return (
         <div>
