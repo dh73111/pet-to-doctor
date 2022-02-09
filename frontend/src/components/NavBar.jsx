@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
     AppBar,
     Box,
@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import UserLoginModal from "./user/UserLoginModal";
 import Banner from "./user/resources/Banner";
 import MainSearchBar from "./user/resources/MainSearchBar";
@@ -54,6 +54,8 @@ const style = {
 
 // ------------- 상단 NAVBAR -------------
 const NavTop = (props) => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     // const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
     const [open, setOpen] = useState(false);
@@ -75,6 +77,12 @@ const NavTop = (props) => {
 
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
+    };
+
+    const logOut = () => {
+        sessionStorage.clear();
+        dispatch({ type: "logout" });
+        navigate("/petodocor");
     };
 
     let MyButton = (page, selectedColor) => (
@@ -168,7 +176,13 @@ const NavTop = (props) => {
                                 </NavLink>
                             </Typography>
                             <Typography>
-                                <NavLink style={style[0]} to="/petodoctor">
+                                <NavLink
+                                    style={style[0]}
+                                    to="/petodoctor"
+                                    onClick={() => {
+                                        logOut();
+                                    }}
+                                >
                                     로그아웃
                                 </NavLink>
                             </Typography>

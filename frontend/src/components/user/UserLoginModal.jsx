@@ -5,7 +5,7 @@ import { loginUser, changePassword, userInfo } from "../../api/user.js";
 import { useNavigate } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import { useDispatch } from "react-redux";
-import { ContactlessOutlined } from "@mui/icons-material";
+
 const newTheme = createTheme({
     palette: {
         primary: {
