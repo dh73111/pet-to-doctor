@@ -27,4 +27,4 @@ function checkPrescriptionList(id, status, success, fail) {
     api.get(`/prescription/list?doctor_id=${id}&type=${status}'`).then(success).catch(fail);
 }
 
-export { AddInvoice, AddPerscription, MedicineInfo, checkPrescription, checkPrescriptionList };
+export { addInvoice, addPerscription, medicineInfo, checkPrescription, checkPrescriptionList };

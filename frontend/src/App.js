@@ -31,7 +31,7 @@ import UserRating from "./components/user/UserRating";
 import Qna from "./components/user/Qna";
 import { createStore } from "redux";
 import { Provider, useSelector } from "react-redux";
-import storage from "redux-persist/lib/storage";
+// import storage from "redux-persist/lib/storage";
 import sessionStorage from "redux-persist/lib/storage/session";
 import { persistStore, persistReducer } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";

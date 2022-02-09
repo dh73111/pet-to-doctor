@@ -146,13 +146,6 @@ const NavTop = (props) => {
         ];
         return (
             <Box sx={{ width: "100%", mb: 2 }}>
-                <Button
-                    onClick={() => {
-                        console.log(isLogin);
-                    }}
-                >
-                    asda
-                </Button>
                 <Box sx={{ display: "flex", justifyContent: "flex-end", height: "36px" }}>
                     {!isLogin ? (
                         <>

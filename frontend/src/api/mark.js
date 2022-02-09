@@ -2,8 +2,6 @@ import { loginApiInstance } from "./index.js";
 
 function userFavMark(success, fail) {
     const loginApi = loginApiInstance();
-
-    console.log("api mark 조회");
     loginApi.get(`/mark`).then(success).catch(fail);
 }
 // 병원 즐겨찾기 등록
