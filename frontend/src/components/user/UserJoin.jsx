@@ -1,5 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Typography, Grid, Button, Box, TextField, InputAdornment, Modal } from "@mui/material";
+import {
+    Typography,
+    Grid,
+    Button,
+    Box,
+    TextField,
+    InputAdornment,
+    Modal,
+    Stack,
+} from "@mui/material";
 import logo from "../../components/logo.png";
 import DaumPostCode from "react-daum-postcode";
 import { border } from "@mui/system";
@@ -7,6 +16,8 @@ import { registerUser } from "../../api/user.js";
 import { PestControl } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 
 function UserJoin(props) {
     const dispatch = useDispatch();
@@ -14,6 +25,7 @@ function UserJoin(props) {
     const [values, setValues] = useState({
         email: "",
         password: "",
+        confirmPassword: "",
         name: "",
         tel: "",
         address: {
@@ -23,13 +35,19 @@ function UserJoin(props) {
         },
         pets: [],
     });
+    const [passwordError, setPasswordError] = useState("");
 
     const [user, setUser] = useState({});
     const [addressDetail, setAddress] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
 
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value });
+        if (values.password === values.confirmPassword) {
+            setPasswordError("");
+            console.log(passwordError);
+        } else {
+            setPasswordError("비밀번호 불일치");
+        }
     };
     async function userRegister(user) {
         await registerUser(
@@ -53,8 +71,14 @@ function UserJoin(props) {
                 ],
             },
             (res) => {
-                console.log(user);
-                dispatch({ type: "register" });
+                if (passwordError !== "") {
+                    alert("비밀번호를 확인하세요");
+                } else {
+                    console.log(user);
+                    dispatch({ type: "register" });
+                    alert("가입 성공");
+                    navigate("/petodoctor");
+                }
             },
             () => {
                 alert("가입 실패");
@@ -165,9 +189,10 @@ function UserJoin(props) {
                     id="confirmPassword"
                     name="confirmPassword"
                     value={values.confirmPassword}
-                    // onChange={handleChange("confirmPassword")}
-                    // 여기에 함수 넣어서 바로 처리~
+                    onChange={handleChange("confirmPassword")}
+                    error={passwordError !== ""}
                 />
+                <Typography style={{ color: "red" }}>{passwordError}</Typography>
                 <Typography component="h6" variant="h6">
                     이름
                 </Typography>
@@ -271,14 +296,19 @@ function UserJoin(props) {
                         </Typography>
                     </Grid>
                     <Grid>
-                        <TextField
-                            style={{ width: 350 }}
-                            margin="dense"
-                            id=""
-                            name=""
-                            value={pet.birthDate}
-                            onChange={handlePetChange("birthDate")}
-                        />
+                        <Stack component="form" noValidate spacing={3}>
+                            <TextField
+                                id="date"
+                                type="date"
+                                defaultValue="2022-02-01"
+                                sx={{ width: 350 }}
+                                value={pet.birthDate}
+                                onChange={handlePetChange("birthDate")}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Stack>
                     </Grid>
                 </Grid>
                 <Grid
@@ -338,11 +368,13 @@ function UserJoin(props) {
                     size="large"
                     sx={{ mt: 3 }}
                     onClick={() => {
-                        let newValues = { ...values };
-                        newValues.pets.push(pet);
-                        setValues(newValues);
-                        console.log(values);
-                        userRegister(values);
+                        if (passwordError === "") {
+                            let newValues = { ...values };
+                            newValues.pets.push(pet);
+                            setValues(newValues);
+                            console.log(values);
+                            userRegister(values);
+                        } else alert("가입 실패");
                     }}
                 >
                     가입하기
