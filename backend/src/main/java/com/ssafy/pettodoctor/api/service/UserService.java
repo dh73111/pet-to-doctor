@@ -105,7 +105,7 @@ public class UserService {
     @Transactional
     public boolean changePassword(Long id, UserPasswordChangeReq upcr) {
         User user = userRepository.findById(id).get();
-        if (upcr.getPassword().equals(upcr.getPasswordConf()) && user.getPassword().equals(upcr.getPassword())) {
+        if (upcr.getNewPassword().equals(upcr.getNewPasswordConf()) && user.getPassword().equals(upcr.getPassword())) {
             user.setPassword(upcr.getNewPassword());
             return true;
         }
