@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { TextField, Grid, Checkbox, Button, FormControlLabel, Typography, Box, Link, Paper } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { loginUser, changePassword, userInfo } from "../../api/user.js";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import { useDispatch } from "react-redux";
 
@@ -17,6 +17,7 @@ const newTheme = createTheme({
 function UserLoginModal(props) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [state, setState] = useState(true);
     const [values, setValues] = useState({
         email: "",
         password: "",
@@ -90,7 +91,7 @@ function UserLoginModal(props) {
                             }}
                         >
                             <Typography component="h1" variant="h4">
-                                <img src="img/web_logo.png" alt="펫투닥터로고" />
+                                <img src="/img/web_logo.png" alt="펫투닥터로고" />
                             </Typography>
                             <Box component="form" noValidate /*onSubmit={handleSubmit}*/ sx={{ mt: 1 }}>
                                 <TextField
@@ -140,9 +141,6 @@ function UserLoginModal(props) {
                                             variant="body2"
                                             sx={{ mr: 1, color: "#BABABA" }}
                                             underline="hover"
-                                            onClick={() => {
-                                                userChangePwd();
-                                            }}
                                         >
                                             이메일찾기
                                         </Link>
@@ -157,37 +155,62 @@ function UserLoginModal(props) {
                                         </Link>
                                     </Grid>
                                 </Grid>
-                                <Button
-                                    fullWidth
-                                    variant="contained"
-                                    sx={{ mt: 3, mb: 1 }}
-                                    style={{ backgroundColor: "#03C75A" }}
-                                >
-                                    <img src="img/naver.png" width="24px" alt="네이버로고" />
-                                    네이버로 로그인
-                                </Button>
-                                {/* 네이버그린 #03C75A */}
-                                <a href={KAKAO_AUTH_URL} style={{ textDecoration: "none" }}>
-                                    <Button
-                                        fullWidth
-                                        variant="contained"
-                                        sx={{ mb: 2 }}
-                                        style={{ backgroundColor: "#FEE500", color: "#000000" }}
-                                        to={KAKAO_AUTH_URL}
-                                    >
-                                        <img src="img/kakaolink_btn_small.png" width="24px" alt="카카오로고" />
-                                        카카오로 로그인
-                                    </Button>
-                                </a>
-                                {/* 카카오옐로 #FEE500 */}
+                                {state ? (
+                                    <Box>
+                                        {" "}
+                                        <Button
+                                            fullWidth
+                                            variant="contained"
+                                            sx={{ mt: 3, mb: 1 }}
+                                            style={{ backgroundColor: "#03C75A" }}
+                                        >
+                                            <img src="/img/naver.png" width="24px" alt="네이버로고" />
+                                            네이버로 로그인
+                                        </Button>
+                                        {/* 네이버그린 #03C75A */}
+                                        <a href={KAKAO_AUTH_URL} style={{ textDecoration: "none" }}>
+                                            <Button
+                                                fullWidth
+                                                variant="contained"
+                                                sx={{ mb: 2 }}
+                                                style={{ backgroundColor: "#FEE500", color: "#000000" }}
+                                                to={KAKAO_AUTH_URL}
+                                            >
+                                                <img src="/img/kakaolink_btn_small.png" width="24px" alt="카카오로고" />
+                                                카카오로 로그인
+                                            </Button>
+                                        </a>
+                                        {/* 카카오옐로 #FEE500 */}
+                                    </Box>
+                                ) : (
+                                    <></>
+                                )}
                                 <Typography variant="body2" align="center" sx={{ color: "#aeaeae" }}>
                                     펫투닥터가 처음이신가요?
                                 </Typography>
-                                <Link href="UserJoin" variant="body2">
-                                    <Typography variant="body2" align="center" sx={{ color: "#309FB3" }}>
-                                        회원가입
-                                    </Typography>
-                                </Link>
+                                <Typography variant="body2" align="center" sx={{ color: "#309FB3" }}>
+                                    <Grid container sx={{ maxWidth: "200px", margin: "0 auto" }} align="center">
+                                        <Grid
+                                            item
+                                            xs={6}
+                                            onClick={() => {
+                                                setState(!state);
+                                            }}
+                                        >
+                                            {state ? "의사로그인" : "로그인"}
+                                        </Grid>
+                                        <NavLink
+                                            to="/petodoctor/userjoin"
+                                            variant="body2"
+                                            onClick={() => {
+                                                props.onClose();
+                                            }}
+                                            style={{ textDecoration: "none", color: "#309FB3" }}
+                                        >
+                                            회원가입
+                                        </NavLink>
+                                    </Grid>
+                                </Typography>
                             </Box>
                         </Box>
                     </Grid>
