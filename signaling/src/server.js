@@ -8,7 +8,7 @@ let io = socketio.listen(server);
 
 app.use(cors());
 const PORT = process.env.PORT || 9000;
-const hostname = "192.168.35.26"; 
+const hostname = "192.168.35.26";
 let users = {};
 
 let socketToRoom = {};
@@ -73,13 +73,6 @@ io.on("connection", (socket) => {
         // 어떤 user가 나갔는 지 room의 다른 user들에게 통보
         socket.broadcast.to(room).emit("user_exit", { id: socket.id });
         console.log(users);
-    });
-
-    socket.on("videoOff", () => {
-        console.log(`${socket.id} 비디오 껐음`);
-        let room = users[socketToRoom[socket.id]];
-        console.log(room, "전달");
-        socket.broadcast.to(room).emit("otherVideoOff", { id: socket.id });
     });
 });
 

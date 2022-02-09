@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Typography, Grid, Box, Container, Tabs, Tab, Paper, createTheme, ThemeProvider, TextField, Button, Link, Modal } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import logo from "../../components/logo.png";
 import DaumPostCode from "react-daum-postcode";
@@ -36,18 +36,23 @@ function a11yProps(index) {
 const newTheme = createTheme();
 
 function UserMypageChange(props) {
-  const [user, setUser] = useState();
-  const params = useParams();
-  const userId = params.userId;
+  const location = useLocation();
+  const [newUserInfo, setNewUserInfo] = useState(
+    // {
+    // name: "",
+    // tel: "",
+    // joinDate: "",
+    // address: {
+    //   city: "",
+    //   street: "",
+    //   zipcode: "",
+    // },
+    // isCertificated: true,
+    // }
+    location.state
+  );
 
-  useEffect(() => {
-    userInfo(userId, (data) => {
-      console.log(data.data.data, "userInfo API from UserpageChange");
-      setUser(data.data.data);
-    });
-  }, [userId]);
-
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -56,10 +61,9 @@ function UserMypageChange(props) {
   const [zipcode, setZipcode] = useState("");
   const [city, setCity] = useState("");
 
-  //   useEffect(() => {
-  //     setAddress(user.street);
-  //   }, user);
-  // 주소 찾기
+  useEffect(() => {
+    setAddress(location.state.address.city);
+  }, []);
   const style = {
     position: "absolute",
     top: "50%",
@@ -71,10 +75,11 @@ function UserMypageChange(props) {
     p: 2,
   };
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleComplete = (data) => {
+    console.log(data, "from handle complete");
     let fullAddress = data.address;
     let extraAddress = "";
     let zonecode = "";
@@ -92,19 +97,36 @@ function UserMypageChange(props) {
     setZipcode(data.zonecode);
     setCity(data.sido);
     console.log(fullAddress);
+    setNewUserInfo({ ...newUserInfo, address: { city: fullAddress, zipcode: data.zonecode } });
+    console.log(newUserInfo);
     //fullAddress -> 전체 주소반환
+  };
+
+  const handleChangeUserInfo = (dataTitle) => (e) => {
+    const data = e.target.value;
+    console.log(dataTitle, data);
+    if (dataTitle == "city" || dataTitle == "street") {
+      setNewUserInfo({ ...newUserInfo, address: { ...newUserInfo.address, [dataTitle]: data } });
+    } else {
+      setNewUserInfo({ ...newUserInfo, [dataTitle]: data });
+    }
+  };
+
+  const requestChangeInfo = () => {
+    modifyUser(
+      newUserInfo,
+      (res) => {
+        console.log(res, "체인지요청성공");
+      },
+      (res) => {
+        console.log(res, "체인지요청실패");
+      }
+    );
   };
   return (
     <Container>
       <ThemeProvider theme={newTheme}>
-        {/* <Container align="center" sx={{ pt: 10, pb: 10, height: "10vh" }}>
-                </Container> */}
-        <Container
-        // sx={{
-        //   width: "70%",
-        //   align: "center",
-        // }}
-        >
+        <Container>
           <Typography variant="h4" component="h1" sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
             회원정보 변경
           </Typography>
@@ -116,6 +138,13 @@ function UserMypageChange(props) {
           </Box>
           <TabPanel value={value} index={0}>
             <Paper sx={{ p: 2, margin: "auto", maxWidth: 900, flexGrow: 1 }}>
+              <button
+                onClick={function () {
+                  console.log(newUserInfo);
+                }}
+              >
+                현재주소뭐야
+              </button>
               <Grid container spacing={2}>
                 <Grid item>
                   <img src={logo} />
@@ -141,10 +170,11 @@ function UserMypageChange(props) {
                     <Grid item xs>
                       <TextField
                         size="small"
-                        placeholder="닉네임"
+                        placeholder="이름"
                         required //값 반드시 입력
                         name="nickname"
-                        defaultValue={userId ? user : "없음"}
+                        defaultValue={newUserInfo.name}
+                        onChange={handleChangeUserInfo("name")}
                       />
                       <br />
                       <TextField
@@ -152,7 +182,8 @@ function UserMypageChange(props) {
                         placeholder="example@example.com"
                         required //값 반드시 입력
                         name="email"
-                        // defaultValue={user.email}
+                        defaultValue={newUserInfo.email}
+                        onChange={handleChangeUserInfo("email")}
                       />
 
                       <br />
@@ -161,7 +192,8 @@ function UserMypageChange(props) {
                         placeholder="number"
                         required //값 반드시 입력
                         name="number"
-                        // defaultValue={user.tel}
+                        defaultValue={newUserInfo.tel}
+                        onChange={handleChangeUserInfo("tel")}
                       />
                       <br />
                       <TextField
@@ -170,14 +202,16 @@ function UserMypageChange(props) {
                         name="address"
                         disabled
                         placeholder="주소"
-                        value={address}
-                      ></TextField>
+                        value={newUserInfo.address.city}
+                        onChange={handleChangeUserInfo("city")}
+                      />
                       <TextField
                         size="small"
                         placeholder="상세주소"
                         required //값 반드시 입력
                         name="addressdetail"
-                        // defaultValue={user.street}
+                        defaultValue={newUserInfo.address.street}
+                        onChange={handleChangeUserInfo("street")}
                       />
                       <Button onClick={handleOpen}>주소 검색</Button>
                       <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
@@ -259,7 +293,10 @@ function UserMypageChange(props) {
             </Paper>
           </TabPanel>
           <Box textAlign="center">
-            <Button variant="outlined"> 수정 완료</Button>
+            <Button variant="outlined" onClick={requestChangeInfo}>
+              {" "}
+              수정 완료
+            </Button>
           </Box>
         </Container>
       </ThemeProvider>

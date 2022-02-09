@@ -18,17 +18,14 @@ import Button from "@mui/material/Button";
 import { NavLink } from "react-router-dom";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { listHospital, listDongNameHospital } from "../../api/hospital.js";
-/* global kakao */
-
+import { hospitalReviews } from "../../api/review.js";
 function HospitalSearch(props) {
     const { kakao } = window;
     const [mode, setMode] = useState("list");
-    const [isSearch, setSearch] = useState(false);
     const [doneSearch, setDoneSearch] = useState(false);
     const [value, setValue] = useState(0);
     const [hosipitalNo, setHosipitalNo] = useState(0);
     const handleChange = (event, newValue) => {
-        console.log(event, newValue);
         setValue(newValue);
     };
     function kakaoMap(lat, lng) {
@@ -276,7 +273,7 @@ function HospitalSearch(props) {
                             X
                         </Grid>
                         <Grid item xs={2.3} sx={{ fontSize: 12, mt: 0.4, color: "gray" }}>
-                            리뷰 : X
+                            리뷰 : {props.review.length}
                         </Grid>
                     </Grid>
                 </CardContent>
@@ -349,14 +346,31 @@ function HospitalSearch(props) {
         setName(e.target.value);
     };
     const [hospitalList, setHospitalList] = useState([]);
-
+    const [reviewList, setReviewList] = useState([]);
     const searchHospitalList = async (name) => {
         await listHospital(name, ({ data }) => {
             let list = data.data;
-
             listDongNameHospital(name, ({ data }) => {
-                setHospitalList(Array.from(new Set(list.concat(data.data))));
-                setDoneSearch(true);
+                list = list.concat(data.data);
+
+                list = list.filter((hosiptal, index, arr) => {
+                    return arr.findIndex((item) => item.id === hosiptal.id) === index;
+                });
+
+                setHospitalList(list); //병원 리스트 조회
+
+                let reviewList = [];
+                let cnt = 1;
+
+                hospitalList.forEach((hospital, index) => {
+                    hospitalReviews(hospital.id, ({ data }) => {
+                        reviewList.push(data.data);
+                        if (cnt++ === hospitalList.length) {
+                            setReviewList(reviewList);
+                            setDoneSearch(true);
+                        }
+                    });
+                });
             });
         });
     };
@@ -389,7 +403,12 @@ function HospitalSearch(props) {
                 {doneSearch === true ? (
                     <Paper style={{ maxHeight: 800, overflow: "auto" }}>
                         {hospitalList.map((hospital, index) => (
-                            <Hosiptal key={hospital.no} hospital={hospital} index={index}></Hosiptal>
+                            <Hosiptal
+                                key={index}
+                                hospital={hospital}
+                                index={index}
+                                review={reviewList[index]}
+                            ></Hosiptal>
                         ))}
                     </Paper>
                 ) : (
