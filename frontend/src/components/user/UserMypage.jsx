@@ -204,6 +204,7 @@ function UserPetInfo(props) {
     };
     return (
         <Grid container>
+<<<<<<< Updated upstream
             <Grid item xs={12} sx={{ mt: 4 }}>
                 <Typography sx={{ mb: 2, fontWeight: "bold", fontSize: 25, borderBottom: 2, pb: 1 }}>
                     함께하는 반려동물
@@ -211,6 +212,59 @@ function UserPetInfo(props) {
                 <Button variant="contained" onClick={changeAddNew}>
                     더 추가하기
                 </Button>
+=======
+          <Grid item xs={12}>
+            <TextField label="이름" name="name" type="text" size="small" onChange={handlePetInfo("name")} />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              label="생년월일"
+              name="birthDate"
+              type="date"
+              onChange={handlePetInfo("data")}
+              defaultValue={year + "-" + ("00" + month.toString()).slice(-2) + "-" + ("00" + day.toString()).slice(-2)}
+              size="small"
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField label="종" name="species" type="text" size="small" onChange={handlePetInfo("species")} />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField label="몸무게" name="weight" type="number" size="small" onChange={handlePetInfo("weight")} />
+          </Grid>
+          <Grid item xs={12}>
+            <Button variant="contained" onClick={doneAddNew}>
+              추가
+            </Button>
+            <button onClick={requestNewPet}>유저펫추가테스트</button>
+          </Grid>
+        </Grid>
+      </>
+    );
+  }
+  const handleChangePetInfo = () => {};
+
+  const changeAddNew = () => {
+    if (!isAddNew) {
+      setIsAddNew(true);
+    }
+  };
+  const doneAddNew = () => {
+    setIsAddNew(false);
+  };
+  return (
+    <Grid container>
+      <Grid item xs={12} sx={{ mt: 4 }}>
+        <Typography sx={{ mb: 2, fontWeight: "bold", fontSize: 25, borderBottom: 2, pb: 1 }}>함께하는 반려동물</Typography>
+        <Button variant="contained" onClick={changeAddNew}>
+          더 추가하기
+        </Button>
+        <Grid container>
+          {userPet.map((pet, idx) => (
+            <Grid key={idx} item sx={{ border: 1 }}>
+              <Card>
+                <CardMedia component="img" height="140" src="/img/resHospital.png" alt="petPhoto" />
+>>>>>>> Stashed changes
                 <Grid container>
                     {userPet.map((pet, idx) => (
                         <Grid key={idx} item sx={{ border: 1 }}>
@@ -263,12 +317,21 @@ function FavoriteHospital() {
         );
     }, []);
 
+<<<<<<< Updated upstream
     const markTest = () => {
         userFavMark((res) => {
             console.log("(요청)즐겨찾는병원", res);
             setfavHospitals(res);
         });
     };
+=======
+  const markTest = () => {
+    userFavMark((res) => {
+      console.log("(요청)즐겨찾는병원 from marktest", res);
+      setfavHospitals(res.data.data);
+    });
+  };
+>>>>>>> Stashed changes
 
     const handleFavMark = (favId) => (e) => {
         e.preventDefault();
@@ -284,6 +347,7 @@ function FavoriteHospital() {
         );
     };
 
+<<<<<<< Updated upstream
     const addMark = async () => {
         console.log("11");
         await addFavMark(
@@ -351,6 +415,74 @@ function FavoriteHospital() {
             </table>
         </Grid>
     );
+=======
+  // function addMark() {
+  //   addFavMark(
+  //     163,
+  //     (res) => {
+  //       console.log(res, "즐겨찾기추가성공");
+  //     },
+  //     (res) => {
+  //       console.log(res, "즐겨찾기추가실패");
+  //     }
+  //   );
+  // }
+  return (
+    <Grid item xs={12} md={12} sx={{ mt: 4 }}>
+      <Typography sx={{ mb: 2, fontWeight: "bold", fontSize: 25 }}>즐겨찾는 병원</Typography>
+      <button onClick={markTest}>즐겨찾기병원 조회 테스트</button>
+      {/* <Button onClick={addMark} variant="contained">
+        즐겨찾는병원 넣기 테스트
+      </Button> */}
+      <table className="favhospital">
+        <thead>
+          <tr>
+            <Checkbox />
+            <th>이미지</th>
+            <th>병원이름</th>
+            <th>주소</th>
+            <th>연락처</th>
+            <th>상태</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <Checkbox />
+            </td>
+            <td>이미지</td>
+            <td>로이병원</td>
+            <td>인천광역시 남동구 논현동 751-1 에코메트로3차 더타워상가 C동 1층 24시 소래동물병원</td>
+            <td>02-1234-5678</td>
+            <td>
+              <Button>즐겨찾기 삭제 깡통</Button>
+            </td>
+          </tr>
+          {favHospitals.map((fav, idx) => {
+            const favId = fav.id;
+            return (
+              <tr key={idx}>
+                <td>
+                  <Checkbox />
+                </td>
+                <td>이미지</td>
+                <td>{fav.user_id} User ID"</td>
+                <td>{fav.hospital_id} Hospital ID"</td>
+                <td>{fav.id} Mark res ID"</td>
+                <td>
+                  <Button onClick={handleFavMark(favId)}>즐겨찾기 삭제</Button>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+        <tfoot>
+          <tr></tr>
+        </tfoot>
+      </table>
+    </Grid>
+  );
+>>>>>>> Stashed changes
 } // 유저 즐겨찾는 병원 컴포넌트 끝
 
 export default UserMypage;
