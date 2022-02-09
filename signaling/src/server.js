@@ -1,14 +1,24 @@
 let express = require("express");
-let http = require("http");
+let https = require("https");
 let app = express();
 let cors = require("cors");
-let server = http.createServer(app);
+
+const fs = require('fs');
+const options = {
+    ca: fs.readFileSync('./fullchain.pem'),
+    key: fs.readFileSync('./privkey.pem'),
+    cert: fs.readFileSync('./cert.pem')
+};
+
+let server = https.createServer(options, app);
+
 let socketio = require("socket.io");
 let io = socketio.listen(server);
 
+
 app.use(cors());
 const PORT = process.env.PORT || 9000;
-const hostname = "192.168.35.26"; 
+const hostname = "0.0.0.0"; 
 let users = {};
 
 let socketToRoom = {};
