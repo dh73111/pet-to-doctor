@@ -1,4 +1,4 @@
-import { apiInstance, loginApiInstance } from "./index.js";
+import { apiInstance } from "./index.js";
 
 const api = apiInstance();
 
@@ -8,17 +8,17 @@ function addInvoice(prescriptionId, success, fail) {
 }
 
 // 진단서 작성
-function addPerscription(treatmentId , success, fail){
+function addPerscription(treatmentId, success, fail) {
     api.post(`/prescription/${treatmentId}`).then(success).catch(fail);
 }
 
 // 약 리스트 정보
-function medicineInfo(treatmentId , success, fail){
+function medicineInfo(treatmentId, success, fail) {
     api.post(`/prescription/medicine/${treatmentId}`).then(success).catch(fail);
 }
 
 // 진단서 확인
-function checkPrescription(treatmentId , success, fail){
+function checkPrescription(treatmentId, success, fail) {
     api.get(`/prescription?prescription_id=${treatmentId}`).then(success).catch(fail);
 }
 
@@ -27,4 +27,4 @@ function checkPrescriptionList(id, status, success, fail) {
     api.get(`/prescription/list?doctor_id=${id}&type=${status}'`).then(success).catch(fail);
 }
 
-export{addInvoice, addPerscription, medicineInfo, checkPrescription, checkPrescriptionList};
+export { addInvoice, addPerscription, medicineInfo, checkPrescription, checkPrescriptionList };

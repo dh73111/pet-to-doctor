@@ -1,4 +1,4 @@
-import { apiInstance, loginApiInstance } from "./index.js";
+import { apiInstance } from "./index.js";
 
 const api = apiInstance();
 
@@ -17,5 +17,4 @@ function listDongHospital(dongCode, success, fail) {
     api.get(`/hospital/dong/${dongCode}`).then(success).catch(fail);
 }
 
-
-export { listHospital, listDongHospital ,getHosiptal};
+export { listHospital, listDongHospital, getHosiptal };

@@ -1,7 +1,6 @@
 import { apiInstance, loginApiInstance } from "./index.js";
 
 const api = apiInstance();
-const loginApi = loginApiInstance();
 
 // 회원 정보 수정
 function modifyUser(user, success, fail) {
@@ -29,8 +28,8 @@ function checkPassword(user, success, fail) {
 }
 // 비밀번호 변경
 function changePassword(user, success, fail) {
-    console.log(user);
-
+    console.log(1);
+    const loginApi = loginApiInstance();
     loginApi.post(`/user/password/change`, JSON.stringify(user)).then(success).catch(fail);
 }
 // 로그인

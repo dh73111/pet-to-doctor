@@ -52,11 +52,11 @@ function UserMypage(props) {
 
     useEffect(() => {
         userInfo(userId, (data) => {
-            console.log(data.data);
+            console.log(data.data , "userInfo API");
             setUser(data.data);
         });
         petList((res) => {
-            setCurrentUserPets(res.data.data);
+            setCurrentUserPets(res.data.data, "pet API");
         });
         // userFavMark((data) => [console.log("(요청)즐겨찾는병원", data)]);
     }, []);
@@ -106,7 +106,6 @@ function UserInfo(props) {
 function UserPetInfo(props) {
     console.log(props, " UserPetInfo");
     const [isAddNew, setIsAddNew] = useState(false);
-    console.log(props, "유저펫들");
     const userPet = props.pets;
 
     // 펫 추가 컴포넌트
@@ -248,10 +247,15 @@ function FavoriteHospital() {
     const [favHospitals, setfavHospitals] = useState([]);
 
     useEffect(() => {
-        userFavMark((res) => {
-            console.log("(요청)즐겨찾는병원", res);
-            setfavHospitals(res);
-        });
+        userFavMark(
+            (res) => {
+                console.log("(요청)즐겨찾는병원", res);
+                setfavHospitals(res);
+            },
+            () => {
+                console.log("즐겨찾기 못가져옴");
+            }
+        );
     }, []);
 
     const markTest = () => {
@@ -307,9 +311,9 @@ function FavoriteHospital() {
                             <Button onClick={handleFavMark}>즐겨찾기 삭제</Button>
                         </td>
                     </tr>
-                    {favHospitals.map((fav) => {
+                    {/* {favHospitals.map((fav, idx) => {
                         return (
-                            <tr key={fav.id}>
+                            <tr key={idx}>
                                 <td>
                                     <Checkbox />
                                 </td>
@@ -322,7 +326,7 @@ function FavoriteHospital() {
                                 </td>
                             </tr>
                         );
-                    })}
+                    })} */}
                 </tbody>
                 <tfoot>
                     <tr></tr>

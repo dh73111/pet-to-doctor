@@ -5,6 +5,7 @@ import { loginUser, changePassword, userInfo } from "../../api/user.js";
 import { useNavigate } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import { useDispatch } from "react-redux";
+import { ContactlessOutlined } from "@mui/icons-material";
 const newTheme = createTheme({
     palette: {
         primary: {
@@ -33,6 +34,7 @@ function UserLoginModal(props) {
             { email: user.email, password: user.password },
             (res) => {
                 sessionStorage.setItem("accessToken", res.data.data);
+                console.log(sessionStorage.getItem("accessToken"));
                 let decode_token = jwtDecode(res.data.data);
                 userInfo(
                     decode_token.sub,
@@ -114,6 +116,9 @@ function UserLoginModal(props) {
                                     autoComplete="current-password"
                                     value={values.password}
                                     onChange={handleChange("password")}
+                                    onKeyPress={(e) => {
+                                        if (e.key === "Enter") userLogin(values);
+                                    }}
                                 />
                                 <FormControlLabel
                                     control={<Checkbox value="remember" color="primary" />}
@@ -154,7 +159,6 @@ function UserLoginModal(props) {
                                     </Grid>
                                 </Grid>
                                 <Button
-                                    type="submit"
                                     fullWidth
                                     variant="contained"
                                     sx={{ mt: 3, mb: 1 }}
@@ -166,7 +170,6 @@ function UserLoginModal(props) {
                                 {/* 네이버그린 #03C75A */}
                                 <a href={KAKAO_AUTH_URL} style={{ textDecoration: "none" }}>
                                     <Button
-                                        type="submit"
                                         fullWidth
                                         variant="contained"
                                         sx={{ mb: 2 }}

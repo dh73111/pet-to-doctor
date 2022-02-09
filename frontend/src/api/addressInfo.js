@@ -1,7 +1,6 @@
-import { apiInstance, loginApiInstance } from "./index.js";
+import { apiInstance } from "./index.js";
 
 const api = apiInstance();
-
 
 function addressInfo(name, success, fail) {
     api.get(`/address-info/name?name=${encodeURI(name)}`)
@@ -9,4 +8,4 @@ function addressInfo(name, success, fail) {
         .catch(fail);
 }
 
-export {addressInfo}
+export { addressInfo };

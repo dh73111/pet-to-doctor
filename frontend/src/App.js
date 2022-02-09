@@ -32,16 +32,16 @@ import Qna from "./components/user/Qna";
 import { createStore } from "redux";
 import { Provider, useSelector } from "react-redux";
 import storage from "redux-persist/lib/storage";
+import sessionStorage from "redux-persist/lib/storage/session";
 import { persistStore, persistReducer } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
-
+import { composeWithDevTools } from "redux-devtools-extension";
 const persistConfig = {
     key: "root",
-    storage,
+    storage: sessionStorage,
 };
 
 function reducer(currentState, action) {
-    console.log(currentState, "현재 스토어 값");
     if (currentState === undefined) {
         return {
             user: {},
@@ -51,9 +51,8 @@ function reducer(currentState, action) {
     const newState = { ...currentState };
 
     if (action.type === "login") {
-        console.log(action.userData);
         newState.user = action.userData;
-        newState.isLogin = !newState.isLogin;
+        newState.isLogin = true;
         return newState;
     }
     if (action.type === "register") {
@@ -65,7 +64,7 @@ function reducer(currentState, action) {
 const persistedReducer = persistReducer(persistConfig, reducer);
 
 // 회원가입 진단서 팝업 doctorperscriptonform , usersignupconfirm
-const store = createStore(persistedReducer);
+const store = createStore(persistedReducer, composeWithDevTools());
 const persistor = persistStore(store);
 
 function App() {
