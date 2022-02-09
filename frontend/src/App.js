@@ -37,34 +37,34 @@ import { persistStore, persistReducer } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import { composeWithDevTools } from "redux-devtools-extension";
 const persistConfig = {
-    key: "root",
-    storage: sessionStorage,
+  key: "root",
+  storage: sessionStorage,
 };
 
 function reducer(currentState, action) {
-    if (currentState === undefined) {
-        return {
-            user: {},
-            isLogin: false,
-        };
-    }
-    const newState = { ...currentState };
+  if (currentState === undefined) {
+    return {
+      user: {},
+      isLogin: false,
+    };
+  }
+  const newState = { ...currentState };
 
-    if (action.type === "login") {
-        newState.user = action.userData;
-        newState.isLogin = true;
-        return newState;
-    }
-    if (action.type === "logout") {
-        newState.user = {};
-        newState.isLogin = false;
-        return newState;
-    }
-    if (action.type === "register") {
-        newState.user = action.userData;
-        return newState;
-    }
+  if (action.type === "login") {
+    newState.user = action.userData;
+    newState.isLogin = true;
     return newState;
+  }
+  if (action.type === "logout") {
+    newState.user = {};
+    newState.isLogin = false;
+    return newState;
+  }
+  if (action.type === "register") {
+    newState.user = action.userData;
+    return newState;
+  }
+  return newState;
 }
 const persistedReducer = persistReducer(persistConfig, reducer);
 
@@ -73,66 +73,54 @@ const store = createStore(persistedReducer, composeWithDevTools());
 const persistor = persistStore(store);
 
 function App() {
-    return (
-        <Box sx={{ fontFamily: "noto sans" }}>
-            <Provider store={store}>
-                <PersistGate loading={null} persistor={persistor}>
-                    <BrowserRouter>
-                        <div className="App">
-                            <Routes>
-                                <Route path="/petodoctor/*" element={<NavBar />}></Route>
-                            </Routes>
-                            <Routes>
-                                <Route path="/petodoctor/" element={<Home />}></Route>
-                                <Route path="/petodoctor/kakaooauth*" element={<Home />}></Route>
-                            </Routes>
-                            <Routes>
-                                {/* doctor */}
-                                <Route path="/petodoctor/doctorreservation" element={<DoctorReservation />}></Route>
-                                <Route path="/petodoctor/doctordiagnosis" element={<DoctorDianosis />}></Route>
-                                <Route path="/petodoctor/doctorperscripton" element={<DoctorPerscription />}></Route>
-                                <Route path="/petodoctor/doctormypage" element={<DoctorMypage />}></Route>
-                                <Route path="/doctorperscriptonform" element={<DoctorPerscriptionForm />}></Route>
-                                <Route path="/petodoctor/doctorconsulting" element={<DoctorConsuliting />}></Route>
+  return (
+    <Box sx={{ fontFamily: "noto sans" }}>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <BrowserRouter>
+            <div className="App">
+              <Routes>
+                <Route path="/petodoctor/*" element={<NavBar />}></Route>
+              </Routes>
+              <Routes>
+                <Route path="/petodoctor/" element={<Home />}></Route>
+                <Route path="/petodoctor/kakaooauth*" element={<Home />}></Route>
+              </Routes>
+              <Routes>
+                {/* doctor */}
+                <Route path="/petodoctor/doctorreservation" element={<DoctorReservation />}></Route>
+                <Route path="/petodoctor/doctordiagnosis" element={<DoctorDianosis />}></Route>
+                <Route path="/petodoctor/doctorperscripton" element={<DoctorPerscription />}></Route>
+                <Route path="/petodoctor/doctormypage" element={<DoctorMypage />}></Route>
+                <Route path="/doctorperscriptonform" element={<DoctorPerscriptionForm />}></Route>
+                <Route path="/petodoctor/doctorconsulting" element={<DoctorConsuliting />}></Route>
 
-                                {/* user */}
-                                <Route path="/petodoctor/notice" element={<Notice />}></Route>
-                                <Route path="/petodoctor/login" element={<UserLoginModal />}></Route>
-                                <Route path="/petodoctor/hospitalsearch" element={<HospitalSearch />}></Route>
-                                <Route path="/petodoctor/hospitalreservation" element={<HospitalReservation />}></Route>
-                                <Route
-                                    path="/petodoctor/hospitalsearchreservation"
-                                    element={<HospitalSearchReservation />}
-                                ></Route>
-                                <Route path="/petodoctor/userjoin" element={<UserJoin />}></Route>
-                                <Route path="/petodoctor/usersignupconfirm" element={<UserSignupConfirm />}></Route>
-                                <Route path="/petodoctor/usermypage" element={<UserMypage />}></Route>
-                                <Route path="/petodoctor/usernmypagechange" element={<UserMypageChange />}></Route>
-                                <Route path="/petodoctor/userrating" element={<UserRating />}></Route>
-                                <Route path="/petodoctor/userreservation" element={<UserReservation />}></Route>
-                                <Route
-                                    path="/petodoctor/userreservationpayment"
-                                    element={<UserReservationPayment />}
-                                ></Route>
-                                <Route
-                                    path="/petodoctor/userreservationpaymenting"
-                                    element={<UserReservationPaymenting />}
-                                ></Route>
-                                <Route
-                                    path="/petodoctor/userreservationcomplete"
-                                    element={<UserReservationComplete />}
-                                ></Route>
-                                <Route path="/petodoctor/usermedipayment" element={<UserMedicinePayment />}></Route>
-                                <Route path="/petodoctor/userconsulting/:id" element={<UserConsulting />}></Route>
-                                <Route path="/petodoctor/qna" element={<Qna />}></Route>
-                                <Route path="/petodoctor/review" element={<Review />}></Route>
-                            </Routes>
-                        </div>
-                    </BrowserRouter>
-                </PersistGate>
-            </Provider>
-        </Box>
-    );
+                {/* user */}
+                <Route path="/petodoctor/notice" element={<Notice />}></Route>
+                <Route path="/petodoctor/login" element={<UserLoginModal />}></Route>
+                <Route path="/petodoctor/hospitalsearch" element={<HospitalSearch />}></Route>
+                <Route path="/petodoctor/hospitalreservation" element={<HospitalReservation />}></Route>
+                <Route path="/petodoctor/hospitalsearchreservation" element={<HospitalSearchReservation />}></Route>
+                <Route path="/petodoctor/userjoin" element={<UserJoin />}></Route>
+                <Route path="/petodoctor/usersignupconfirm" element={<UserSignupConfirm />}></Route>
+                <Route path="/petodoctor/usermypage" element={<UserMypage />}></Route>
+                <Route path="/petodoctor/usermypage/:userId" element={<UserMypageChange />}></Route>
+                <Route path="/petodoctor/userrating" element={<UserRating />}></Route>
+                <Route path="/petodoctor/userreservation" element={<UserReservation />}></Route>
+                <Route path="/petodoctor/userreservationpayment" element={<UserReservationPayment />}></Route>
+                <Route path="/petodoctor/userreservationpaymenting" element={<UserReservationPaymenting />}></Route>
+                <Route path="/petodoctor/userreservationcomplete" element={<UserReservationComplete />}></Route>
+                <Route path="/petodoctor/usermedipayment" element={<UserMedicinePayment />}></Route>
+                <Route path="/petodoctor/userconsulting/:id" element={<UserConsulting />}></Route>
+                <Route path="/petodoctor/qna" element={<Qna />}></Route>
+                <Route path="/petodoctor/review" element={<Review />}></Route>
+              </Routes>
+            </div>
+          </BrowserRouter>
+        </PersistGate>
+      </Provider>
+    </Box>
+  );
 }
 
 export default App;
