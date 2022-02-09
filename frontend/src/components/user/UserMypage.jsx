@@ -90,6 +90,7 @@ function UserInfo(props) {
             <Box sx={{ typography: "h5" }}>{informationUser.name}</Box>
             <Box sx={{ typography: "body1" }}>{informationUser.email}</Box>
             <Box sx={{ typography: "body1" }}>{informationUser.tel}</Box>
+            <Box sx={{ typography: "body1" }}>{informationUser.address.city}</Box>
             <Box sx={{ typography: "body1" }}>{informationUser.address.street}</Box>
           </Grid>
           <Box sx={{ mt: 2, mx: 2 }}>
@@ -191,8 +192,8 @@ function UserPetInfo(props) {
           더 추가하기
         </Button>
         <Grid container>
-          {userPet.map((pet) => (
-            <Grid key={pet.idx} item sx={{ border: 1 }}>
+          {userPet.map((pet, idx) => (
+            <Grid key={idx} item sx={{ border: 1 }}>
               <Card>
                 <CardMedia component="img" height="140" src="./img/resHospital.png" alt="petPhoto" />
                 <Grid container>
@@ -265,7 +266,7 @@ function FavoriteHospital() {
 
   const addMark = () => {
     addFavMark(
-      ("164",
+      (163,
       (res) => {
         console.log(res, "즐겨찾기추가성공");
       },
