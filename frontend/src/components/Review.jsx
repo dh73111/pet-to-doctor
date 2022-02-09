@@ -1,8 +1,10 @@
-import { Box, Container, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Box, Button, Container, Typography } from "@mui/material";
+import { allReview } from "../api/review";
 
 function Review() {
-  const allReview = {
+  const [reviews, setReviews] = useState([]);
+  const allReviews = {
     message: "성공",
     data: [
       {
@@ -15,7 +17,18 @@ function Review() {
       },
     ],
   };
-  const reviewlen = allReview.length;
+  useEffect(() => {
+    allReview(
+      (res) => {
+        setReviews(res.data.data);
+        console.log("리뷰가져오기성공");
+      },
+      () => {
+        console.log("리뷰가져오기성공");
+      }
+    );
+  }, []);
+  const reviewlen = allReviews.data.length;
   return (
     <Container>
       <Typography variant="h4" component="h1" sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
@@ -24,17 +37,20 @@ function Review() {
       <Box sx={{ border: "1px solid blue", mb: 4 }}>어떤걸 할지... 아직 안정함</Box>
       <Box sx={{ border: "1px solid #309FB3", borderRadius: "4px", mb: 2 }}>
         <Typography sx={{ fontWeight: "600" }}>모든 리뷰({reviewlen})</Typography>
-        <Box>최신순</Box>
-        <Box>평점순</Box>
+        <Button>등록순</Button>
+        <Button>최신순</Button>
+        <Button>평점순</Button>
       </Box>
       <Box>
-        {allReview.data.map((review, idx) => {
+        {reviews.map((review, idx) => {
           return (
             <Box key={idx} sx={{ border: 1, p: 3, mb: 1 }}>
-              <p>{review.rate}</p>
-              <p>{review.userId}</p>
-              <p>{review.content}</p>
-              <p>{review.createTime}</p>
+              <p>리뷰 ID : {review.id}</p>
+              <p>평점 : {review.rate}</p>
+              <p>유저네임 : {review.username}</p>
+              <p>병원 ID : {review.hospitalId}</p>
+              <p>내용 : {review.content}</p>
+              <p>작성시간 : {review.createTime}</p>
             </Box>
           );
         })}
