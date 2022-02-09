@@ -16,24 +16,26 @@ public class ReviewRes {
     private String content;
     private Integer rate;
     private LocalDateTime createTime;
+    private String username;
 
     public ReviewRes() {
     }
 
-    public ReviewRes(Long id, Long userId, Long hospitalId, String content, Integer rate, LocalDateTime createTime) {
+    public ReviewRes(Long id, Long userId, Long hospitalId, String content, Integer rate, LocalDateTime createTime, String username) {
         this.id = id;
         this.userId = userId;
         this.hospitalId = hospitalId;
         this.content = content;
         this.rate = rate;
         this.createTime = createTime;
+        this.username = username;
     }
 
     public static List<ReviewRes> convertToResList(List<Review> reviews){
         List<ReviewRes> result = new ArrayList<>();
         for(Review r : reviews){
             ReviewRes rr = new ReviewRes(r.getId(), r.getUser().getId()
-                    , r.getHospital().getId(), r.getContent(), r.getRate(), r.getCreateTime());
+                    , r.getHospital().getId(), r.getContent(), r.getRate(), r.getCreateTime(), r.getUser().getName());
             result.add(rr);
         }
 
