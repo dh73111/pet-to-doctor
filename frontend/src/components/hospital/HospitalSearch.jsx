@@ -18,6 +18,7 @@ import Button from "@mui/material/Button";
 import { NavLink } from "react-router-dom";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { listHospital, listDongNameHospital } from "../../api/hospital.js";
+import { addFavMark } from "../../api/mark.js";
 /* global kakao */
 
 function HospitalSearch(props) {
@@ -290,14 +291,24 @@ function HospitalSearch(props) {
             <Grid container>
                 <Grid item xs={3.3}>
                     <Box
-                        sx={{ position: "absolute", left: "780px", top: "50%" }}
+                        sx={{ position: "absolute", left: "780px", top: "70%" }}
                         onClick={() => {
                             setMode("list");
                         }}
                     >
                         <ChevronLeftIcon sx={{ fontSize: 40 }}></ChevronLeftIcon>
                     </Box>
-
+                    <Box>
+                        <Button
+                            onClick={() => {
+                                addFavMark(163, (res) => {
+                                    console.log(res);
+                                });
+                            }}
+                        >
+                            테스트
+                        </Button>
+                    </Box>
                     <Paper style={{ maxHeight: 890, overflow: "auto" }} elevation={0}>
                         <img src="/img/hospital.png" style={{ height: "200px", width: "100%" }} alt="병원 이미지"></img>
                         <Box display="flex" justifyContent="center" alignItems="center" sx={{ mt: 1 }}>

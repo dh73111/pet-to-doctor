@@ -7,9 +7,20 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
 import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
 const pc_config = {
-    iceServer: [{ urls: "stun:stun.l.google.com:19302" }],
+    iceServers: [
+        {
+            urls: [
+                "stun:stun.l.google.com:19302",
+                "stun:stun1.l.google.com:19302",
+                "stun:stun2.l.google.com:19302",
+                "stun:stun3.l.google.com:19302",
+                "stun:stun4.l.google.com:19302",
+            ],
+        },
+    ],
 };
-const SOCKET_SERVER_URL = "http://192.168.35.26:9000";
+//https://i6b209.p.ssafy.io:9000/
+const SOCKET_SERVER_URL = "https://i6b209.p.ssafy.io:443/";
 
 function UserConsulting(props) {
     const navigate = useNavigate();
@@ -32,6 +43,7 @@ function UserConsulting(props) {
                 pcRef.current.addTrack(track, stream);
             });
             pcRef.current.onicecandidate = (e) => {
+                console.log(e, "  ", e.candidate, "candidate event");
                 if (e.candidate) {
                     if (!socketRef.current) return;
                     console.log("onicecandidate");
@@ -43,11 +55,10 @@ function UserConsulting(props) {
             };
             pcRef.current.ontrack = (ev) => {
                 console.log("add remotetrack success");
+                console.log(ev, "ontrack 이벤트 ");
+                console.log(remoteVideoRef.current, "!!!!!!!!!!");
                 if (remoteVideoRef.current) {
                     remoteVideoRef.current.srcObject = ev.streams[0];
-                    remoteVideoRef.current.srcObject
-                        .getTracks()
-                        .forEach((track) => (track.onended = () => console.log("상대방비디오종료")));
                 }
             };
             socketRef.current.emit("join_room", {
@@ -105,19 +116,17 @@ function UserConsulting(props) {
         });
         socketRef.current.on("getAnswer", (sdp) => {
             console.log("get answer");
+            console.log(sdp, " sdp");
             if (!pcRef.current) return;
             pcRef.current.setRemoteDescription(new RTCSessionDescription(sdp));
-            console.log(sdp);
         });
         socketRef.current.on("getCandidate", async (candidate) => {
+            console.log(candidate, "Get Candidate");
             if (!pcRef.current) return;
             await pcRef.current.addIceCandidate(new RTCIceCandidate(candidate));
             console.log("candidate add success");
         });
 
-        socketRef.current.on("otherVideoOff", () => {
-            console.log("전송받음");
-        });
         setVideoTracks();
         return () => {
             if (socketRef.current) {
