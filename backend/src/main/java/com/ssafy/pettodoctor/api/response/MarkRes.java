@@ -13,17 +13,17 @@ import java.util.List;
 public class MarkRes {
 
     private Long id;
-    private User user;
-    private Hospital hospital;
+    private Long user_id;
+    private Long hospital_id;
 
-    public MarkRes(Long id, User user, Hospital hospital) {
+    public MarkRes(Long id, Long user_id, Long hospital_id) {
         this.id = id;
-        this.user = user;
-        this.hospital = hospital;
+        this.user_id = user_id;
+        this.hospital_id = hospital_id;
     }
 
     public static MarkRes convertToMarkRes(Mark m) {
-        return new MarkRes(m.getId(), m.getUser(), m.getHospital());
+        return new MarkRes(m.getId(), m.getUser().getId(), m.getHospital().getId());
     }
 
     public static List<MarkRes> convertToMarkResList(List<Mark> markList) {
