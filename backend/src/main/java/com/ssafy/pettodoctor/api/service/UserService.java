@@ -1,5 +1,7 @@
 package com.ssafy.pettodoctor.api.service;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.ssafy.pettodoctor.api.domain.Pet;
 import com.ssafy.pettodoctor.api.domain.User;
 import com.ssafy.pettodoctor.api.domain.UserCertification;
@@ -18,10 +20,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
+import javax.net.ssl.HttpsURLConnection;
+import java.awt.*;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -50,6 +58,13 @@ public class UserService {
                 Pet p = Pet.createPet(pet.getName(), pet.getBirthDate(), pet.getSpecies(), pet.getWeight(), user);
                 petRepository.save(p);
             }
+        return user;
+    }
+
+    @Transactional
+    public User oauthSignup(String email, String nickname){
+        User user = User.createOauthUser(email, nickname);
+        userRepository.save(user);
         return user;
     }
 
@@ -147,4 +162,5 @@ public class UserService {
         userCertificationRepository.delete(uc.getId());
         user.setIsCertificated(true);
     }
+
 }

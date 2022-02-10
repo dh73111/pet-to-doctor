@@ -1,12 +1,11 @@
 package com.ssafy.pettodoctor.api.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.pettodoctor.api.auth.AccountUserDetails;
-import com.ssafy.pettodoctor.api.domain.Pet;
 import com.ssafy.pettodoctor.api.domain.User;
 import com.ssafy.pettodoctor.api.request.*;
-import com.ssafy.pettodoctor.api.response.PetRes;
-import com.ssafy.pettodoctor.api.response.ResVO;
-import com.ssafy.pettodoctor.api.response.UserRes;
+import com.ssafy.pettodoctor.api.response.*;
 import com.ssafy.pettodoctor.api.service.SendMailService;
 import com.ssafy.pettodoctor.api.request.LoginPostReq;
 import com.ssafy.pettodoctor.api.request.UserCommonSignupPostReq;
@@ -20,16 +19,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,7 +65,6 @@ public class UserController {
         return new ResponseEntity<ResVO<Boolean>>(result, status);
     }
 
-
     @PostMapping
     @Operation(summary = "회원 가입", description = "<strong>아이디와 패스워드</strong>를 통해 회원가입 한다.")
     @ApiResponses({
@@ -96,9 +93,145 @@ public class UserController {
         return new ResponseEntity<ResVO<Long>>(result, status);
     }
 
+    @PostMapping("/oauth-login/kakao")
+    @Operation(summary = "카카오 로그인", description = "카카오 인증 코드로 카카오 토큰을 얻고 정보로 로그인한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "401", description = "인증 실패"),
+            @ApiResponse(responseCode = "404", description = "사용자 없음"),
+            @ApiResponse(responseCode = "500", description = "서버 오류")
+    })
+    public ResponseEntity<ResVO<String>> kakaoLogin (@RequestParam String code) {
+        ResVO<String> result = new ResVO<>();
+        HttpStatus status = null;
+
+        //------------ 통신 ---------------//
+        // 토큰 관련 정보 얻기
+        ResponseEntity<String> responseToken = getKakaoToken(code);
+        if(responseToken == null){
+            result.setMessage("유효하지 않은 카카오 인증 코드 입니다.");
+            status = HttpStatus.BAD_REQUEST;
+            return new ResponseEntity<ResVO<String>>(result, status);
+        }
+
+        // 토큰 정보 추출
+        ObjectMapper objectMapper = new ObjectMapper();
+        OauthToken oauthToken = null;
+        try {
+            oauthToken = objectMapper.readValue(responseToken.getBody(), OauthToken.class);
+        } catch (JsonProcessingException e) { // 파싱 에러
+            e.printStackTrace();
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            result.setMessage("서버 오류");
+            return new ResponseEntity<ResVO<String>>(result, status);
+        }
+
+
+        //------------ 통신 ---------------//
+        // 토큰으로 프로필 정보 가져오기
+        ResponseEntity<String> responseProfile = getKakaoProfile(oauthToken);
+        if(responseProfile == null){
+            result.setMessage("유효하지 않은 토큰 입니다.");
+            status = HttpStatus.BAD_REQUEST;
+            return new ResponseEntity<ResVO<String>>(result, status);
+        }
+
+        // 프로필 정보 추출
+        KakaoProfile kakaoProfile = null;
+        try {
+            kakaoProfile = objectMapper.readValue(getKakaoProfile(oauthToken).getBody(), KakaoProfile.class);
+        } catch (JsonProcessingException e) { // 파싱 에러
+            e.printStackTrace();
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            result.setMessage("서버 오류");
+            return new ResponseEntity<ResVO<String>>(result, status);
+        }
+
+
+
+        // 이메일 중복 확인 및 토큰 반환
+        String email = kakaoProfile.getKakao_account().getEmail();
+        String nickname = kakaoProfile.getProperties().getNickname();
+        Boolean duplicated = userService.isDuplicated(email);
+        User user = null;
+        if(!duplicated) {
+            user = userService.oauthSignup(email, nickname);
+//            System.out.println("소셜 회원가입");
+        }
+        else{
+            user = userService.getUserByEmail(email);
+//            System.out.println("소셜 로그인");
+        }
+
+        status = HttpStatus.OK;
+        String accessToken = JwtTokenUtil.getToken(user.getId().toString(), user.getRole());
+        result.setData(accessToken);
+        result.setMessage("카카오 로그인 성공");
+
+        return new ResponseEntity<ResVO<String>>(result, status);
+    }
+
+    private ResponseEntity<String> getKakaoToken(String code) {
+        ResponseEntity<String> tokens = null;
+        // 카카오 토큰 요청
+        RestTemplate rt = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("grant_type", "authorization_code");
+        params.add("client_id", "17e88fdcd4825e84145e1f5676bf6007");
+        params.add("redirect_uri","http://localhost:3000/petodoctor/kakaooauth");
+//        params.add("redirect_uri", "http://localhost:3000/kakaooauth");
+        params.add("code", code);
+
+        HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest =
+                new HttpEntity<>(params, headers);
+        try {
+            tokens = rt.exchange(
+                    "https://kauth.kakao.com/oauth/token",
+                    HttpMethod.POST,
+                    kakaoTokenRequest,
+                    String.class
+            );
+//            System.out.println(tokens);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return tokens;
+    }
+
+    private ResponseEntity<String> getKakaoProfile(OauthToken oauthToken) {
+        ResponseEntity<String> response = null;
+        // 카카오 토큰 요청
+        RestTemplate rt = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + oauthToken.getAccess_token());
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+
+//        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+//        params.add("property_keys", "[\"properties.nickname\", \"kakao_acount.email\"]");
+
+        HttpEntity<MultiValueMap<String, String>> kakaoInfoRequest =
+                new HttpEntity<>(headers);
+        try {
+            response = rt.exchange(
+                    "https://kapi.kakao.com/v2/user/me",
+                    HttpMethod.POST,
+                    kakaoInfoRequest,
+                    String.class
+            );
+//            System.out.println(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return response;
+    }
 
     @PostMapping("/login")
-    @Operation(summary = "로그인", description = "<strong>아이디와 패스워드</strong>를 통해 회원가입 한다.")
+    @Operation(summary = "로그인", description = "<strong>아이디와 패스워드</strong>를 통해 로그인한다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공"),
             @ApiResponse(responseCode = "401", description = "인증 실패"),
