@@ -337,26 +337,30 @@ public class UserController {
 
 
     @GetMapping("/certification/{certificationKey}")
-    @Operation(summary = "서버 이메일 인증", description = "이메일로 날아온 인증 url클릭하면 인증해준다.")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "성공"),
-            @ApiResponse(responseCode = "500", description = "서버 오류")
-    })
-    public ResponseEntity<Map<String, Object>> mailCertification(
-            @PathVariable("certificationKey") @Parameter(description = "이메일 인증 키") String certKey) {
-        Map<String, Object> resultMap = new HashMap<String, Object>();
-        HttpStatus status = null;
-
+    public String mailCertification(
+            @PathVariable("certificationKey")  String certKey) {
         try {
             userService.mailCertification(certKey);
-            status = HttpStatus.OK;
+            return "<body>\n" +
+                    "    <h1>펫투닥터 서비스 메일 인증에 성공했습니다!</h1>\n" +
+                    "    <h3>\n" +
+                    "        <a href=\"https://i6b209.p.ssafy.io:3333/petodoctor\">펫투닥터 서비스</a>\n" +
+                    "        로 이동해 로그인 해주세요.\n" +
+                    "    </h3>\n" +
+                    "</body>\n";
 
         } catch (Exception e) {
             e.printStackTrace();
-            status = HttpStatus.INTERNAL_SERVER_ERROR;
-            resultMap.put("message", "서버 오류");
+
+            return
+                    "<body>\n" +
+                    "    <h1>펫투닥터 서비스 메일 인증에 실패했습니다...</h1>\n" +
+                    "    <h3>\n" +
+                    "        <a href=\"https://i6b209.p.ssafy.io:3333/petodoctor\">펫투닥터 서비스</a>\n" +
+                    "        로 이동\n" +
+                    "    </h3>\n" +
+                    "</body>\n";
         }
 
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 }
