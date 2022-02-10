@@ -21,7 +21,7 @@ public class Scheduler {
     private final UserCertificationRepository userCertificationRepository;
 
     // "0 * * * * ?" -> 매분 0초에 실행되는 테스트용 "0 0 0 * * ?" -> 매일 0시에 실행되는 실사용 용
-    @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "0 0 0 * * ?")
     @Transactional
     public void updateDailySchedule(){
         try{
@@ -32,7 +32,7 @@ public class Scheduler {
 
     }
 
-    @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "0 0 0 * * ?")
     @Transactional
     public void deleteExpiredUser(){
         List<Long> userIdOfExpiredUsers = userRepository.findUserIdOfExpiredUsers(7);
