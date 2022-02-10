@@ -4,6 +4,7 @@ import com.ssafy.pettodoctor.api.domain.Doctor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ public class DoctorRes {
     private String name;
     private String role;
     private String tel;
-    private LocalDateTime joinDate;
+    private LocalDate joinDate;
     private String pysicianLicenseNumber;
     private String specialty;
     private Integer price;
@@ -26,7 +27,7 @@ public class DoctorRes {
 
     }
 
-    public DoctorRes(Long id, String email, String name, String role, String tel, LocalDateTime joinDate, String pysicianLicenseNumber, String specialty, Integer price, Long hospitalId, String profileImgUrl) {
+    public DoctorRes(Long id, String email, String name, String role, String tel, LocalDate joinDate, String pysicianLicenseNumber, String specialty, Integer price, Long hospitalId, String profileImgUrl) {
         this.id = id;
         this.email = email;
         this.name = name;

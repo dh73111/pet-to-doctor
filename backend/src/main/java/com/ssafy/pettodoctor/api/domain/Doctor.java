@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -29,7 +30,7 @@ public class Doctor extends Account {
         doctor.setPassword(password);
         doctor.setRole("ROLE_DOCTOR");
         doctor.setTel(tel);
-        doctor.setJoinDate(LocalDateTime.now());
+        doctor.setJoinDate(LocalDate.now());
 
         doctor.setPysicianLicenseNumber(pysicianLicenseNumber);
         doctor.setSpecialty(specialty);
