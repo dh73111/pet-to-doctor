@@ -156,11 +156,11 @@ public class UserController {
         User user = null;
         if(!duplicated) {
             user = userService.oauthSignup(email, nickname);
-            System.out.println("소셜 회원가입");
+//            System.out.println("소셜 회원가입");
         }
         else{
             user = userService.getUserByEmail(email);
-            System.out.println("소셜 로그인");
+//            System.out.println("소셜 로그인");
         }
 
         status = HttpStatus.OK;
@@ -194,7 +194,7 @@ public class UserController {
                     kakaoTokenRequest,
                     String.class
             );
-            System.out.println(tokens);
+//            System.out.println(tokens);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -222,7 +222,7 @@ public class UserController {
                     kakaoInfoRequest,
                     String.class
             );
-            System.out.println(response);
+//            System.out.println(response);
         } catch (Exception e) {
             e.printStackTrace();
         }
