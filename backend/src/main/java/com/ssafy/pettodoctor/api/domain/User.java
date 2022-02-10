@@ -36,7 +36,7 @@ public class User extends Account {
         return user;
     }
 
-    public User createOauthUser(String email, String name){
+    public static User createOauthUser(String email, String name){
         User user = new User();
         user.setEmail(email);
         user.setName(name);
