@@ -34,7 +34,10 @@ function Review() {
       <Typography variant="h4" component="h1" sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
         리뷰
       </Typography>
-      <Box sx={{ border: "1px solid blue", mb: 4 }}>어떤걸 할지... 아직 안정함</Box>
+      <Box sx={{ border: "1px solid blue", mb: 4 }}>
+        병원리뷰순위 뿌려줄것임 아니면.. 음.. 머 대충그런거
+        <br /> 리뷰는 페이징으로하고 안되면 무한스크롤링ㄱ
+      </Box>
       <Box sx={{ border: "1px solid #309FB3", borderRadius: "4px", mb: 2 }}>
         <Typography sx={{ fontWeight: "600" }}>모든 리뷰({reviewlen})</Typography>
         <Button>등록순</Button>
