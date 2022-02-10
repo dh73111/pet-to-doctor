@@ -13,11 +13,12 @@ import logo from "../../components/logo.png";
 import DaumPostCode from "react-daum-postcode";
 import { border } from "@mui/system";
 import { registerUser } from "../../api/user.js";
-import { PestControl } from "@mui/icons-material";
+import { ElevenMpTwoTone, PestControl } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
+import { useForm } from "react-hook-form";
 
 function UserJoin(props) {
     const dispatch = useDispatch();
@@ -35,18 +36,49 @@ function UserJoin(props) {
         },
         pets: [],
     });
+    const [telError, setTelError] = useState("");
+    const [emailError, setEmailError] = useState("");
     const [passwordError, setPasswordError] = useState("");
 
     const [user, setUser] = useState({});
-    const [addressDetail, setAddress] = useState("");
-
+    const handleStreetChange = (prop) => (event) => {
+        setValues({
+            ...values,
+            ["address"]: {
+                city: values.address.city,
+                zipcode: values.address.zipcode,
+                street: event.target.value,
+            },
+        });
+    };
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value });
-        if (values.password === values.confirmPassword) {
-            setPasswordError("");
-            console.log(passwordError);
-        } else {
+        console.log(prop);
+        if (prop === "email") {
+            var emailVal = event.target.value;
+            var regExp =
+                /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
+            if (emailVal.match(regExp) != null) {
+                setEmailError("");
+            } else {
+                setEmailError("이메일을 정확히 입력해주세요");
+            }
+        }
+        if (prop === "tel") {
+            var telVal = event.target.value;
+            var regExp = /(\d{11})/;
+            if (telVal.match(regExp) != null) {
+                setTelError("");
+            } else {
+                setTelError("전화번호를 정확히 입력해주세요");
+            }
+        }
+        // console.log(prop, event.target.value);
+        if (values.password !== values.confirmPassword) {
             setPasswordError("비밀번호 불일치");
+            // console.log(passwordError);
+        } else {
+            setPasswordError("");
         }
     };
     async function userRegister(user) {
@@ -59,30 +91,24 @@ function UserJoin(props) {
                 address: {
                     zipcode: user.zipcode,
                     city: user.city,
-                    street: user.street + " " + user.de,
+                    street: user.street,
                 },
                 pets: [
                     {
-                        name: "a",
-                        birthDate: "",
+                        name: user.pets.name,
+                        birthDate: user.pets.birthDate,
                         species: user.pets.species,
-                        weight: "",
+                        weight: user.pets.weight,
                     },
                 ],
             },
             (res) => {
-                if (passwordError !== "") {
-                    alert("비밀번호를 확인하세요");
-                } else {
-                    console.log(user);
-                    dispatch({ type: "register" });
-                    alert("가입 성공");
-                    navigate("/petodoctor");
-                }
+                console.log(user);
+                dispatch({ type: "register" });
+                alert("가입 성공");
+                navigate("/petodoctor");
             },
-            () => {
-                alert("가입 실패");
-            }
+            () => {}
         );
     }
 
@@ -111,9 +137,9 @@ function UserJoin(props) {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-    const handleAddressChange = (event) => {
-        setAddress(event.target.value);
-    };
+    // const handleAddressChange = (event) => {
+    //     setAddress(event.target.value);
+    // };
     const handleComplete = (data) => {
         let fullAddress = data.address;
         let extraAddress = "";
@@ -129,7 +155,7 @@ function UserJoin(props) {
         console.log(fullAddress, data.zonecode, data.sido);
         setValues({
             ...values,
-            ["address"]: { street: fullAddress, zipcode: data.zonecode, city: data.sido },
+            ["address"]: { city: fullAddress, zipcode: data.zonecode },
         });
         // console.log(values);
         handleClose();
@@ -162,7 +188,10 @@ function UserJoin(props) {
                     autoFocus // 화면에서 바로 커서가 이 곳으로 이동
                     value={values.email}
                     onChange={handleChange("email")}
+                    error={emailError !== ""}
                 />
+                <Typography style={{ color: "red" }}>{emailError}</Typography>
+
                 <Typography component="h1" variant="h6">
                     비밀번호
                 </Typography>
@@ -190,6 +219,7 @@ function UserJoin(props) {
                     name="confirmPassword"
                     value={values.confirmPassword}
                     onChange={handleChange("confirmPassword")}
+                    onKeyPress={handleChange("confirmPassword")}
                     error={passwordError !== ""}
                 />
                 <Typography style={{ color: "red" }}>{passwordError}</Typography>
@@ -220,7 +250,9 @@ function UserJoin(props) {
                     name="tel"
                     value={values.tel}
                     onChange={handleChange("tel")}
+                    error={telError !== ""}
                 />
+                <Typography style={{ color: "red" }}>{telError}</Typography>
                 <Box>
                     <Box>
                         <Typography align="center" component="h1" variant="h6">
@@ -240,7 +272,7 @@ function UserJoin(props) {
                     </Box>
                     <TextField
                         style={{ width: 350 }}
-                        value={values.address.street}
+                        value={values.address.city}
                         margin="dense"
                         disabled
                     ></TextField>
@@ -250,10 +282,10 @@ function UserJoin(props) {
                     margin="dense"
                     placeholder="상세 주소"
                     required //값 반드시 입력
-                    id="addressdetail"
-                    name="addressdetail"
-                    value={addressDetail}
-                    onChange={handleAddressChange}
+                    id="street"
+                    name="street"
+                    value={values.address.street}
+                    onChange={handleStreetChange("street")}
                 />
                 <Typography mt={5} align="right" component="h1" variant="h6">
                     반려동물 정보(선택입력사항)
@@ -368,13 +400,19 @@ function UserJoin(props) {
                     size="large"
                     sx={{ mt: 3 }}
                     onClick={() => {
-                        if (passwordError === "") {
+                        if (emailError !== "") {
+                            alert("이메일을 확인해주세요");
+                        } else if (passwordError !== "") {
+                            alert("비밀번호를 확인해주세요");
+                        } else if (telError !== "") {
+                            alert("전화번호를 확인해주세요");
+                        } else {
                             let newValues = { ...values };
                             newValues.pets.push(pet);
                             setValues(newValues);
                             console.log(values);
                             userRegister(values);
-                        } else alert("가입 실패");
+                        }
                     }}
                 >
                     가입하기
