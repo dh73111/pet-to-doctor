@@ -1,7 +1,10 @@
 package com.ssafy.pettodoctor.api.service;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.ssafy.pettodoctor.api.domain.Pet;
 import com.ssafy.pettodoctor.api.domain.User;
+import com.ssafy.pettodoctor.api.domain.UserCertification;
 import com.ssafy.pettodoctor.api.repository.PetRepository;
 import com.ssafy.pettodoctor.api.repository.UserCertificationRepository;
 import com.ssafy.pettodoctor.api.repository.UserRepository;
@@ -17,10 +20,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
+import javax.net.ssl.HttpsURLConnection;
+import java.awt.*;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -49,6 +58,13 @@ public class UserService {
                 Pet p = Pet.createPet(pet.getName(), pet.getBirthDate(), pet.getSpecies(), pet.getWeight(), user);
                 petRepository.save(p);
             }
+        return user;
+    }
+
+    @Transactional
+    public User oauthSignup(String email, String nickname){
+        User user = User.createOauthUser(email, nickname);
+        userRepository.save(user);
         return user;
     }
 
@@ -105,7 +121,7 @@ public class UserService {
     @Transactional
     public boolean changePassword(Long id, UserPasswordChangeReq upcr) {
         User user = userRepository.findById(id).get();
-        if (upcr.getPassword().equals(upcr.getPasswordConf()) && user.getPassword().equals(upcr.getPassword())) {
+        if (upcr.getNewPassword().equals(upcr.getNewPasswordConf()) && user.getPassword().equals(upcr.getPassword())) {
             user.setPassword(upcr.getNewPassword());
             return true;
         }
@@ -142,6 +158,9 @@ public class UserService {
     @Transactional
     public void mailCertification(String certificationKey) {
         User user = userCertificationRepository.certificate(certificationKey).get();
+        UserCertification uc = userCertificationRepository.findByKey(certificationKey).get();
+        userCertificationRepository.delete(uc.getId());
         user.setIsCertificated(true);
     }
+
 }

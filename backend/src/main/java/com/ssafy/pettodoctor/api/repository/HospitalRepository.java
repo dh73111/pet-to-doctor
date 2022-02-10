@@ -17,7 +17,7 @@ public class HospitalRepository {
     }
 
     public List<Hospital> findByDongCode(String dongCode){
-        return em.createQuery("select h from Hospital h where h.dongCode = :dongCode")
+        return em.createQuery("select h from Hospital h where h.dongCode = :dongCode", Hospital.class)
                 .setParameter("dongCode", dongCode)
                 .getResultList();
     }
