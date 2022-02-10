@@ -45,12 +45,11 @@ function UserConsulting(props) {
                 console.log("add remotetrack success");
                 if (remoteVideoRef.current) {
                     remoteVideoRef.current.srcObject = ev.streams[0];
-                    remoteVideoRef.current.srcObject
-                        .getTracks()
-                        .forEach((track) => (track.onended = () => console.log("상대방비디오종료")));
                 }
             };
-
+            socketRef.current.emit("join_room", {
+                room: "1234",
+            });
             console.dir(localVideoRef.current.srcObject.getVideoTracks());
             console.dir(localVideoRef.current.srcObject.getAudioTracks());
         } catch (e) {
@@ -88,8 +87,6 @@ function UserConsulting(props) {
         }
     };
     useEffect(() => {
-        setVideoTracks();
-
         socketRef.current = io.connect(SOCKET_SERVER_URL);
         pcRef.current = new RTCPeerConnection(pc_config);
 
@@ -114,14 +111,7 @@ function UserConsulting(props) {
             await pcRef.current.addIceCandidate(new RTCIceCandidate(candidate));
             console.log("candidate add success");
         });
-
-        socketRef.current.on("otherVideoOff", () => {
-            console.log("전송받음");
-        });
-
-        socketRef.current.emit("join_room", {
-            room: "1234",
-        });
+        setVideoTracks();
 
         return () => {
             if (socketRef.current) {
@@ -136,14 +126,14 @@ function UserConsulting(props) {
     const [video, setVideo] = useState(true);
     const [mic, setMic] = useState(true);
 
-    const videoStartOrStop = (videoFlag) => {
+    const videoStartOrStop = () => {
         localVideoRef.current.srcObject.getVideoTracks().forEach((track) => {
             track.enabled = !track.enabled;
         });
         console.dir(localVideoRef.current.srcObject.getVideoTracks());
     };
 
-    const micStartOrStop = (micFlag) => {
+    const micStartOrStop = () => {
         localVideoRef.current.srcObject.getAudioTracks().forEach((track) => {
             track.enabled = !track.enabled;
         });
@@ -205,7 +195,7 @@ function UserConsulting(props) {
                         <></>
                     )}
                     <BottomNavigationAction
-                        onClick={({ history }) => {
+                        onClick={() => {
                             console.log("나가기");
                             socketRef.current.emit("disconnect");
 
