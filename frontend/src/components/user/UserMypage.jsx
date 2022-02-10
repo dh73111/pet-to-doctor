@@ -1,31 +1,14 @@
 import React, { useEffect, useState } from "react";
-import {
-  Avatar,
-  Box,
-  Button,
-  Card,
-  cardContentClasses,
-  CardMedia,
-  Checkbox,
-  Container,
-  Grid,
-  Input,
-  Paper,
-  TableCell,
-  TableHead,
-  TableRow,
-  TableSortLabel,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Card, CardMedia, Checkbox, Container, Grid, Input, Paper, TextField, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { userFavMark, addFavMark } from "../../api/mark.js";
 import { userInfo } from "../../api/user.js";
 import { deleteFavMark } from "../../api/mark.js";
-import { modifyPet, deletePet, registerPet, modifyPetPic, petList } from "../../api/pet.js";
+import { modifyPet, deletePet, registerPet, modifyPetPic, petList, petInfo } from "../../api/pet.js";
+import { CompareSharp } from "@mui/icons-material";
 
-// 마이페이지 메인 컴포넌트
+// 마이페이지 메인 최상단 컴포넌트
 function UserMypage(props) {
   const userId = useSelector((store) => store.user.id);
   const [user, setUser] = useState({
@@ -43,21 +26,15 @@ function UserMypage(props) {
     isOauth: true,
     isCertificated: false,
   });
-  // const currentUserInfo = useSelector((state) => state);
-  // console.log(currentUserInfo, "state 유저인포");
-  const [currentUserPet, setCurrentUserPets] = useState([]);
+  // const [currentUserPet, setCurrentUserPets] = useState([]);
   const [favHospitals, setfavHospitals] = useState([]);
 
   useEffect(() => {
     const init = async () => {
-      console.log(userId, " user ID");
       const user = await userInfo(userId);
-      console.log(user);
-      const userPets = await petList();
-      console.log(user);
-      console.log(userPets);
       setUser(user);
-      setCurrentUserPets(userPets);
+      // const userPets = await petList();
+      // setCurrentUserPets(userPets);
     };
     init();
     // userInfo(userId, (data) => {
@@ -76,7 +53,7 @@ function UserMypage(props) {
         마이페이지
       </Typography>
       <UserInfo user={user} />
-      <UserPetInfo pets={currentUserPet} />
+      <UserPetInfo user={user} /*pets={currentUserPet}*/ />
       <FavoriteHospital hospitals={favHospitals} />
     </Container>
   );
@@ -115,9 +92,17 @@ function UserInfo(props) {
 
 // 유저 펫 정보 컴포넌트
 function UserPetInfo(props) {
-  console.log(props, " UserPetInfo");
+  const [userPet, setUserPet] = useState([]);
   const [isAddNew, setIsAddNew] = useState(false);
-  const userPet = props.pets;
+  const [isPetMod, setIsPetMod] = useState(false);
+  // const userPet = props.pets;
+  useEffect(() => {
+    const init = async () => {
+      const userPets = await petList();
+      setUserPet(userPets);
+    };
+    init();
+  }, []);
 
   // 펫 추가 컴포넌트
   function AddPet() {
@@ -135,22 +120,18 @@ function UserPetInfo(props) {
     const handlePetInfo = (dataTitle) => (e) => {
       const dataTitle = e.target.name;
       const data = e.target.value;
-      console.log(dataTitle, " ", data);
+      // console.log(dataTitle, " ", data);
       setNewPetInfo({ ...newPetInfo, [dataTitle]: data });
     };
     const requestNewPet = async () => {
-      const newPet = await registerPet(newPetInfo);
-      console.log(newPet, "새로운펫 등록하자");
-      // console.log(newPetInfo);
-      // registerPet(
-      //   newPetInfo,
-      //   (res) => {
-      //     console.log(res, "새로운 펫 등록성공");
-      //   },
-      //   (res) => {
-      //     console.log(res, "새로운 펫 등록실패");
-      //   }
-      // );
+      await registerPet(newPetInfo).then(async (res) => {
+        if (res.message === "성공") {
+          const reloaded = await petList();
+          console.log("펫추가성공", reloaded);
+          setUserPet(reloaded);
+        }
+      });
+      setIsAddNew(false);
     };
     return (
       <>
@@ -178,30 +159,60 @@ function UserPetInfo(props) {
             <Button variant="contained" onClick={doneAddNew}>
               추가
             </Button>
-            <button onClick={requestNewPet}>유저펫추가테스트</button>
+            <button
+              onClick={() => {
+                requestNewPet();
+              }}
+            >
+              유저펫추가테스트
+            </button>
           </Grid>
         </Grid>
       </>
     );
-  }
-  const handleChangePetInfo = () => {};
-  const handleDeletePetInfo = (petId) => {
-    console.log("펫삭제할래용", petId);
+  } // 펫 추가 컴포넌트 끝
+
+  const [modPetInfo, setModPetInfo] = useState({
+    name: "string",
+    birthDate: "2022-02-10",
+    species: "string",
+    weight: "string",
+  });
+  const handleChangePetInfo = () => {
+    setIsPetMod(!isPetMod);
+  };
+  const changeModPetInfo = (title) => (e) => {
+    setModPetInfo({ ...modPetInfo, [title]: e.target.value });
+  };
+  const handleModPetInfo = async (petId) => {
+    const modPetRes = await modifyPet(petId, modPetInfo);
+    console.log(modPetRes, "펫정보변경결과");
+    setIsPetMod(!isPetMod);
+  };
+  // const handleFavMark = async (favId) => {
+  //   await deleteFavMark(favId).then(async () => {
+  //     const reFav = await userFavMark();
+  //     setfavHospitals(reFav);
+  //   });
+  // };
+  const handleDeletePetInfo = async (petId) => {
     const conf = window.confirm("반려동물 정보를 삭제합니다");
-    if (conf) {
-      deletePet(
-        petId,
-        (res) => {
-          console.log(res, "펫삭제성공");
-        },
-        (res) => {
-          console.log(res, "펫삭제실패");
-        }
-      );
+    if (conf === true) {
+      await deletePet(petId).then(async () => {
+        const rePets = await petList();
+        setUserPet(rePets);
+        alert("반려동물 정보 삭제를 성공했습니다.");
+      });
     } else {
-      console.log("반려동물 정보 삭제 취소");
+      alert("반려동물 정보 삭제를 취소했습니다.");
     }
   };
+  // const handleFavMark = async (favId) => {
+  //   await deleteFavMark(favId).then(async () => {
+  //     const reFav = await userFavMark();
+  //     setfavHospitals(reFav);
+  //   });
+  // };
   const changeAddNew = () => {
     if (!isAddNew) {
       setIsAddNew(true);
@@ -221,31 +232,71 @@ function UserPetInfo(props) {
           {userPet.map((pet, idx) => (
             <Grid key={idx} item sx={{ border: 1 }}>
               <Card>
-                <CardMedia component="img" height="140" src="/img/resHospital.png" alt="petPhoto" />
-                <Grid container>
-                  <Grid item xs={12}>
-                    {pet.name}
+                <CardMedia component="img" height="140" src={`${process.env.PUBLIC_URL}/img/dogDefaultProfile.jpg`} alt="petPhoto" />
+                {!isPetMod ? (
+                  <Grid container>
+                    <Grid item xs={12}>
+                      {pet.name}
+                    </Grid>
+                    <Grid item xs={12}>
+                      {pet.birthDate}
+                    </Grid>
+                    <Grid item xs={12}>
+                      {pet.species}
+                    </Grid>
+                    <Grid item xs={12}>
+                      {pet.weight}
+                    </Grid>
+                    <Button onClick={handleChangePetInfo} variant="contained">
+                      펫정보수정
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        handleDeletePetInfo(pet.id);
+                      }}
+                    >
+                      펫정보삭제
+                    </Button>
                   </Grid>
-                  <Grid item xs={12}>
-                    {pet.birthDate}
+                ) : (
+                  <Grid container>
+                    <Grid item xs={12}>
+                      <Input defaultValue={pet.name} onChange={changeModPetInfo("name")} />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Input defaultValue={pet.birthDate} onChange={changeModPetInfo("birthDate")} />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Input defaultValue={pet.species} onChange={changeModPetInfo("species")} />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Input defaultValue={pet.weight} onChange={changeModPetInfo("weight")} />
+                    </Grid>
+                    <Button
+                      onClick={() => {
+                        handleModPetInfo(pet.id);
+                      }}
+                      variant="contained"
+                    >
+                      펫정보수정완료
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setIsPetMod(false);
+                      }}
+                      variant="contained"
+                    >
+                      펫정보수정취소
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        handleDeletePetInfo(pet.id);
+                      }}
+                    >
+                      펫정보삭제
+                    </Button>
                   </Grid>
-                  <Grid item xs={12}>
-                    {pet.species}
-                  </Grid>
-                  <Grid item xs={12}>
-                    {pet.weight}
-                  </Grid>
-                  <Button onClick={handleChangePetInfo} variant="contained">
-                    펫정보수정
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      handleDeletePetInfo(pet.id);
-                    }}
-                  >
-                    펫정보삭제
-                  </Button>
-                </Grid>
+                )}
               </Card>
             </Grid>
           ))}
@@ -278,18 +329,14 @@ function FavoriteHospital() {
     });
   };
 
-  const handleFavMark = (favId) => (e) => {
-    e.preventDefault();
-    console.log(favId, "즐겨찾기 markID인자받아오기");
-    deleteFavMark(
-      favId,
-      (res) => {
-        console.log(res, "즐겨찾기삭제성공");
-      },
-      (res) => {
-        console.log(res, "즐겨찾기삭제실패");
-      }
-    );
+  const handleFavMark = async (favId) => {
+    const tmp = window.confirm("즐겨찾기를 삭제하시겠습니까?");
+    if (tmp === true) {
+      await deleteFavMark(favId).then(async () => {
+        const reFav = await userFavMark();
+        setfavHospitals(reFav);
+      });
+    }
   };
 
   const addMark = async () => {
@@ -347,7 +394,13 @@ function FavoriteHospital() {
                 <td>{fav.hospital_id} Hospital ID"</td>
                 <td>{fav.id} Mark res ID"</td>
                 <td>
-                  <Button onClick={handleFavMark(favId)}>즐겨찾기 삭제</Button>
+                  <Button
+                    onClick={() => {
+                      handleFavMark(favId);
+                    }}
+                  >
+                    즐겨찾기 삭제
+                  </Button>
                 </td>
               </tr>
             );

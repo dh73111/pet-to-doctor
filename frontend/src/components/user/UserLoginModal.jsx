@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { TextField, Grid, Checkbox, Button, FormControlLabel, Typography, Box, Link, Paper } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { loginUser, changePassword, userInfo } from "../../api/user.js";
+import { loginUser, changePassword, userInfo } from "api/user.js";
 import { useNavigate } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import { useDispatch } from "react-redux";
@@ -29,29 +29,38 @@ function UserLoginModal(props) {
   const REST_API_KEY = "c9d9cd706215602e662da44e2c2150a2";
   const REDIRECT_URI = "http://localhost:3000/kakaooauth";
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-  async function userLogin(user) {
-    await loginUser(
-      { email: user.email, password: user.password },
-      (res) => {
-        sessionStorage.setItem("accessToken", res.data.data);
-        let decode_token = jwtDecode(res.data.data);
-        userInfo(
-          decode_token.sub,
-          (res) => {
-            dispatch({ type: "login", userData: res.data.data });
-            props.onClose();
-            navigate("/petodoctor");
-          },
-          () => {
-            console.log("회원 정보가져오기 실패");
-          }
-        );
-      },
-      () => {
-        alert("아이디나 비밀번호가 틀렸습니다.");
-      }
-    );
-  }
+  const userLogin = async (user) => {
+    const loginRes = await loginUser({ email: user.email, password: user.password });
+    sessionStorage.setItem("accessToken", loginRes);
+    let decode_token = jwtDecode(loginRes);
+    const info = await userInfo(decode_token.sub);
+    await dispatch({ type: "login", userData: info });
+    props.onClose();
+    navigate("/petodoctor");
+  };
+  // async function userLogin(user) {
+  //   await loginUser(
+  //     { email: user.email, password: user.password },
+  //     (res) => {
+  //       sessionStorage.setItem("accessToken", res.data.data);
+  //       let decode_token = jwtDecode(res.data.data);
+  //       userInfo(
+  //         decode_token.sub,
+  //         (res) => {
+  //           dispatch({ type: "login", userData: res.data.data });
+  //           props.onClose();
+  //           navigate("/petodoctor");
+  //         },
+  //         () => {
+  //           console.log("회원 정보가져오기 실패");
+  //         }
+  //       );
+  //     },
+  //     () => {
+  //       alert("아이디나 비밀번호가 틀렸습니다.");
+  //     }
+  //   );
+  // }
   async function userChangePwd() {
     await changePassword(
       { password: "123", passwordConf: "123", newPassword: "1234" },
@@ -71,7 +80,7 @@ function UserLoginModal(props) {
             sm={4}
             md={7}
             sx={{
-              backgroundImage: `url('img/loginDog.jpg')`,
+              backgroundImage: `url('${process.env.PUBLIC_URL}/img/loginDog.jpg')`,
               backgroundRepeat: "no-repeat",
               backgroundColor: (t) => (t.palette.mode === "light" ? t.palette.grey[50] : t.palette.grey[900]),
               backgroundSize: "cover",
@@ -89,7 +98,7 @@ function UserLoginModal(props) {
               }}
             >
               <Typography component="h1" variant="h4">
-                <img src="img/web_logo.png" alt="펫투닥터로고" />
+                <img src={`${process.env.PUBLIC_URL}/img/web_logo.png`} alt="펫투닥터로고" />
               </Typography>
               <Box component="form" noValidate /*onSubmit={handleSubmit}*/ sx={{ mt: 1 }}>
                 <TextField
@@ -149,13 +158,13 @@ function UserLoginModal(props) {
                   </Grid>
                 </Grid>
                 <Button fullWidth variant="contained" sx={{ mt: 3, mb: 1 }} style={{ backgroundColor: "#03C75A" }}>
-                  <img src="img/naver.png" width="24px" alt="네이버로고" />
+                  <img src={`${process.env.PUBLIC_URL}/img/naver.png`} width="24px" alt="네이버로고" />
                   네이버로 로그인
                 </Button>
                 {/* 네이버그린 #03C75A */}
                 <a href={KAKAO_AUTH_URL} style={{ textDecoration: "none" }}>
                   <Button fullWidth variant="contained" sx={{ mb: 2 }} style={{ backgroundColor: "#FEE500", color: "#000000" }} to={KAKAO_AUTH_URL}>
-                    <img src="img/kakaolink_btn_small.png" width="24px" alt="카카오로고" />
+                    <img src={`${process.env.PUBLIC_URL}/img/kakaolink_btn_small.png`} width="24px" alt="카카오로고" />
                     카카오로 로그인
                   </Button>
                 </a>

@@ -35,3 +35,19 @@
 .favhospital tbody tr td {
   border-top: 1px solid #e5e5e5;
 }
+
+.test {
+  display: inline-block;
+  height: 80%;
+  border-radius: 100px;
+  margin-right: 10px;
+}
+.test2 {
+  display: inline-block;
+  height: 80%;
+  border-radius: 100px;
+}
+.test:hover,
+.test2:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}

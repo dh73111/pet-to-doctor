@@ -4,6 +4,8 @@ import { allReview } from "../api/review";
 
 function Review() {
   const [reviews, setReviews] = useState([]);
+  const [sortTime, setSortTime] = useState(false);
+  let sortByOld = [...reviews];
   const allReviews = {
     message: "성공",
     data: [
@@ -18,17 +20,31 @@ function Review() {
     ],
   };
   useEffect(() => {
-    allReview(
-      (res) => {
-        setReviews(res.data.data);
-        console.log("리뷰가져오기성공");
-      },
-      () => {
-        console.log("리뷰가져오기성공");
-      }
-    );
+    const init = async () => {
+      const res = await allReview();
+      await setReviews(res);
+      sortByOld = res;
+    };
+    init();
   }, []);
-  const reviewlen = allReviews.data.length;
+
+  const tempReview = [...sortByOld];
+  const sortByTime = (title) => {
+    if (title === "최신순") {
+      const sorted = tempReview.sort((a, b) => b.id - a.id);
+      setReviews(sorted);
+      setSortTime(true);
+    } else if (title === "작성순") {
+      const sorted2 = tempReview.sort((a, b) => a.id - b.id);
+      setReviews(sorted2);
+      setSortTime(false);
+    }
+  };
+  const sortByRate = () => {
+    const sorted = tempReview.sort((a, b) => b.rate - a.rate);
+    setReviews(sorted);
+  };
+
   return (
     <Container>
       <Typography variant="h4" component="h1" sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
@@ -37,12 +53,35 @@ function Review() {
       <Box sx={{ border: "1px solid blue", mb: 4 }}>
         병원리뷰순위 뿌려줄것임 아니면.. 음.. 머 대충그런거
         <br /> 리뷰는 페이징으로하고 안되면 무한스크롤링ㄱ
+        <Box>병원2위</Box>
+        <Box>병원1위</Box>
+        <Box>병원3위</Box>
       </Box>
       <Box sx={{ border: "1px solid #309FB3", borderRadius: "4px", mb: 2 }}>
-        <Typography sx={{ fontWeight: "600" }}>모든 리뷰({reviewlen})</Typography>
-        <Button>등록순</Button>
-        <Button>최신순</Button>
-        <Button>평점순</Button>
+        <Typography sx={{ fontWeight: "bold", fontSize: 25 }}>모든 리뷰({reviews.length})</Typography>
+        <Box sx={{ border: 1 }}>
+          <Button
+            onClick={() => {
+              sortByTime("최신순");
+            }}
+          >
+            최신순
+          </Button>
+          <Button
+            onClick={() => {
+              sortByTime("작성순");
+            }}
+          >
+            작성순
+          </Button>
+          <Button
+            onClick={() => {
+              sortByRate();
+            }}
+          >
+            평점순
+          </Button>
+        </Box>
       </Box>
       <Box>
         {reviews.map((review, idx) => {

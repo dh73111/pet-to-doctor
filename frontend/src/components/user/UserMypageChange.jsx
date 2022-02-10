@@ -37,7 +37,6 @@ const newTheme = createTheme();
 
 function UserMypageChange(props) {
   const location = useLocation(); // 넘겨주는 user값 location으로 주소
-  console.log(location.state, "LoC");
   const [newUserInfo, setNewUserInfo] = useState({
     name: location.state.name,
     tel: location.state.tel,
@@ -141,8 +140,10 @@ function UserMypageChange(props) {
     console.log(response);
   };
 
-  const requestPwChange = () => {
+  const requestPwChange = async () => {
     const prev = passwords.password;
+    const currentPwConf = await checkPassword(prev);
+    console.log(currentPwConf);
     // console.log(prev);
     // checkPassword(
     //   prev,
@@ -156,15 +157,15 @@ function UserMypageChange(props) {
     //     console.log("먼가 췍이 잘못댐");
     //   }
     // );
-    changePassword(
-      passwords,
-      (res) => {
-        console.log("비번체인지ㅇㅋ", res);
-      },
-      (res) => {
-        console.log("비번체인지ㄴㄴ", res);
-      }
-    );
+    // changePassword(
+    //   passwords,
+    //   (res) => {
+    //     console.log("비번체인지ㅇㅋ", res);
+    //   },
+    //   (res) => {
+    //     console.log("비번체인지ㄴㄴ", res);
+    //   }
+    // );
   };
 
   return (
@@ -288,7 +289,7 @@ function UserMypageChange(props) {
                         새로 사용할 비밀번호를 입력해주세요
                       </Typography>
                       <Typography gutterBottom variant="subtitle1" component="div" align="left">
-                        현재 비밀번호{""}
+                        현재 비밀번호
                       </Typography>
                       <Box
                         textAlign="center"
@@ -302,8 +303,8 @@ function UserMypageChange(props) {
                           required //값 반드시 입력
                           type="password"
                           name="password"
-                          // onChange={handlePasswords("password")}
-                        />{" "}
+                          onChange={handlePasswords("password")}
+                        />
                       </Box>
                       <Typography gutterBottom variant="subtitle1" component="div" align="left">
                         새 비밀번호
@@ -321,7 +322,7 @@ function UserMypageChange(props) {
                           name="newPassword"
                           type="newPassword"
                           // onChange={handlePasswords("newPassword")}
-                        />{" "}
+                        />
                       </Box>
                       <Typography gutterBottom variant="subtitle1" component="div" align="left">
                         새 비밀번호 확인
@@ -339,7 +340,7 @@ function UserMypageChange(props) {
                           type="newPasswordConf"
                           name="newPasswordConf"
                           // onChange={handlePasswords("newPasswordConf")}
-                        />{" "}
+                        />
                       </Box>
                       <Box textAlign="center">
                         <Button variant="contained" onClick={requestPwChange}>
