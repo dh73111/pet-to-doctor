@@ -7,7 +7,8 @@ import { loginApiInstance } from "./index.js";
 // }
 async function userFavMark() {
   const loginApi = loginApiInstance();
-  const response = await loginApi.get(`/user`);
+  const response = await loginApi.get(`/mark`);
+  console.log(response);
   return response.data.data;
 }
 
@@ -24,10 +25,15 @@ async function addFavMark(hospitalId) {
 }
 
 // 병원 즐겨찾기 삭제
-function deleteFavMark(markId, success, fail) {
-  const loginApi = loginApiInstance();
+// function deleteFavMark(markId, success, fail) {
+//   const loginApi = loginApiInstance();
 
-  loginApi.delete(`/mark/${markId}`).then(success).catch(fail);
+//   loginApi.delete(`/mark/${markId}`).then(success).catch(fail);
+// }
+async function deleteFavMark(markId) {
+  const loginApi = loginApiInstance();
+  const response = await loginApi.post(`/mark/${markId}`);
+  return response.data.data;
 }
 
 export { userFavMark, addFavMark, deleteFavMark };

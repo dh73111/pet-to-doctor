@@ -137,6 +137,7 @@ function UserMypageChange(props) {
   // };
   const requestChangeInfo = async () => {
     const response = await modifyUser(newUserInfo);
+    window.location.href = "http://localhost:3000/petodoctor/usermypage";
     console.log(response);
   };
 
@@ -268,14 +269,13 @@ function UserMypageChange(props) {
               </Grid>
             </Paper>
             <Box textAlign="center" sx={{ mt: 5 }}>
-              <NavLink
-                to={`/petodoctor/usermypage`}
+              <Button
                 onClick={() => {
                   requestChangeInfo(newUserInfo);
                 }}
               >
                 수정 완료
-              </NavLink>
+              </Button>
             </Box>
           </TabPanel>
           <TabPanel value={value} index={1}>

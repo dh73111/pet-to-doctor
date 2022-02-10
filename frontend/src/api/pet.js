@@ -3,8 +3,12 @@ import { apiInstance, loginApiInstance } from "./index.js";
 const api = apiInstance();
 
 // 반려동물 정보 조회
-function petInfo(petId, success, fail) {
-  api.get(`/pet/${petId}`).then(success).catch(fail);
+// function petInfo(petId, success, fail) {
+//   api.get(`/pet/${petId}`).then(success).catch(fail);
+// }
+async function petInfo(petId) {
+  const response = await api.get(`/pet/${petId}`);
+  return response.data.data;
 }
 
 // 반려동물 정보 수정
@@ -19,9 +23,14 @@ function deletePet(petId, success, fail) {
 }
 
 // 반려동물 정보 등록
-function registerPet(pet, success, fail) {
+// function registerPet(pet, success, fail) {
+//   const loginApi = loginApiInstance();
+//   loginApi.post(`/pet`, JSON.stringify(pet)).then(success).catch(fail);
+// }
+async function registerPet(pet) {
   const loginApi = loginApiInstance();
-  loginApi.post(`/pet`, JSON.stringify(pet)).then(success).catch(fail);
+  const response = await loginApi.post(`/pet`, JSON.stringify(pet));
+  return response.data;
 }
 
 //사진은 어떻게...

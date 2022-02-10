@@ -29,22 +29,19 @@ import { modifyPet, deletePet, registerPet, modifyPetPic, petList } from "../../
 function UserMypage(props) {
   const userId = useSelector((store) => store.user.id);
   const [user, setUser] = useState({
-    message: "회원정보 조회 테스트",
-    data: {
-      id: "",
-      email: "",
-      name: "",
-      role: null,
-      tel: "",
-      joinDate: "",
-      address: {
-        city: "",
-        street: "",
-        zipcode: "",
-      },
-      isOauth: true,
-      isCertificated: false,
+    id: "",
+    email: "",
+    name: "",
+    role: null,
+    tel: "",
+    joinDate: "",
+    address: {
+      city: "",
+      street: "",
+      zipcode: "",
     },
+    isOauth: true,
+    isCertificated: false,
   });
   // const currentUserInfo = useSelector((state) => state);
   // console.log(currentUserInfo, "state 유저인포");
@@ -87,7 +84,7 @@ function UserMypage(props) {
 
 // 유저 정보 컴포넌트
 function UserInfo(props) {
-  const informationUser = props.user.data;
+  const informationUser = props.user;
 
   return (
     <Grid container>
@@ -141,17 +138,19 @@ function UserPetInfo(props) {
       console.log(dataTitle, " ", data);
       setNewPetInfo({ ...newPetInfo, [dataTitle]: data });
     };
-    const requestNewPet = () => {
-      console.log(newPetInfo);
-      registerPet(
-        newPetInfo,
-        (res) => {
-          console.log(res, "새로운 펫 등록성공");
-        },
-        (res) => {
-          console.log(res, "새로운 펫 등록실패");
-        }
-      );
+    const requestNewPet = async () => {
+      const newPet = await registerPet(newPetInfo);
+      console.log(newPet, "새로운펫 등록하자");
+      // console.log(newPetInfo);
+      // registerPet(
+      //   newPetInfo,
+      //   (res) => {
+      //     console.log(res, "새로운 펫 등록성공");
+      //   },
+      //   (res) => {
+      //     console.log(res, "새로운 펫 등록실패");
+      //   }
+      // );
     };
     return (
       <>
@@ -187,16 +186,21 @@ function UserPetInfo(props) {
   }
   const handleChangePetInfo = () => {};
   const handleDeletePetInfo = (petId) => {
-    console.log("펫삭제", petId);
-    deletePet(
-      petId,
-      (res) => {
-        console.log(res, "펫삭제성공");
-      },
-      (res) => {
-        console.log(res, "펫삭제실패");
-      }
-    );
+    console.log("펫삭제할래용", petId);
+    const conf = window.confirm("반려동물 정보를 삭제합니다");
+    if (conf) {
+      deletePet(
+        petId,
+        (res) => {
+          console.log(res, "펫삭제성공");
+        },
+        (res) => {
+          console.log(res, "펫삭제실패");
+        }
+      );
+    } else {
+      console.log("반려동물 정보 삭제 취소");
+    }
   };
   const changeAddNew = () => {
     if (!isAddNew) {
@@ -260,15 +264,11 @@ function FavoriteHospital() {
   console.log(favHospitals, "즐겨찾는병원저장");
 
   useEffect(() => {
-    userFavMark(
-      (res) => {
-        console.log("(요청)즐겨찾는병원", res);
-        setfavHospitals(res.data.data);
-      },
-      () => {
-        console.log("즐겨찾기 못가져옴");
-      }
-    );
+    const init = async () => {
+      const userFav = await userFavMark();
+      setfavHospitals(userFav);
+    };
+    init();
   }, []);
 
   const markTest = () => {
