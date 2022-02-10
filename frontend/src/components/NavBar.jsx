@@ -21,7 +21,8 @@ import { NavLink, useNavigate } from "react-router-dom";
 import UserLoginModal from "./user/UserLoginModal";
 import Banner from "./user/resources/Banner";
 import MainSearchBar from "./user/resources/MainSearchBar";
-import { CallOutlined, PersonOutlineOutlined, SupportAgent } from "@mui/icons-material";
+import { PersonOutlineOutlined } from "@mui/icons-material";
+import LiveHelpOutlined from "@mui/icons-material/LiveHelpOutlined";
 
 const pages = [
     { id: 1, path: "/petodoctor/userreservation", name: "내 예약" },
@@ -211,21 +212,24 @@ const NavTop = (props) => {
                             justifyContent: "space-between",
                         }}
                     >
-                        <NavLink to="/petodoctor">
-                            <img src="./img/web_logo.png" width="150px" alt="logo" />
+                        <NavLink
+                            to="/petodoctor"
+                            onClick={() => {
+                                props.clickNav(0);
+                            }}
+                        >
+                            <img src={`${process.env.PUBLIC_URL}/img/web_logo.png`} width="150px" alt="logo" />
                         </NavLink>
                         <MainSearchBar />
-                        <Box>
-                            <NavLink to="/petodoctor">
-                                <NotificationsNoneIcon
-                                    sx={{ fontSize: "36px", marginRight: "10px", color: "#cacaca" }}
-                                />
+                        <Box sx={{ pt: 1 }}>
+                            <NavLink to="/petodoctor" className="test">
+                                <NotificationsNoneIcon sx={{ fontSize: "30px", color: "#309FB3" }} />
                             </NavLink>
-                            <NavLink to="/petodoctor/usermypage">
-                                <PersonOutlineOutlined sx={{ fontSize: "36px", marginRight: "10px" }} />
+                            <NavLink to="/petodoctor/usermypage" className="test">
+                                <PersonOutlineOutlined sx={{ fontSize: "30px", color: "#309FB3" }} />
                             </NavLink>
-                            <NavLink to="/petodoctor/qna">
-                                <SupportAgent sx={{ fontSize: "36px" }} />
+                            <NavLink to="/petodoctor/qna" className="test2">
+                                <LiveHelpOutlined sx={{ fontSize: "30px", color: "#309FB3" }} />
                             </NavLink>
                         </Box>
                     </Box>
@@ -298,7 +302,6 @@ const NavTop = (props) => {
         </Box>
     );
 };
-
 // ------------- 스크롤 STICKY 하단 NAVBAR -------------
 function NavBottom(props) {
     const [anchorElNav, setAnchorElNav] = useState(null);
@@ -313,7 +316,7 @@ function NavBottom(props) {
         if (id === props.selectNav) props.clickNav(id);
     };
 
-    let MyButton = (page, selectedColor) => (
+    let MyButton = (page, selectedColor, fontWeight) => (
         <Box
             key={page}
             onClick={() => {
@@ -321,7 +324,7 @@ function NavBottom(props) {
             }}
             sx={{ color: selectedColor, display: "block" }}
         >
-            <Typography sx={{ fontSize: 17 }}>{page.name}</Typography>
+            <Typography sx={{ fontSize: 17, fontWeight: fontWeight }}>{page.name}</Typography>
         </Box>
     );
 
@@ -332,7 +335,9 @@ function NavBottom(props) {
                 <Box sx={{ width: "100%", display: { xs: "none", md: "flex" }, justifyContent: "space-between" }}>
                     {pages.map((page) => (
                         <NavLink to={page.path} key={page.path} style={{ textDecoration: "none" }}>
-                            {props.selectedNav === page.id ? MyButton(page, "#29A1B1") : MyButton(page, "black")}
+                            {props.selectedNav === page.id
+                                ? MyButton(page, "#29A1B1", "bold")
+                                : MyButton(page, "black")}
                         </NavLink>
                     ))}
                 </Box>
@@ -342,7 +347,9 @@ function NavBottom(props) {
                 <Box sx={{ width: "100%", display: { xs: "none", md: "flex" }, justifyContent: "space-between" }}>
                     {doctorpages.map((page) => (
                         <NavLink to={page.path} key={page.path} style={{ textDecoration: "none" }}>
-                            {props.selectedNav === page.id ? MyButton(page, "#29A1B1") : MyButton(page, "black")}
+                            {props.selectedNav === page.id
+                                ? MyButton(page, "#29A1B1", "bold")
+                                : MyButton(page, "black")}
                         </NavLink>
                     ))}
                 </Box>
@@ -355,7 +362,7 @@ function NavBottom(props) {
             sx={{
                 position: "sticky",
                 top: 0,
-                zIndex: "9999",
+                zIndex: "2",
                 borderTop: "1px solid #e7e7e7",
                 borderBottom: "1px solid #e7e7e7",
             }}
@@ -370,7 +377,7 @@ function NavBottom(props) {
                             component="div"
                             sx={{ display: { xs: "flex", md: "none" }, flexGrow: 1 }}
                         >
-                            <img src="img/web_logo.png" width="150px" alt="logo"></img>
+                            <img src={`${process.env.PUBLIC_URL}/img/web_logo.png`} width="150px" alt="logo"></img>
                         </Typography>
                         <Box sx={{ display: { xs: "flex", md: "none" } }}>
                             <IconButton

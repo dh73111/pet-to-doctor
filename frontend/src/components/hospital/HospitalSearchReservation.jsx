@@ -21,7 +21,6 @@ import Button from "@mui/material/Button";
 
 function HospitalSearchReservation(props) {
     const { kakao } = window;
-
     const [values, setValues] = useState({
         name: "",
         weight: "",

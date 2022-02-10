@@ -1,63 +1,49 @@
 import React, { useEffect, useState } from "react";
-import {
-  Avatar,
-  Box,
-  Button,
-  Card,
-  cardContentClasses,
-  CardMedia,
-  Checkbox,
-  Container,
-  Grid,
-  Input,
-  Paper,
-  TableCell,
-  TableHead,
-  TableRow,
-  TableSortLabel,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Card, CardMedia, Checkbox, Container, Grid, Input, Paper, TextField, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { userFavMark, addFavMark } from "../../api/mark.js";
 import { userInfo } from "../../api/user.js";
-import { modifyPet, deletePet, registerPet, modifyPetPic, petList } from "../../api/pet.js";
+import { deleteFavMark } from "../../api/mark.js";
+import { modifyPet, deletePet, registerPet, modifyPetPic, petList, petInfo } from "../../api/pet.js";
+import { CompareSharp } from "@mui/icons-material";
 
-// 마이페이지 메인 컴포넌트
+// 마이페이지 메인 최상단 컴포넌트
 function UserMypage(props) {
   const userId = useSelector((store) => store.user.id);
   const [user, setUser] = useState({
-    message: "회원정보 조회 테스트",
-    data: {
-      id: "",
-      email: "",
-      name: "",
-      role: null,
-      tel: "",
-      joinDate: "",
-      address: {
-        city: "",
-        street: "",
-        zipcode: "",
-      },
-      isOauth: true,
-      isCertificated: false,
+    id: "",
+    email: "",
+    name: "",
+    role: null,
+    tel: "",
+    joinDate: "",
+    address: {
+      city: "",
+      street: "",
+      zipcode: "",
     },
+    isOauth: true,
+    isCertificated: false,
   });
-  // const currentUserInfo = useSelector((state) => state);
-  // console.log(currentUserInfo, "state 유저인포");
-  const [currentUserPet, setCurrentUserPets] = useState([]);
+  // const [currentUserPet, setCurrentUserPets] = useState([]);
   const [favHospitals, setfavHospitals] = useState([]);
 
   useEffect(() => {
-    userInfo(userId, (data) => {
-      console.log(data.data, "userInfo API");
-      setUser(data.data);
-    });
-    petList((res) => {
-      setCurrentUserPets(res.data.data, "pet API");
-    });
+    const init = async () => {
+      const user = await userInfo(userId);
+      setUser(user);
+      // const userPets = await petList();
+      // setCurrentUserPets(userPets);
+    };
+    init();
+    // userInfo(userId, (data) => {
+    //   console.log(data.data, "userInfo API");
+    //   setUser(data.data);
+    // });
+    // petList((res) => {
+    //   setCurrentUserPets(res.data.data, "pet API");
+    // });
     // userFavMark((data) => [console.log("(요청)즐겨찾는병원", data)]);
   }, []);
 
@@ -67,7 +53,7 @@ function UserMypage(props) {
         마이페이지
       </Typography>
       <UserInfo user={user} />
-      <UserPetInfo pets={currentUserPet} />
+      <UserPetInfo user={user} /*pets={currentUserPet}*/ />
       <FavoriteHospital hospitals={favHospitals} />
     </Container>
   );
@@ -75,7 +61,7 @@ function UserMypage(props) {
 
 // 유저 정보 컴포넌트
 function UserInfo(props) {
-  const user = props.user.data;
+  const informationUser = props.user;
 
   return (
     <Grid container>
@@ -86,13 +72,14 @@ function UserInfo(props) {
             <Box item xs={12} sx={{ width: "100%", height: "100%", backgroundColor: "#eaeaea" }}></Box>
           </Grid>
           <Grid item xs={12} md={8} sx={{ border: 1 }}>
-            <Box sx={{ typography: "h5" }}>{user.name}</Box>
-            <Box sx={{ typography: "body1" }}>{user.email}</Box>
-            <Box sx={{ typography: "body1" }}>{user.tel}</Box>
-            <Box sx={{ typography: "body1" }}>{user.address.street}</Box>
+            <Box sx={{ typography: "h5" }}>{informationUser.name}</Box>
+            <Box sx={{ typography: "body1" }}>{informationUser.email}</Box>
+            <Box sx={{ typography: "body1" }}>{informationUser.tel}</Box>
+            <Box sx={{ typography: "body1" }}>{informationUser.address.city}</Box>
+            <Box sx={{ typography: "body1" }}>{informationUser.address.street}</Box>
           </Grid>
           <Box sx={{ mt: 2, mx: 2 }}>
-            <Link to={`/petodoctor/usermypage/${user.id}`}>
+            <Link to={`/petodoctor/usermypage/${informationUser.id}`} state={informationUser}>
               <Button varient="contained">회원정보 수정</Button>
             </Link>
             <Outlet />
@@ -105,9 +92,17 @@ function UserInfo(props) {
 
 // 유저 펫 정보 컴포넌트
 function UserPetInfo(props) {
-  console.log(props, " UserPetInfo");
+  const [userPet, setUserPet] = useState([]);
   const [isAddNew, setIsAddNew] = useState(false);
-  const userPet = props.pets;
+  const [isPetMod, setIsPetMod] = useState(false);
+  // const userPet = props.pets;
+  useEffect(() => {
+    const init = async () => {
+      const userPets = await petList();
+      setUserPet(userPets);
+    };
+    init();
+  }, []);
 
   // 펫 추가 컴포넌트
   function AddPet() {
@@ -125,20 +120,18 @@ function UserPetInfo(props) {
     const handlePetInfo = (dataTitle) => (e) => {
       const dataTitle = e.target.name;
       const data = e.target.value;
-      console.log(dataTitle, " ", data);
+      // console.log(dataTitle, " ", data);
       setNewPetInfo({ ...newPetInfo, [dataTitle]: data });
     };
-    const requestNewPet = () => {
-      console.log(newPetInfo);
-      registerPet(
-        newPetInfo,
-        (res) => {
-          console.log(res, "새로운 펫 등록성공");
-        },
-        (res) => {
-          console.log(res, "새로운 펫 등록실패");
+    const requestNewPet = async () => {
+      await registerPet(newPetInfo).then(async (res) => {
+        if (res.message === "성공") {
+          const reloaded = await petList();
+          console.log("펫추가성공", reloaded);
+          setUserPet(reloaded);
         }
-      );
+      });
+      setIsAddNew(false);
     };
     return (
       <>
@@ -166,14 +159,60 @@ function UserPetInfo(props) {
             <Button variant="contained" onClick={doneAddNew}>
               추가
             </Button>
-            <button onClick={requestNewPet}>유저펫추가테스트</button>
+            <button
+              onClick={() => {
+                requestNewPet();
+              }}
+            >
+              유저펫추가테스트
+            </button>
           </Grid>
         </Grid>
       </>
     );
-  }
-  const handleChangePetInfo = () => {};
+  } // 펫 추가 컴포넌트 끝
 
+  const [modPetInfo, setModPetInfo] = useState({
+    name: "string",
+    birthDate: "2022-02-10",
+    species: "string",
+    weight: "string",
+  });
+  const handleChangePetInfo = () => {
+    setIsPetMod(!isPetMod);
+  };
+  const changeModPetInfo = (title) => (e) => {
+    setModPetInfo({ ...modPetInfo, [title]: e.target.value });
+  };
+  const handleModPetInfo = async (petId) => {
+    const modPetRes = await modifyPet(petId, modPetInfo);
+    console.log(modPetRes, "펫정보변경결과");
+    setIsPetMod(!isPetMod);
+  };
+  // const handleFavMark = async (favId) => {
+  //   await deleteFavMark(favId).then(async () => {
+  //     const reFav = await userFavMark();
+  //     setfavHospitals(reFav);
+  //   });
+  // };
+  const handleDeletePetInfo = async (petId) => {
+    const conf = window.confirm("반려동물 정보를 삭제합니다");
+    if (conf === true) {
+      await deletePet(petId).then(async () => {
+        const rePets = await petList();
+        setUserPet(rePets);
+        alert("반려동물 정보 삭제를 성공했습니다.");
+      });
+    } else {
+      alert("반려동물 정보 삭제를 취소했습니다.");
+    }
+  };
+  // const handleFavMark = async (favId) => {
+  //   await deleteFavMark(favId).then(async () => {
+  //     const reFav = await userFavMark();
+  //     setfavHospitals(reFav);
+  //   });
+  // };
   const changeAddNew = () => {
     if (!isAddNew) {
       setIsAddNew(true);
@@ -190,27 +229,74 @@ function UserPetInfo(props) {
           더 추가하기
         </Button>
         <Grid container>
-          {userPet.map((pet) => (
-            <Grid key={pet.idx} item sx={{ border: 1 }}>
+          {userPet.map((pet, idx) => (
+            <Grid key={idx} item sx={{ border: 1 }}>
               <Card>
-                <CardMedia component="img" height="140" image="img/resHospital.png" alt="petPhoto" />
-                <Grid container>
-                  <Grid item xs={12}>
-                    {pet.name}
+                <CardMedia component="img" height="140" src={`${process.env.PUBLIC_URL}/img/dogDefaultProfile.jpg`} alt="petPhoto" />
+                {!isPetMod ? (
+                  <Grid container>
+                    <Grid item xs={12}>
+                      {pet.name}
+                    </Grid>
+                    <Grid item xs={12}>
+                      {pet.birthDate}
+                    </Grid>
+                    <Grid item xs={12}>
+                      {pet.species}
+                    </Grid>
+                    <Grid item xs={12}>
+                      {pet.weight}
+                    </Grid>
+                    <Button onClick={handleChangePetInfo} variant="contained">
+                      펫정보수정
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        handleDeletePetInfo(pet.id);
+                      }}
+                    >
+                      펫정보삭제
+                    </Button>
                   </Grid>
-                  <Grid item xs={12}>
-                    {pet.birthDate}
+                ) : (
+                  <Grid container>
+                    <Grid item xs={12}>
+                      <Input defaultValue={pet.name} onChange={changeModPetInfo("name")} />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Input defaultValue={pet.birthDate} onChange={changeModPetInfo("birthDate")} />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Input defaultValue={pet.species} onChange={changeModPetInfo("species")} />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Input defaultValue={pet.weight} onChange={changeModPetInfo("weight")} />
+                    </Grid>
+                    <Button
+                      onClick={() => {
+                        handleModPetInfo(pet.id);
+                      }}
+                      variant="contained"
+                    >
+                      펫정보수정완료
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setIsPetMod(false);
+                      }}
+                      variant="contained"
+                    >
+                      펫정보수정취소
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        handleDeletePetInfo(pet.id);
+                      }}
+                    >
+                      펫정보삭제
+                    </Button>
                   </Grid>
-                  <Grid item xs={12}>
-                    {pet.species}
-                  </Grid>
-                  <Grid item xs={12}>
-                    {pet.weight}
-                  </Grid>
-                  <Button onClick={handleChangePetInfo} variant="contained">
-                    펫정보수정
-                  </Button>
-                </Grid>
+                )}
               </Card>
             </Grid>
           ))}
@@ -226,39 +312,43 @@ function UserPetInfo(props) {
 // 유저 즐겨찾는 병원 컴포넌트
 function FavoriteHospital() {
   const [favHospitals, setfavHospitals] = useState([]);
+  console.log(favHospitals, "즐겨찾는병원저장");
 
   useEffect(() => {
-    userFavMark(
-      (res) => {
-        console.log("(요청)즐겨찾는병원", res);
-        setfavHospitals(res);
-      },
-      () => {
-        console.log("즐겨찾기 못가져옴");
-      }
-    );
+    const init = async () => {
+      const userFav = await userFavMark();
+      setfavHospitals(userFav);
+    };
+    init();
   }, []);
 
   const markTest = () => {
     userFavMark((res) => {
       console.log("(요청)즐겨찾는병원", res);
-      setfavHospitals(res);
+      setfavHospitals(res.data.data);
     });
   };
 
-  const handleFavMark = () => {
-    console.log("즐겨찾기삭제");
+  const handleFavMark = async (favId) => {
+    const tmp = window.confirm("즐겨찾기를 삭제하시겠습니까?");
+    if (tmp === true) {
+      await deleteFavMark(favId).then(async () => {
+        const reFav = await userFavMark();
+        setfavHospitals(reFav);
+      });
+    }
   };
 
-  const addMark = () => {
-    addFavMark(
-      ("162",
+  const addMark = async () => {
+    console.log("11");
+    await addFavMark(
+      160,
       (res) => {
         console.log(res, "즐겨찾기추가성공");
       },
       (res) => {
         console.log(res, "즐겨찾기추가실패");
-      })
+      }
     );
   };
   return (
@@ -289,25 +379,32 @@ function FavoriteHospital() {
             <td>인천광역시 남동구 논현동 751-1 에코메트로3차 더타워상가 C동 1층 24시 소래동물병원</td>
             <td>02-1234-5678</td>
             <td>
-              <Button onClick={handleFavMark}>즐겨찾기 삭제</Button>
+              <Button>즐겨찾기 삭제 깡통</Button>
             </td>
           </tr>
-          {/* {favHospitals.map((fav, idx) => {
-                        return (
-                            <tr key={idx}>
-                                <td>
-                                    <Checkbox />
-                                </td>
-                                <td>이미지</td>
-                                <td>{fav.hospital.name}</td>
-                                <td>{fav.hospital.address.street}</td>
-                                <td>{fav.hospital.tel}</td>
-                                <td>
-                                    <Button onClick={handleFavMark}>즐겨찾기 삭제</Button>
-                                </td>
-                            </tr>
-                        );
-                    })} */}
+          {favHospitals.map((fav, idx) => {
+            const favId = fav.id;
+            return (
+              <tr key={idx}>
+                <td>
+                  <Checkbox />
+                </td>
+                <td>이미지</td>
+                <td>{fav.user_id} User ID"</td>
+                <td>{fav.hospital_id} Hospital ID"</td>
+                <td>{fav.id} Mark res ID"</td>
+                <td>
+                  <Button
+                    onClick={() => {
+                      handleFavMark(favId);
+                    }}
+                  >
+                    즐겨찾기 삭제
+                  </Button>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
         <tfoot>
           <tr></tr>

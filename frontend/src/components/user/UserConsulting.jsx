@@ -50,9 +50,7 @@ function UserConsulting(props) {
                         .forEach((track) => (track.onended = () => console.log("상대방비디오종료")));
                 }
             };
-            socketRef.current.emit("join_room", {
-                room: "1234",
-            });
+
             console.dir(localVideoRef.current.srcObject.getVideoTracks());
             console.dir(localVideoRef.current.srcObject.getAudioTracks());
         } catch (e) {
@@ -90,6 +88,8 @@ function UserConsulting(props) {
         }
     };
     useEffect(() => {
+        setVideoTracks();
+
         socketRef.current = io.connect(SOCKET_SERVER_URL);
         pcRef.current = new RTCPeerConnection(pc_config);
 
@@ -118,7 +118,11 @@ function UserConsulting(props) {
         socketRef.current.on("otherVideoOff", () => {
             console.log("전송받음");
         });
-        setVideoTracks();
+
+        socketRef.current.emit("join_room", {
+            room: "1234",
+        });
+
         return () => {
             if (socketRef.current) {
                 socketRef.current.disconnect();
@@ -155,6 +159,7 @@ function UserConsulting(props) {
                             style={{ width: "98%", height: 500, margin: 5, background: "black" }}
                             ref={localVideoRef}
                             autoPlay
+                            muted
                         ></video>
                     </Box>
                 </Grid>

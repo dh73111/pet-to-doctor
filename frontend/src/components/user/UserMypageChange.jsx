@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Typography, Grid, Box, Container, Tabs, Tab, Paper, createTheme, ThemeProvider, TextField, Button, Link, Modal } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { Typography, Grid, Box, Container, Tabs, Tab, Paper, createTheme, ThemeProvider, TextField, Button, Modal } from "@mui/material";
+import { useLocation, useParams, NavLink, Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import logo from "../../components/logo.png";
 import DaumPostCode from "react-daum-postcode";
-import { userInfo, modifyUser, modifyUserPic } from "../../api/user.js";
+import { useNavigate } from "react-router-dom";
+import { modifyUser, modifyUserPic, checkPassword, changePassword } from "../../api/user.js";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
-
   return (
     <div role="tabpanel" hidden={value !== index} id={`simple-tabpanel-${index}`} aria-labelledby={`simple-tab-${index}`} {...other}>
       {value === index && (
@@ -36,30 +36,30 @@ function a11yProps(index) {
 const newTheme = createTheme();
 
 function UserMypageChange(props) {
-  const [user, setUser] = useState();
-  const params = useParams();
-  const userId = params.userId;
-
-  useEffect(() => {
-    userInfo(userId, (data) => {
-      console.log(data.data.data, "userInfo API from UserpageChange");
-      setUser(data.data.data);
-    });
-  }, [userId]);
-
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+  const location = useLocation(); // 넘겨주는 user값 location으로 주소
+  const [newUserInfo, setNewUserInfo] = useState({
+    name: location.state.name,
+    tel: location.state.tel,
+    joinDate: location.state.joinDate,
+    address: {
+      city: location.state.address.city,
+      street: location.state.address.street,
+      zipcode: location.state.address.zipcode,
+    },
+    isCertificated: true,
+  });
+  const [value, setValue] = useState(0);
+  const [open, setOpen] = useState(false);
+  const [onLoad, setOnLoad] = useState(false);
   const [address, setAddress] = useState("");
   const [zipcode, setZipcode] = useState("");
   const [city, setCity] = useState("");
+  const [passwords, setPasswords] = useState({
+    password: "",
+    newPassword: "",
+    newPasswordConf: "",
+  });
 
-  //   useEffect(() => {
-  //     setAddress(user.street);
-  //   }, user);
-  // 주소 찾기
   const style = {
     position: "absolute",
     top: "50%",
@@ -71,10 +71,17 @@ function UserMypageChange(props) {
     p: 2,
   };
 
-  const [open, setOpen] = React.useState(false);
+  useEffect(() => {
+    setAddress(location.state.address.city);
+  }, []);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleComplete = (data) => {
+    console.log(data, "from handle complete");
     let fullAddress = data.address;
     let extraAddress = "";
     let zonecode = "";
@@ -92,19 +99,79 @@ function UserMypageChange(props) {
     setZipcode(data.zonecode);
     setCity(data.sido);
     console.log(fullAddress);
+    setNewUserInfo({ ...newUserInfo, address: { city: fullAddress, zipcode: data.zonecode } });
+    console.log(newUserInfo);
     //fullAddress -> 전체 주소반환
   };
+
+  const handleChangeUserInfo = (dataTitle) => (e) => {
+    const data = e.target.value;
+    if (dataTitle == "city" || dataTitle == "street") {
+      setNewUserInfo({ ...newUserInfo, address: { ...newUserInfo.address, [dataTitle]: data } });
+    } else {
+      setNewUserInfo({ ...newUserInfo, [dataTitle]: data });
+    }
+  };
+
+  const handlePasswords = (pwTitle) => (e) => {
+    console.log(pwTitle, e.target.value);
+    setPasswords({ ...passwords, [pwTitle]: e.target.value });
+  };
+
+  // const requestChangeInfo = async (user) => {
+  //   console.log(user, "보내는 유저");
+  //   const response = await modifyUser(user);
+  //   console.log(response);
+  //   // console.log(result, " 결과!!!!!");
+  //   // navigate("/petodoctor");
+  //   // modifyUser(
+  //   //   newUserInfo,
+  //   //   (res) => {
+  //   //     console.log(res, "체인지요청성공");
+  //   //   },
+  //   //   (res) => {
+  //   //     console.log(res, "체인지요청실패");
+  //   //   }
+  //   // );
+  // };
+  const requestChangeInfo = async () => {
+    const response = await modifyUser(newUserInfo);
+    window.location.href = "http://localhost:3000/petodoctor/usermypage";
+    console.log(response);
+  };
+
+  const requestPwChange = async () => {
+    const prev = passwords.password;
+    const currentPwConf = await checkPassword(prev);
+    console.log(currentPwConf);
+    // console.log(prev);
+    // checkPassword(
+    //   prev,
+    //   (res) => {
+    //     console.log("췤", res.data);
+    //     if (res.data.result === false) {
+    //       alert("현재 비밀번호가 일치하지 않습니다");
+    //     }
+    //   },
+    //   () => {
+    //     console.log("먼가 췍이 잘못댐");
+    //   }
+    // );
+    // changePassword(
+    //   passwords,
+    //   (res) => {
+    //     console.log("비번체인지ㅇㅋ", res);
+    //   },
+    //   (res) => {
+    //     console.log("비번체인지ㄴㄴ", res);
+    //   }
+    // );
+  };
+
   return (
     <Container>
       <ThemeProvider theme={newTheme}>
-        {/* <Container align="center" sx={{ pt: 10, pb: 10, height: "10vh" }}>
-                </Container> */}
-        <Container
-        // sx={{
-        //   width: "70%",
-        //   align: "center",
-        // }}
-        >
+        <Container>
           <Typography variant="h4" component="h1" sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
             회원정보 변경
           </Typography>
@@ -116,6 +183,13 @@ function UserMypageChange(props) {
           </Box>
           <TabPanel value={value} index={0}>
             <Paper sx={{ p: 2, margin: "auto", maxWidth: 900, flexGrow: 1 }}>
+              <button
+                onClick={function () {
+                  console.log(newUserInfo);
+                }}
+              >
+                현재주소뭐야
+              </button>
               <Grid container spacing={2}>
                 <Grid item>
                   <img src={logo} />
@@ -141,10 +215,11 @@ function UserMypageChange(props) {
                     <Grid item xs>
                       <TextField
                         size="small"
-                        placeholder="닉네임"
+                        placeholder="이름"
                         required //값 반드시 입력
                         name="nickname"
-                        defaultValue={userId ? user : "없음"}
+                        defaultValue={newUserInfo.name}
+                        onChange={handleChangeUserInfo("name")}
                       />
                       <br />
                       <TextField
@@ -152,7 +227,8 @@ function UserMypageChange(props) {
                         placeholder="example@example.com"
                         required //값 반드시 입력
                         name="email"
-                        // defaultValue={user.email}
+                        defaultValue={newUserInfo.email}
+                        onChange={handleChangeUserInfo("email")}
                       />
 
                       <br />
@@ -161,7 +237,8 @@ function UserMypageChange(props) {
                         placeholder="number"
                         required //값 반드시 입력
                         name="number"
-                        // defaultValue={user.tel}
+                        defaultValue={newUserInfo.tel}
+                        onChange={handleChangeUserInfo("tel")}
                       />
                       <br />
                       <TextField
@@ -170,14 +247,16 @@ function UserMypageChange(props) {
                         name="address"
                         disabled
                         placeholder="주소"
-                        value={address}
-                      ></TextField>
+                        value={newUserInfo.address.city}
+                        onChange={handleChangeUserInfo("city")}
+                      />
                       <TextField
                         size="small"
                         placeholder="상세주소"
                         required //값 반드시 입력
                         name="addressdetail"
-                        // defaultValue={user.street}
+                        defaultValue={newUserInfo.address.street}
+                        onChange={handleChangeUserInfo("street")}
                       />
                       <Button onClick={handleOpen}>주소 검색</Button>
                       <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
@@ -190,6 +269,15 @@ function UserMypageChange(props) {
                 </Grid>
               </Grid>
             </Paper>
+            <Box textAlign="center" sx={{ mt: 5 }}>
+              <Button
+                onClick={() => {
+                  requestChangeInfo(newUserInfo);
+                }}
+              >
+                수정 완료
+              </Button>
+            </Box>
           </TabPanel>
           <TabPanel value={value} index={1}>
             <Paper sx={{ p: 2, margin: "auto", maxWidth: "30%", flexGrow: 1 }}>
@@ -201,8 +289,7 @@ function UserMypageChange(props) {
                         새로 사용할 비밀번호를 입력해주세요
                       </Typography>
                       <Typography gutterBottom variant="subtitle1" component="div" align="left">
-                        현재 비밀번호{""}
-                        <Link href="#">{"비밀번호 변경 안내"}</Link>
+                        현재 비밀번호
                       </Typography>
                       <Box
                         textAlign="center"
@@ -216,7 +303,8 @@ function UserMypageChange(props) {
                           required //값 반드시 입력
                           type="password"
                           name="password"
-                        />{" "}
+                          onChange={handlePasswords("password")}
+                        />
                       </Box>
                       <Typography gutterBottom variant="subtitle1" component="div" align="left">
                         새 비밀번호
@@ -231,9 +319,10 @@ function UserMypageChange(props) {
                           size="small"
                           placeholder="비밀번호"
                           required //값 반드시 입력
-                          name="password"
-                          type="password"
-                        />{" "}
+                          name="newPassword"
+                          type="newPassword"
+                          // onChange={handlePasswords("newPassword")}
+                        />
                       </Box>
                       <Typography gutterBottom variant="subtitle1" component="div" align="left">
                         새 비밀번호 확인
@@ -248,9 +337,15 @@ function UserMypageChange(props) {
                           size="small"
                           placeholder="비밀번호"
                           required //값 반드시 입력
-                          type="password"
-                          name="password"
-                        />{" "}
+                          type="newPasswordConf"
+                          name="newPasswordConf"
+                          // onChange={handlePasswords("newPasswordConf")}
+                        />
+                      </Box>
+                      <Box textAlign="center">
+                        <Button variant="contained" onClick={requestPwChange}>
+                          비밀번호 변경
+                        </Button>
                       </Box>
                     </Grid>
                   </Grid>
@@ -258,9 +353,6 @@ function UserMypageChange(props) {
               </Grid>
             </Paper>
           </TabPanel>
-          <Box textAlign="center">
-            <Button variant="outlined"> 수정 완료</Button>
-          </Box>
         </Container>
       </ThemeProvider>
     </Container>
