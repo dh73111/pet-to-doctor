@@ -17,9 +17,12 @@ import StarIcon from "@mui/icons-material/Star";
 import Button from "@mui/material/Button";
 import { NavLink } from "react-router-dom";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import { listHospital, listDongNameHospital } from "../../api/hospital.js";
+import { listNameHospital, listDongCodeHospital, listDongHospital } from "api/hospital.js";
 import { hospitalReviews } from "../../api/review.js";
+import { apiInstance } from "api/index.js";
+import { CoPresent } from "@mui/icons-material";
 function HospitalSearch(props) {
+    const api = apiInstance();
     const { kakao } = window;
     const [mode, setMode] = useState("list");
     const [doneSearch, setDoneSearch] = useState(false);
@@ -90,7 +93,6 @@ function HospitalSearch(props) {
                             <Grid item xs={10.4} sx={{ mt: 2 }}>
                                 <Link
                                     onClick={() => {
-                                        console.log("클릭");
                                         window.location.href = "https://www.naver.com/";
                                     }}
                                 >
@@ -248,7 +250,7 @@ function HospitalSearch(props) {
         );
     }
 
-    function Hosiptal(props) {
+    function Hospital(props) {
         return (
             <Card sx={{ minWidth: 275 }}>
                 <CardContent>
@@ -345,36 +347,65 @@ function HospitalSearch(props) {
     const onHandleChange = (e) => {
         setName(e.target.value);
     };
+    // const searchHospitalList = (name) => {
+    //     console.log(name);
+    //     let promise = new Promise((resolve) => {
+    //         let list;
+    //         listHospital(name, ({ data }) => {
+    //             list = data.data;
+    //             listDongNameHospital(name, ({ data }) => {
+    //                 list = list.concat(data.data);
+    //                 list = list.filter((hosiptal, index, arr) => {
+    //                     return arr.findIndex((item) => item.id === hosiptal.id) === index;
+    //                 });
+    //                 console.log(list, "second api");
+    //                 resolve(list); // 처음 api 갔다와서 resolve 로 list를 넘김
+    //             });
+    //         });
+    //     });
+
+    //     listHospital(name);
+    //     promise.then((list) => {
+    //         let cnt = 1;
+    //         list.forEach((hospital, index) => {
+    //             let tempList = [];
+    //             hospitalReviews(hospital.id, ({ data }) => {
+    //                 tempList.push(data.data);
+    //                 console.log(data.data);
+    //                 if (cnt++ === list.length) {
+    //                     console.log(data.data);
+    //                     setReviewList(tempList);
+    //                     setHospitalList(list);
+    //                     setDoneSearch(true);
+    //                     console.log(list);
+    //                     console.log(tempList);
+    //                 }
+    //             });
+    //         });
+    //     });
+    // };
     const [hospitalList, setHospitalList] = useState([]);
-    const [reviewList, setReviewList] = useState([]);
+
     const searchHospitalList = async (name) => {
-        await listHospital(name, ({ data }) => {
-            let list = data.data;
-            listDongNameHospital(name, ({ data }) => {
-                list = list.concat(data.data);
-
-                list = list.filter((hosiptal, index, arr) => {
-                    return arr.findIndex((item) => item.id === hosiptal.id) === index;
-                });
-
-                setHospitalList(list); //병원 리스트 조회
-
-                let reviewList = [];
-                let cnt = 1;
-
-                hospitalList.forEach((hospital, index) => {
-                    hospitalReviews(hospital.id, ({ data }) => {
-                        reviewList.push(data.data);
-                        if (cnt++ === hospitalList.length) {
-                            setReviewList(reviewList);
-                            setDoneSearch(true);
-                        }
-                    });
-                });
-            });
+        const tempHospitalList = await listNameHospital(name);
+        const hospitalDongList = await listDongHospital(name);
+        let list = [...tempHospitalList, ...hospitalDongList];
+        console.log(hospitalDongList, "Dong API");
+        console.log(tempHospitalList, "Name API");
+        list = list.filter((hosiptal, index, arr) => {
+            return arr.findIndex((item) => item.id === hosiptal.id) === index;
         });
+        let tempList = [];
+        console.log(list, "hospital list");
+        for (let i = 0; i < list.length; i++) {
+            const { id } = list[i];
+            const data = await hospitalReviews(id);
+            tempList.push({ reviewList: data, hospital: list[i] });
+        }
+        setHospitalList(tempList);
+        console.log(tempList, "review List");
     };
-
+    console.log(hospitalList, " state hospitalList");
     useEffect(() => {
         kakaoMap();
     });
@@ -400,20 +431,17 @@ function HospitalSearch(props) {
                         검색
                     </Button>
                 </Box>
-                {doneSearch === true ? (
-                    <Paper style={{ maxHeight: 800, overflow: "auto" }}>
-                        {hospitalList.map((hospital, index) => (
-                            <Hosiptal
-                                key={index}
-                                hospital={hospital}
-                                index={index}
-                                review={reviewList[index]}
-                            ></Hosiptal>
-                        ))}
-                    </Paper>
-                ) : (
-                    ""
-                )}
+
+                <Paper style={{ maxHeight: 800, overflow: "auto" }}>
+                    {hospitalList.map((item, index) => (
+                        <Hospital
+                            key={index}
+                            hospital={item.hospital}
+                            index={index}
+                            review={item.reviewList}
+                        ></Hospital>
+                    ))}
+                </Paper>
             </Grid>
             <Grid item xs={12} md={9.5}>
                 {mode === "list" ? (

@@ -13,8 +13,12 @@ function addReview(review, success, fail) {
 }
 
 // 병원 리뷰 조회
-function hospitalReviews(hospitalId, success, fail) {
-    api.get(`/review/${hospitalId}`).then(success).catch(fail);
+// function hospitalReviews (hospitalId, success, fail) {
+//     api.get(`/review/${hospitalId}`).then(success).catch(fail);
+// }
+async function hospitalReviews(hospitalId) {
+    const response = await api.get(`/review/${hospitalId}`);
+    return response.data.data;
 }
 
 // 최근 리뷰 10개 반환
