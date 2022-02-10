@@ -36,7 +36,7 @@ public class ScheduleRepository {
     public void dailyUpdate(int scheduleDays){
         em.createQuery("update Schedule s set s.plusDay = s.plusDay-1")
                 .executeUpdate();
-        em.createQuery("update Schedule s set s.plusDay = :scheduleDays, s.bitmask = '0000000000' where s.plusDay <= -1")
+        em.createQuery("update Schedule s set s.plusDay = :scheduleDays, s.bitmask = '0000000000000000' where s.plusDay <= -1")
                 .setParameter("scheduleDays", scheduleDays)
                 .executeUpdate();
     }
