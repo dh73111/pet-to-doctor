@@ -12,14 +12,23 @@ async function petInfo(petId) {
 }
 
 // 반려동물 정보 수정
-function modifyPet(petId, pet, success, fail) {
-  api.put(`/pet/${petId}`, JSON.stringify(pet)).then(success).catch(fail);
+// function modifyPet(petId, pet, success, fail) {
+//   api.put(`/pet/${petId}`, JSON.stringify(pet)).then(success).catch(fail);
+// }
+async function modifyPet(petId, pet) {
+  const response = await api.put(`/pet/${petId}`, JSON.stringify(pet));
+  return response.data;
 }
 
 // 반려동물 정보 삭제
-function deletePet(petId, success, fail) {
+// function deletePet(petId, success, fail) {
+//   const loginApi = loginApiInstance();
+//   loginApi.delete(`/pet/${petId}`).then(success).catch(fail);
+// }
+async function deletePet(petId) {
   const loginApi = loginApiInstance();
-  loginApi.delete(`/pet/${petId}`).then(success).catch(fail);
+  const response = await loginApi.delete(`/pet/${petId}`);
+  return response.data;
 }
 
 // 반려동물 정보 등록
@@ -34,8 +43,12 @@ async function registerPet(pet) {
 }
 
 //사진은 어떻게...
-function modifyPetPic(petId, success, fail) {
-  api.post(`/pet/profile/${petId}`).then(success).catch(fail);
+// function modifyPetPic(petId, success, fail) {
+//   api.post(`/pet/profile/${petId}`).then(success).catch(fail);
+// }
+async function modifyPetPic(petId) {
+  const response = await api.post(`/pet/profile/${petId}`);
+  return response.data;
 }
 
 // 유저 모든 반려동물 조회
@@ -46,7 +59,7 @@ function modifyPetPic(petId, success, fail) {
 async function petList() {
   const loginApi = loginApiInstance();
   const response = await loginApi.get(`/pet/list`);
-  console.log(response, "petAPI");
+  console.log(response, "petList API");
   return response.data.data;
 }
 

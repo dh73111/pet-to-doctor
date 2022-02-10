@@ -35,7 +35,7 @@ function Home(props) {
     return (
         <div>
             <MyImage>
-                <img src={`${process.env.PUBLIC_URL}/img/image132.png`} width="100%" alt="mainVisual" />
+                <img src={`${process.env.PUBLIC_URL}/img/image132.png`} minHeight="500px" alt="mainVisual" />
             </MyImage>
             <Container>
                 <Grid container style={cardStyle} className="card">

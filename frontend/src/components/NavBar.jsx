@@ -21,7 +21,8 @@ import { NavLink, useNavigate } from "react-router-dom";
 import UserLoginModal from "./user/UserLoginModal";
 import Banner from "./user/resources/Banner";
 import MainSearchBar from "./user/resources/MainSearchBar";
-import { CallOutlined, PersonOutlineOutlined, SupportAgent } from "@mui/icons-material";
+import { PersonOutlineOutlined } from "@mui/icons-material";
+import LiveHelpOutlined from "@mui/icons-material/LiveHelpOutlined";
 
 const pages = [
     { id: 1, path: "/petodoctor/userreservation", name: "내 예약" },
@@ -220,17 +221,15 @@ const NavTop = (props) => {
                             <img src={`${process.env.PUBLIC_URL}/img/web_logo.png`} width="150px" alt="logo" />
                         </NavLink>
                         <MainSearchBar />
-                        <Box>
-                            <NavLink to="/petodoctor">
-                                <NotificationsNoneIcon
-                                    sx={{ fontSize: "36px", marginRight: "10px", color: "#cacaca" }}
-                                />
+                        <Box sx={{ pt: 1 }}>
+                            <NavLink to="/petodoctor" className="test">
+                                <NotificationsNoneIcon sx={{ fontSize: "30px", color: "#309FB3" }} />
                             </NavLink>
-                            <NavLink to="/petodoctor/usermypage">
-                                <PersonOutlineOutlined sx={{ fontSize: "36px", marginRight: "10px" }} />
+                            <NavLink to="/petodoctor/usermypage" className="test">
+                                <PersonOutlineOutlined sx={{ fontSize: "30px", color: "#309FB3" }} />
                             </NavLink>
-                            <NavLink to="/petodoctor/qna">
-                                <SupportAgent sx={{ fontSize: "36px" }} />
+                            <NavLink to="/petodoctor/qna" className="test2">
+                                <LiveHelpOutlined sx={{ fontSize: "30px", color: "#309FB3" }} />
                             </NavLink>
                         </Box>
                     </Box>

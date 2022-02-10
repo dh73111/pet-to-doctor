@@ -32,8 +32,8 @@ async function addFavMark(hospitalId) {
 // }
 async function deleteFavMark(markId) {
   const loginApi = loginApiInstance();
-  const response = await loginApi.post(`/mark/${markId}`);
-  return response.data.data;
+  const response = await loginApi.delete(`/mark/${markId}`);
+  return response;
 }
 
 export { userFavMark, addFavMark, deleteFavMark };
