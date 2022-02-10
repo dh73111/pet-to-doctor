@@ -35,4 +35,10 @@ public class PetRepository {
         if (findPet.getUser() == user)
             em.remove(findPet);
     }
+
+    public void deleteAllPetsOfUser(Long userId) {
+        em.createQuery("delete from Pet p where p.user.id = :userId")
+                .setParameter("userId", userId)
+                .executeUpdate();
+    }
 }
