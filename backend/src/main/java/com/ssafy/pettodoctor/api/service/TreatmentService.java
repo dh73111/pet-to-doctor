@@ -6,6 +6,7 @@ import com.ssafy.pettodoctor.api.repository.DoctorRepository;
 import com.ssafy.pettodoctor.api.repository.HospitalRepository;
 import com.ssafy.pettodoctor.api.repository.TreatmentRepositry;
 import com.ssafy.pettodoctor.api.repository.UserRepository;
+import com.ssafy.pettodoctor.api.request.NoticePostReq;
 import com.ssafy.pettodoctor.api.request.PaymentReq;
 import com.ssafy.pettodoctor.api.request.TreatmentPostReq;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class TreatmentService {
     private final UserRepository userRepository;
     private final HospitalRepository hospitalRepository;
     private final PrescriptionRepository prescriptionRepository;
+    private final NoticeRepository noticeRepository;
 
     public Treatment findById(Long id){
         return treatmentRepositry.findByTreatmentId(id);
@@ -41,6 +43,26 @@ public class TreatmentService {
         Doctor doctor = doctorRepository.findById(treatmentPostReq.getDoctorId());
         User user = userRepository.findById(treatmentPostReq.getUserId()).get();
         Hospital hospital = hospitalRepository.findById(treatmentPostReq.getHospitalId());
+
+        // 유저 알람 생성
+        Long user_id = treatmentPostReq.getUserId();
+        NoticePostReq noticeUserInfo = new NoticePostReq();
+        noticeUserInfo.setAccountId(user_id);
+        noticeUserInfo.setContent("예약 접수중입니다. 결제를 진행해 주세요.");
+        noticeUserInfo.setUrl("https://"); // 결제 페이지..?
+        noticeUserInfo.setType(NoticeType.PAYMENT);
+        noticeUserInfo.setIsChecked(false);
+        noticeRepository.registerNotice(noticeUserInfo, doctor);
+
+        // 의사 알람 생성 - 결제가 되었을때 생성돼야 하나??
+        Long doctor_id = treatmentPostReq.getDoctorId();
+        NoticePostReq noticeDoctorInfo = new NoticePostReq();
+        noticeDoctorInfo.setAccountId(doctor_id);
+        noticeDoctorInfo.setContent("예약 접수중... 곧 예약이 들어올지도?");
+        noticeDoctorInfo.setUrl("https://"); // 예약 확인페이지..?
+        noticeDoctorInfo.setType(NoticeType.PAYMENT);
+        noticeDoctorInfo.setIsChecked(false);
+        noticeRepository.registerNotice(noticeDoctorInfo, doctor);
 
         return treatmentRepositry.registerTreatment(treatmentPostReq, doctor, user, hospital);
     }
