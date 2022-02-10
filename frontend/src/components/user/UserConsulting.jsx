@@ -159,6 +159,7 @@ function UserConsulting(props) {
                             style={{ width: "98%", height: 500, margin: 5, background: "black" }}
                             ref={localVideoRef}
                             autoPlay
+                            muted
                         ></video>
                     </Box>
                 </Grid>

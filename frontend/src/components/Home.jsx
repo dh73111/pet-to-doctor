@@ -100,11 +100,21 @@ function Home(props) {
                 <Grid container rowSpacing={22} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                     <Grid item xs={12}></Grid>
                     <Grid item xs={12}>
-                        <img src="./img/mainDesc.png" width="100%" height="450px" alt=""></img>
+                        <img
+                            src={`${process.env.PUBLIC_URL}/img/mainDesc.png`}
+                            width="100%"
+                            height="450px"
+                            alt=""
+                        ></img>
                     </Grid>
                     <Grid item xs={2.4}></Grid>
                     <Grid item xs={7.2}>
-                        <img src="./img/mainDesc2.png" width="100%" height="300px" alt=""></img>
+                        <img
+                            src={`${process.env.PUBLIC_URL}/img/mainDesc2.png`}
+                            width="100%"
+                            height="300px"
+                            alt=""
+                        ></img>
                     </Grid>
                     <Grid item xs={2.4}></Grid>
                 </Grid>

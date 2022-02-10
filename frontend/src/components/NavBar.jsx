@@ -217,7 +217,7 @@ const NavTop = (props) => {
                                 props.clickNav(0);
                             }}
                         >
-                            <img src="/img/web_logo.png" width="150px" alt="logo" />
+                            <img src={`${process.env.PUBLIC_URL}/img/web_logo.png`} width="150px" alt="logo" />
                         </NavLink>
                         <MainSearchBar />
                         <Box>
@@ -378,7 +378,7 @@ function NavBottom(props) {
                             component="div"
                             sx={{ display: { xs: "flex", md: "none" }, flexGrow: 1 }}
                         >
-                            <img src="/img/web_logo.png" width="150px" alt="logo"></img>
+                            <img src={`${process.env.PUBLIC_URL}/img/web_logo.png`} width="150px" alt="logo"></img>
                         </Typography>
                         <Box sx={{ display: { xs: "flex", md: "none" } }}>
                             <IconButton

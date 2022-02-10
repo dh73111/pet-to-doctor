@@ -18,11 +18,9 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
 import { Typography } from "@mui/material";
 import Button from "@mui/material/Button";
-import { apiInstance } from "api/index.js";
 
 function HospitalSearchReservation(props) {
     const { kakao } = window;
-    const api = apiInstance();
     const [values, setValues] = useState({
         name: "",
         weight: "",

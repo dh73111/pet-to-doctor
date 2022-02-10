@@ -25,9 +25,17 @@ function modifyDoctorPic(doctorId, success, fail) {
 function getDoctorInfo(doctorId, success, fail) {
     api.get(`/doctor/${doctorId}`).then(success).catch(fail);
 }
-function getDoctorInfoFromHospital(hospitalId, success, fail) {
-    api.get(`/doctor/hospital/${hospitalId}`).then(success).catch(fail);
+async function getDoctorInfoFromHospital(hospitalId, success, fail) {
+    const response = await api.get(`/doctor/hospital/${hospitalId}`);
+    return response.data.data;
 }
-// 의사정보조회와 의사정보 반환 차이가.... 그리고 doctorid, doctor_id 차이..
 
-export { changePassword, checkPassword, doctorInfo, registerDoctor, modifyDoctorPic, getDoctorInfo, getDoctorInfoFromHospital };
+export {
+    changePassword,
+    checkPassword,
+    doctorInfo,
+    registerDoctor,
+    modifyDoctorPic,
+    getDoctorInfo,
+    getDoctorInfoFromHospital,
+};

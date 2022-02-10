@@ -16,18 +16,17 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import StarIcon from "@mui/icons-material/Star";
 import Button from "@mui/material/Button";
 import { NavLink } from "react-router-dom";
+import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import { listNameHospital, listDongCodeHospital, listDongHospital } from "api/hospital.js";
+import { listNameHospital, listDongHospital } from "api/hospital.js";
+import { getDoctorInfoFromHospital } from "api/doctor.js";
 import { hospitalReviews } from "../../api/review.js";
-import { apiInstance } from "api/index.js";
-import { CoPresent } from "@mui/icons-material";
 function HospitalSearch(props) {
-    const api = apiInstance();
     const { kakao } = window;
     const [mode, setMode] = useState("list");
     const [doneSearch, setDoneSearch] = useState(false);
     const [value, setValue] = useState(0);
-    const [hosipitalNo, setHosipitalNo] = useState(0);
+    const [hospitalNo, setHospitalNo] = useState(0);
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -43,9 +42,24 @@ function HospitalSearch(props) {
         new kakao.maps.Map(container, options);
     }
 
+    function markerPosition() {
+        const container = document.getElementById("map");
+        const options = {
+            center: new kakao.maps.LatLng(37.365264512305174, 127.10676860117488),
+            level: 3,
+        };
+
+        let map = new kakao.maps.Map(container, options);
+        let markerPosition = new kakao.maps.LatLng(37.365264512305174, 127.10676860117488);
+        let marker = new kakao.maps.Marker({
+            position: markerPosition,
+        });
+        marker.setMap(map);
+    }
+
     function detailHospital(id) {
         setMode("search");
-        setHosipitalNo(id);
+        setHospitalNo(id);
     }
     function LinkTab(props) {
         return (
@@ -60,8 +74,24 @@ function HospitalSearch(props) {
     }
 
     function TabItems(props) {
-        const hospital = props.hospital;
-        console.log(hospital);
+        const hospital = { ...props.hospital };
+        const review = [...props.review];
+        let rating = 0;
+        for (let itme of review) {
+            rating += itme.rate;
+        }
+        rating /= review.length;
+        const [doctor, setDoctor] = useState({
+            leadDoctor: {},
+            doctorList: [],
+        });
+        useEffect(() => {
+            const init = async () => {
+                const data = await getDoctorInfoFromHospital(hospital.id);
+                setDoctor({ leadDoctor: { ...data[0] }, doctorList: data });
+            };
+            init();
+        }, []);
         if (value === 0) {
             // 정보
             return (
@@ -82,7 +112,7 @@ function HospitalSearch(props) {
                                 <AccessTimeIcon sx={{ height: "20px" }}></AccessTimeIcon>
                             </Grid>
                             <Grid item xs={10.4} sx={{ mt: 2 }}>
-                                매일 00:00 ~ 24:00
+                                운영 시간 : {hospital.operatingTime}
                             </Grid>
 
                             <Grid item xs={0.3} sx={{ mt: 1 }}></Grid>
@@ -119,16 +149,16 @@ function HospitalSearch(props) {
                                 {hospital.treatmentSubject}
                             </Grid>
                             <Grid item xs={4} sx={{ mt: 1 }}>
-                                대표 수의사
+                                대표 수의사 :
                             </Grid>
                             <Grid item xs={8} sx={{ color: "black", mt: 1 }}>
-                                의사 테이블에서 가져와야함
+                                {doctor.leadDoctor.name}
                             </Grid>
                             <Grid item xs={4} sx={{ mt: 1 }}>
                                 수의사 수
                             </Grid>
                             <Grid item xs={8} sx={{ color: "black", mt: 1 }}>
-                                의사 테이블에서 가져와야함 length 처리
+                                {doctor.doctorList.length}
                             </Grid>
                         </Grid>
                     </Box>
@@ -140,7 +170,26 @@ function HospitalSearch(props) {
                             </Grid>
                             <Grid item xs={0.3}></Grid>
                             <Grid item sx={{ color: "#309FB3", fontWeight: "bold", fontSize: "12px" }} xs={9.2}>
-                                의사 테이블에서 가져와야함 length 처리
+                                {doctor.doctorList.length}
+                            </Grid>
+                            <Grid container sx={{ mt: 1 }}>
+                                {doctor.doctorList.map((item, index) => (
+                                    <Grid item md={6} key={index}>
+                                        <Grid item md={1.5}></Grid>
+                                        <Grid item md={10}>
+                                            <Box>
+                                                <img
+                                                    src={`${process.env.PUBLIC_URL}/img/loginDog.jpg`}
+                                                    alt="의사사진"
+                                                    width="100%"
+                                                    height="150"
+                                                ></img>
+                                            </Box>
+                                            <Box>{item.name}</Box>
+                                        </Grid>
+                                        <Grid item md={0.5}></Grid>
+                                    </Grid>
+                                ))}
                             </Grid>
                         </Grid>
                     </Box>
@@ -150,47 +199,57 @@ function HospitalSearch(props) {
             // 예약하기
             return (
                 <Box>
-                    <Grid container>
-                        <Grid item xs={4.3}>
-                            <img src="img/loginDog.jpg" alt="의사사진" width="150px" height="150"></img>
-                        </Grid>
-                        <Grid item xs={7.7} sx={{ mt: 2 }}>
-                            <Box>
-                                <Box component="span" sx={{ mx: 2, fontWeight: "bold" }}>
-                                    김덕배
+                    {doctor.doctorList.map((item, index) => (
+                        <Grid container>
+                            <Grid item xs={4.3}>
+                                <img
+                                    src={`${process.env.PUBLIC_URL}/img/loginDog.jpg`}
+                                    alt="의사사진"
+                                    width="150px"
+                                    height="150"
+                                ></img>
+                            </Grid>
+                            <Grid item xs={7.7} sx={{ mt: 2 }}>
+                                <Box>
+                                    <Box component="span" sx={{ mx: 2, fontWeight: "bold" }}>
+                                        {item.name}
+                                    </Box>
+                                    <Box
+                                        component="span"
+                                        sx={{ mx: 0.1, fontSize: 12, fontWeight: "bold", color: "gray" }}
+                                    >
+                                        수의사
+                                    </Box>
                                 </Box>
-                                <Box component="span" sx={{ mx: 0.1, fontSize: 12, fontWeight: "bold", color: "gray" }}>
-                                    수의사
+                                <Box sx={{ mt: 2 }}>
+                                    <Grid container>
+                                        <Grid item xs={1}></Grid>
+                                        <Grid item xs={3} sx={{ fontWeight: "bold", fontSize: 10 }}>
+                                            전문
+                                        </Grid>
+                                        <Grid item xs={8} sx={{ fontSize: 12, fontWeight: "bold" }}>
+                                            {item.specialty}
+                                        </Grid>
+                                    </Grid>
                                 </Box>
-                            </Box>
-                            <Box sx={{ mt: 2 }}>
-                                <Grid container>
-                                    <Grid item xs={1}></Grid>
-                                    <Grid item xs={3} sx={{ fontWeight: "bold", fontSize: 10 }}>
-                                        전문
+                                <Box>
+                                    <Grid container>
+                                        <Grid item xs={7.5}></Grid>
+                                        <Grid item xs={4.5}>
+                                            <Button variant="contained" sx={{ mt: 3 }}>
+                                                <NavLink
+                                                    to={`${process.env.PUBLIC_URL}/hospitalsearchreservation/${hospital.id}/${item.id}`}
+                                                    style={{ textDecoration: "none", color: "white" }}
+                                                >
+                                                    예약하기
+                                                </NavLink>
+                                            </Button>
+                                        </Grid>
                                     </Grid>
-                                    <Grid item xs={8} sx={{ fontSize: 12, fontWeight: "bold" }}>
-                                        행동교정, 피부 , 산소특화진료, 중증질병, 심장특화진료
-                                    </Grid>
-                                </Grid>
-                            </Box>
-                            <Box>
-                                <Grid container>
-                                    <Grid item xs={7.5}></Grid>
-                                    <Grid item xs={4.5}>
-                                        <Button variant="contained" sx={{ mt: 3 }}>
-                                            <NavLink
-                                                to={"/hospitalsearchreservation"}
-                                                style={{ textDecoration: "none" }}
-                                            >
-                                                예약하기
-                                            </NavLink>
-                                        </Button>
-                                    </Grid>
-                                </Grid>
-                            </Box>
+                                </Box>
+                            </Grid>
                         </Grid>
-                    </Grid>
+                    ))}
                 </Box>
             );
         } else {
@@ -203,14 +262,14 @@ function HospitalSearch(props) {
                                 전체
                             </Grid>
                             <Grid item xs={1.8} sx={{ fontSize: 13, mt: 0.15, fontWeight: "bold" }}>
-                                142
+                                {review.length}
                             </Grid>
                             <Grid item xs={4.5} sx={{ color: "#FC4C4E", fontSize: 25 }}></Grid>
                             <Grid item xs={0.8} sx={{ color: "#FC4C4E", fontSize: 25 }}>
                                 ★
                             </Grid>
                             <Grid item xs={1.5} sx={{ color: "#FC4C4E", fontSize: 25 }}>
-                                4.79
+                                {isNaN(rating) ? `0.00` : rating.toFixed(2)}
                             </Grid>
                             <Grid item xs={0.5} sx={{ color: "gray", fontSize: 25 }}>
                                 /
@@ -220,37 +279,48 @@ function HospitalSearch(props) {
                             </Grid>
                         </Grid>
                     </Box>
-                    <UserReview></UserReview>
+                    <UserReview review={review} />
                 </Box>
             );
         }
     }
-    function UserReview() {
+    function UserReview(props) {
+        let reviews = [...props.review];
+        console.log(reviews);
         return (
             <Box>
-                <Grid container sx={{ mt: 2 }}>
-                    <Grid item xs={2} sx={{ fontWeight: "bold" }}>
-                        <img src="/img/user.png" alt="user"></img>
+                {reviews.map((item, index) => (
+                    <Grid container sx={{ mt: 2.5 }}>
+                        <Grid container>
+                            <Grid item xs={2} sx={{ fontWeight: "bold" }}>
+                                <img src={`${process.env.PUBLIC_URL}/img/user.png`} alt="user"></img>
+                            </Grid>
+                            <Grid item xs={1.7} sx={{ fontSize: 14, mt: 0.15, fontWeight: "bold" }}>
+                                닉네임닉네임
+                            </Grid>
+                            <Grid item xs={3} sx={{ color: "gray", fontSize: 10 }}>
+                                {item.createTime.substr(0, 10)} 진료
+                            </Grid>
+                            <Grid item xs={1.3}></Grid>
+                            <Grid item xs={3} sx={{ color: "#29A1B1", fontSize: 25 }}>
+                                {"★".repeat(item.rate)}
+                            </Grid>
+                        </Grid>
+                        <Box sx={{ mt: 2, fontSize: 15 }}>{item.content}</Box>
                     </Grid>
-                    <Grid item xs={1.7} sx={{ fontSize: 14, mt: 0.15, fontWeight: "bold" }}>
-                        닉네임닉네임
-                    </Grid>
-                    <Grid item xs={3} sx={{ color: "gray", fontSize: 10 }}>
-                        22.01.28 진료
-                    </Grid>
-                    <Grid item xs={1.3}></Grid>
-                    <Grid item xs={3} sx={{ color: "#29A1B1", fontSize: 25 }}>
-                        ★★★★☆
-                    </Grid>
-                </Grid>
-                <Box sx={{ mt: 2, fontSize: 13 }}>
-                    리뷰 작성 리뷰 작성 리뷰 작성 리뷰 작성 리뷰 작성 리뷰 작성리뷰 작성리뷰 작성리뷰 작성
-                </Box>
+                ))}
             </Box>
         );
     }
 
     function Hospital(props) {
+        const hospital = { ...props.hospital };
+        const address = { ...props.hospital.address };
+        let rating = 0;
+        for (let review of props.reviewList) {
+            rating += review.rate;
+        }
+        rating /= props.reviewList.length;
         return (
             <Card sx={{ minWidth: 275 }}>
                 <CardContent>
@@ -261,21 +331,21 @@ function HospitalSearch(props) {
                             detailHospital(props.index);
                         }}
                     >
-                        {props.hospital.name}
+                        {hospital.name}
                     </Typography>
                     <Typography sx={{ mt: 0.8, mb: 1.5 }} color="text.secondary">
-                        영업시간 {props.hospital.operatingTime}
+                        영업시간 {hospital.operatingTime}
                     </Typography>
-                    <Typography variant="body2">{props.hospital.address.street}</Typography>
+                    <Typography variant="body2">{address.street}</Typography>
                     <Grid container>
                         <Grid item xs={0.7}>
                             <StarIcon sx={{ fontSize: 18, mt: 0.35, color: "#29A1B1" }} />
                         </Grid>
                         <Grid item xs={1.5} sx={{ fontSize: 14, mt: 0.2, color: "#29A1B1" }}>
-                            X
+                            {isNaN(rating) ? "0" : rating.toFixed(2)}
                         </Grid>
                         <Grid item xs={2.3} sx={{ fontSize: 12, mt: 0.4, color: "gray" }}>
-                            리뷰 : {props.review.length}
+                            리뷰 : {props.reviewList.length}
                         </Grid>
                     </Grid>
                 </CardContent>
@@ -284,7 +354,13 @@ function HospitalSearch(props) {
     }
 
     function HospitalDetail(props) {
-        const hospital = props.hospital;
+        const hospital = { ...props.hospital };
+        const reviewList = [...props.reviewList];
+        let rating = 0;
+        for (let review of props.reviewList) {
+            rating += review.rate;
+        }
+        rating /= reviewList.length;
         return (
             <Grid container>
                 <Grid item xs={3.3}>
@@ -294,13 +370,22 @@ function HospitalSearch(props) {
                             setMode("list");
                         }}
                     >
-                        <ChevronLeftIcon sx={{ fontSize: 40 }}></ChevronLeftIcon>
+                        <ArrowCircleLeftIcon sx={{ fontSize: 40 }} />
                     </Box>
 
                     <Paper style={{ maxHeight: 890, overflow: "auto" }} elevation={0}>
-                        <img src="/img/hospital.png" style={{ height: "200px", width: "100%" }} alt="병원 이미지"></img>
+                        <img
+                            src={`${process.env.PUBLIC_URL}/img/hospital.png`}
+                            style={{ height: "200px", width: "100%" }}
+                            alt="병원 이미지"
+                        ></img>
+
                         <Box display="flex" justifyContent="center" alignItems="center" sx={{ mt: 1 }}>
-                            <img src="/img/24hospital.png" alt="24시여부"></img>
+                            {hospital.fullTime ? (
+                                <img src={`${process.env.PUBLIC_URL}/img/24hospital.png`} alt="24시여부"></img>
+                            ) : (
+                                <Box>24 안열어</Box>
+                            )}
                         </Box>
                         <Box
                             display="flex"
@@ -319,10 +404,10 @@ function HospitalSearch(props) {
                             <Grid container>
                                 <Grid item xs={4} />
                                 <Grid item xs={2} sx={{ color: "#29A1B1" }}>
-                                    ★ {hospital.rating}
+                                    ★ {isNaN(rating) ? "0" : rating.toFixed(2)}
                                 </Grid>
                                 <Grid item xs={3} sx={{ fontSize: 12, mt: 0.3, color: "gray" }}>
-                                    리뷰 : {hospital.review}
+                                    리뷰 : {reviewList.length}
                                 </Grid>
                             </Grid>
                         </Box>
@@ -333,7 +418,7 @@ function HospitalSearch(props) {
                                 <LinkTab label="리뷰" href="/spam" sx={{ mx: 1, width: "120px" }} />
                             </Tabs>
                         </Box>
-                        <TabItems hospital={hospital}></TabItems>
+                        <TabItems key={hospital.id} hospital={hospital} review={reviewList}></TabItems>
                     </Paper>
                 </Grid>
                 <Grid item xs={8.7}>
@@ -347,71 +432,41 @@ function HospitalSearch(props) {
     const onHandleChange = (e) => {
         setName(e.target.value);
     };
-    // const searchHospitalList = (name) => {
-    //     console.log(name);
-    //     let promise = new Promise((resolve) => {
-    //         let list;
-    //         listHospital(name, ({ data }) => {
-    //             list = data.data;
-    //             listDongNameHospital(name, ({ data }) => {
-    //                 list = list.concat(data.data);
-    //                 list = list.filter((hosiptal, index, arr) => {
-    //                     return arr.findIndex((item) => item.id === hosiptal.id) === index;
-    //                 });
-    //                 console.log(list, "second api");
-    //                 resolve(list); // 처음 api 갔다와서 resolve 로 list를 넘김
-    //             });
-    //         });
-    //     });
-
-    //     listHospital(name);
-    //     promise.then((list) => {
-    //         let cnt = 1;
-    //         list.forEach((hospital, index) => {
-    //             let tempList = [];
-    //             hospitalReviews(hospital.id, ({ data }) => {
-    //                 tempList.push(data.data);
-    //                 console.log(data.data);
-    //                 if (cnt++ === list.length) {
-    //                     console.log(data.data);
-    //                     setReviewList(tempList);
-    //                     setHospitalList(list);
-    //                     setDoneSearch(true);
-    //                     console.log(list);
-    //                     console.log(tempList);
-    //                 }
-    //             });
-    //         });
-    //     });
-    // };
     const [hospitalList, setHospitalList] = useState([]);
 
     const searchHospitalList = async (name) => {
         const tempHospitalList = await listNameHospital(name);
         const hospitalDongList = await listDongHospital(name);
         let list = [...tempHospitalList, ...hospitalDongList];
-        console.log(hospitalDongList, "Dong API");
-        console.log(tempHospitalList, "Name API");
         list = list.filter((hosiptal, index, arr) => {
             return arr.findIndex((item) => item.id === hosiptal.id) === index;
         });
         let tempList = [];
-        console.log(list, "hospital list");
+        if (list.length === 0) {
+            setMode("list");
+            setHospitalList([]);
+            return;
+        }
         for (let i = 0; i < list.length; i++) {
             const { id } = list[i];
             const data = await hospitalReviews(id);
             tempList.push({ reviewList: data, hospital: list[i] });
         }
         setHospitalList(tempList);
-        console.log(tempList, "review List");
     };
-    console.log(hospitalList, " state hospitalList");
     useEffect(() => {
         kakaoMap();
     });
     return (
         <Grid container>
             <Grid item xs={12} md={2.5}>
+                <Button
+                    onClick={() => {
+                        markerPosition();
+                    }}
+                >
+                    테스트{" "}
+                </Button>
                 <Box sx={{ mt: 2 }}>
                     <TextField
                         id="outlined-basic"
@@ -431,14 +486,13 @@ function HospitalSearch(props) {
                         검색
                     </Button>
                 </Box>
-
-                <Paper style={{ maxHeight: 800, overflow: "auto" }}>
+                <Paper style={{ maxHeight: 820, overflow: "auto", WebkitScrollSnapType: "none" }}>
                     {hospitalList.map((item, index) => (
                         <Hospital
                             key={index}
                             hospital={item.hospital}
                             index={index}
-                            review={item.reviewList}
+                            reviewList={item.reviewList}
                         ></Hospital>
                     ))}
                 </Paper>
@@ -450,7 +504,11 @@ function HospitalSearch(props) {
                 ) : (
                     // 상세 보기 페이지
 
-                    <HospitalDetail key={hosipitalNo} hospital={hospitalList[hosipitalNo]}></HospitalDetail>
+                    <HospitalDetail
+                        key={hospitalNo}
+                        hospital={hospitalList[hospitalNo].hospital}
+                        reviewList={hospitalList[hospitalNo].reviewList}
+                    ></HospitalDetail>
                 )}
             </Grid>
         </Grid>
