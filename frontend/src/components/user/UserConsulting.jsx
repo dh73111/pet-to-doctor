@@ -86,8 +86,12 @@ function UserConsulting(props) {
             console.error(e);
         }
     };
+
     useEffect(() => {
-        socketRef.current = io.connect(SOCKET_SERVER_URL);
+        console.log(window.location.href, "현 url");
+        socketRef.current = io.connect(SOCKET_SERVER_URL, {
+            withCredentials: true,
+        });
         pcRef.current = new RTCPeerConnection(pc_config);
 
         socketRef.current.on("all_users", (allUsers) => {
@@ -196,7 +200,6 @@ function UserConsulting(props) {
                     )}
                     <BottomNavigationAction
                         onClick={() => {
-                            console.log("나가기");
                             socketRef.current.emit("disconnect");
 
                             navigate("/petodoctor");
