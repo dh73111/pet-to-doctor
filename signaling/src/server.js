@@ -1,14 +1,21 @@
+import {createServer} from "http";
+import {Server} from "socket.io";
+
 let express = require("express");
 let http = require("http");
 let app = express();
 let cors = require("cors");
 let server = http.createServer(app);
-let socketio = require("socket.io");
-let io = socketio.listen(server);
+// let socketio = require("socket.io");
+// let io = socketio.listen(server);
+const io = new Server(httpServer, {});
+
+
+server.
 
 app.use(cors());
-const PORT = process.env.PORT || 9000;
-const hostname = "192.168.35.26";
+const PORT = process.env.PORT || 2000;
+const hostname = "0.0.0.0";
 let users = {};
 
 let socketToRoom = {};
@@ -76,6 +83,6 @@ io.on("connection", (socket) => {
     });
 });
 
-server.listen(PORT, hostname, () => {
+httsServer.listen(PORT, hostname, () => {
     console.log(`server running on http:/${hostname}:${PORT}`);
 });

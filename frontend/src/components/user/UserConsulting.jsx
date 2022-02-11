@@ -9,7 +9,7 @@ import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
 const pc_config = {
     iceServer: [{ urls: "stun:stun.l.google.com:19302" }],
 };
-const SOCKET_SERVER_URL = "http://192.168.35.26:9000";
+const SOCKET_SERVER_URL = "https://i6b209.p.ssafy.io/signaling";
 
 function UserConsulting(props) {
     const navigate = useNavigate();
@@ -88,10 +88,15 @@ function UserConsulting(props) {
         }
     };
     useEffect(() => {
-        setVideoTracks();
+        console.log("io", io);
+        console.log("SOCKET_SERVER_URL", SOCKET_SERVER_URL);
 
         socketRef.current = io.connect(SOCKET_SERVER_URL);
         pcRef.current = new RTCPeerConnection(pc_config);
+
+        console.log("io", io);
+        console.log("SOCKET_SERVER_URL", SOCKET_SERVER_URL);
+        console.log("pcRef.current", pcRef.current);
 
         socketRef.current.on("all_users", (allUsers) => {
             if (allUsers.length > 0) {
@@ -122,6 +127,8 @@ function UserConsulting(props) {
         socketRef.current.emit("join_room", {
             room: "1234",
         });
+
+        setVideoTracks();
 
         return () => {
             if (socketRef.current) {

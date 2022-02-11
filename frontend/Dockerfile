@@ -9,11 +9,13 @@ ENV PATH /app/node_modules/.bin:$PATH
 # COPY package.json ./
 # COPY package-lock.json ./
 
-COPY package.json /app/package.json
+COPY frontend/package.json /app/package.json
 RUN npm install
 
 # add app
-COPY . ./
+COPY frontend ./
+
+EXPOSE 3000
 
 # start app
 CMD ["npm", "start"]

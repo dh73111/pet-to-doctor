@@ -9,11 +9,14 @@ ENV PATH /app/node_modules/.bin:$PATH
 # COPY package.json ./
 # COPY package-lock.json ./
 
-COPY package.json /app/package.json
+COPY signaling/package.json /app/package.json
 RUN npm install
 
 # add app
-COPY . ./
+COPY signaling ./
 WORKDIR /app/src
+
+EXPOSE 2000
+
 # start app
 CMD ["node", "server.js"]
