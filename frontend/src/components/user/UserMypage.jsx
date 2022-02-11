@@ -229,6 +229,10 @@ function UserPetInfo(props) {
   const doneAddNew = () => {
     setIsAddNew(false);
   };
+  const limitMod = (petId) => {
+    console.log(petId);
+    return petId;
+  };
   return (
     <Grid container>
       <Grid item xs={12} sx={{ mt: 4 }}>
@@ -237,7 +241,7 @@ function UserPetInfo(props) {
           더 추가하기
         </Button>
         <Grid container>
-          {userPet.map((pet, idx) => (
+          {userPet.forEach((pet, idx) => (
             <Grid key={idx} item sx={{ border: 1 }}>
               <Card>
                 <CardMedia component="img" height="140" src={`${process.env.PUBLIC_URL}/img/dogDefaultProfile.jpg`} alt="petPhoto" />
@@ -255,7 +259,13 @@ function UserPetInfo(props) {
                     <Grid item xs={12}>
                       {pet.weight}
                     </Grid>
-                    <Button onClick={handleChangePetInfo} variant="contained">
+                    <Button
+                      onClick={() => {
+                        handleChangePetInfo();
+                        limitMod(pet.id);
+                      }}
+                      variant="contained"
+                    >
                       펫정보수정
                     </Button>
                     <Button

@@ -356,7 +356,6 @@ function UserMypageChange(props) {
                           name="password"
                           onChange={handlePasswords("password")}
                         />
-                        <Typography>유효성검사</Typography>
                       </Box>
                       <Typography gutterBottom variant="subtitle1" component="div" align="left">
                         새 비밀번호
