@@ -6,6 +6,7 @@ import { userFavMark, addFavMark } from "../../api/mark.js";
 import { userInfo } from "../../api/user.js";
 import { deleteFavMark } from "../../api/mark.js";
 import { modifyPet, deletePet, registerPet, modifyPetPic, petList, petInfo } from "../../api/pet.js";
+import UserPets from "./resources/UserPets.jsx";
 
 // 마이페이지 메인 최상단 컴포넌트
 function UserMypage(props) {
@@ -195,14 +196,10 @@ function UserPetInfo(props) {
   const handleModPetInfo = async (petId) => {
     const modPetRes = await modifyPet(petId, modPetInfo);
     console.log(modPetRes, "펫정보변경결과");
-    setIsPetMod(!isPetMod);
+    const rePets = await petList();
+    setUserPet(rePets);
+    // setIsPetMod(!isPetMod);
   };
-  // const handleFavMark = async (favId) => {
-  //   await deleteFavMark(favId).then(async () => {
-  //     const reFav = await userFavMark();
-  //     setfavHospitals(reFav);
-  //   });
-  // };
   const handleDeletePetInfo = async (petId) => {
     const conf = window.confirm("반려동물 정보를 삭제합니다");
     if (conf === true) {
@@ -241,82 +238,16 @@ function UserPetInfo(props) {
           더 추가하기
         </Button>
         <Grid container>
-          {userPet.forEach((pet, idx) => (
-            <Grid key={idx} item sx={{ border: 1 }}>
-              <Card>
-                <CardMedia component="img" height="140" src={`${process.env.PUBLIC_URL}/img/dogDefaultProfile.jpg`} alt="petPhoto" />
-                {!isPetMod ? (
-                  <Grid container>
-                    <Grid item xs={12}>
-                      {pet.name}
-                    </Grid>
-                    <Grid item xs={12}>
-                      {pet.birthDate}
-                    </Grid>
-                    <Grid item xs={12}>
-                      {pet.species}
-                    </Grid>
-                    <Grid item xs={12}>
-                      {pet.weight}
-                    </Grid>
-                    <Button
-                      onClick={() => {
-                        handleChangePetInfo();
-                        limitMod(pet.id);
-                      }}
-                      variant="contained"
-                    >
-                      펫정보수정
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        handleDeletePetInfo(pet.id);
-                      }}
-                    >
-                      펫정보삭제
-                    </Button>
-                  </Grid>
-                ) : (
-                  <Grid container>
-                    <Grid item xs={12}>
-                      <Input defaultValue={pet.name} onChange={changeModPetInfo("name")} />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Input defaultValue={pet.birthDate} onChange={changeModPetInfo("birthDate")} />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Input defaultValue={pet.species} onChange={changeModPetInfo("species")} />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Input defaultValue={pet.weight} onChange={changeModPetInfo("weight")} />
-                    </Grid>
-                    <Button
-                      onClick={() => {
-                        handleModPetInfo(pet.id);
-                      }}
-                      variant="contained"
-                    >
-                      펫정보수정완료
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        setIsPetMod(false);
-                      }}
-                      variant="contained"
-                    >
-                      펫정보수정취소
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        handleDeletePetInfo(pet.id);
-                      }}
-                    >
-                      펫정보삭제
-                    </Button>
-                  </Grid>
-                )}
-              </Card>
-            </Grid>
+          {userPet.map((pet, idx) => (
+            <UserPets
+              key={idx}
+              pet={pet}
+              handleDeletePetInfo={handleDeletePetInfo}
+              handleChangePetInfo={handleChangePetInfo}
+              changeModPetInfo={changeModPetInfo}
+              handleModPetInfo={handleModPetInfo}
+              changeModPetInfo={changeModPetInfo}
+            />
           ))}
           <Grid item>
             <Paper sx={{ height: 280, width: 280 }}>{isAddNew ? <AddPet /> : null}</Paper>
@@ -330,7 +261,7 @@ function UserPetInfo(props) {
 // 유저 즐겨찾는 병원 컴포넌트
 function FavoriteHospital() {
   const [favHospitals, setfavHospitals] = useState([]);
-  console.log(favHospitals, "즐겨찾는병원저장");
+  // console.log(favHospitals, "즐겨찾는병원저장");
 
   useEffect(() => {
     const init = async () => {
