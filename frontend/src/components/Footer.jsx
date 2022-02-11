@@ -10,6 +10,7 @@ function Footer(props) {
     backgroundColor: "#FFF5F6",
     position: "relative",
     bottom: 0,
+    marginTop: "100px",
   });
   return (
     <MyFooter>

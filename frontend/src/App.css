@@ -1,44 +1,54 @@
+@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+
+/* .notosanskr * {
+} */
 * {
-    margin: 0;
-    -ms-overflow-style: none;
+  font-family: "Noto Sans KR", sans-serif;
+  margin: 0;
+  -ms-overflow-style: none;
+}
+.mainTitle {
+  color: white;
+  font-weight: bold;
+  text-shadow: 1px 0px 10px #000;
 }
 .card {
-    transform: translateX(-50%);
-    box-shadow: rgb(0 0 0 / 20%) 0px 2px 1px -1px, rgb(0 0 0 / 14%) 0px 1px 1px 0px, rgb(0 0 0 / 12%) 0px 1px 3px 0px;
-    padding: 20px;
+  /* transform: translateX(-50%); */
+  box-shadow: rgb(0 0 0 / 20%) 0px 2px 1px -1px, rgb(0 0 0 / 14%) 0px 1px 1px 0px, rgb(0 0 0 / 12%) 0px 1px 3px 0px;
+  padding: 20px;
 }
 .searchbar {
-    position: relative;
-    padding: 2px 0;
+  position: relative;
+  padding: 2px 0;
 }
 .mainSearchBar {
-    width: 380px;
-    height: 100%;
-    border: 4px solid #1dc6f6;
-    box-sizing: border-box;
-    padding-left: 10px;
-    font-size: 16px;
+  width: 380px;
+  height: 100%;
+  border: 4px solid #1dc6f6;
+  box-sizing: border-box;
+  padding-left: 10px;
+  font-size: 16px;
 }
 .mainSearchBar:focus {
-    outline: none;
+  outline: none;
 }
 
 .favhospital {
-    border-spacing: 0;
-    width: 100%;
-    /* border: 1px solid blue; */
-    border-top: 2px solid black;
-    margin-bottom: 200px;
+  border-spacing: 0;
+  width: 100%;
+  /* border: 1px solid blue; */
+  border-top: 2px solid black;
+  margin-bottom: 200px;
 }
 .favhospital thead tr {
-    border-bottom: 1px solid black;
+  border-bottom: 1px solid black;
 }
 .favhospital tbody tr td {
-    border-top: 1px solid #e5e5e5;
+  border-top: 1px solid #e5e5e5;
 }
 
 ::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 .test {

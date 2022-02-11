@@ -6,7 +6,6 @@ import { userFavMark, addFavMark } from "../../api/mark.js";
 import { userInfo } from "../../api/user.js";
 import { deleteFavMark } from "../../api/mark.js";
 import { modifyPet, deletePet, registerPet, modifyPetPic, petList, petInfo } from "../../api/pet.js";
-import { CompareSharp } from "@mui/icons-material";
 
 // 마이페이지 메인 최상단 컴포넌트
 function UserMypage(props) {
@@ -69,7 +68,18 @@ function UserInfo(props) {
         {/* <Typography sx={{ mt: 5, fontWeight: "bold", fontSize: 25 }}>내 정보</Typography> */}
         <Grid container sx={{ mt: 1, p: 3, border: "2px solid #29A1B1" }}>
           <Grid item xs={12} md={4}>
-            <Box item xs={12} sx={{ width: "100%", height: "100%", backgroundColor: "#eaeaea" }}></Box>
+            <Box
+              item
+              xs={12}
+              sx={{
+                width: "100%",
+                height: "100%",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundImage: `url(${process.env.PUBLIC_URL}/img/main.png)`,
+                // 유저의 프로필
+              }}
+            ></Box>
           </Grid>
           <Grid item xs={12} md={8} sx={{ border: 1 }}>
             <Box sx={{ typography: "h5" }}>{informationUser.name}</Box>
@@ -124,14 +134,12 @@ function UserPetInfo(props) {
       setNewPetInfo({ ...newPetInfo, [dataTitle]: data });
     };
     const requestNewPet = async () => {
-      await registerPet(newPetInfo).then(async (res) => {
-        if (res.message === "성공") {
-          const reloaded = await petList();
-          console.log("펫추가성공", reloaded);
-          setUserPet(reloaded);
-        }
-      });
-      setIsAddNew(false);
+      const response = await registerPet(newPetInfo);
+      if (response.data.message === "성공") {
+        const reloaded = await petList();
+        setIsAddNew(false);
+        setUserPet(reloaded);
+      }
     };
     return (
       <>
@@ -390,9 +398,11 @@ function FavoriteHospital() {
                   <Checkbox />
                 </td>
                 <td>이미지</td>
-                <td>{fav.user_id} User ID"</td>
-                <td>{fav.hospital_id} Hospital ID"</td>
-                <td>{fav.id} Mark res ID"</td>
+                <td>{fav.hospital_name}</td>
+                <td>
+                  {fav.hospital_address.city} {fav.hospital_address.street}
+                </td>
+                <td>{fav.hospital_tel}</td>
                 <td>
                   <Button
                     onClick={() => {
