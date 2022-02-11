@@ -26,4 +26,10 @@ public class AccountRepository {
         return em.find(Account.class, id);
     }
 
+    public void deleteById(Long id){
+        em.createQuery("delete from Account a where a.id = :id")
+                .setParameter("id", id)
+                .executeUpdate();
+    }
+
 }

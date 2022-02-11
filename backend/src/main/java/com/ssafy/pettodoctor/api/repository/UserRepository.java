@@ -9,6 +9,10 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import java.sql.Array;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,4 +49,13 @@ public class UserRepository {
         em.remove(user);
     }
 
+    public List<Long> findUserIdOfExpiredUsers(int expireDays) {
+        LocalDate today = LocalDate.now();
+        LocalDate minus30 = today.minusDays(expireDays);
+
+        List<Long> expiredUserIds = em.createQuery("select u.id from User u where u.isCertificated=FALSE and u.joinDate < :minus")
+                .setParameter("minus", minus30)
+                .getResultList();
+        return expiredUserIds;
+    }
 }

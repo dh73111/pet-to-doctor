@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ public class User extends Account {
         user.setAddress(address);
         user.setIsCertificated(false);
         user.setIsOauth(false);
-        user.setJoinDate(LocalDateTime.now());
+        user.setJoinDate(LocalDate.now());
         user.setRole("ROLE_USER");
         return user;
     }
@@ -42,7 +43,7 @@ public class User extends Account {
         user.setName(name);
         user.setIsCertificated(true);
         user.setIsOauth(true);
-        user.setJoinDate(LocalDateTime.now());
+        user.setJoinDate(LocalDate.now());
 
         return user;
     }
