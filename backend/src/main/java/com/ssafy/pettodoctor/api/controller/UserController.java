@@ -18,7 +18,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -388,7 +387,7 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
     public ResponseEntity<Map<String, Object>> checkPassword(
-            @RequestBody @Parameter(description = "비밀번호") PwChangeReq inputPass) {
+            @RequestBody @Parameter(description = "비밀번호") PwCheckReq inputPass) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         HttpStatus status = null;
 
