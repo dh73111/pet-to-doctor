@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Card, CardMedia, Checkbox, Container, Grid, Input, Paper, TextField, Typography } from "@mui/material";
+import { Box, Button, Card, CardMedia, Checkbox, Container, Grid, Input, InputAdornment, Paper, TextField, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import { Link, Outlet } from "react-router-dom";
 import { userFavMark, addFavMark } from "../../api/mark.js";
@@ -144,13 +144,16 @@ function UserPetInfo(props) {
     };
     return (
       <>
-        <Grid container>
+        <Paper container sx={{ height: "100%" }}>
           <Grid item xs={12}>
-            <TextField label="이름" name="name" type="text" size="small" onChange={handlePetInfo("name")} />
+            <Input type="file" />
           </Grid>
           <Grid item xs={12}>
-            <TextField
-              label="생년월일"
+            <Input placeholder="이름" name="name" type="text" size="small" onChange={handlePetInfo("name")} />
+          </Grid>
+          <Grid item xs={12}>
+            <Input
+              placeholder="생년월일"
               name="birthDate"
               type="date"
               onChange={handlePetInfo("data")}
@@ -159,24 +162,37 @@ function UserPetInfo(props) {
             />
           </Grid>
           <Grid item xs={12}>
-            <TextField label="종" name="species" type="text" size="small" onChange={handlePetInfo("species")} />
+            <Input placeholder="종" name="species" type="text" size="small" onChange={handlePetInfo("species")} />
           </Grid>
           <Grid item xs={12}>
-            <TextField label="몸무게" name="weight" type="number" size="small" onChange={handlePetInfo("weight")} />
+            <Input
+              placeholder="몸무게"
+              name="weight"
+              type="number"
+              size="small"
+              onChange={handlePetInfo("weight")}
+              endAdornment={<InputAdornment position="end">kg</InputAdornment>}
+            />
           </Grid>
           <Grid item xs={12}>
-            <Button variant="contained" onClick={doneAddNew}>
-              추가
-            </Button>
-            <button
+            <Button
+              variant="contained"
               onClick={() => {
                 requestNewPet();
               }}
             >
-              유저펫추가테스트
-            </button>
+              추가
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => {
+                setIsAddNew(false);
+              }}
+            >
+              취소
+            </Button>
           </Grid>
-        </Grid>
+        </Paper>
       </>
     );
   } // 펫 추가 컴포넌트 끝
@@ -219,9 +235,7 @@ function UserPetInfo(props) {
   //   });
   // };
   const changeAddNew = () => {
-    if (!isAddNew) {
-      setIsAddNew(true);
-    }
+    setIsAddNew(!isAddNew);
   };
   const doneAddNew = () => {
     setIsAddNew(false);
@@ -234,10 +248,7 @@ function UserPetInfo(props) {
     <Grid container>
       <Grid item xs={12} sx={{ mt: 4 }}>
         <Typography sx={{ mb: 2, fontWeight: "bold", fontSize: 25, borderBottom: 2, pb: 1 }}>함께하는 반려동물</Typography>
-        <Button variant="contained" onClick={changeAddNew}>
-          더 추가하기
-        </Button>
-        <Grid container>
+        <Grid container spacing={1.5}>
           {userPet.map((pet, idx) => (
             <UserPets
               key={idx}
@@ -249,8 +260,16 @@ function UserPetInfo(props) {
               changeModPetInfo={changeModPetInfo}
             />
           ))}
-          <Grid item>
-            <Paper sx={{ height: 280, width: 280 }}>{isAddNew ? <AddPet /> : null}</Paper>
+          <Grid item xs={6} md={3}>
+            {isAddNew ? (
+              <AddPet />
+            ) : (
+              <Paper sx={{ height: "100%" }}>
+                <Button variant="contained" onClick={changeAddNew}>
+                  더 추가하기
+                </Button>
+              </Paper>
+            )}
           </Grid>
         </Grid>
       </Grid>
