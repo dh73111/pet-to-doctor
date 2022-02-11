@@ -3,33 +3,33 @@ import { apiInstance, loginApiInstance } from "./index.js";
 const api = apiInstance();
 
 // 특정 진료 정보 반환
-function treatmentInfo(treatmentId, success, fail) {
-    api.get(`/treatment/${treatmentId}`).then(success).catch(fail);
+async function treatmentInfo(treatmentId) {
+  return (await api.get(`/treatment/${treatmentId}`)).data.data;
 }
 
 // 사용자 진료 정보 반환
-function userTreatmentInfo(userId, success, fail) {
-    api.get(`/treatment/user/${userId}`).then(success).catch(fail);
+async function userTreatmentInfo(userId) {
+  return (await api.get(`/treatment/user/${userId}`)).data.data;
 }
 
 // 의사 진료 정보 반환
-function doctorTreatmentInfo(doctorId, success, fail) {
-    api.get(`/treatment/doctor/${doctorId}`).then(success).catch(fail);
+async function doctorTreatmentInfo(doctorId) {
+  return (await api.get(`/treatment/doctor/${doctorId}`)).data.data;
 }
 
 // 진료 정보 등록
-function addTreatment(treatmentInfo, success, fail) {
-    api.post(`/treatment`, JSON.stringify(treatmentInfo)).then(success).catch(fail);
+async function addTreatment(treatmentInfo) {
+  return await api.post(`/treatment`, JSON.stringify(treatmentInfo));
 }
 
 // 진료 상태 수정
-function treatmentState(treatmentId, success, fail) {
-    api.post(`/treatment/${treatmentId}`).then(success).catch(fail);
+async function treatmentState(treatmentId) {
+  return await api.post(`/treatment/${treatmentId}`);
 }
 
 // 결제 정보 수정
-function treatmentPay(treatmentId, success, fail) {
-    api.post(`/treatment/payment/${treatmentId}`).then(success).catch(fail);
+async function treatmentPay(treatmentId) {
+  return await api.post(`/treatment/payment/${treatmentId}`);
 }
 
 export { treatmentInfo, userTreatmentInfo, doctorTreatmentInfo, addTreatment, treatmentState, treatmentPay };

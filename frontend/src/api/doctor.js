@@ -2,40 +2,31 @@ import { apiInstance } from "./index.js";
 
 const api = apiInstance();
 
-function changePassword(doctor, success, fail) {
-    api.put(`/doctor/password`, JSON.stringify(doctor)).then(success).catch(fail);
+async function changePassword(doctor, success, fail) {
+  return await api.put(`/doctor/password`, JSON.stringify(doctor));
 }
 
-function checkPassword(doctor, success, fail) {
-    api.post(`/doctor/password`, JSON.stringify(doctor)).then(success).catch(fail);
+async function checkPassword(doctor, success, fail) {
+  return await api.post(`/doctor/password`, JSON.stringify(doctor));
 }
 
-function doctorInfo(doctor_id, success, fail) {
-    api.get(`/doctor/${doctor_id}`).then(success).catch(fail);
+async function doctorInfo(doctor_id, success, fail) {
+  return (await api.get(`/doctor/${doctor_id}`)).data.data;
 }
 
-function registerDoctor(doctor, success, fail) {
-    api.post(`/doctor`, JSON.stringify(doctor)).then(success).catch(fail);
+async function registerDoctor(doctor, success, fail) {
+  return (await api.post(`/doctor`, JSON.stringify(doctor))).data.data;
 }
 
-function modifyDoctorPic(doctorId, success, fail) {
-    api.post(`/doctor/profile/${doctorId}`).then(success).catch(fail);
+async function modifyDoctorPic(doctorId, success, fail) {
+  return (await api.post(`/doctor/profile/${doctorId}`)).data.data;
 }
 
-function getDoctorInfo(doctorId, success, fail) {
-    api.get(`/doctor/${doctorId}`).then(success).catch(fail);
+async function getDoctorInfo(doctorId) {
+  return (await api.get(`/doctor/${doctorId}`)).data.data;
 }
 async function getDoctorInfoFromHospital(hospitalId, success, fail) {
-    const response = await api.get(`/doctor/hospital/${hospitalId}`);
-    return response.data.data;
+  return await api.get(`/doctor/hospital/${hospitalId}`).data.data;
 }
 
-export {
-    changePassword,
-    checkPassword,
-    doctorInfo,
-    registerDoctor,
-    modifyDoctorPic,
-    getDoctorInfo,
-    getDoctorInfoFromHospital,
-};
+export { changePassword, checkPassword, doctorInfo, registerDoctor, modifyDoctorPic, getDoctorInfo, getDoctorInfoFromHospital };

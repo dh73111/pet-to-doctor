@@ -45,8 +45,8 @@ function UserJoin(props) {
     setValues({ ...values, [prop]: event.target.value });
     console.log(prop);
     if (prop === "email") {
-      var emailVal = event.target.value;
-      var regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
+      let emailVal = event.target.value;
+      let regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
       if (emailVal.match(regExp) != null) {
         setEmailError("");
       } else {
@@ -54,51 +54,47 @@ function UserJoin(props) {
       }
     }
     if (prop === "tel") {
-      var telVal = event.target.value;
-      var regExp = /(\d{11})/;
+      let telVal = event.target.value;
+      let regExp = /(\d{11})/;
       if (telVal.match(regExp) != null) {
         setTelError("");
       } else {
         setTelError("전화번호를 정확히 입력해주세요");
       }
     }
-    // console.log(prop, event.target.value);
-    if (values.password !== values.confirmPassword) {
-      setPasswordError("비밀번호 불일치");
-      // console.log(passwordError);
-    } else {
-      setPasswordError("");
+    console.log(event.target.value);
+    if (prop === "confirmPassword") {
+      if (values.password !== event.target.value) {
+        setPasswordError("비밀번호 불일치");
+        // console.log(passwordError);
+      } else {
+        setPasswordError("");
+      }
     }
   };
   async function userRegister(user) {
-    await registerUser(
-      {
-        email: user.email,
-        password: user.password,
-        name: user.name,
-        tel: user.tel,
-        address: {
-          zipcode: user.zipcode,
-          city: user.city,
-          street: user.street,
+    await registerUser({
+      email: user.email,
+      password: user.password,
+      name: user.name,
+      tel: user.tel,
+      address: {
+        zipcode: user.zipcode,
+        city: user.city,
+        street: user.street,
+      },
+      pets: [
+        {
+          name: user.pets.name,
+          birthDate: user.pets.birthDate,
+          species: user.pets.species,
+          weight: user.pets.weight,
         },
-        pets: [
-          {
-            name: user.pets.name,
-            birthDate: user.pets.birthDate,
-            species: user.pets.species,
-            weight: user.pets.weight,
-          },
-        ],
-      },
-      (res) => {
-        console.log(user);
-        dispatch({ type: "register" });
-        alert("가입 성공");
-        navigate("/petodoctor");
-      },
-      () => {}
-    );
+      ],
+    });
+    dispatch({ type: "register" });
+    alert("가입 성공");
+    navigate("/petodoctor");
   }
 
   const [pet, setPet] = useState({
@@ -208,7 +204,6 @@ function UserJoin(props) {
           name="confirmPassword"
           value={values.confirmPassword}
           onChange={handleChange("confirmPassword")}
-          onKeyPress={handleChange("confirmPassword")}
           error={passwordError !== ""}
         />
         <Typography style={{ color: "red" }}>{passwordError}</Typography>

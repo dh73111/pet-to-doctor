@@ -6,33 +6,28 @@ const api = apiInstance();
 // // 회원 정보 수정
 async function modifyUser(user) {
   const loginApi = loginApiInstance();
-  const response = await loginApi.put(`/user`, JSON.stringify(user));
-  return response.data.data;
+  return await loginApi.put(`/user`, JSON.stringify(user));
 }
 
 // 회원 가입
 async function registerUser(user) {
-  const response = await api.post(`/user`, JSON.stringify(user));
-  return response.data.data;
+  return await api.post(`/user`, JSON.stringify(user));
 }
 
 // 회원 탈퇴
 async function deleteUser(userId) {
-  const response = await api.delete(`/user/${userId}`);
-  return response.data.data;
+  return await api.delete(`/user/${userId}`);
 }
 
 //회원 사진 수정
 async function modifyUserPic(userId) {
-  const response = await api.post(`/user/profile/${userId}`);
-  return response.data.data;
+  return await api.post(`/user/profile/${userId}`);
 }
 
 // 비밀번호 확인
 async function checkPassword(user) {
   const loginApi = loginApiInstance();
-  const response = await loginApi.post(`/user/password/check`, JSON.stringify(user));
-  return response;
+  return await loginApi.post(`/user/password/check`, JSON.stringify(user));
 }
 
 // 비밀번호 변경
@@ -42,8 +37,7 @@ async function checkPassword(user) {
 // }
 async function changePassword(user) {
   const loginApi = loginApiInstance();
-  const response = await loginApi.post(`/user/password/change`, JSON.stringify(user));
-  return response.data.data;
+  return await loginApi.post(`/user/password/change`, JSON.stringify(user));
 }
 
 // 로그인
@@ -51,32 +45,22 @@ async function changePassword(user) {
 //   api.post(`/user/login`, JSON.stringify(user)).then(success).catch(fail);
 // }
 async function loginUser(user) {
-  const response = await api.post(`/user/login`, JSON.stringify(user));
-  return response.data.data;
+  return (await api.post(`/user/login`, JSON.stringify(user))).data.data;
 }
 
 // 회원 정보
 async function userInfo(userId) {
-  const response = await api.get(`/user/${userId}`);
-  return response.data.data;
+  return (await api.get(`/user/${userId}`)).data.data;
 }
 
 // 비밀번호 찾기
-// function findUserPassword(userEmail, success, fail) {
-//   api.get(`/user/password/sendToEmail/${userEmail}`).then(success).catch(fail);
-// }
 async function findUserPassword(userEmail) {
-  const response = await api.get(`/user/password/sendToEmail/${userEmail}`);
-  return response.data.data;
+  return await api.get(`/user/password/sendToEmail/${userEmail}`);
 }
 
 //이메일 중복 조회
-// function checkDuplication(userEmail, success, fail) {
-//   api.get(`/user/duplication?email=${userEmail}`).then(success).catch(fail);
-// }
 async function checkDuplication(userEmail) {
-  const response = await api.get(`/user/duplication?email=${userEmail}`);
-  return response.data.data;
+  return (await api.get(`/user/duplication?email=${userEmail}`)).data.data;
 }
 
 // 즐겨찾는 병원 조회
