@@ -7,24 +7,24 @@ import jwtDecode from "jwt-decode";
 import { useDispatch } from "react-redux";
 
 const newTheme = createTheme({
-    palette: {
-        primary: {
-            main: "#309FB3",
-        },
+  palette: {
+    primary: {
+      main: "#309FB3",
     },
+  },
 });
 
 function UserLoginModal(props) {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const [values, setValues] = useState({
-        email: "",
-        password: "",
-    });
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [values, setValues] = useState({
+    email: "",
+    password: "",
+  });
 
-    const handleChange = (prop) => (event) => {
-        setValues({ ...values, [prop]: event.target.value });
-    };
+  const handleChange = (prop) => (event) => {
+    setValues({ ...values, [prop]: event.target.value });
+  };
 
   const REST_API_KEY = "c9d9cd706215602e662da44e2c2150a2";
   const REDIRECT_URI = "http://localhost:3000/kakaooauth";
@@ -127,7 +127,6 @@ function UserLoginModal(props) {
                     if (e.key === "Enter") userLogin(values);
                   }}
                 />
-                <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
                 <Button
                   onClick={() => {
                     userLogin(values);

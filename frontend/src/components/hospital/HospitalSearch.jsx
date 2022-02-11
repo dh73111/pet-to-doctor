@@ -296,7 +296,7 @@ function HospitalSearch(props) {
                                 <img src={`${process.env.PUBLIC_URL}/img/user.png`} alt="user"></img>
                             </Grid>
                             <Grid item xs={1.7} sx={{ fontSize: 14, mt: 0.15, fontWeight: "bold" }}>
-                                닉네임닉네임
+                                {item.username}
                             </Grid>
                             <Grid item xs={3} sx={{ color: "gray", fontSize: 10 }}>
                                 {item.createTime.substr(0, 10)} 진료
@@ -460,13 +460,6 @@ function HospitalSearch(props) {
     return (
         <Grid container>
             <Grid item xs={12} md={2.5}>
-                <Button
-                    onClick={() => {
-                        markerPosition();
-                    }}
-                >
-                    테스트{" "}
-                </Button>
                 <Box sx={{ mt: 2 }}>
                     <TextField
                         id="outlined-basic"

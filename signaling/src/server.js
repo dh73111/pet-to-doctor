@@ -1,13 +1,29 @@
 let express = require("express");
-let http = require("http");
+
 let app = express();
 let cors = require("cors");
-let server = http.createServer(app);
-let socketio = require("socket.io");
-let io = socketio.listen(server);
-
+let server = require("http").createServer(app);
 app.use(cors());
-const PORT = process.env.PORT || 9000;
+
+let socketio = require("socket.io")(server, {
+    cors: {
+        origin: "http://192.168.35.26",
+        allowedHeaders: ["my-custom-header"],
+        methods: ["GET", "POST"],
+        transports: ["websocket", "polling"],
+        credentials: true,
+        // xhrFields: {
+        //     withCredentials: false,
+        // },
+        allowEI03: true,
+    },
+});
+let io = socketio.listen(server);
+// const httpServer = require("http").createServer();
+// const options = { /* ... */ };
+// const io = require("socket.io")(httpServer, options);
+
+const PORT = 9000;
 const hostname = "192.168.35.26";
 let users = {};
 
@@ -16,6 +32,7 @@ let socketToRoom = {};
 const maximum = process.env.MAXIMUM || 2;
 
 io.on("connection", (socket) => {
+    console.log("connection start");
     socket.on("join_room", (data) => {
         if (users[data.room]) {
             const length = users[data.room].length;
