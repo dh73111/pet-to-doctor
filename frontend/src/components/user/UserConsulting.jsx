@@ -88,34 +88,37 @@ function UserConsulting(props) {
     };
 
     useEffect(() => {
-        console.log(window.location.href, "현 url");
-        socketRef.current = io.connect(SOCKET_SERVER_URL, {
-            withCredentials: true,
-        });
-        pcRef.current = new RTCPeerConnection(pc_config);
+        const init = async () => {
+            socketRef.current = await io.connect(SOCKET_SERVER_URL, {
+                withCredentials: true,
+            });
+            pcRef.current = await new RTCPeerConnection(pc_config);
 
-        socketRef.current.on("all_users", (allUsers) => {
-            if (allUsers.length > 0) {
-                createOffer();
-            }
-        });
-        socketRef.current.on("getOffer", (sdp) => {
-            console.log(sdp);
-            console.log("get offer");
-            createAnswer(sdp);
-        });
-        socketRef.current.on("getAnswer", (sdp) => {
-            console.log("get answer");
-            if (!pcRef.current) return;
-            pcRef.current.setRemoteDescription(new RTCSessionDescription(sdp));
-            console.log(sdp);
-        });
-        socketRef.current.on("getCandidate", async (candidate) => {
-            if (!pcRef.current) return;
-            await pcRef.current.addIceCandidate(new RTCIceCandidate(candidate));
-            console.log("candidate add success");
-        });
-        setVideoTracks();
+            socketRef.current.on("all_users", (allUsers) => {
+                if (allUsers.length > 0) {
+                    createOffer();
+                }
+            });
+            socketRef.current.on("getOffer", (sdp) => {
+                console.log(sdp);
+                console.log("get offer");
+                createAnswer(sdp);
+            });
+            socketRef.current.on("getAnswer", (sdp) => {
+                console.log("get answer");
+                if (!pcRef.current) return;
+                pcRef.current.setRemoteDescription(new RTCSessionDescription(sdp));
+                console.log(sdp);
+            });
+            socketRef.current.on("getCandidate", async (candidate) => {
+                if (!pcRef.current) return;
+                await pcRef.current.addIceCandidate(new RTCIceCandidate(candidate));
+                console.log("candidate add success");
+            });
+            await setVideoTracks();
+        };
+        
+        init();
 
         return () => {
             if (socketRef.current) {
