@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -387,14 +388,14 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
     public ResponseEntity<Map<String, Object>> checkPassword(
-            @RequestBody @Parameter(description = "비밀번호") String inputPass) {
+            @RequestBody @Parameter(description = "비밀번호") PwChangeReq inputPass) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         HttpStatus status = null;
 
         try {
             AccountUserDetails userDetails = (AccountUserDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
             User nowUser = userService.getUserById(userDetails.getUserId()).get();
-            boolean checkResult = userService.checkPassword(inputPass, nowUser);
+            boolean checkResult = userService.checkPassword(inputPass.getPassword(), nowUser);
 
             if (checkResult) {
                 resultMap.put("message", "비밀번호 확인 완료");
