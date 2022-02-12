@@ -21,8 +21,14 @@ public class NoticeRepository {
         return em.find(Notice.class, id);
     }
 
-    public Long registerNotice(NoticePostReq noticeInfo, Account account) {
-        Notice notice = Notice.createNotice(account, noticeInfo);
+    public Notice findBytreatmentId(Long id) {
+        return em.createQuery("select n from Notice n where n.treatment.id = :id", Notice.class)
+                .setParameter("id", id)
+                .getSingleResult();
+    }
+
+    public Long registerNotice(NoticePostReq noticeInfo, Account account, Doctor doctor, Treatment treatment) {
+        Notice notice = Notice.createNotice(account, doctor, treatment, noticeInfo);
         em.persist(notice);
         return notice.getId();
     }
@@ -30,13 +36,19 @@ public class NoticeRepository {
     public Notice updateNotice(Long noticeId, NoticeType noticeType) {
         Notice notice = em.find(Notice.class, noticeId);
 
-        if(noticeType.equals(NoticeType.RESERVATION)) {
+        // 알림 type에 따라 content 및 url 내용 다르게 업데이트
+        if(noticeType.equals(NoticeType.RESERVATION)) { // 에약
             notice.setContent("예약이 완료되었습니다.");
             notice.setUrl("https://");
         }
-        else if(noticeType.equals(NoticeType.DELIVERY)) {
-            notice.setContent("배송지를 입력해 주세요");
+        else if(noticeType.equals(NoticeType.DELIVERY)) { // 배송
+            notice.setContent("처방전이 등록되었습니다. 결제를 진행해 주세요");
             notice.setUrl("https://");
+        }
+        else if(noticeType.equals(NoticeType.NOTIFICATION)){
+            notice.setContent("운송장이 등록되었습니다.");
+            notice.setUrl("https://");
+
         }
         notice.setType(noticeType);
         notice.setNoticeDate(LocalDateTime.now());

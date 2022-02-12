@@ -19,9 +19,13 @@ public class Notice {
     @JoinColumn(name="account_id")
     private Account account;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name="doctor_id")
-//    private Doctor doctor;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="treatment_id")
+    private Treatment treatment;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="doctor_id")
+    private Doctor doctor;
 
     private String content;
     private String url;
@@ -32,13 +36,16 @@ public class Notice {
     private Boolean isChecked;
     private LocalDateTime noticeDate;
 
-    public static Notice createNotice(Account account, NoticePostReq req) {
+    public static Notice createNotice(Account account, Doctor doctor, Treatment treatment, NoticePostReq req) {
         Notice notice = new Notice();
         notice.setAccount(account);
         notice.setContent(req.getContent());
         notice.setUrl(req.getUrl());
         notice.setType(req.getType());
+        notice.setDoctor(doctor);
+        notice.setTreatment(treatment);
         notice.setIsChecked(false);
+
         notice.setNoticeDate(LocalDateTime.now());
 
         return notice;

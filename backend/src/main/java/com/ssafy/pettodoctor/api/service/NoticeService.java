@@ -1,10 +1,7 @@
 package com.ssafy.pettodoctor.api.service;
 
 import com.ssafy.pettodoctor.api.domain.*;
-import com.ssafy.pettodoctor.api.repository.AccountRepository;
-import com.ssafy.pettodoctor.api.repository.DoctorRepository;
-import com.ssafy.pettodoctor.api.repository.NoticeRepository;
-import com.ssafy.pettodoctor.api.repository.UserRepository;
+import com.ssafy.pettodoctor.api.repository.*;
 import com.ssafy.pettodoctor.api.request.NoticePostReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,18 +16,20 @@ public class NoticeService {
     private final NoticeRepository noticeRepository;
     private final UserRepository userRepository;
     private final AccountRepository accountRepository;
+    private final DoctorRepository doctorRepository;
+    private final TreatmentRepositry treatmentRepositry;
 
     @Transactional
     public Long registerNotice(NoticePostReq noticeInfo) {
         Account account = accountRepository.findById(noticeInfo.getAccountId());
+        Doctor doctor = doctorRepository.findById(noticeInfo.getDoctorId());
+        Treatment treatment = treatmentRepositry.findByTreatmentId(noticeInfo.getTreatmentId());
 
-        return noticeRepository.registerNotice(noticeInfo, account);
+        return noticeRepository.registerNotice(noticeInfo, account, doctor, treatment);
     }
 
     @Transactional
     public Notice updateNotice(Long noticeId, NoticeType noticeType) {
-//        Account account = accountRepository.findById(noticeRepository.findByNoticeId(noticeId).getAccount().getId());
-//        return noticeRepository.updateNotice(noticeId, noticeType,account.getAuthority());
         return noticeRepository.updateNotice(noticeId, noticeType);
     }
 
