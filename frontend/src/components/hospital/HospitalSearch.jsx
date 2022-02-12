@@ -27,34 +27,29 @@ function HospitalSearch(props) {
     const [doneSearch, setDoneSearch] = useState(false);
     const [value, setValue] = useState(0);
     const [hospitalNo, setHospitalNo] = useState(0);
+    const [lat, setLat] = useState(33.450701);
+    const [lng, setLng] = useState(126.570667);
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
-    function kakaoMap(lat, lng) {
-        lat = 33.450701;
-        lng = 126.570667;
+    function kakaoMap() {
         const container = document.getElementById("map");
         const options = {
             center: new kakao.maps.LatLng(lat, lng),
             level: 3,
         };
 
-        new kakao.maps.Map(container, options);
-    }
-
-    function markerPosition() {
-        const container = document.getElementById("map");
-        const options = {
-            center: new kakao.maps.LatLng(37.365264512305174, 127.10676860117488),
-            level: 3,
-        };
-
-        let map = new kakao.maps.Map(container, options);
-        let markerPosition = new kakao.maps.LatLng(37.365264512305174, 127.10676860117488);
+        let markerPosition = new kakao.maps.LatLng(lat, lng);
         let marker = new kakao.maps.Marker({
             position: markerPosition,
         });
+        let map = new kakao.maps.Map(container, options);
         marker.setMap(map);
+    }
+
+    function markerPosition(lat, lng) {
+        setLat(lat);
+        setLng(lng);
     }
 
     function detailHospital(id) {
@@ -314,9 +309,11 @@ function HospitalSearch(props) {
     }
 
     function Hospital(props) {
+        console.log(props.markerPosition);
         const hospital = { ...props.hospital };
         const address = { ...props.hospital.address };
         let rating = 0;
+        // console.log(hospital);
         for (let review of props.reviewList) {
             rating += review.rate;
         }
@@ -329,6 +326,7 @@ function HospitalSearch(props) {
                         component="div"
                         onClick={() => {
                             detailHospital(props.index);
+                            props.markerPosition(hospital.latitude, hospital.longitude);
                         }}
                     >
                         {hospital.name}
@@ -455,7 +453,7 @@ function HospitalSearch(props) {
         setHospitalList(tempList);
     };
     useEffect(() => {
-        kakaoMap();
+        kakaoMap(lat, lng);
     });
     return (
         <Grid container>
@@ -486,6 +484,7 @@ function HospitalSearch(props) {
                             hospital={item.hospital}
                             index={index}
                             reviewList={item.reviewList}
+                            markerPosition={markerPosition}
                         ></Hospital>
                     ))}
                 </Paper>
