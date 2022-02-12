@@ -66,10 +66,9 @@ public class TreatmentService {
         noticeUserInfo.setUrl("https://"); // 결제 페이지
         noticeUserInfo.setType(NoticeType.PAYMENT);
         noticeUserInfo.setIsChecked(false);
-        noticeUserInfo.setDoctorId(treatmentPostReq.getDoctorId());
         noticeUserInfo.setTreatmentId(treatmentId);
         noticeUserInfo.setNoticeDate(LocalDateTime.now());
-        noticeRepository.registerNotice(noticeUserInfo, user, doctor, treatment);
+        noticeRepository.registerNotice(noticeUserInfo, user, treatment);
 
         return treatmentId;
     }
@@ -85,12 +84,12 @@ public class TreatmentService {
         if(type.equals(TreatmentType.RES_CANCEL) || type.equals(TreatmentType.VST_CANCEL)){ // 예약 취소
             noticeUserInfo.setContent("예약이 취소되었습니다.");
             noticeUserInfo.setUrl("https://");
-            noticeRepository.registerNotice(noticeUserInfo, treatmentRepositry.findByTreatmentId(id).getUser(), null, null);
+            noticeRepository.registerNotice(noticeUserInfo, treatmentRepositry.findByTreatmentId(id).getUser(), null);
         }
         else if(type.equals(TreatmentType.RES_REJECT) || type.equals(TreatmentType.VST_REJECT)){ // 예약 거절
             noticeUserInfo.setContent("예약이 거절되었습니다.");
             noticeUserInfo.setUrl("https://");
-            noticeRepository.registerNotice(noticeUserInfo, treatmentRepositry.findByTreatmentId(id).getUser(), null, null);
+            noticeRepository.registerNotice(noticeUserInfo, treatmentRepositry.findByTreatmentId(id).getUser(), null);
         }
         else if(type.equals(TreatmentType.RES_ACCEPTED)){ // 예약 승인
             noticeRepository.updateNotice(noticeRepository.findBytreatmentId(id).getId(), NoticeType.RESERVATION );
@@ -98,7 +97,7 @@ public class TreatmentService {
         else if(type.equals(TreatmentType.RES_PAID) || type.equals(TreatmentType.VST_PAID)){ // 예약 거절
             noticeUserInfo.setContent("결제가 완료되었습니다.");
             noticeUserInfo.setUrl("https://");
-            noticeRepository.registerNotice(noticeUserInfo, treatmentRepositry.findByTreatmentId(id).getUser(), null, null);
+            noticeRepository.registerNotice(noticeUserInfo, treatmentRepositry.findByTreatmentId(id).getUser(), null);
 
             // 의사에게 알림
             NoticePostReq noticeDoctorInfo = new NoticePostReq();
@@ -107,7 +106,7 @@ public class TreatmentService {
             noticeDoctorInfo.setAccountId(user_id);
             noticeDoctorInfo.setContent("승인이 필요한 예약이 있습니다.");
             noticeDoctorInfo.setUrl("https://");
-            noticeRepository.registerNotice(noticeDoctorInfo, treatmentRepositry.findByTreatmentId(id).getDoctor(), null, null);
+            noticeRepository.registerNotice(noticeDoctorInfo, treatmentRepositry.findByTreatmentId(id).getDoctor(),null);
 
         }
 

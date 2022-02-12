@@ -88,7 +88,7 @@ public class PrescriptionService {
             noticeInfo.setUrl("https://"); // 운송장 등록하는 사이트
             noticeInfo.setIsChecked(false);
             noticeInfo.setNoticeDate(LocalDateTime.now());
-            noticeRepository.registerNotice(noticeInfo, treatmentRepositry.findByPrescriptionId(prescriptionId).getDoctor(), null, null);
+            noticeRepository.registerNotice(noticeInfo, treatmentRepositry.findByPrescriptionId(prescriptionId).getDoctor(), null);
         }
 
         return prescriptionRepository.updatePaymentInfo(prescriptionId, paymentType);

@@ -27,8 +27,8 @@ public class NoticeRepository {
                 .getSingleResult();
     }
 
-    public Long registerNotice(NoticePostReq noticeInfo, Account account, Doctor doctor, Treatment treatment) {
-        Notice notice = Notice.createNotice(account, doctor, treatment, noticeInfo);
+    public Long registerNotice(NoticePostReq noticeInfo, Account account, Treatment treatment) {
+        Notice notice = Notice.createNotice(account, treatment, noticeInfo);
         em.persist(notice);
         return notice.getId();
     }
