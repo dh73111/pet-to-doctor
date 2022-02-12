@@ -7,7 +7,6 @@ import com.ssafy.pettodoctor.api.domain.User;
 import com.ssafy.pettodoctor.api.request.*;
 import com.ssafy.pettodoctor.api.response.*;
 import com.ssafy.pettodoctor.api.service.SendMailService;
-import com.ssafy.pettodoctor.api.request.LoginPostReq;
 import com.ssafy.pettodoctor.api.request.UserCommonSignupPostReq;
 import com.ssafy.pettodoctor.api.response.ResVO;
 import com.ssafy.pettodoctor.api.service.UserService;
@@ -230,43 +229,6 @@ public class UserController {
         return response;
     }
 
-    @PostMapping("/login")
-    @Operation(summary = "로그인", description = "<strong>아이디와 패스워드</strong>를 통해 로그인한다.")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "성공"),
-            @ApiResponse(responseCode = "401", description = "인증 실패"),
-            @ApiResponse(responseCode = "404", description = "사용자 없음"),
-            @ApiResponse(responseCode = "500", description = "서버 오류")
-    })
-    public ResponseEntity<ResVO<String>> login (@RequestBody LoginPostReq loginPostReq){
-        ResVO<String> result = new ResVO<>();
-        HttpStatus status = null;
-
-        try{
-            User user = userService.getUserByEmail(loginPostReq.getEmail());
-            if(user == null) {
-                status = HttpStatus.NOT_ACCEPTABLE;
-                result.setMessage("존재하지 않는 이메일입니다.");
-            } else if (!loginPostReq.getPassword().equals(user.getPassword())) {
-                status = HttpStatus.UNAUTHORIZED;
-                result.setMessage("비밀번호가 일치하지 않습니다.");
-            } else if (!user.getIsCertificated()){
-                status = HttpStatus.UNAUTHORIZED;
-                result.setMessage("이메일 인증이 되지 않은 회원입니다.");
-            } else {
-                status = HttpStatus.OK;
-                String accessToken = JwtTokenUtil.getToken(user.getId().toString(), user.getRole());
-                result.setData(accessToken);
-                result.setMessage("성공");
-            }
-
-        }catch (Exception e){
-            status = HttpStatus.INTERNAL_SERVER_ERROR;
-            result.setMessage("서버 오류");
-        }
-
-        return new ResponseEntity<ResVO<String>>(result, status);
-    }
 
     // 사용자 프로필 업데이트
     @PostMapping("/profile/{userId}")
