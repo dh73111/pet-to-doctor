@@ -40,29 +40,6 @@ function UserLoginModal(props) {
         console.log(user);
         navigate("/petodoctor");
     };
-    // async function userLogin(user) {
-    //   await loginUser(
-    //     { email: user.email, password: user.password },
-    //     (res) => {
-    //       sessionStorage.setItem("accessToken", res.data.data);
-    //       let decode_token = jwtDecode(res.data.data);
-    //       userInfo(
-    //         decode_token.sub,
-    //         (res) => {
-    //           dispatch({ type: "login", userData: res.data.data });
-    //           props.onClose();
-    //           navigate("/petodoctor");
-    //         },
-    //         () => {
-    //           console.log("회원 정보가져오기 실패");
-    //         }
-    //       );
-    //     },
-    //     () => {
-    //       alert("아이디나 비밀번호가 틀렸습니다.");
-    //     }
-    //   );
-    // }
     async function userChangePwd() {
         await changePassword(
             { password: "123", passwordConf: "123", newPassword: "1234" },
@@ -72,6 +49,7 @@ function UserLoginModal(props) {
             () => {}
         );
     }
+
     return (
         <ThemeProvider theme={newTheme}>
             <div>
