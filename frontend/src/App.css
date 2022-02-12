@@ -8,6 +8,7 @@
     /* font-family: 나눔스퀘어, 'NanumSquare', sans-serif; */
     margin: 0;
     -ms-overflow-style: none;
+    color: "#263747";
 }
 .mainTitle {
     color: white;
@@ -15,7 +16,7 @@
     text-shadow: 1px 0px 10px #000;
 }
 .gnb div:hover {
-    color: #309FB3;
+    color: #309fb3;
 }
 .card {
     /* transform: translateX(-50%); */
@@ -41,6 +42,13 @@
     height: 1px;
     background-color: rgb(221, 221, 221);
 }
+/* 스타일링용끝 */
+
+.pet_card:hover {
+    /* border-color: #1dc6f6; */
+    border-color: #309fb3;
+    cursor: pointer;
+}
 
 .mainSearchBar:focus {
     outline: none;
@@ -50,7 +58,7 @@
     border-spacing: 0;
     width: 100%;
     /* border: 1px solid blue; */
-    border-top: 2px solid black;
+    border-top: 1px solid #e5e5e5;
     margin-bottom: 200px;
 }
 .favhospital thead tr {
