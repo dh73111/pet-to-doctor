@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -30,6 +31,8 @@ public class TreatmentService {
         return treatmentRepositry.findByTreatmentId(id);
     }
 
+    public Treatment findByPrescriptionId(Long id) { return treatmentRepositry.findByPrescriptionId(id); }
+
     public List<Treatment> findByDoctorId(Long id, TreatmentType treatmentType){
         return treatmentRepositry.findByDoctorId(id, treatmentType);
     }
@@ -43,32 +46,63 @@ public class TreatmentService {
         Doctor doctor = doctorRepository.findById(treatmentPostReq.getDoctorId());
         User user = userRepository.findById(treatmentPostReq.getUserId()).get();
         Hospital hospital = hospitalRepository.findById(treatmentPostReq.getHospitalId());
+        Long treatmentId = treatmentRepositry.registerTreatment(treatmentPostReq, doctor, user, hospital);
+        Treatment treatment = treatmentRepositry.findByTreatmentId(treatmentId);
 
         // 유저 알람 생성
         Long user_id = treatmentPostReq.getUserId();
         NoticePostReq noticeUserInfo = new NoticePostReq();
         noticeUserInfo.setAccountId(user_id);
         noticeUserInfo.setContent("예약 접수중입니다. 결제를 진행해 주세요.");
-        noticeUserInfo.setUrl("https://"); // 결제 페이지..?
+        noticeUserInfo.setUrl("https://"); // 결제 페이지
         noticeUserInfo.setType(NoticeType.PAYMENT);
         noticeUserInfo.setIsChecked(false);
-        noticeRepository.registerNotice(noticeUserInfo, doctor);
+        noticeUserInfo.setDoctorId(treatmentPostReq.getDoctorId());
+        noticeUserInfo.setTreatmentId(treatmentId);
+        noticeUserInfo.setNoticeDate(LocalDateTime.now());
+        noticeRepository.registerNotice(noticeUserInfo, user, doctor, treatment);
 
-        // 의사 알람 생성 - 결제가 되었을때 생성돼야 하나??
-        Long doctor_id = treatmentPostReq.getDoctorId();
-        NoticePostReq noticeDoctorInfo = new NoticePostReq();
-        noticeDoctorInfo.setAccountId(doctor_id);
-        noticeDoctorInfo.setContent("예약 접수중... 곧 예약이 들어올지도?");
-        noticeDoctorInfo.setUrl("https://"); // 예약 확인페이지..?
-        noticeDoctorInfo.setType(NoticeType.PAYMENT);
-        noticeDoctorInfo.setIsChecked(false);
-        noticeRepository.registerNotice(noticeDoctorInfo, doctor);
-
-        return treatmentRepositry.registerTreatment(treatmentPostReq, doctor, user, hospital);
+        return treatmentId;
     }
 
     @Transactional
     public Treatment updateTreatment(Long id, TreatmentType type){
+        Long user_id = treatmentRepositry.findByTreatmentId(id).getUser().getId();
+
+        NoticePostReq noticeUserInfo = new NoticePostReq();
+        noticeUserInfo.setIsChecked(false);
+        noticeUserInfo.setNoticeDate(LocalDateTime.now());
+        noticeUserInfo.setAccountId(user_id);
+        if(type.equals(TreatmentType.RES_CANCEL) || type.equals(TreatmentType.VST_CANCEL)){ // 예약 취소
+            noticeUserInfo.setContent("예약이 취소되었습니다.");
+            noticeUserInfo.setUrl("https://");
+            noticeRepository.registerNotice(noticeUserInfo, treatmentRepositry.findByTreatmentId(id).getUser(), null, null);
+        }
+        else if(type.equals(TreatmentType.RES_REJECT) || type.equals(TreatmentType.VST_REJECT)){ // 예약 거절
+            noticeUserInfo.setContent("예약이 거절되었습니다.");
+            noticeUserInfo.setUrl("https://");
+            noticeRepository.registerNotice(noticeUserInfo, treatmentRepositry.findByTreatmentId(id).getUser(), null, null);
+        }
+        else if(type.equals(TreatmentType.RES_ACCEPTED)){ // 예약 승인
+            noticeRepository.updateNotice(noticeRepository.findBytreatmentId(id).getId(), NoticeType.RESERVATION );
+        }
+        else if(type.equals(TreatmentType.RES_PAID) || type.equals(TreatmentType.VST_PAID)){ // 예약 거절
+            noticeUserInfo.setContent("결제가 완료되었습니다.");
+            noticeUserInfo.setUrl("https://");
+            noticeRepository.registerNotice(noticeUserInfo, treatmentRepositry.findByTreatmentId(id).getUser(), null, null);
+
+            // 의사에게 알림
+            NoticePostReq noticeDoctorInfo = new NoticePostReq();
+            noticeDoctorInfo.setIsChecked(false);
+            noticeDoctorInfo.setNoticeDate(LocalDateTime.now());
+            noticeDoctorInfo.setAccountId(user_id);
+            noticeDoctorInfo.setContent("승인이 필요한 예약이 있습니다.");
+            noticeDoctorInfo.setUrl("https://");
+            noticeRepository.registerNotice(noticeDoctorInfo, treatmentRepositry.findByTreatmentId(id).getDoctor(), null, null);
+
+        }
+
+
         return treatmentRepositry.updateTreatment(id, type);
     }
 
