@@ -16,4 +16,4 @@ RUN npm install
 COPY . ./
 WORKDIR /app/src
 # start app
-CMD ["node", "server.js"]
+CMD ["npm", "run" ,"dev"]
