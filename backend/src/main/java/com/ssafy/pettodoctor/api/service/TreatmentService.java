@@ -33,13 +33,22 @@ public class TreatmentService {
 
     public Treatment findByPrescriptionId(Long id) { return treatmentRepositry.findByPrescriptionId(id); }
 
-    public List<Treatment> findByDoctorId(Long id, TreatmentType treatmentType){
-        return treatmentRepositry.findByDoctorId(id, treatmentType);
+    public List<Treatment> findByDoctorIdAndType(Long id, TreatmentType treatmentType){
+        return treatmentRepositry.findByDoctorIdAndType(id, treatmentType);
     }
 
-    public List<Treatment> findByUserId(Long id, TreatmentType treatmentType){
-        return treatmentRepositry.findByUserId(id, treatmentType);
+    public List<Treatment> findByUserIdAndType(Long id, TreatmentType treatmentType){
+        return treatmentRepositry.findByUserIdAndType(id, treatmentType);
     }
+
+    public List<Treatment> findByDoctorId(Long id){
+        return treatmentRepositry.findByDoctorId(id);
+    }
+
+    public List<Treatment> findByUserId(Long id){
+        return treatmentRepositry.findByUserId(id);
+    }
+
 
     @Transactional
     public Long registerTreatment(TreatmentPostReq treatmentPostReq) {

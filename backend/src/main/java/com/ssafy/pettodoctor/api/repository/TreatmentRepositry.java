@@ -1,7 +1,6 @@
 package com.ssafy.pettodoctor.api.repository;
 
 import com.ssafy.pettodoctor.api.domain.*;
-import com.ssafy.pettodoctor.api.request.PrescriptionPostReq;
 import com.ssafy.pettodoctor.api.request.TreatmentPostReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -24,7 +23,7 @@ public class TreatmentRepositry {
                 .getSingleResult();
     }
 
-    public List<Treatment> findByUserId(Long id, TreatmentType treatmentType){
+    public List<Treatment> findByUserIdAndType(Long id, TreatmentType treatmentType){
         return em.createQuery("select t from Treatment t join t.user u where u.id = :id and t.type = :treatmentType",
                 Treatment.class)
                 .setParameter("id", id)
@@ -32,11 +31,25 @@ public class TreatmentRepositry {
                 .getResultList();
     }
 
-    public List<Treatment> findByDoctorId(Long id, TreatmentType treatmentType){
+    public List<Treatment> findByDoctorIdAndType(Long id, TreatmentType treatmentType){
         return em.createQuery("select t from Treatment t join t.doctor d where d.id = :id and t.type =: treatmentType",
                         Treatment.class)
                 .setParameter("id", id)
                 .setParameter("treatmentType", treatmentType)
+                .getResultList();
+    }
+
+    public List<Treatment> findByDoctorId(Long id){
+        return em.createQuery("select t from Treatment t join t.doctor d where d.id = :id",
+                        Treatment.class)
+                .setParameter("id", id)
+                .getResultList();
+    }
+
+    public List<Treatment> findByUserId(Long id){
+        return em.createQuery("select t from Treatment t join t.user u where u.id = :id",
+                        Treatment.class)
+                .setParameter("id", id)
                 .getResultList();
     }
 
