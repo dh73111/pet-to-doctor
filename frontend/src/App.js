@@ -31,6 +31,7 @@ import UserConsulting from "components/user/UserConsulting";
 import UserMedicinePayment from "components/user/UserMedicinePayment";
 import UserRating from "components/user/UserRating";
 import Qna from "components/user/Qna";
+import PerscriptionDetail from "components/commons/PerscriptionDetail";
 
 function App() {
     const fontTheme = createTheme({
@@ -77,6 +78,7 @@ function App() {
                             path='/petodoctor/userreservationpaymenting'
                             element={<UserReservationPaymenting />}></Route>
                         <Route path='/petodoctor/userreservationcomplete' element={<UserReservationComplete />}></Route>
+                        <Route path='/petodoctor/persciption/:perscId' element={<PerscriptionDetail />}></Route>
                         <Route path='/petodoctor/usermedipayment' element={<UserMedicinePayment />}></Route>
                         <Route path='/petodoctor/userconsulting/:id' element={<UserConsulting />}></Route>
                         <Route path='/petodoctor/qna' element={<Qna />}></Route>
