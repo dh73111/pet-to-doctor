@@ -1,27 +1,17 @@
-let express = require("express");
-
-let app = express();
-let cors = require("cors");
-let server = require("http").createServer(app);
-app.use(cors());
-
-let socketio = require("socket.io")(server, {
+import { createServer } from "http";
+import { Server } from "socket.io";
+import express from "express";
+const app = express();
+const httpServer = createServer(app);
+var cors = require("cors");
+const io = new Server(httpServer, {
     cors: {
-        origin: "http://192.168.35.26",
-        allowedHeaders: ["my-custom-header"],
+        origin: ["http://localhost:3000", "http://localhost:3001"],
         methods: ["GET", "POST"],
-        transports: ["websocket", "polling"],
         credentials: true,
-        // xhrFields: {
-        //     withCredentials: false,
-        // },
-        allowEI03: true,
     },
+    allowEIO3: true,
 });
-let io = socketio.listen(server);
-// const httpServer = require("http").createServer();
-// const options = { /* ... */ };
-// const io = require("socket.io")(httpServer, options);
 
 const PORT = 9000;
 const hostname = "192.168.35.26";
@@ -29,11 +19,11 @@ let users = {};
 
 let socketToRoom = {};
 
-const maximum = process.env.MAXIMUM || 2;
+const maximum = process.env.MAXIMUM || 4;
 
 io.on("connection", (socket) => {
-    console.log("connection start");
-    socket.on("join_room", (data) => {
+    socket.on("joinRoom", (data) => {
+        console.log("dddd");
         if (users[data.room]) {
             const length = users[data.room].length;
             if (length === maximum) {
@@ -53,6 +43,23 @@ io.on("connection", (socket) => {
 
         console.log(usersInThisRoom);
         io.sockets.to(socket.id).emit("all_users", usersInThisRoom);
+    });
+
+    socket.on("disconnect", () => {
+        console.log(`[${socketToRoom[socket.id]}]: ${socket.id} exit`);
+        // disconnect한 user가 포함된 roomID
+        const roomID = socketToRoom[socket.id];
+        // room에 포함된 유저
+        let room = users[roomID];
+        // room이 존재한다면(user들이 포함된)
+        if (room) {
+            // disconnect user를 제외
+            room = room.filter((user) => user.id !== socket.id);
+            users[roomID] = room;
+        }
+        // 어떤 user가 나갔는 지 room의 다른 user들에게 통보
+        socket.broadcast.to(room).emit("user_exit", { id: socket.id });
+        console.log(users);
     });
 
     // 다른 user들에게 offer를 보냄 (자신의 RTCSessionDescription)
@@ -75,24 +82,8 @@ io.on("connection", (socket) => {
     });
 
     // user가 연결이 끊겼을 때 처리
-    socket.on("disconnect", () => {
-        console.log(`[${socketToRoom[socket.id]}]: ${socket.id} exit`);
-        // disconnect한 user가 포함된 roomID
-        const roomID = socketToRoom[socket.id];
-        // room에 포함된 유저
-        let room = users[roomID];
-        // room이 존재한다면(user들이 포함된)
-        if (room) {
-            // disconnect user를 제외
-            room = room.filter((user) => user.id !== socket.id);
-            users[roomID] = room;
-        }
-        // 어떤 user가 나갔는 지 room의 다른 user들에게 통보
-        socket.broadcast.to(room).emit("user_exit", { id: socket.id });
-        console.log(users);
-    });
 });
 
-server.listen(PORT, hostname, () => {
+httpServer.listen(PORT, hostname, () => {
     console.log(`server running on http:/${hostname}:${PORT}`);
 });

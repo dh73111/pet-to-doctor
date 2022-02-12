@@ -47,7 +47,7 @@ function UserConsulting(props) {
                     remoteVideoRef.current.srcObject = ev.streams[0];
                 }
             };
-            socketRef.current.emit("join_room", {
+            socketRef.current.emit("joinRoom", {
                 room: "1234",
             });
             console.dir(localVideoRef.current.srcObject.getVideoTracks());
@@ -89,9 +89,7 @@ function UserConsulting(props) {
 
     useEffect(() => {
         const init = async () => {
-            socketRef.current = await io.connect(SOCKET_SERVER_URL, {
-                withCredentials: true,
-            });
+            socketRef.current = await io.connect(SOCKET_SERVER_URL);
             pcRef.current = await new RTCPeerConnection(pc_config);
 
             socketRef.current.on("all_users", (allUsers) => {
@@ -117,7 +115,7 @@ function UserConsulting(props) {
             });
             await setVideoTracks();
         };
-        
+
         init();
 
         return () => {
@@ -185,6 +183,9 @@ function UserConsulting(props) {
                     />
                     <BottomNavigationAction
                         onClick={() => {
+                            socketRef.current.emit("joinRoom", {
+                                room: "1234",
+                            });
                             setMic(!mic);
                             micStartOrStop(!mic);
                         }}
