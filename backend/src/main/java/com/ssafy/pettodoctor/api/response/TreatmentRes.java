@@ -56,7 +56,8 @@ public class TreatmentRes {
 
     public static TreatmentRes convertToRes(Treatment t){
         TreatmentRes tr = new TreatmentRes(t.getId(), t.getUser().getId(), t.getDoctor().getId()
-                ,t.getPrescription() != null ? t.getPrescription().getId() : null, t.getHospital().getId()
+                ,t.getPrescription() != null ? t.getPrescription().getId() : null
+                , t.getHospital() != null ? t.getHospital().getId() : null
                 ,t.getPaymentCode(), t.getScheduleDate(), t.getType()
                 ,t.getReVisit(), t.getPetName(), t.getSymptom(), t.getBirthDate()
                 ,t.getPetSpecies(), t.getPetWeight(), t.getPrice(), t.getUrl());
