@@ -33,58 +33,64 @@ import UserRating from "components/user/UserRating";
 import Qna from "components/user/Qna";
 
 function App() {
-  const fontTheme = createTheme({
-    typography: {
-      fontFamily: "noto-sans",
-    },
-  });
-  return (
-    <ThemeProvider theme={fontTheme}>
-      <Box>
-        <div className="App">
-          <Routes>
-            <Route path="/petodoctor/*" element={<NavBar />}></Route>
-          </Routes>
-          <Routes>
-            <Route path="/petodoctor/" element={<Home />}></Route>
-            <Route path="/petodoctor/kakaooauth*" element={<Home />}></Route>
-          </Routes>
-          <Routes>
-            {/* doctor */}
-            <Route path="/petodoctor/doctorreservation" element={<DoctorReservation />}></Route>
-            <Route path="/petodoctor/doctordiagnosis" element={<DoctorDianosis />}></Route>
-            <Route path="/petodoctor/doctorperscripton" element={<DoctorPerscription />}></Route>
-            <Route path="/petodoctor/doctormypage" element={<DoctorMypage />}></Route>
-            <Route path="/doctorperscriptonform" element={<DoctorPerscriptionForm />}></Route>
-            <Route path="/petodoctor/doctorconsulting" element={<DoctorConsuliting />}></Route>
+    const fontTheme = createTheme({
+        typography: {
+            fontFamily: "noto-sans",
+        },
+    });
+    return (
+        <ThemeProvider theme={fontTheme}>
+            <Box>
+                <div className="App">
+                    <Routes>
+                        <Route path="/petodoctor/*" element={<NavBar />}></Route>
+                    </Routes>
+                    <Routes>
+                        <Route path="/petodoctor/" element={<Home />}></Route>
+                        <Route path="/petodoctor/kakaooauth*" element={<Home />}></Route>
+                    </Routes>
+                    <Routes>
+                        {/* doctor */}
+                        <Route path="/petodoctor/doctorreservation" element={<DoctorReservation />}></Route>
+                        <Route path="/petodoctor/doctordiagnosis" element={<DoctorDianosis />}></Route>
+                        <Route path="/petodoctor/doctorperscripton" element={<DoctorPerscription />}></Route>
+                        <Route path="/petodoctor/doctormypage" element={<DoctorMypage />}></Route>
+                        <Route path="/doctorperscriptonform" element={<DoctorPerscriptionForm />}></Route>
+                        <Route path="/petodoctor/doctorconsulting" element={<DoctorConsuliting />}></Route>
 
-            {/* user */}
-            <Route path="/petodoctor/notice" element={<Notice />}></Route>
-            <Route path="/petodoctor/login" element={<UserLoginModal />}></Route>
-            <Route path="/petodoctor/hospitalsearch" element={<HospitalSearch />}></Route>
-            <Route path="/petodoctor/hospitalreservation" element={<HospitalReservation />}></Route>
-            <Route path="/petodoctor/hospitalsearchreservation" element={<HospitalSearchReservation />}></Route>
-            <Route path="/petodoctor/userjoin" element={<UserJoin />}></Route>
-            <Route path="/petodoctor/usersignupconfirm" element={<UserSignupConfirm />}></Route>
-            <Route path="/petodoctor/usermypage" element={<UserMypage />}></Route>
-            <Route path="/petodoctor/usermypage/:userId" element={<UserMypageChange />}></Route>
-            <Route path="/petodoctor/userrating" element={<UserRating />}></Route>
-            <Route path="/petodoctor/userreservation" element={<UserReservation />}></Route>
-            <Route path="/petodoctor/userreservationpayment" element={<UserReservationPayment />}></Route>
-            <Route path="/petodoctor/userreservationpaymenting" element={<UserReservationPaymenting />}></Route>
-            <Route path="/petodoctor/userreservationcomplete" element={<UserReservationComplete />}></Route>
-            <Route path="/petodoctor/usermedipayment" element={<UserMedicinePayment />}></Route>
-            <Route path="/petodoctor/userconsulting/:id" element={<UserConsulting />}></Route>
-            <Route path="/petodoctor/qna" element={<Qna />}></Route>
-            <Route path="/petodoctor/review" element={<Review />}></Route>
-          </Routes>
-          <Routes>
-            <Route path="/petodoctor/*" element={<Footer />}></Route>
-          </Routes>
-        </div>
-      </Box>
-    </ThemeProvider>
-  );
+                        {/* user */}
+                        <Route path="/petodoctor/notice" element={<Notice />}></Route>
+                        <Route path="/petodoctor/login" element={<UserLoginModal />}></Route>
+                        <Route path="/petodoctor/hospitalsearch" element={<HospitalSearch />}></Route>
+                        <Route path="/petodoctor/hospitalreservation" element={<HospitalReservation />}></Route>
+                        <Route
+                            path="/petodoctor/hospitalsearchreservation"
+                            element={<HospitalSearchReservation />}
+                        ></Route>
+                        <Route path="/petodoctor/userjoin" element={<UserJoin />}></Route>
+                        <Route path="/petodoctor/usersignupconfirm" element={<UserSignupConfirm />}></Route>
+                        <Route path="/petodoctor/usermypage" element={<UserMypage />}></Route>
+                        <Route path="/petodoctor/usermypage/:userId" element={<UserMypageChange />}></Route>
+                        <Route path="/petodoctor/userrating" element={<UserRating />}></Route>
+                        <Route path="/petodoctor/userreservation" element={<UserReservation />}></Route>
+                        <Route path="/petodoctor/userreservationpayment" element={<UserReservationPayment />}></Route>
+                        <Route
+                            path="/petodoctor/userreservationpaymenting"
+                            element={<UserReservationPaymenting />}
+                        ></Route>
+                        <Route path="/petodoctor/userreservationcomplete" element={<UserReservationComplete />}></Route>
+                        <Route path="/petodoctor/usermedipayment" element={<UserMedicinePayment />}></Route>
+                        <Route path="/petodoctor/userconsulting/:id" element={<UserConsulting />}></Route>
+                        <Route path="/petodoctor/qna" element={<Qna />}></Route>
+                        <Route path="/petodoctor/review" element={<Review />}></Route>
+                    </Routes>
+                    <Routes>
+                        <Route path="/petodoctor/*" element={<Footer />}></Route>
+                    </Routes>
+                </div>
+            </Box>
+        </ThemeProvider>
+    );
 }
 
 export default App;
