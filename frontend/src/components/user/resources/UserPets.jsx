@@ -7,11 +7,11 @@ function UserPets(props) {
   const pet = props.pet;
 
   return (
-    <Grid item sx={{ border: 1 }}>
+    <Grid item xs={6} md={3}>
       <Card>
-        <CardMedia component="img" height="140" src={`${process.env.PUBLIC_URL}/img/dogDefaultProfile.jpg`} alt="petPhoto" />
         {isPetMod === false ? (
           <Grid container>
+            <CardMedia component="img" height="140" src={`${process.env.PUBLIC_URL}/img/dogDefaultProfile.jpg`} alt="petPhoto" />
             <Grid item xs={12}>
               {pet.name}
             </Grid>
@@ -43,6 +43,7 @@ function UserPets(props) {
           </Grid>
         ) : (
           <Grid container>
+            <CardMedia component="img" height="140" src={`${process.env.PUBLIC_URL}/img/dogDefaultProfile.jpg`} alt="petPhoto" />
             <Grid item xs={12}>
               <Input defaultValue={pet.name} onChange={props.changeModPetInfo("name")} />
             </Grid>

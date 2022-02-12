@@ -136,13 +136,7 @@ function DoctorDiagnosis(props) {
                     <Box sx={{ width: 120 }}>
                         <FormControl fullWidth>
                             <InputLabel id="demo-simple-select-label">ALL</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                value={state}
-                                label="state"
-                                onChange={handleChange}
-                            >
+                            <Select labelId="demo-simple-select-label" id="demo-simple-select" value={state} label="state" onChange={handleChange}>
                                 <MenuItem value={10}>진료 대기</MenuItem>
                                 <MenuItem value={20}>진료 완료</MenuItem>
                             </Select>
@@ -166,10 +160,7 @@ function DoctorDiagnosis(props) {
                                 </tr>
                             </thead>
                             <tbody>
-                                {(rowsPerPage > 0
-                                    ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                    : rows
-                                ).map((row) => (
+                                {(rowsPerPage > 0 ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : rows).map((row) => (
                                     <tr key={row.no}>
                                         <td style={{ width: 160 }}> {row.no}</td>
                                         <td style={{ width: 160 }} align="right">
@@ -188,11 +179,7 @@ function DoctorDiagnosis(props) {
                                                 </Button>
                                             </Box>
                                             <Box sx={{ mt: 0.3 }}>
-                                                <Button
-                                                    variant="contained"
-                                                    sx={{ width: "50px", height: "20px" }}
-                                                    color="error"
-                                                >
+                                                <Button variant="contained" sx={{ width: "50px", height: "20px" }} color="error">
                                                     close
                                                 </Button>
                                             </Box>

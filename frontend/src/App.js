@@ -55,7 +55,7 @@ function App() {
                         <Route path="/petodoctor/doctordiagnosis" element={<DoctorDianosis />}></Route>
                         <Route path="/petodoctor/doctorperscripton" element={<DoctorPerscription />}></Route>
                         <Route path="/petodoctor/doctormypage" element={<DoctorMypage />}></Route>
-                        <Route path="/doctorperscriptonform" element={<DoctorPerscriptionForm />}></Route>
+                        <Route path="/petodoctor/doctorperscriptonform" element={<DoctorPerscriptionForm />}></Route>
                         <Route path="/petodoctor/doctorconsulting" element={<DoctorConsuliting />}></Route>
 
                         {/* user */}
@@ -63,10 +63,7 @@ function App() {
                         <Route path="/petodoctor/login" element={<UserLoginModal />}></Route>
                         <Route path="/petodoctor/hospitalsearch" element={<HospitalSearch />}></Route>
                         <Route path="/petodoctor/hospitalreservation" element={<HospitalReservation />}></Route>
-                        <Route
-                            path="/petodoctor/hospitalsearchreservation"
-                            element={<HospitalSearchReservation />}
-                        ></Route>
+                        <Route path="/petodoctor/hospitalsearchreservation" element={<HospitalSearchReservation />}></Route>
                         <Route path="/petodoctor/userjoin" element={<UserJoin />}></Route>
                         <Route path="/petodoctor/usersignupconfirm" element={<UserSignupConfirm />}></Route>
                         <Route path="/petodoctor/usermypage" element={<UserMypage />}></Route>
@@ -74,10 +71,7 @@ function App() {
                         <Route path="/petodoctor/userrating" element={<UserRating />}></Route>
                         <Route path="/petodoctor/userreservation" element={<UserReservation />}></Route>
                         <Route path="/petodoctor/userreservationpayment" element={<UserReservationPayment />}></Route>
-                        <Route
-                            path="/petodoctor/userreservationpaymenting"
-                            element={<UserReservationPaymenting />}
-                        ></Route>
+                        <Route path="/petodoctor/userreservationpaymenting" element={<UserReservationPaymenting />}></Route>
                         <Route path="/petodoctor/userreservationcomplete" element={<UserReservationComplete />}></Route>
                         <Route path="/petodoctor/usermedipayment" element={<UserMedicinePayment />}></Route>
                         <Route path="/petodoctor/userconsulting/:id" element={<UserConsulting />}></Route>

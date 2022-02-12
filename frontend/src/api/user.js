@@ -25,9 +25,10 @@ async function modifyUserPic(userId) {
 }
 
 // 비밀번호 확인
-async function checkPassword(user) {
+async function checkPassword(password) {
+  console.log(typeof password, "from user api");
   const loginApi = loginApiInstance();
-  return await loginApi.post(`/user/password/check`, JSON.stringify(user));
+  return await loginApi.post(`/user/password/check`, password);
 }
 
 // 비밀번호 변경
@@ -35,9 +36,9 @@ async function checkPassword(user) {
 //   const loginApi = loginApiInstance();
 //   loginApi.post(`/user/password/change`, JSON.stringify(user)).then(success).catch(fail);
 // }
-async function changePassword(user) {
+async function changePassword(password) {
   const loginApi = loginApiInstance();
-  return await loginApi.post(`/user/password/change`, JSON.stringify(user));
+  return await loginApi.post(`/user/password/change`, JSON.stringify(password));
 }
 
 // 로그인

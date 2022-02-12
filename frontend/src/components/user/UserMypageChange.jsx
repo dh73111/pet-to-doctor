@@ -127,22 +127,6 @@ function UserMypageChange(props) {
     setPasswords({ ...passwords, [pwTitle]: e.target.value });
   };
 
-  // const requestChangeInfo = async (user) => {
-  //   console.log(user, "보내는 유저");
-  //   const response = await modifyUser(user);
-  //   console.log(response);
-  //   // console.log(result, " 결과!!!!!");
-  //   // navigate("/petodoctor");
-  //   // modifyUser(
-  //   //   newUserInfo,
-  //   //   (res) => {
-  //   //     console.log(res, "체인지요청성공");
-  //   //   },
-  //   //   (res) => {
-  //   //     console.log(res, "체인지요청실패");
-  //   //   }
-  //   // );
-  // };
   const requestChangeInfo = async () => {
     const response = await modifyUser(newUserInfo);
     window.location.href = "http://localhost:3000/petodoctor/usermypage";
@@ -164,28 +148,6 @@ function UserMypageChange(props) {
     } else {
       alert("현재 비밀번호를 확인 해 주세요.");
     }
-    // console.log(prev);
-    // checkPassword(
-    //   prev,
-    //   (res) => {
-    //     console.log("췤", res.data);
-    //     if (res.data.result === false) {
-    //       alert("현재 비밀번호가 일치하지 않습니다");
-    //     }
-    //   },
-    //   () => {
-    //     console.log("먼가 췍이 잘못댐");
-    //   }
-    // );
-    // changePassword(
-    //   passwords,
-    //   (res) => {
-    //     console.log("비번체인지ㅇㅋ", res);
-    //   },
-    //   (res) => {
-    //     console.log("비번체인지ㄴㄴ", res);
-    //   }
-    // );
   };
   const encodeFileToBase64 = (fileBloab) => {
     const reader = new FileReader();
@@ -226,16 +188,24 @@ function UserMypageChange(props) {
               </button> */}
               <Grid container spacing={2}>
                 <Grid item>
-                  <div className="preview" style={{ border: "1px solid black" }}>
-                    {modImg && <img src={modImg} alt="preview-img" />}
+                  <div
+                    className="preview"
+                    style={{ border: "1px solid black", width: "250px", height: "250px", backgroundImage: `url(${modImg})`, backgroundSize: "cover" }}
+                  >
+                    {/* {modImg && <img src={modImg} alt="preview-img" />} */}
                     이미지 미리보기
                   </div>
+                  <label className="profile-img-upload-btn" for="input_profile">
+                    이미지업로드
+                  </label>
                   <input
                     type="file"
                     accept="image/*"
+                    id="input_profile"
                     onChange={(e) => {
                       encodeFileToBase64(e.target.files[0]);
                     }}
+                    style={{ display: "none" }}
                   />
                   {/* <Input type="file" /> */}
                   <Button
@@ -243,6 +213,7 @@ function UserMypageChange(props) {
                     onClick={() => {
                       changeProfilePic();
                     }}
+                    disabled={modImg === ""}
                   >
                     프로필사진 변경
                   </Button>

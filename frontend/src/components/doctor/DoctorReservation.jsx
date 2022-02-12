@@ -95,10 +95,11 @@ function DoctorReservation(props) {
         top: "50%",
         left: "50%",
         transform: "translate(-50%, -50%)",
-        width: 1200,
-        height: 800,
+        width: 780,
+        // height: 800,
         bgcolor: "background.paper",
         boxShadow: 24,
+        boxSizing: "border-box",
     };
 
     // Avoid a layout jump when reaching the last page with empty rows.
@@ -159,13 +160,7 @@ function DoctorReservation(props) {
                     <Box sx={{ width: 120 }}>
                         <FormControl fullWidth>
                             <InputLabel id="demo-simple-select-label">ALL</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                value={state}
-                                label="state"
-                                onChange={handleChange}
-                            >
+                            <Select labelId="demo-simple-select-label" id="demo-simple-select" value={state} label="state" onChange={handleChange}>
                                 <MenuItem value={10}>예약 요청</MenuItem>
                                 <MenuItem value={20}>예약 취소</MenuItem>
                                 <MenuItem value={30}>예약 확인</MenuItem>
@@ -190,10 +185,7 @@ function DoctorReservation(props) {
                                 </tr>
                             </thead>
                             <tbody>
-                                {(rowsPerPage > 0
-                                    ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                    : rows
-                                ).map((row) => (
+                                {(rowsPerPage > 0 ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : rows).map((row) => (
                                     <tr key={row.no}>
                                         <td style={{ width: 160 }}> {row.no}</td>
                                         <td style={{ width: 160 }} align="right">
@@ -206,11 +198,7 @@ function DoctorReservation(props) {
                                             {row.state}
                                         </td>
                                         <td style={{ width: 160 }} align="right">
-                                            <Button
-                                                sx={{ fontWeight: "bold", display: "block" }}
-                                                value={row.no}
-                                                onClick={handleOpen}
-                                            >
+                                            <Button sx={{ fontWeight: "bold", display: "block" }} value={row.no} onClick={handleOpen}>
                                                 {row.detail}
                                             </Button>
                                         </td>
@@ -257,12 +245,7 @@ function DoctorReservation(props) {
                 <Grid item xs={2}></Grid>
             </Grid>
 
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
+            <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
                 <Box sx={style}>
                     <ReservationDetail></ReservationDetail>
                 </Box>
