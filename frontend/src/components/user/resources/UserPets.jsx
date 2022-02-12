@@ -1,17 +1,17 @@
-import { Card, CardMedia, Grid, Button, Input } from "@mui/material";
-import { deletePet } from "api/pet";
+import { Card, CardMedia, Grid, Button, Input, Box } from "@mui/material";
 import React, { useState } from "react";
 
 function UserPets(props) {
   const [isPetMod, setIsPetMod] = useState(false);
   const pet = props.pet;
+  const petCoverStyle = { width: '100%', height: '140px', backgroundImage: `url(${process.env.PUBLIC_URL}/img/dogDefaultProfile.jpg)`, backgroundSize: 'cover'}
 
   return (
-    <Grid item sx={{ border: 1 }}>
+    <Grid item xs={6} md={3}>
       <Card>
-        <CardMedia component="img" height="140" src={`${process.env.PUBLIC_URL}/img/dogDefaultProfile.jpg`} alt="petPhoto" />
         {isPetMod === false ? (
           <Grid container>
+            <CardMedia component="img" height="140" src={`${process.env.PUBLIC_URL}/img/dogDefaultProfile.jpg`} alt="petPhoto" />
             <Grid item xs={12}>
               {pet.name}
             </Grid>
@@ -32,17 +32,11 @@ function UserPets(props) {
             >
               펫정보수정
             </Button>
-            <Button
-              onClick={() => {
-                props.handleDeletePetInfo(pet.id);
-                setIsPetMod(false);
-              }}
-            >
-              펫정보삭제
-            </Button>
           </Grid>
         ) : (
           <Grid container>
+            {/* <CardMedia component="img" height="140" src={`${process.env.PUBLIC_URL}/img/dogDefaultProfile.jpg`} alt="petPhoto" /> */}
+            <Box style={petCoverStyle}></Box>
             <Grid item xs={12}>
               <Input defaultValue={pet.name} onChange={props.changeModPetInfo("name")} />
             </Grid>

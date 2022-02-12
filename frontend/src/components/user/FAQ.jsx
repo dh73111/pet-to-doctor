@@ -4,9 +4,8 @@ import { Box } from "@mui/system";
 import { Button, Container } from "@mui/material";
 import React, { useState } from "react";
 import QuizIcon from "@mui/icons-material/Quiz";
-// import { Provider, useSelector, useDispatch } from "react-redux";
 
-function Qna(props) {
+function FAQ(props) {
     const [expanded, setExpanded] = useState(false);
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
@@ -71,4 +70,4 @@ function Qna(props) {
     );
 }
 
-export default Qna;
+export default FAQ;

@@ -17,6 +17,7 @@ const newTheme = createTheme({
 function UserLoginModal(props) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [state, setState] = useState(true);
     const [values, setValues] = useState({
         email: "",
         password: "",
@@ -36,6 +37,7 @@ function UserLoginModal(props) {
         const info = await userInfo(decode_token.sub);
         await dispatch({ type: "login", userData: info });
         props.onClose();
+        console.log(user);
         navigate("/petodoctor");
     };
     // async function userLogin(user) {
@@ -127,15 +129,28 @@ function UserLoginModal(props) {
                                         if (e.key === "Enter") userLogin(values);
                                     }}
                                 />
-                                <Button
-                                    onClick={() => {
-                                        userLogin(values);
-                                    }}
-                                    fullWidth
-                                    variant='contained'
-                                    sx={{ mt: 3, mb: 1, py: 1 }}>
-                                    로그인
-                                </Button>
+                                {state ? (
+                                    <Button
+                                        onClick={() => {
+                                            userLogin(values);
+                                        }}
+                                        fullWidth
+                                        variant='contained'
+                                        sx={{ mt: 3, mb: 1, py: 1 }}>
+                                        로그인
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        onClick={() => {
+                                            userLogin(values);
+                                        }}
+                                        fullWidth
+                                        variant='contained'
+                                        sx={{ mt: 3, mb: 1, py: 1 }}>
+                                        의사로그인
+                                    </Button>
+                                )}
+
                                 <Grid container justifyContent='flex-end'>
                                     <Grid item>
                                         <Link
@@ -158,43 +173,55 @@ function UserLoginModal(props) {
                                         </Link>
                                     </Grid>
                                 </Grid>
-                                <Button
-                                    fullWidth
-                                    variant='contained'
-                                    sx={{ mt: 3, mb: 1 }}
-                                    style={{ backgroundColor: "#03C75A" }}>
-                                    <img
-                                        src={`${process.env.PUBLIC_URL}/img/naver.png`}
-                                        width='24px'
-                                        alt='네이버로고'
-                                    />
-                                    네이버로 로그인
-                                </Button>
-                                {/* 네이버그린 #03C75A */}
-                                <a href={KAKAO_AUTH_URL} style={{ textDecoration: "none" }}>
-                                    <Button
-                                        fullWidth
-                                        variant='contained'
-                                        sx={{ mb: 2 }}
-                                        style={{ backgroundColor: "#FEE500", color: "#000000" }}
-                                        to={KAKAO_AUTH_URL}>
-                                        <img
-                                            src={`${process.env.PUBLIC_URL}/img/kakaolink_btn_small.png`}
-                                            width='24px'
-                                            alt='카카오로고'
-                                        />
-                                        카카오로 로그인
-                                    </Button>
-                                </a>
-                                {/* 카카오옐로 #FEE500 */}
-                                <Typography variant='body2' align='center' sx={{ color: "#aeaeae" }}>
-                                    펫투닥터가 처음이신가요?
-                                </Typography>
-                                <Link href='UserJoin' variant='body2'>
-                                    <Typography variant='body2' align='center' sx={{ color: "#309FB3" }}>
-                                        회원가입
-                                    </Typography>
-                                </Link>
+                                {state ? (
+                                    <Box>
+                                        <Button
+                                            fullWidth
+                                            variant='contained'
+                                            sx={{ mt: 3, mb: 1 }}
+                                            style={{ backgroundColor: "#03C75A" }}>
+                                            <img
+                                                src={`${process.env.PUBLIC_URL}/img/naver.png`}
+                                                width='24px'
+                                                alt='네이버로고'
+                                            />
+                                            네이버로 로그인
+                                        </Button>
+                                        {/* 네이버그린 #03C75A */}
+                                        <a href={KAKAO_AUTH_URL} style={{ textDecoration: "none" }}>
+                                            <Button
+                                                fullWidth
+                                                variant='contained'
+                                                sx={{ mb: 2 }}
+                                                style={{ backgroundColor: "#FEE500", color: "#000000" }}
+                                                to={KAKAO_AUTH_URL}>
+                                                <img
+                                                    src={`${process.env.PUBLIC_URL}/img/kakaolink_btn_small.png`}
+                                                    width='24px'
+                                                    alt='카카오로고'
+                                                />
+                                                카카오로 로그인
+                                            </Button>
+                                        </a>
+                                        {/* 카카오옐로 #FEE500 */}
+                                        <Typography variant='body2' align='center' sx={{ color: "#aeaeae" }}>
+                                            펫투닥터가 처음이신가요?
+                                        </Typography>
+                                        <Link href='UserJoin' variant='body2'>
+                                            <Typography variant='body2' align='center' sx={{ color: "#309FB3" }}>
+                                                회원가입
+                                            </Typography>
+                                        </Link>
+                                    </Box>
+                                ) : (
+                                    <Box></Box>
+                                )}
+                                <Grid
+                                    onClick={() => {
+                                        setState(!state);
+                                    }}>
+                                    {state ? "의사 로그인으로 이동" : "일반 유저로그인으로 이동"}
+                                </Grid>
                             </Box>
                         </Box>
                     </Grid>

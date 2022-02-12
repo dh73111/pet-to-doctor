@@ -4,27 +4,27 @@ const api = apiInstance();
 
 // 운송장 등록
 async function addInvoice(prescriptionId) {
-  return await api.put(`/prescription/shipping`);
+    return await api.put(`/prescription/shipping`);
 }
 
 // 진단서 작성
-async function addPerscription() {
-  return await api.post(`/prescription/${treatmentId}`);
+async function addPrescription(treatmentId) {
+    return await api.post(`/prescription/${treatmentId}`);
 }
 
 // 약 리스트 정보
 async function medicineInfo(treatmentId) {
-  return (await api.post(`/prescription/medicine/${treatmentId}`)).data.data;
+    return (await api.post(`/prescription/medicine/${treatmentId}`)).data.data;
 }
 
 // 진단서 확인
 async function checkPrescription(treatmentId) {
-  return (await api.get(`/prescription`)).data.data;
+    return (await api.get(`/prescription`)).data.data;
 }
 
 // 진단서 리스트 조회
 async function checkPrescriptionList(id, status) {
-  return (await api.get(`/prescription/list?doctor_id=${id}&type=${status}`)).data.data;
+    return (await api.get(`/prescription/list?doctor_id=${id}&type=${status}`)).data.data;
 }
 
-export { addInvoice, addPerscription, medicineInfo, checkPrescription, checkPrescriptionList };
+export { addInvoice, addPrescription, medicineInfo, checkPrescription, checkPrescriptionList };
