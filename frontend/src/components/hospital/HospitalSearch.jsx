@@ -59,7 +59,7 @@ function HospitalSearch(props) {
     function LinkTab(props) {
         return (
             <Tab
-                component="a"
+                component='a'
                 onClick={(event) => {
                     event.preventDefault();
                 }}
@@ -118,9 +118,8 @@ function HospitalSearch(props) {
                             <Grid item xs={10.4} sx={{ mt: 2 }}>
                                 <Link
                                     onClick={() => {
-                                        window.location.href = "https://www.naver.com/";
-                                    }}
-                                >
+                                        window.location.href = hospital.url;
+                                    }}>
                                     {hospital.url ? hospital.url : "홈페이지 없음"}
                                 </Link>
                             </Grid>
@@ -175,10 +174,9 @@ function HospitalSearch(props) {
                                             <Box>
                                                 <img
                                                     src={`${process.env.PUBLIC_URL}/img/loginDog.jpg`}
-                                                    alt="의사사진"
-                                                    width="100%"
-                                                    height="150"
-                                                ></img>
+                                                    alt='의사사진'
+                                                    width='100%'
+                                                    height='150'></img>
                                             </Box>
                                             <Box>{item.name}</Box>
                                         </Grid>
@@ -199,20 +197,18 @@ function HospitalSearch(props) {
                             <Grid item xs={4.3}>
                                 <img
                                     src={`${process.env.PUBLIC_URL}/img/loginDog.jpg`}
-                                    alt="의사사진"
-                                    width="150px"
-                                    height="150"
-                                ></img>
+                                    alt='의사사진'
+                                    width='150px'
+                                    height='150'></img>
                             </Grid>
                             <Grid item xs={7.7} sx={{ mt: 2 }}>
                                 <Box>
-                                    <Box component="span" sx={{ mx: 2, fontWeight: "bold" }}>
+                                    <Box component='span' sx={{ mx: 2, fontWeight: "bold" }}>
                                         {item.name}
                                     </Box>
                                     <Box
-                                        component="span"
-                                        sx={{ mx: 0.1, fontSize: 12, fontWeight: "bold", color: "gray" }}
-                                    >
+                                        component='span'
+                                        sx={{ mx: 0.1, fontSize: 12, fontWeight: "bold", color: "gray" }}>
                                         수의사
                                     </Box>
                                 </Box>
@@ -231,11 +227,11 @@ function HospitalSearch(props) {
                                     <Grid container>
                                         <Grid item xs={7.5}></Grid>
                                         <Grid item xs={4.5}>
-                                            <Button variant="contained" sx={{ mt: 3 }}>
+                                            <Button variant='contained' sx={{ mt: 3 }}>
                                                 <NavLink
                                                     to={`${process.env.PUBLIC_URL}/hospitalsearchreservation/${hospital.id}/${item.id}`}
-                                                    style={{ textDecoration: "none", color: "white" }}
-                                                >
+                                                    state={doctor}
+                                                    style={{ textDecoration: "none", color: "white" }}>
                                                     예약하기
                                                 </NavLink>
                                             </Button>
@@ -288,7 +284,7 @@ function HospitalSearch(props) {
                     <Grid container sx={{ mt: 2.5 }}>
                         <Grid container>
                             <Grid item xs={2} sx={{ fontWeight: "bold" }}>
-                                <img src={`${process.env.PUBLIC_URL}/img/user.png`} alt="user"></img>
+                                <img src={`${process.env.PUBLIC_URL}/img/user.png`} alt='user'></img>
                             </Grid>
                             <Grid item xs={1.7} sx={{ fontSize: 14, mt: 0.15, fontWeight: "bold" }}>
                                 {item.username}
@@ -322,19 +318,18 @@ function HospitalSearch(props) {
             <Card sx={{ minWidth: 275 }}>
                 <CardContent>
                     <Typography
-                        variant="h6"
-                        component="div"
+                        variant='h6'
+                        component='div'
                         onClick={() => {
                             detailHospital(props.index);
                             props.markerPosition(hospital.latitude, hospital.longitude);
-                        }}
-                    >
+                        }}>
                         {hospital.name}
                     </Typography>
-                    <Typography sx={{ mt: 0.8, mb: 1.5 }} color="text.secondary">
+                    <Typography sx={{ mt: 0.8, mb: 1.5 }} color='text.secondary'>
                         영업시간 {hospital.operatingTime}
                     </Typography>
-                    <Typography variant="body2">{address.street}</Typography>
+                    <Typography variant='body2'>{address.street}</Typography>
                     <Grid container>
                         <Grid item xs={0.7}>
                             <StarIcon sx={{ fontSize: 18, mt: 0.35, color: "#29A1B1" }} />
@@ -366,8 +361,7 @@ function HospitalSearch(props) {
                         sx={{ position: "absolute", left: "780px", top: "50%" }}
                         onClick={() => {
                             setMode("list");
-                        }}
-                    >
+                        }}>
                         <ArrowCircleLeftIcon sx={{ fontSize: 40 }} />
                     </Box>
 
@@ -375,30 +369,27 @@ function HospitalSearch(props) {
                         <img
                             src={`${process.env.PUBLIC_URL}/img/hospital.png`}
                             style={{ height: "200px", width: "100%" }}
-                            alt="병원 이미지"
-                        ></img>
+                            alt='병원 이미지'></img>
 
-                        <Box display="flex" justifyContent="center" alignItems="center" sx={{ mt: 1 }}>
+                        <Box display='flex' justifyContent='center' alignItems='center' sx={{ mt: 1 }}>
                             {hospital.fullTime ? (
-                                <img src={`${process.env.PUBLIC_URL}/img/24hospital.png`} alt="24시여부"></img>
+                                <img src={`${process.env.PUBLIC_URL}/img/24hospital.png`} alt='24시여부'></img>
                             ) : (
                                 <Box>24 안열어</Box>
                             )}
                         </Box>
                         <Box
-                            display="flex"
-                            justifyContent="center"
-                            alignItems="center"
-                            sx={{ mt: 2, fontSize: 25, fontWeight: "bold" }}
-                        >
+                            display='flex'
+                            justifyContent='center'
+                            alignItems='center'
+                            sx={{ mt: 2, fontSize: 25, fontWeight: "bold" }}>
                             {hospital.name}
                         </Box>
                         <Box
-                            display="flex"
-                            justifyContent="center"
-                            alignItems="center"
-                            sx={{ mt: 1, fontSize: 15, fontWeight: "bold" }}
-                        >
+                            display='flex'
+                            justifyContent='center'
+                            alignItems='center'
+                            sx={{ mt: 1, fontSize: 15, fontWeight: "bold" }}>
                             <Grid container>
                                 <Grid item xs={4} />
                                 <Grid item xs={2} sx={{ color: "#29A1B1" }}>
@@ -410,17 +401,17 @@ function HospitalSearch(props) {
                             </Grid>
                         </Box>
                         <Box sx={{ mt: 2, fontSize: 15, fontWeight: "bold" }}>
-                            <Tabs value={value} onChange={handleChange} aria-label="nav tabs example">
-                                <LinkTab label="정보" href="/drafts" sx={{ mx: 1, width: "120px" }} />
-                                <LinkTab label="예약하기" href="/trash" sx={{ mx: 1, width: "120px" }} />
-                                <LinkTab label="리뷰" href="/spam" sx={{ mx: 1, width: "120px" }} />
+                            <Tabs value={value} onChange={handleChange} aria-label='nav tabs example'>
+                                <LinkTab label='정보' href='/drafts' sx={{ mx: 1, width: "120px" }} />
+                                <LinkTab label='예약하기' href='/trash' sx={{ mx: 1, width: "120px" }} />
+                                <LinkTab label='리뷰' href='/spam' sx={{ mx: 1, width: "120px" }} />
                             </Tabs>
                         </Box>
                         <TabItems key={hospital.id} hospital={hospital} review={reviewList}></TabItems>
                     </Paper>
                 </Grid>
                 <Grid item xs={8.7}>
-                    <div id="map" style={{ width: "100%", height: "890px" }}></div>
+                    <div id='map' style={{ width: "100%", height: "890px" }}></div>
                 </Grid>
             </Grid>
         );
@@ -460,20 +451,19 @@ function HospitalSearch(props) {
             <Grid item xs={12} md={2.5}>
                 <Box sx={{ mt: 2 }}>
                     <TextField
-                        id="outlined-basic"
-                        label="동,병원 이름검색"
-                        variant="outlined"
+                        id='outlined-basic'
+                        label='동,병원 이름검색'
+                        variant='outlined'
                         value={name}
                         onChange={onHandleChange}
                         sx={{ width: 250, mx: 0.3 }}
                     />
                     <Button
-                        variant="contained"
+                        variant='contained'
                         sx={{ mx: 2.5, width: 100, height: 55 }}
                         onClick={() => {
                             searchHospitalList(name);
-                        }}
-                    >
+                        }}>
                         검색
                     </Button>
                 </Box>
@@ -484,23 +474,21 @@ function HospitalSearch(props) {
                             hospital={item.hospital}
                             index={index}
                             reviewList={item.reviewList}
-                            markerPosition={markerPosition}
-                        ></Hospital>
+                            markerPosition={markerPosition}></Hospital>
                     ))}
                 </Paper>
             </Grid>
             <Grid item xs={12} md={9.5}>
                 {mode === "list" ? (
                     // 리스트 페이지
-                    <Box id="map" style={{ width: "100%", height: "890px" }}></Box>
+                    <Box id='map' style={{ width: "100%", height: "890px" }}></Box>
                 ) : (
                     // 상세 보기 페이지
 
                     <HospitalDetail
                         key={hospitalNo}
                         hospital={hospitalList[hospitalNo].hospital}
-                        reviewList={hospitalList[hospitalNo].reviewList}
-                    ></HospitalDetail>
+                        reviewList={hospitalList[hospitalNo].reviewList}></HospitalDetail>
                 )}
             </Grid>
         </Grid>
