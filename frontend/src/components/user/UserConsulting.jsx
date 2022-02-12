@@ -7,7 +7,7 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
 import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
 const pc_config = {
-    iceServer: [{ urls: "stun:stun.l.google.com:19302" }],
+    iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
 };
 const SOCKET_SERVER_URL = "http://192.168.35.26:9000";
 
@@ -41,10 +41,13 @@ function UserConsulting(props) {
             pcRef.current.oniceconnectionstatechange = (e) => {
                 console.log(e);
             };
+
             pcRef.current.ontrack = (ev) => {
+                console.log(ev.stream);
                 console.log("add remotetrack success");
                 if (remoteVideoRef.current) {
                     remoteVideoRef.current.srcObject = ev.streams[0];
+                    console.log(remoteVideoRef.current.srcObject);
                 }
             };
             socketRef.current.emit("joinRoom", {
@@ -113,6 +116,11 @@ function UserConsulting(props) {
                 await pcRef.current.addIceCandidate(new RTCIceCandidate(candidate));
                 console.log("candidate add success");
             });
+
+            socketRef.current.on("test", () => {
+                console.log(test);
+            });
+
             await setVideoTracks();
         };
 
@@ -154,8 +162,7 @@ function UserConsulting(props) {
                             style={{ width: "98%", height: 500, margin: 5, background: "black" }}
                             ref={localVideoRef}
                             autoPlay
-                            muted
-                        ></video>
+                            muted></video>
                     </Box>
                 </Grid>
                 <Grid item md={6}>
@@ -163,8 +170,7 @@ function UserConsulting(props) {
                         <video
                             style={{ width: "98%", height: 500, margin: 5, background: "black" }}
                             ref={remoteVideoRef}
-                            autoPlay
-                        ></video>
+                            autoPlay></video>
                     </Box>
                     <Box></Box>
                 </Grid>
@@ -183,9 +189,9 @@ function UserConsulting(props) {
                     />
                     <BottomNavigationAction
                         onClick={() => {
-                            socketRef.current.emit("joinRoom", {
-                                room: "1234",
-                            });
+                            // socketRef.current.emit("joinRoom", {
+                            //     room: "1234",
+                            // });
                             setMic(!mic);
                             micStartOrStop(!mic);
                         }}
@@ -209,8 +215,7 @@ function UserConsulting(props) {
                             navigate("/petodoctor");
                         }}
                         label={<Box sx={{ fontSize: 20, fontWeight: "bold" }}>나가기</Box>}
-                        icon={<ExitToAppIcon sx={{ fontSize: 35, color: "blue" }} />}
-                    ></BottomNavigationAction>
+                        icon={<ExitToAppIcon sx={{ fontSize: 35, color: "blue" }} />}></BottomNavigationAction>
                 </BottomNavigation>
             </Box>
         </Box>

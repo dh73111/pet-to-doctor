@@ -64,7 +64,7 @@ function App() {
                         <Route path="/petodoctor/hospitalsearch" element={<HospitalSearch />}></Route>
                         <Route path="/petodoctor/hospitalreservation" element={<HospitalReservation />}></Route>
                         <Route
-                            path="/petodoctor/hospitalsearchreservation"
+                            path="/petodoctor/hospitalsearchreservation/:hospitalId/:doctorId"
                             element={<HospitalSearchReservation />}
                         ></Route>
                         <Route path="/petodoctor/userjoin" element={<UserJoin />}></Route>
