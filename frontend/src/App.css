@@ -1,9 +1,11 @@
 @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+@import url(https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css);
 
 /* .notosanskr * {
 } */
 * {
     font-family: "Noto Sans KR", sans-serif;
+    /* font-family: 나눔스퀘어, 'NanumSquare', sans-serif; */
     margin: 0;
     -ms-overflow-style: none;
 }
@@ -11,6 +13,9 @@
     color: white;
     font-weight: bold;
     text-shadow: 1px 0px 10px #000;
+}
+.gnb div:hover {
+    color: #309FB3;
 }
 .card {
     /* transform: translateX(-50%); */

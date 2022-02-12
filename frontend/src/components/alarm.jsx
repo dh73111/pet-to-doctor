@@ -25,13 +25,14 @@ function Alarm(props) {
         width: "280px",
         height: "300px",
         border: 1,
-        position: "fixed",
+        position: "absolute",
         zIndex: 9999,
         backgroundColor: "#fff",
-        top: "46px",
-        right: "0",
+        top: "50px",
+        right: "2rem",
         padding: "10px",
         overflow: "scroll",
+        // zIndex: -1,
       }}
     >
       {alarmLists.map((a) => {

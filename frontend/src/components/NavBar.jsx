@@ -141,7 +141,7 @@ const NavTop = (props) => {
             { title: "로그아웃", link: "/petodoctor" },
         ];
         return (
-            <Box sx={{ width: "100%", mb: 2 }}>
+            <Box sx={{ width: "100%", mb: 1 }}>
                 <Box sx={{ display: "flex", justifyContent: "flex-end", height: "36px" }}>
                     {!isLogin ? (
                         <>
@@ -187,7 +187,7 @@ const NavTop = (props) => {
     };
     const [alarmVisible, setAlarmVisible] = useState();
     return (
-        <Box sx={{ position: "relative", mb: 3 }}>
+        <Box sx={{ position: "relative", mb: 2 }}>
             <Banner></Banner>
             <Box color="inherit">
                 <Container maxWidth="lg">
@@ -228,60 +228,6 @@ const NavTop = (props) => {
                     </Box>
                 </Container>
             </Box>
-            {/* <Box sx={{ mt: 2, backgroundColor: "#fff", backgroundColor: "gray", position: "sticky", top: 0 }}>
-        <Container>
-          <Toolbar sx={{ backgroundColor: "lightyellow" }}>
-            <Box sx={{ display: { xs: "flex", md: "none" }, flexGrow: 1 }}>
-              <IconButton
-                //  모바일화면 햄버거아이콘
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleOpenNavMenu}
-                color="inherit"
-              >
-                <MenuIcon />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorElNav}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
-                open={Boolean(anchorElNav)}
-                onClose={handleCloseNavMenu}
-                sx={{
-                  display: { xs: "block", md: "none" },
-                }}
-              >
-                {pages.map((page) => (
-                  <NavLink to={page.path} key={page.path} style={{ textDecoration: "none" }}>
-                    {props.selectedNav === page.id ? MyButton(page, "#29A1B1") : MyButton(page, "black")}
-                  </NavLink>
-                ))}
-              </Menu>
-            </Box>
-            <Typography
-              // 모바일 로고
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{ display: { xs: "flex", md: "none" } }}
-            >
-              <img src="img/logo.png" height="50px" alt="logo"></img>
-            </Typography>
-            <NavItem />
-           
-          </Toolbar>
-        </Container>
-      </Box> */}
             <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
                 <Box sx={style}>
                     <UserLoginModal onClose={handleClose}></UserLoginModal>
@@ -295,7 +241,7 @@ const NavTop = (props) => {
 function NavBottom(props) {
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [open, setOpen] = useState(false);
-    const [mode, setMode] = useState("doctor");
+    const [mode, setMode] = useState("user");
     const handleClose = () => setOpen(false);
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -313,7 +259,7 @@ function NavBottom(props) {
             }}
             sx={{ color: selectedColor, display: "block" }}
         >
-            <Typography sx={{ fontSize: 17, fontWeight: fontWeight }}>{page.name}</Typography>
+            <Typography sx={{ fontSize: 16, fontWeight: fontWeight }}>{page.name}</Typography>
         </Box>
     );
 
@@ -323,7 +269,7 @@ function NavBottom(props) {
             return (
                 <Box sx={{ width: "100%", display: { xs: "none", md: "flex" }, justifyContent: "space-between" }}>
                     {pages.map((page) => (
-                        <NavLink to={page.path} key={page.path} style={{ textDecoration: "none" }}>
+                        <NavLink to={page.path} key={page.path} style={{ textDecoration: "none" }} className="gnb">
                             {props.selectedNav === page.id ? MyButton(page, "#29A1B1", "bold") : MyButton(page, "black")}
                         </NavLink>
                     ))}
@@ -333,7 +279,7 @@ function NavBottom(props) {
             return (
                 <Box sx={{ width: "100%", display: { xs: "none", md: "flex" }, justifyContent: "space-between" }}>
                     {doctorpages.map((page) => (
-                        <NavLink to={page.path} key={page.path} style={{ textDecoration: "none" }}>
+                        <NavLink to={page.path} key={page.path} style={{ textDecoration: "none" }} className="gnb">
                             {props.selectedNav === page.id ? MyButton(page, "#29A1B1", "bold") : MyButton(page, "black")}
                         </NavLink>
                     ))}
