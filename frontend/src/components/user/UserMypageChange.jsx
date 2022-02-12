@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import {
     Typography,
     Grid,
@@ -98,13 +99,13 @@ function UserMypageChange(props) {
         setAddress(location.state.address.city);
     }, []);
 
+    let userId = useSelector((store) => store.user.id);
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const handleComplete = (data) => {
-        console.log(data, "from handle complete");
         let fullAddress = data.address;
         let extraAddress = "";
         let zonecode = "";
@@ -121,15 +122,13 @@ function UserMypageChange(props) {
         setAddress(fullAddress);
         setZipcode(data.zonecode);
         setCity(data.sido);
-        console.log(fullAddress);
         setNewUserInfo({ ...newUserInfo, address: { city: fullAddress, zipcode: data.zonecode } });
-        console.log(newUserInfo);
         //fullAddress -> 전체 주소반환
     };
 
     const handleChangeUserInfo = (dataTitle) => (e) => {
         const data = e.target.value;
-        if (dataTitle == "city" || dataTitle == "street") {
+        if (dataTitle === "city" || dataTitle === "street") {
             setNewUserInfo({ ...newUserInfo, address: { ...newUserInfo.address, [dataTitle]: data } });
         } else {
             setNewUserInfo({ ...newUserInfo, [dataTitle]: data });
@@ -137,7 +136,6 @@ function UserMypageChange(props) {
     };
 
     const handlePasswords = (pwTitle) => (e) => {
-        console.log(pwTitle, e.target.value);
         if (pwTitle === "newPasswordConf") {
             if (passwords.newPassword !== e.target.value) {
                 setPasswordError("비밀번호 불일치");
@@ -151,17 +149,14 @@ function UserMypageChange(props) {
     const requestChangeInfo = async () => {
         const response = await modifyUser(newUserInfo);
         window.location.href = "http://localhost:3000/petodoctor/usermypage";
-        console.log(response);
     };
 
     const requestPwChange = async () => {
         const prev = passwords.password;
         const currentPwConf = await checkPassword(prev);
-        console.log(currentPwConf.data.result);
         if (currentPwConf.data.result === true) {
             if (passwordError === "비밀번호 일치") {
                 const changePw = await changePassword(passwords);
-                console.log(changePw, "비번변경완료");
                 alert("비밀번호가 성공적으로 변경되었습니다.");
             } else {
                 alert("새로운 비밀번호와 확인이 일치하지 않습니다.");
@@ -170,29 +165,24 @@ function UserMypageChange(props) {
             alert("현재 비밀번호를 확인 해 주세요.");
         }
     };
-    const encodeFileToBase64 = (fileBloab) => {
+    const encodeFileToBase64 = async (fileBloab) => {
         const reader = new FileReader();
-        reader.readAsDataURL(fileBloab);
-        return new Promise((resolv) => {
-            reader.onload = () => {
-                setModImg(reader.result);
-                resolv();
-            };
-        });
+        await reader.readAsDataURL(fileBloab);
+
+        reader.onload = () => {
+            setModImg(reader.result);
+        };
     };
 
     const changeProfilePic = () => {
-        console.log(profileSend);
         const fd = new FormData();
         Object.profileSend.forEach((file) => fd.append("profileImgUrl", file));
-        console.log(fd, "");
         // modifyUserPic("256", profileSend);
         alert("프로필변경이완료됨");
     };
 
     const testProfile = (e) => {
         e.preventDefault();
-        console.log(e);
         changeProfilePic();
     };
 
@@ -209,142 +199,143 @@ function UserMypageChange(props) {
                             <Tab label='비밀번호 변경' {...a11yProps(1)} />
                         </Tabs>
                     </Box>
-                    <TabPanel value={value} index={0}>
-                        <Paper sx={{ p: 2, margin: "auto", maxWidth: 900, flexGrow: 1 }}>
-                            {/* <button
+                    <form
+                        action={`http://localhost:8080/api/user/profile/${userId}`}
+                        method='post'
+                        enctype='multipart/form-data'
+                        target='param'>
+                        <TabPanel value={value} index={0}>
+                            <Paper sx={{ p: 2, margin: "auto", maxWidth: 900, flexGrow: 1 }}>
+                                {/* <button
                 onClick={function () {
-                  console.log(newUserInfo);
                 }}
               >
                 현재주소뭐야
               </button> */}
-                            <Grid container spacing={2}>
-                                <Grid item>
-                                    <div
-                                        className='preview'
-                                        style={{
-                                            border: "1px solid black",
-                                            width: "250px",
-                                            height: "250px",
-                                            backgroundImage: `url(${modImg})`,
-                                            backgroundSize: "cover",
-                                        }}>
-                                        {/* {modImg && <img src={modImg} alt="preview-img" />} */}
-                                        이미지 미리보기
-                                    </div>
-                                    <label className='profile-img-upload-btn' for='input_profile'>
-                                        이미지업로드
-                                    </label>
-                                    <input
-                                        type='file'
-                                        accept='image/*'
-                                        id='input_profile'
-                                        onChange={(e) => {
-                                            console.log(e.target);
-                                            encodeFileToBase64(e.target.files[0]);
-                                            console.log(e.target.files, "온체인지");
-                                            setProfileSend(e.target.files[0]);
-                                        }}
-                                        style={{ display: "none" }}
-                                    />
-                                    <button
-                                        // variant="outlined"
-                                        onClick={() => {
-                                            // testProfile(e);
-                                            changeProfilePic();
-                                        }}
-                                        // disabled={modImg === ""}
-                                    >
-                                        프로필사진 변경
-                                    </button>
-                                    {/* <Input type="file" /> */}
-                                </Grid>
-                                <Grid item>
-                                    <Typography gutterBottom variant='subtitle1' component='div' pb={1}>
-                                        닉네임
-                                    </Typography>
-                                    <Typography gutterBottom variant='subtitle1' component='div' pb={1}>
-                                        이메일
-                                    </Typography>
-                                    <Typography gutterBottom variant='subtitle1' component='div' pb={1}>
-                                        연락처
-                                    </Typography>
-                                    <Typography gutterBottom variant='subtitle1' component='div' pb={1}>
-                                        주소
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs={12} sm container>
-                                    <Grid item xs container direction='column' spacing={2}>
-                                        <Grid item xs>
-                                            <TextField
-                                                size='small'
-                                                placeholder='이름'
-                                                required //값 반드시 입력
-                                                name='nickname'
-                                                defaultValue={newUserInfo.name}
-                                                onChange={handleChangeUserInfo("name")}
-                                            />
-                                            <br />
-                                            <TextField
-                                                size='small'
-                                                placeholder='example@example.com'
-                                                required //값 반드시 입력
-                                                name='email'
-                                                defaultValue={newUserInfo.email}
-                                                onChange={handleChangeUserInfo("email")}
-                                            />
+                                <Grid container spacing={2}>
+                                    <Grid item>
+                                        <div
+                                            className='preview'
+                                            style={{
+                                                border: "1px solid black",
+                                                width: "250px",
+                                                height: "250px",
+                                                backgroundImage: `url(${modImg})`,
+                                                backgroundSize: "cover",
+                                            }}>
+                                            {/* {modImg && <img src={modImg} alt="preview-img" />} */}
+                                            이미지 미리보기
+                                        </div>
+                                        <label className='profile-img-upload-btn' for='input_profile'>
+                                            이미지업로드
+                                        </label>
+                                        {/* http: */}
 
-                                            <br />
-                                            <TextField
-                                                size='small'
-                                                placeholder='number'
-                                                required //값 반드시 입력
-                                                name='number'
-                                                defaultValue={newUserInfo.tel}
-                                                onChange={handleChangeUserInfo("tel")}
-                                            />
-                                            <br />
-                                            <TextField
-                                                size='small'
-                                                required //값 반드시 입력
-                                                name='address'
-                                                disabled
-                                                placeholder='주소'
-                                                value={newUserInfo.address.city}
-                                                onChange={handleChangeUserInfo("city")}
-                                            />
-                                            <TextField
-                                                size='small'
-                                                placeholder='상세주소'
-                                                required //값 반드시 입력
-                                                name='addressdetail'
-                                                defaultValue={newUserInfo.address.street}
-                                                onChange={handleChangeUserInfo("street")}
-                                            />
-                                            <Button onClick={handleOpen}>주소 검색</Button>
-                                            <Modal
-                                                open={open}
-                                                onClose={handleClose}
-                                                aria-labelledby='modal-modal-title'
-                                                aria-describedby='modal-modal-description'>
-                                                <Box sx={style}>
-                                                    <DaumPostCode onComplete={handleComplete} className='post-code' />
-                                                </Box>
-                                            </Modal>
+                                        <input
+                                            type='file'
+                                            name='profileImgUrl'
+                                            accept='image/*'
+                                            id='input_profile'
+                                            onChange={(e) => {
+                                                encodeFileToBase64(e.target.files[0]);
+                                                setProfileSend(e.target.files[0]);
+                                            }}
+                                            style={{ display: "none" }}
+                                        />
+                                        {/* <Input type="file" /> */}
+                                    </Grid>
+                                    <Grid item>
+                                        <Typography gutterBottom variant='subtitle1' component='div' pb={1}>
+                                            닉네임
+                                        </Typography>
+                                        <Typography gutterBottom variant='subtitle1' component='div' pb={1}>
+                                            이메일
+                                        </Typography>
+                                        <Typography gutterBottom variant='subtitle1' component='div' pb={1}>
+                                            연락처
+                                        </Typography>
+                                        <Typography gutterBottom variant='subtitle1' component='div' pb={1}>
+                                            주소
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={12} sm container>
+                                        <Grid item xs container direction='column' spacing={2}>
+                                            <Grid item xs>
+                                                <TextField
+                                                    size='small'
+                                                    placeholder='이름'
+                                                    required //값 반드시 입력
+                                                    name='nickname'
+                                                    defaultValue={newUserInfo.name}
+                                                    onChange={handleChangeUserInfo("name")}
+                                                />
+                                                <br />
+                                                <TextField
+                                                    size='small'
+                                                    placeholder='example@example.com'
+                                                    required //값 반드시 입력
+                                                    name='email'
+                                                    defaultValue={newUserInfo.email}
+                                                    onChange={handleChangeUserInfo("email")}
+                                                />
+
+                                                <br />
+                                                <TextField
+                                                    size='small'
+                                                    placeholder='number'
+                                                    required //값 반드시 입력
+                                                    name='number'
+                                                    defaultValue={newUserInfo.tel}
+                                                    onChange={handleChangeUserInfo("tel")}
+                                                />
+                                                <br />
+                                                <TextField
+                                                    size='small'
+                                                    required //값 반드시 입력
+                                                    name='address'
+                                                    disabled
+                                                    placeholder='주소'
+                                                    value={newUserInfo.address.city}
+                                                    onChange={handleChangeUserInfo("city")}
+                                                />
+                                                <TextField
+                                                    size='small'
+                                                    placeholder='상세주소'
+                                                    required //값 반드시 입력
+                                                    name='addressdetail'
+                                                    defaultValue={newUserInfo.address.street}
+                                                    onChange={handleChangeUserInfo("street")}
+                                                />
+                                                <Button onClick={handleOpen}>주소 검색</Button>
+                                                <Modal
+                                                    open={open}
+                                                    onClose={handleClose}
+                                                    aria-labelledby='modal-modal-title'
+                                                    aria-describedby='modal-modal-description'>
+                                                    <Box sx={style}>
+                                                        <DaumPostCode
+                                                            onComplete={handleComplete}
+                                                            className='post-code'
+                                                        />
+                                                    </Box>
+                                                </Modal>
+                                            </Grid>
                                         </Grid>
                                     </Grid>
                                 </Grid>
-                            </Grid>
-                        </Paper>
-                        <Box textAlign='center' sx={{ mt: 5 }}>
-                            <Button
-                                onClick={() => {
-                                    requestChangeInfo(newUserInfo);
-                                }}>
-                                수정 완료
-                            </Button>
-                        </Box>
-                    </TabPanel>
+                            </Paper>
+                            <Box textAlign='center' sx={{ mt: 5 }}>
+                                <Button
+                                    type='submit'
+                                    onClick={() => {
+                                        requestChangeInfo(newUserInfo);
+                                    }}>
+                                    수정 완료
+                                </Button>
+                            </Box>
+                        </TabPanel>
+                        <iframe id='if' title='formhide' name='param' style={{ display: "none" }}></iframe>
+                    </form>
                     <TabPanel value={value} index={1}>
                         <Paper sx={{ p: 2, margin: "auto", maxWidth: "30%", flexGrow: 1 }}>
                             <Grid container spacing={3}>
