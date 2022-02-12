@@ -1,5 +1,6 @@
 package com.ssafy.pettodoctor.api.repository;
 
+import com.ssafy.pettodoctor.api.domain.PaymentType;
 import com.ssafy.pettodoctor.api.domain.Prescription;
 import com.ssafy.pettodoctor.api.domain.TreatmentType;
 import lombok.RequiredArgsConstructor;
@@ -28,5 +29,11 @@ public class PrescriptionRepository {
                 .setParameter("doctor_id",doctor_id)
                 .setParameter("type",type)
                 .getResultList();
+    }
+
+    public Prescription updatePaymentInfo(Long prescriptionId, PaymentType paymentType) {
+        Prescription prescription = em.find(Prescription.class, prescriptionId);
+        prescription.setType(paymentType);
+        return prescription;
     }
 }

@@ -18,6 +18,12 @@ public class TreatmentRepositry {
         return em.find(Treatment.class, id);
     }
 
+    public Treatment findByPrescriptionId(Long id) {
+        return em.createQuery("select t from Treatment  t where t.prescription.id = :id", Treatment.class)
+                .setParameter("id", id)
+                .getSingleResult();
+    }
+
     public List<Treatment> findByUserId(Long id, TreatmentType treatmentType){
         return em.createQuery("select t from Treatment t join t.user u where u.id = :id and t.type = :treatmentType",
                 Treatment.class)
@@ -46,4 +52,5 @@ public class TreatmentRepositry {
         treatment.setType(type);
         return treatment;
     }
+
 }
