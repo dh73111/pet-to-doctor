@@ -1,4 +1,5 @@
 import React from "react";
+import { Container, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -22,20 +23,15 @@ const rows = [createData(1, "완료", "3456789"), createData(1, "완료", "")].s
 
 const Root = styled("div")`
     table {
-        font-family: arial, sans-serif;
+        font-family: noto sans, sans-serif;
         border-collapse: collapse;
         width: 100%;
     }
 
     td,
     th {
-        border: 1px solid #ddd;
         text-align: left;
         padding: 8px;
-    }
-
-    th {
-        background-color: #ddd;
     }
 `;
 
@@ -98,8 +94,7 @@ function DoctorPerscription(props) {
         top: "50%",
         left: "50%",
         transform: "translate(-50%, -50%)",
-        width: 1200,
-        height: 800,
+        width: 680,
         bgcolor: "background.paper",
         boxShadow: 24,
     };
@@ -113,26 +108,11 @@ function DoctorPerscription(props) {
     };
 
     return (
-        <Box>
+        <Container>
             <Grid container>
-                <Grid item xs={4}></Grid>
-                <Grid item xs={4}>
-                    <Box
-                        sx={{
-                            background: "#CDEEF4",
-                            mt: 10,
-                            width: "100%",
-                            height: "80px",
-                            fontWeight: "bold",
-                            textAlign: "center",
-                            fontSize: 30,
-                            pt: 5,
-                        }}
-                    >
-                        처방 현황
-                    </Box>
-                </Grid>
-                <Grid item xs={4}></Grid>
+                <Typography variant="h4" component="h1" sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
+                    처방현황
+                </Typography>
             </Grid>
             <Grid container>
                 <Grid item xs={8}></Grid>
@@ -155,13 +135,7 @@ function DoctorPerscription(props) {
                     <Box sx={{ width: 120 }}>
                         <FormControl fullWidth>
                             <InputLabel id="demo-simple-select-label">ALL</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                value={state}
-                                label="state"
-                                onChange={handleChange}
-                            >
+                            <Select labelId="demo-simple-select-label" id="demo-simple-select" value={state} label="state" onChange={handleChange}>
                                 <MenuItem value={10}>결제 대기</MenuItem>
                                 <MenuItem value={20}>결제 완료</MenuItem>
                             </Select>
@@ -170,37 +144,29 @@ function DoctorPerscription(props) {
                 </Grid>
             </Grid>
             <Grid container>
-                <Grid item xs={2}></Grid>
-                <Grid item xs={8}>
-                    <Root sx={{ width: 1400, mt: 3 }}>
-                        <table aria-label="custom pagination table">
+                <Grid item xs={12}>
+                    <Root sx={{ width: "100%", mt: 3 }}>
+                        <table aria-label="custom pagination table" className="favhospital">
                             <thead>
                                 <tr>
                                     <th>처방번호</th>
+                                    <th>처방정보</th>
                                     <th>결제상태</th>
-                                    <th>운송장번호</th>
+                                    <th>운송장번호/택배사</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {(rowsPerPage > 0
-                                    ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                    : rows
-                                ).map((row) => (
+                                {(rowsPerPage > 0 ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : rows).map((row) => (
                                     <tr key={row.no}>
-                                        <td style={{ width: 160 }}>
+                                        <td>{row.no}</td>
+                                        <td>
                                             {" "}
-                                            <Button
-                                                sx={{ fontWeight: "bold", display: "block" }}
-                                                value={row.no}
-                                                onClick={handleOpen}
-                                            >
-                                                {row.no}
+                                            <Button sx={{ fontWeight: "bold", display: "block" }} value={row.no} onClick={handleOpen}>
+                                                처방전
                                             </Button>
                                         </td>
-                                        <td style={{ width: 160 }} align="right">
-                                            {row.state}
-                                        </td>
-                                        <td style={{ width: 160 }} align="right">
+                                        <td align="right">{row.state}</td>
+                                        <td align="right">
                                             {row.deliveryNo === "" ? (
                                                 <Button color="inherit" variant="contained">
                                                     등록
@@ -243,19 +209,13 @@ function DoctorPerscription(props) {
                         </table>
                     </Root>
                 </Grid>
-                <Grid item xs={2}></Grid>
             </Grid>
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
+            <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
                 <Box sx={style}>
-                    <PerscriptionDetail></PerscriptionDetail>
+                    <PerscriptionDetail onClose={handleClose}></PerscriptionDetail>
                 </Box>
             </Modal>
-        </Box>
+        </Container>
     );
 }
 
