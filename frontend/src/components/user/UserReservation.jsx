@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -17,6 +17,8 @@ import TextField from "@mui/material/TextField";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { NavLink } from "react-router-dom";
+import { userTreatmentInfo } from 'api/treatment';
+import { useSelector } from "react-redux";
 function createData(no, date, time, hospital, doctor, state, perscription, shipNo) {
     return { no, date, time, hospital, doctor, state, perscription, shipNo };
 }
@@ -79,10 +81,19 @@ const CustomTablePagination = styled(TablePaginationUnstyled)`
     }
 `;
 function UserReservation(props) {
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    const [value, setValue] = React.useState(new Date());
-    const [state, setState] = React.useState("");
+    const userId = useSelector((store) => store.user.id);
+    console.log(userId)
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [value, setValue] = useState(new Date());
+    const [state, setState] = useState("");
+
+    const [treatmentInfo, setTreatmentInfo] = useState();
+    useEffect(async () => {
+        const treat = await userTreatmentInfo(userId, "RES_REQUEST");
+        console.log(treat);
+        setTreatmentInfo(treat);
+    }, [])
 
     const [open, setOpen] = React.useState(false);
     const handleOpen = (event) => {

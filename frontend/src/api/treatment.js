@@ -8,8 +8,9 @@ async function treatmentInfo(treatmentId) {
 }
 
 // 사용자 진료 정보 반환
-async function userTreatmentInfo(userId) {
-  return (await api.get(`/treatment/user/${userId}`)).data.data;
+async function userTreatmentInfo(userId, treatmentType) {
+  console.log(userId, treatmentType, typeof treatmentType)
+  return (await api.get(`/treatment/user/${userId}?treatmentType=${treatmentType}`)).data.data;
 }
 
 // 의사 진료 정보 반환
