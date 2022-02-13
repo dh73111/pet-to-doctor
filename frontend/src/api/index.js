@@ -9,15 +9,6 @@ function apiInstance() {
     });
     return instance;
 }
-function fileApiInstance() {
-    const instance = axios.create({
-        baseURL: API_BASE_URL,
-        headers: {
-            "Content-type": "multipart/form-data",
-        },
-    });
-    return instance;
-}
 function loginApiInstance() {
     const jwtToken = sessionStorage.getItem("accessToken");
     const instance = axios.create({
@@ -30,4 +21,4 @@ function loginApiInstance() {
     return instance;
 }
 
-export { apiInstance, loginApiInstance, fileApiInstance };
+export { apiInstance, loginApiInstance };

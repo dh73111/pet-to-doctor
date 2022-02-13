@@ -12,8 +12,8 @@ public class TreatmentPostReq {
     private Long userId;
     private Long doctorId;
     private Long hospitalId;
-    private Long petId; // 임시로 넣어둠
-
+//    private Long petId; // 임시로 넣어둠
+//
     private String paymentCode;
     private LocalDateTime scheduleDate;
     private TreatmentType type;

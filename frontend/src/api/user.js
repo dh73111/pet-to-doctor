@@ -1,8 +1,7 @@
 import { ConstructionOutlined } from "@mui/icons-material";
-import { apiInstance, fileApiInstance, loginApiInstance } from "./index.js";
+import { apiInstance, loginApiInstance } from "./index.js";
 
 const api = apiInstance();
-const fileApi = fileApiInstance();
 // // 회원 정보 수정
 async function modifyUser(user) {
     const loginApi = loginApiInstance();
@@ -17,12 +16,6 @@ async function registerUser(user) {
 // 회원 탈퇴
 async function deleteUser(userId) {
     return await api.delete(`/user/${userId}`);
-}
-
-//회원 사진 수정
-async function modifyUserPic(userId, imgURL) {
-    console.log(userId, { profileImgUrl: imgURL });
-    return await fileApi.post(`/user/profile/${userId}`, { profileImgUrl: imgURL });
 }
 
 // 비밀번호 확인
@@ -72,7 +65,6 @@ export {
     registerUser,
     modifyUser,
     deleteUser,
-    modifyUserPic,
     checkPassword,
     changePassword,
     loginUser,

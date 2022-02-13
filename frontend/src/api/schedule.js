@@ -8,8 +8,8 @@ async function getSchedule(id, day) {
 }
 
 //의사 스케줄 정보 업데이트
-async function updateSchedule(doctor) {
-    return await api.post(`/schedule/${doctor.id}`, JSON.stringify(doctor));
+async function updateSchedule(data) {
+    return await api.post(`/schedule/${data.doctorId}?plusDay=${data.plusDay}&bitmask=${data.bitmask}`);
 }
 
 export { getSchedule, updateSchedule };
