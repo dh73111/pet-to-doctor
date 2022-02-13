@@ -21,17 +21,25 @@ import { Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import { getHosiptal } from "api/hospital";
 import { getDoctorInfo } from "api/doctor";
-
+import { getSchedule } from "api/schedule";
+import { useSelector } from "react-redux";
 function HospitalSearchReservation(props) {
     const { kakao } = window;
-
+    const store = useSelector((store) => store);
     const [values, setValues] = useState({
-        name: "",
-        weight: "",
-        specific: "",
-        diagonose: "",
-        time: "",
-        symptom: "",
+        type: "RES_REQUEST",
+        userId: store.user.id,
+        doctorId: 0,
+        hospitalId: 0,
+        petId: 0,
+        scheduleDate: "2022-02-13T10:15:29.800Z",
+        reVisit: "first",
+        petName: "string",
+        symptom: "string",
+        birthDate: "2022-02-13",
+        petSpecies: "string",
+        petWeight: "string",
+        price: "",
     });
     const [doctor, setDoctor] = useState({
         id: 0,
@@ -67,11 +75,30 @@ function HospitalSearchReservation(props) {
     const [leadDoctor, setLeadDoctor] = useState("");
     const [doctorCount, setDoctorCount] = useState("");
     const [date, setDate] = useState(new Date());
-
+    const [schedule, setSchedule] = useState("0000000000000000");
+    const [originSchedule, setOriginSchedule] = useState("0000000000000000");
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value });
     };
-
+    const [selectTime, setSelectTime] = useState("-1");
+    const reserveTime = [
+        "9:00",
+        "9:30",
+        "10:00",
+        "10:30",
+        "11:00",
+        "11:30",
+        "1:00",
+        "1:30",
+        "2:00",
+        "2:30",
+        "3:00",
+        "3:30",
+        "4:00",
+        "4:30",
+        "5:00",
+        "5:30",
+    ];
     function kakaoMap() {
         const lat = hospital.latitude;
         const lng = hospital.longitude;
@@ -92,31 +119,57 @@ function HospitalSearchReservation(props) {
     function MyButton(props) {
         return (
             <Button
-                variant='outlined'
+                disabled={props.item === "1"}
+                variant='contained'
+                color={props.index === selectTime ? "success" : "primary"}
                 sx={{ width: "98%", mt: 1, mx: 1 }}
                 onClick={() => {
                     console.log(props.time);
+                    setSelectTime(props.index);
+                    // setSchedule(
+                    //     originSchedule.substring(0, props.index) +
+                    //         "1" +
+                    //         originSchedule.substring(props.index + 1, originSchedule.length)
+                    // );
+                    console.log(selectTime);
+                    console.log(props.item);
                 }}>
                 {props.time}
             </Button>
         );
     }
+    const submitReservation = () => {
+        console.log(values, date);
+        console.log(selectTime);
+        console.log(date);
+    };
+    const diffDay = (date) => {
+        let now = new Date();
+        let start = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+        let end = new Date(date.getFullYear(), date.getMonth() - 1, date.getDate());
+        return (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24);
+    };
+
+    const refreshSchedule = async (diff) => {
+        setSchedule((await getSchedule(params.doctorId, diff)).bitmask);
+    };
 
     useEffect(() => {
         kakaoMap();
     });
     const params = useParams();
     const location = useLocation();
-    console.log(location);
     useEffect(() => {
         const init = async () => {
             const hospital = await getHosiptal(params.hospitalId);
             const doctor = await getDoctorInfo(params.doctorId);
-
+            const schedule = (await getSchedule(params.doctorId, 0)).bitmask;
+            setOriginSchedule(schedule);
+            setSchedule(schedule);
             setHospital(hospital);
             setDoctor(doctor);
-            setLeadDoctor(location.leadDoctor.name);
-            setDoctorCount(location.doctorList.length);
+            setLeadDoctor(location.state.leadDoctor.name);
+            setDoctorCount(location.state.doctorList.length);
         };
         init();
     }, []);
@@ -125,14 +178,21 @@ function HospitalSearchReservation(props) {
             <Grid container>
                 {/* <Grid item xs={2.5}></Grid> */}
                 <Grid item xs={12} sx={{ mt: 5 }}>
-                    <Paper>
+                    <Paper elevation={0}>
                         <Grid container>
                             <Grid item xs={4}>
-                                <img src='./img/resHospital.png' width='300px' height='300px' alt='동물병원사진'></img>
+                                <img
+                                    src={`${process.env.PUBLIC_URL}/img/resHospital.png`}
+                                    width='300px'
+                                    height='300px'
+                                    alt='동물병원사진'></img>
                             </Grid>
                             <Grid item xs={8}>
                                 <Box>
-                                    <img src='./img/24hours.png' alt='동물병원사진' width='50px'></img>
+                                    <img
+                                        src={`${process.env.PUBLIC_URL}/img/24hours.png`}
+                                        alt='24시여부'
+                                        width='50px'></img>
                                 </Box>
                                 <Box>
                                     <Typography sx={{ fontSize: "25px", fontWeight: "bold", mx: 1 }}>
@@ -184,15 +244,29 @@ function HospitalSearchReservation(props) {
                         </Grid>
                         <Box>
                             <FormControl>
-                                <FormLabel id='demo-row-radio-buttons-group-label'>진료 종료</FormLabel>
+                                <FormLabel id='demo-row-radio-buttons-group-label'>진료 종류</FormLabel>
                                 <RadioGroup
                                     row
                                     aria-labelledby='demo-row-radio-buttons-group-label'
                                     name='row-radio-buttons-group'
-                                    value={values.diagonose}
-                                    onChange={handleChange("diagonose")}>
-                                    <FormControlLabel value='visit' control={<Radio />} label='방문' />
-                                    <FormControlLabel value='video' control={<Radio />} label='화상' />
+                                    value={values.type}
+                                    onChange={handleChange("type")}>
+                                    <FormControlLabel value='RES_REQUEST' control={<Radio />} label='방문' />
+                                    <FormControlLabel value='VST_REQUEST' control={<Radio />} label='화상' />
+                                </RadioGroup>
+                            </FormControl>
+                        </Box>
+                        <Box>
+                            <FormControl>
+                                <FormLabel id='demo-row-radio-buttons-group-label'>재진 여부</FormLabel>
+                                <RadioGroup
+                                    row
+                                    aria-labelledby='demo-row-radio-buttons-group-label'
+                                    name='row-radio-buttons-group'
+                                    value={values.reVisit}
+                                    onChange={handleChange("reVisit")}>
+                                    <FormControlLabel value='first' control={<Radio />} label='초진' />
+                                    <FormControlLabel value='reVisit' control={<Radio />} label='재진' />
                                 </RadioGroup>
                             </FormControl>
                         </Box>
@@ -202,7 +276,7 @@ function HospitalSearchReservation(props) {
                                 <Box sx={{ fontWeight: "bold", fontSize: 22 }}>선택한 의사 선생님</Box>
                                 <Box sx={{ mt: 2 }}>
                                     <img
-                                        src='./img/loginDog.jpg'
+                                        src={`${process.env.PUBLIC_URL}/img/loginDog.jpg`}
                                         alt='의사 사진'
                                         style={{ width: "100%", height: "250px" }}></img>
                                 </Box>
@@ -210,8 +284,8 @@ function HospitalSearchReservation(props) {
                             <Grid item xs={0.3} />
 
                             <Grid item xs={7.7} sx={{ mt: 8 }}>
-                                <Box sx={{ fontSize: 20, fontWeight: "bold" }}>이름 : 강박사</Box>
-                                <Box sx={{ fontSize: 20, fontWeight: "bold" }}>전문 분야 : ~~~~~~</Box>
+                                <Box sx={{ fontSize: 20, fontWeight: "bold" }}>이름 : {doctor.name}</Box>
+                                <Box sx={{ fontSize: 20, fontWeight: "bold" }}>전문 분야 : {doctor.specialty}</Box>
                                 <Box sx={{ fontSize: 20, fontWeight: "bold", mt: 2 }}>
                                     한마디 : 최선을 다하겠습니다.
                                 </Box>
@@ -226,8 +300,8 @@ function HospitalSearchReservation(props) {
                                             <InputLabel htmlFor='filled-adornment-name'>이름</InputLabel>
                                             <FilledInput
                                                 id='filled-adornment-name'
-                                                value={values.name}
-                                                onChange={handleChange("name")}
+                                                value={values.petName}
+                                                onChange={handleChange("petName")}
                                                 startAdornment={<InputAdornment position='start'></InputAdornment>}
                                             />
                                         </FormControl>
@@ -235,8 +309,8 @@ function HospitalSearchReservation(props) {
                                             <InputLabel htmlFor='filled-adornment-specific'>종</InputLabel>
                                             <FilledInput
                                                 id='filled-adornment-specific'
-                                                value={values.specific}
-                                                onChange={handleChange("specific")}
+                                                value={values.petSpecies}
+                                                onChange={handleChange("petSpecies")}
                                                 startAdornment={<InputAdornment position='start'></InputAdornment>}
                                             />
                                         </FormControl>
@@ -244,8 +318,8 @@ function HospitalSearchReservation(props) {
                                             <InputLabel htmlFor='filled-adornment-weight'>몸무게</InputLabel>
                                             <FilledInput
                                                 id='filled-adornment-weight'
-                                                value={values.weight}
-                                                onChange={handleChange("weight")}
+                                                value={values.petWeight}
+                                                onChange={handleChange("petWeight")}
                                                 startAdornment={<InputAdornment position='start'></InputAdornment>}
                                             />
                                         </FormControl>
@@ -256,7 +330,14 @@ function HospitalSearchReservation(props) {
                                         <CalendarPicker
                                             date={date}
                                             onChange={(newDate) => {
+                                                const dayDiff = diffDay(newDate);
+                                                setSelectTime(-1);
                                                 setDate(newDate);
+                                                refreshSchedule(dayDiff);
+                                            }}
+                                            shouldDisableDate={(date) => {
+                                                const dayDiff = diffDay(date);
+                                                return dayDiff < 0 || dayDiff > 15;
                                             }}
                                         />
                                     </Grid>
@@ -267,42 +348,11 @@ function HospitalSearchReservation(props) {
                             <AccessTimeIcon /> 시간 선택
                         </Box>
                         <Grid container sx={{ mt: 2 }}>
-                            <Grid item xs={1.5}>
-                                <MyButton time='10:00' />
-                                <MyButton time='12:55' />
-                                <MyButton time='15:50' />
-                                <MyButton time='18:45' />
-                            </Grid>
-                            <Grid item xs={1.5}>
-                                <MyButton time='10:25' />
-                                <MyButton time='13:20' />
-                                <MyButton time='16:15' />
-                            </Grid>
-                            <Grid item xs={1.5}>
-                                <MyButton time='10:50' />
-                                <MyButton time='13:45' />
-                                <MyButton time='16:40' />
-                            </Grid>
-                            <Grid item xs={1.5}>
-                                <MyButton time='11:15' />
-                                <MyButton time='14:10' />
-                                <MyButton time='17:05' />
-                            </Grid>
-                            <Grid item xs={1.5}>
-                                <MyButton time='11:40' />
-                                <MyButton time='14:35' />
-                                <MyButton time='17:30' />
-                            </Grid>
-                            <Grid item xs={1.5}>
-                                <MyButton time='12:05' />
-                                <MyButton time='15:00' />
-                                <MyButton time='17:55' />
-                            </Grid>
-                            <Grid item xs={1.5}>
-                                <MyButton time='12:30' />
-                                <MyButton time='15:25' />
-                                <MyButton time='18:20' />
-                            </Grid>
+                            {[...schedule].map((item, index) => (
+                                <Grid item xs={3} key={index}>
+                                    <MyButton time={reserveTime[index]} item={item} index={index} />
+                                </Grid>
+                            ))}
                         </Grid>
                         <Box sx={{ fontWeight: "bold", mt: 5, fontSize: 22 }}>
                             특이사항(이전 병력, 증상, 상담을 원하는 이유 작성 부탁드립니다.)
@@ -322,8 +372,9 @@ function HospitalSearchReservation(props) {
                         <Box sx={{ mx: 130, width: "100px", mt: 3 }}>
                             <Button
                                 variant='contained'
+                                type='submit'
                                 onClick={() => {
-                                    console.log(values, date);
+                                    submitReservation();
                                 }}>
                                 예약하기
                             </Button>

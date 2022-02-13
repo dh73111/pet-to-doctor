@@ -12,7 +12,7 @@ function Footer(props) {
         // position: "relative",
         // bottom: 0,
         paddingBottom: "100px",
-        marginTop: "100px",
+        // marginTop: "100px",
     });
     return (
         <MyFooter>
