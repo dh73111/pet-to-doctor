@@ -223,6 +223,7 @@ function UserReservation(props) {
                             onChange={(newValue) => {
                                 setValue(newValue);
                             }}
+                            size='small'
                             renderInput={(params) => <TextField {...params} />}
                         />
                     </LocalizationProvider>
@@ -236,6 +237,7 @@ function UserReservation(props) {
                                 id='demo-simple-select'
                                 value={state}
                                 label='state'
+                                size='small'
                                 onChange={handleChange}>
                                 <MenuItem value={10}>예약 요청</MenuItem>
                                 <MenuItem value={20}>예약 취소</MenuItem>
@@ -300,7 +302,7 @@ function UserReservation(props) {
                                                 <tr key={idx}>
                                                     <td>{idx + 1}</td>
                                                     <td>{treat.scheduleDate}</td>
-                                                    <td>{treat.scheduleDate}</td>
+                                                    <td>{treat.scheduleDate.substring(11, 16)}</td>
                                                     <td>{treat.hospitalId}</td>
                                                     <td>{treat.doctorId}</td>
                                                     <td>{convertor[treat.type]}</td>

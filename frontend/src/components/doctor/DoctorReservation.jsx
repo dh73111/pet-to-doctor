@@ -206,7 +206,7 @@ function DoctorReservation(props) {
                                     <th>예약시간</th>
                                     <th>예약상태</th>
                                     <th>자세히보기</th>
-                                    <th> </th>
+                                    <th>예약승인</th>
                                 </tr>
                             </thead>
                             <tbody>
