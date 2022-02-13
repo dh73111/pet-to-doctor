@@ -87,20 +87,7 @@ public class TreatmentService {
         String doctorName = treatmentRepositry.findByTreatmentId(id).getDoctor().getName();
         String content = id + "번 [" + hospitalName + "-" + doctorName + "] ";
 
-        if(type.equals(TreatmentType.RES_CANCEL) || type.equals(TreatmentType.VST_CANCEL)){ // 예약 취소
-            noticeUserInfo.setContent(content + "예약이 취소되었습니다.");
-            noticeUserInfo.setUrl("https://");
-            noticeRepository.registerNotice(noticeUserInfo, treatmentRepositry.findByTreatmentId(id).getUser(), null);
-        }
-        else if(type.equals(TreatmentType.RES_REJECT) || type.equals(TreatmentType.VST_REJECT)){ // 예약 거절
-            noticeUserInfo.setContent(content + "예약이 거절되었습니다.");
-            noticeUserInfo.setUrl("https://");
-            noticeRepository.registerNotice(noticeUserInfo, treatmentRepositry.findByTreatmentId(id).getUser(), null);
-        }
-        else if(type.equals(TreatmentType.RES_ACCEPTED)){ // 예약 승인
-            noticeRepository.updateNotice(noticeRepository.findBytreatmentId(id).getId(), NoticeType.RESERVATION );
-        }
-        else if(type.equals(TreatmentType.RES_PAID) || type.equals(TreatmentType.VST_PAID)){ // 예약 거절
+        if(type.equals(TreatmentType.RES_PAID) || type.equals(TreatmentType.VST_PAID)){ // 결제
             noticeUserInfo.setContent(content + "결제가 완료되었습니다.");
             noticeUserInfo.setUrl("https://");
             noticeRepository.registerNotice(noticeUserInfo, treatmentRepositry.findByTreatmentId(id).getUser(), null);
@@ -114,6 +101,25 @@ public class TreatmentService {
             noticeDoctorInfo.setUrl("https://");
             noticeRepository.registerNotice(noticeDoctorInfo, treatmentRepositry.findByTreatmentId(id).getDoctor(),null);
         }
+        else if(type.equals(TreatmentType.RES_CANCEL) || type.equals(TreatmentType.VST_CANCEL)){ // 예약 취소
+            noticeUserInfo.setContent(content + "예약이 취소되었습니다.");
+            noticeUserInfo.setUrl("https://");
+            noticeRepository.registerNotice(noticeUserInfo, treatmentRepositry.findByTreatmentId(id).getUser(), null);
+        }
+        else if(type.equals(TreatmentType.RES_REJECT) || type.equals(TreatmentType.VST_REJECT)){ // 예약 거절
+            noticeUserInfo.setContent(content + "예약이 거절되었습니다.");
+            noticeUserInfo.setUrl("https://");
+            noticeRepository.registerNotice(noticeUserInfo, treatmentRepositry.findByTreatmentId(id).getUser(), null);
+        }
+        else if(type.equals(TreatmentType.RES_ACCEPTED)){ // 예약 승인
+            noticeRepository.updateNotice(noticeRepository.findBytreatmentId(id).getId(), NoticeType.RESERVATION );
+        }
+        else if(type.equals(TreatmentType.RES_ACCEPTED_CANCEL) || type.equals(TreatmentType.VST_ACCEPTED_CANCEL)){ // 예약승인 취소
+            noticeUserInfo.setContent(content + "예약승인이 취소되었습니다.");
+            noticeUserInfo.setUrl("https://");
+            noticeRepository.registerNotice(noticeUserInfo, treatmentRepositry.findByTreatmentId(id).getUser(), null);
+        }
+
         return treatmentRepositry.updateTreatment(id, type);
     }
 
