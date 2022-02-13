@@ -50,11 +50,14 @@ public class MarkRepository {
     }
 
     public void deleteByHospitalId(User user, Long hospitalId) {
-        Mark findMark = em.createQuery("select m from Mark m  where m.user.id = :userId and m.hospital.id = :hospitalId", Mark.class)
-                .setParameter("userId", user.getId())
+        List<Mark> marks = em.createQuery("select m from Mark m join fetch m.hospital h where h.id = :hospitalId", Mark.class)
                 .setParameter("hospitalId", hospitalId)
-                .getSingleResult();
-        em.remove(findMark);
+                .getResultList();
+
+        for (Mark mark : marks) {
+            if (mark.getUser() == user)
+                em.remove(mark);
+        }
     }
 
 }
