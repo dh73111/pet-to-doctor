@@ -34,8 +34,8 @@ async function treatmentPay(treatmentId) {
 }
 
 // 의사의 전체 진료 정보 반환
-async function allTreatment(doctorId) {
+async function treatments(doctorId) {
     return (await api.get(`/treatment/doctor/all/${doctorId}`)).data.data;
 }
 
-export { treatmentInfo, userTreatmentInfo, doctorTreatmentInfo, addTreatment, treatmentState, treatmentPay, allTreatment };
+export { treatmentInfo, userTreatmentInfo, doctorTreatmentInfo, addTreatment, treatmentState, treatmentPay, treatments };

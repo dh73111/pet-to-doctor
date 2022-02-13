@@ -15,21 +15,10 @@ import DatePicker from "@mui/lab/DatePicker";
 import TextField from "@mui/material/TextField";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import allTreatment from "../../api/treatment.js";
+import { treatments } from "../../api/treatment.js";
 import { useSelector } from "react-redux";
 function createData(no, date, time, state, detail) {
     return { no, date, time, state, detail };
-}
-
-function DoctorReservationInfo(props) {
-    const [reservation, setReservation] = useState([]);
-    const doctorId = useSelector((store) => store.user.id);
-    console.log(doctorId);
-    useEffect(() => {
-        const init = async () => {
-            const reservations = await allTreatment(doctorId);
-        };
-    });
 }
 
 const rows = [
@@ -86,18 +75,17 @@ const CustomTablePagination = styled(TablePaginationUnstyled)`
     }
 `;
 function DoctorReservation(props) {
+    const doctorId = useSelector((store) => store.user.id);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [value, setValue] = React.useState(new Date());
     const [state, setState] = React.useState("");
-
     const [open, setOpen] = React.useState(false);
     const handleOpen = (event) => {
         console.log(event.target.value);
         setOpen(true);
     };
     const handleClose = () => setOpen(false);
-
     const handleChange = (event) => {
         setState(event.target.value);
     };
@@ -125,7 +113,27 @@ function DoctorReservation(props) {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
+    console.log(doctorId, "1");
 
+    const [reservations, setReservations] = useState([]);
+    // const getReservations = async () => {
+    //     const data = await treatments("691");
+    //     // console.log(reservations.data);
+    //     setReservations(data);
+    //     // console.log(reservation);
+    // };
+    // useEffect(() => {
+    //     getReservations();
+    //     console.log(reservations);
+    // }, []);
+    useEffect(() => {
+        const getdata = async () => {
+            const data = await treatments("691");
+            setReservations(data);
+        };
+        getdata();
+        console.log(reservations);
+    }, []);
     return (
         <Container>
             <Grid container>
