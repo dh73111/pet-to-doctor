@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -15,6 +15,8 @@ import TextField from "@mui/material/TextField";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { Pagination, Stack } from "@mui/material";
+import { doctorTreatmentAllInfo } from "api/treatment";
+import { useSelector } from "react-redux";
 
 function createData(no, date, time, name, state) {
     return { no, date, time, name, state };
@@ -71,10 +73,23 @@ const CustomTablePagination = styled(TablePaginationUnstyled)`
     }
 `;
 function DoctorDiagnosis(props) {
+    const docInfo = useSelector((store) => store.user);
+    const [diags, setDiags] = useState({});
+    // const [docInfo, setDocInfo] = useState();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [value, setValue] = React.useState(new Date());
     const [state, setState] = React.useState("");
+
+    useEffect(() => {
+        const init = async () => {
+            const data = await doctorTreatmentAllInfo(docInfo.id);
+            setDiags(data);
+            console.log(data, "의사의 모든 진료현황");
+        };
+        init();
+    }, []);
+
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
@@ -93,7 +108,7 @@ function DoctorDiagnosis(props) {
     return (
         <Container>
             <Grid container>
-                <Typography variant="h4" component="h1" sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
+                <Typography variant='h4' component='h1' sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
                     진료현황
                 </Typography>
                 {/* <Grid item xs={4}></Grid> */}
@@ -121,8 +136,8 @@ function DoctorDiagnosis(props) {
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DatePicker
                             disableFuture
-                            label="날짜"
-                            openTo="year"
+                            label='날짜'
+                            openTo='year'
                             views={["year", "month", "day"]}
                             value={value}
                             onChange={(newValue) => {
@@ -135,8 +150,13 @@ function DoctorDiagnosis(props) {
                 <Grid item xs={2}>
                     <Box sx={{ width: 120 }}>
                         <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label">ALL</InputLabel>
-                            <Select labelId="demo-simple-select-label" id="demo-simple-select" value={state} label="state" onChange={handleChange}>
+                            <InputLabel id='demo-simple-select-label'>ALL</InputLabel>
+                            <Select
+                                labelId='demo-simple-select-label'
+                                id='demo-simple-select'
+                                value={state}
+                                label='state'
+                                onChange={handleChange}>
                                 <MenuItem value={10}>진료 대기</MenuItem>
                                 <MenuItem value={20}>진료 완료</MenuItem>
                             </Select>
@@ -148,7 +168,7 @@ function DoctorDiagnosis(props) {
                 {/* <Grid item xs={2}></Grid> */}
                 <Grid item xs={12}>
                     <Root sx={{ width: "100%", mt: 3 }}>
-                        <table aria-label="custom pagination table" className="favhospital">
+                        <table aria-label='custom pagination table' className='favhospital'>
                             <thead>
                                 <tr>
                                     <th>예약번호</th>
@@ -160,31 +180,49 @@ function DoctorDiagnosis(props) {
                                 </tr>
                             </thead>
                             <tbody>
-                                {(rowsPerPage > 0 ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : rows).map((row) => (
+                                {diags.map((diag, idx) => {
+                                    return (
+                                        <tr key={idx}>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    );
+                                })}
+                                {/* {(rowsPerPage > 0
+                                    ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                    : rows
+                                ).map((row) => (
                                     <tr key={row.no}>
                                         <td style={{ width: 160 }}> {row.no}</td>
-                                        <td style={{ width: 160 }} align="right">
+                                        <td style={{ width: 160 }} align='right'>
                                             {row.date}
                                         </td>
-                                        <td style={{ width: 160 }} align="right">
+                                        <td style={{ width: 160 }} align='right'>
                                             {row.time}
                                         </td>
-                                        <td style={{ width: 160 }} align="right">
+                                        <td style={{ width: 160 }} align='right'>
                                             {row.name}
                                         </td>
-                                        <td style={{ width: 160 }} align="right">
+                                        <td style={{ width: 160 }} align='right'>
                                             <Box>
-                                                <Button variant="contained" sx={{ width: "50px", height: "20px" }}>
+                                                <Button variant='contained' sx={{ width: "50px", height: "20px" }}>
                                                     open
                                                 </Button>
                                             </Box>
                                             <Box sx={{ mt: 0.3 }}>
-                                                <Button variant="contained" sx={{ width: "50px", height: "20px" }} color="error">
+                                                <Button
+                                                    variant='contained'
+                                                    sx={{ width: "50px", height: "20px" }}
+                                                    color='error'>
                                                     close
                                                 </Button>
                                             </Box>
                                         </td>
-                                        <td style={{ width: 160 }} align="right">
+                                        <td style={{ width: 160 }} align='right'>
                                             {row.state}
                                         </td>
                                     </tr>
@@ -194,7 +232,7 @@ function DoctorDiagnosis(props) {
                                     <tr style={{ height: 41 * emptyRows }}>
                                         <td colSpan={3} />
                                     </tr>
-                                )}
+                                )} */}
                             </tbody>
                             <tfoot>
                                 <thead sx={{ width: 1200 }}>
@@ -224,7 +262,7 @@ function DoctorDiagnosis(props) {
                 </Grid>
                 <Grid item xs={2}></Grid>
             </Grid>
-            <Pagination count={10} sx={{ border: 1, mx: "auto", maxWidth: "414px" }} size="large" />
+            <Pagination count={10} sx={{ border: 1, mx: "auto", maxWidth: "414px" }} size='large' />
         </Container>
     );
 }

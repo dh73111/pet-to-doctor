@@ -46,6 +46,7 @@ function UserMypage(props) {
     useEffect(() => {
         const init = async () => {
             const user = await userInfo(userId);
+            console.log(user, "유저데이터");
             setUser(user);
         };
         init();
@@ -103,9 +104,10 @@ function UserInfo(props) {
                             </Box>
                             <Box sx={{ typography: "body1", color: "#263747" }}></Box>
                             <Box sx={{ typography: "body1", color: "#263747", mt: 2 }}>
-                                {informationUser.address.city}
+                                {/* {informationUser.address.city}
                                 <br />
-                                {informationUser.address.street}
+                                {informationUser.address.street} */}
+                                {informationUser.address !== null ? "있음" : "없음"}
                             </Box>
                         </Box>
                     </Grid>
