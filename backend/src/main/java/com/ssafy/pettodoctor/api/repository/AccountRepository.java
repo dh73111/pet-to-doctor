@@ -12,18 +12,24 @@ import javax.persistence.NoResultException;
 public class AccountRepository {
     private final EntityManager em;
 
-    public Account findByEmail(String email){
+    public Account findByEmail(String email) {
         try {
             return em.createQuery("select a from Account a where a.email = :email", Account.class)
                     .setParameter("email", email)
                     .getSingleResult();
-        } catch (NoResultException e) {
+        } catch (Exception e) {
             return null;
         }
     }
 
     public Account findById(Long id){
         return em.find(Account.class, id);
+    }
+
+    public void deleteById(Long id){
+        em.createQuery("delete from Account a where a.id = :id")
+                .setParameter("id", id)
+                .executeUpdate();
     }
 
 }

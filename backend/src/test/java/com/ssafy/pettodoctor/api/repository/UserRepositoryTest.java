@@ -6,7 +6,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -40,6 +46,29 @@ class UserRepositoryTest {
         userRepository.save(u1);
 
         Assertions.assertThat(userRepository.findById(u1.getId())).isEqualTo(u1);
+    }
+
+    @Test
+    @Transactional
+    public void 만료된_유저아이디찾기() {
+        User u1 = new User();
+        User u2 = new User();
+        User u3 = new User();
+        u1.setIsCertificated(false);
+        u2.setIsCertificated(false);
+        u3.setIsCertificated(true);
+        userRepository.save(u1);
+        userRepository.save(u2);
+        userRepository.save(u3);
+        LocalDate expiredDate = LocalDate.now().minusDays(100);
+        u1.setJoinDate(expiredDate);
+        u3.setJoinDate(expiredDate);
+
+        List<Long> exUsers = userRepository.findUserIdOfExpiredUsers(7);
+        List<Long> u1List = new ArrayList<>();
+        u1List.add(u1.getId());
+
+        Assertions.assertThat(exUsers).isEqualTo(u1List);
     }
 
 

@@ -6,12 +6,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -46,8 +43,8 @@ class TreatmentServiceTest {
         em.clear();
 
         Assertions.assertEquals("고양이", ts.findById(t.getId()).getPetName());
-        Assertions.assertEquals("고양이", ts.findByUserId(t.getUser().getId(), TreatmentType.RES_REQUEST).get(0).getPetName());
-        Assertions.assertEquals("고양이", ts.findByDoctorId(t.getDoctor().getId(), TreatmentType.RES_REQUEST).get(0).getPetName());
+        Assertions.assertEquals("고양이", ts.findByUserIdAndType(t.getUser().getId(), TreatmentType.RES_REQUEST).get(0).getPetName());
+        Assertions.assertEquals("고양이", ts.findByDoctorIdAndType(t.getDoctor().getId(), TreatmentType.RES_REQUEST).get(0).getPetName());
         ts.updateTreatment(t.getId(), TreatmentType.RES_REJECT);
         Assertions.assertEquals(TreatmentType.RES_REJECT, ts.findById(t.getId()).getType());
 
@@ -59,6 +56,6 @@ class TreatmentServiceTest {
         ts.registerTreatment(tpr);
         ts.registerTreatment(tpr);
 
-        Assertions.assertEquals(2, ts.findByUserId(u.getId(), TreatmentType.RES_REQUEST).size());
+        Assertions.assertEquals(2, ts.findByUserIdAndType(u.getId(), TreatmentType.RES_REQUEST).size());
     }
 }
