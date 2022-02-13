@@ -49,6 +49,12 @@ public class MarkRepository {
             em.remove(findMark);
     }
 
-
+    public void deleteByHospitalId(User user, Long hospitalId) {
+        Mark findMark = em.createQuery("select m from Mark m  where m.user.id = :userId and m.hospital.id = :hospitalId", Mark.class)
+                .setParameter("userId", user.getId())
+                .setParameter("hospitalId", hospitalId)
+                .getSingleResult();
+        em.remove(findMark);
+    }
 
 }
