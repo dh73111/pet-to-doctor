@@ -35,7 +35,6 @@
     padding-left: 10px;
     font-size: 16px;
 }
-
 /* 스타일링용 */
 .devider {
     width: 100%;
@@ -43,6 +42,14 @@
     background-color: rgb(221, 221, 221);
 }
 /* 스타일링용끝 */
+
+/* 회원가입 스타일 */
+.input_required::after {
+    content: "*";
+    display: inline;
+    color: #309fb3;
+}
+/* 회원가입 스타일 끝 */
 
 .pet_card:hover {
     /* border-color: #1dc6f6; */

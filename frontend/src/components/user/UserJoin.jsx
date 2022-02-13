@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Typography, Grid, Button, Box, TextField, InputAdornment, Modal, Stack } from "@mui/material";
+import { Typography, Grid, Button, Box, TextField, InputAdornment, Modal, Stack, Divider } from "@mui/material";
 import logo from "../../components/logo.png";
 import DaumPostCode from "react-daum-postcode";
 import { border } from "@mui/system";
@@ -147,126 +147,242 @@ function UserJoin(props) {
         //fullAddress -> 전체 주소반환
     };
 
+    const textFieldStyle = {
+        backgroundColor: "#FBFBFD",
+        width: "280px",
+    };
+
     return (
-        <div>
+        <Box>
             <Box
                 sx={{
                     display: "flex",
-                    marginTop: 7,
+                    paddingTop: 7,
                     flexDirection: "column",
                     alignItems: "center",
-                }}
-            >
-                <img src={logo} alt='로고' />
-                <Typography mt={5} align='left' component='h1' variant='h6'>
+                    width: "600px",
+                    mx: "auto",
+                }}>
+                <img src={logo} alt='로고' style={{ marginBottom: "40px" }} />
+                {/* <Typography mt={5} align='left' component='h1' variant='h6'>
                     이메일
+                </Typography> */}
+                <Typography align='center' component='h2' sx={{ fontSize: "18px", fontWeight: "700", mb: 2 }}>
+                    회원 정보
                 </Typography>
-                <TextField
-                    style={{ width: 350 }}
-                    margin='dense'
-                    placeholder='example@example.com'
-                    required //값 반드시 입력
-                    type={values.email}
-                    id='email'
-                    name='email'
-                    autoComplete='email' // 모바일에서 이메일 자동으로 입력할 수 있도록 해줌
-                    autoFocus // 화면에서 바로 커서가 이 곳으로 이동
-                    value={values.email}
-                    onChange={handleChange("email")}
-                    error={emailError !== ""}
-                />
-                <Typography style={{ color: "red" }}>{emailError}</Typography>
+                <Box>
+                    <label
+                        for='email'
+                        className='input_required'
+                        style={{
+                            display: "block",
+                            float: "left",
+                            width: "90px",
+                            textAlign: "left",
+                            lineHeight: "55px",
+                            marginRight: "20px",
+                        }}>
+                        이메일
+                    </label>
+                    <TextField
+                        style={{ width: 280 }}
+                        margin='dense'
+                        placeholder='example@example.com'
+                        required //값 반드시 입력
+                        type={values.email}
+                        id='email'
+                        name='email'
+                        autoComplete='email' // 모바일에서 이메일 자동으로 입력할 수 있도록 해줌
+                        autoFocus // 화면에서 바로 커서가 이 곳으로 이동
+                        value={values.email}
+                        onChange={handleChange("email")}
+                        error={emailError !== ""}
+                        size='small'
+                        sx={textFieldStyle}
+                    />
+                    <Typography style={{ color: "red", fontSize: "14px" }}>{emailError}</Typography>
+                </Box>
 
-                <Typography component='h1' variant='h6'>
+                {/* <Typography component='h1' variant='h6'>
                     비밀번호
-                </Typography>
-                <TextField
-                    style={{ width: 350 }}
-                    margin='dense'
-                    placeholder='비밀번호 입력'
-                    required //값 반드시 입력
-                    type='password'
-                    id='password'
-                    name='password'
-                    value={values.password}
-                    onChange={handleChange("password")}
-                />
-                <Typography component='h1' variant='h6'>
+                </Typography> */}
+                <Box>
+                    <label
+                        for='password'
+                        className='input_required'
+                        style={{
+                            display: "block",
+                            float: "left",
+                            width: "90px",
+                            textAlign: "left",
+                            lineHeight: "55px",
+                            marginRight: "20px",
+                        }}>
+                        비밀번호
+                    </label>
+                    <TextField
+                        style={{ width: 280 }}
+                        margin='dense'
+                        placeholder='비밀번호 입력'
+                        required //값 반드시 입력
+                        type='password'
+                        id='password'
+                        name='password'
+                        value={values.password}
+                        onChange={handleChange("password")}
+                        size='small'
+                        sx={textFieldStyle}
+                    />
+                </Box>
+                {/* <Typography component='h1' variant='h6'>
                     비밀번호 재확인
-                </Typography>
-                <TextField
-                    style={{ width: 350 }}
-                    margin='dense'
-                    placeholder='비밀번호 재확인'
-                    required //값 반드시 입력
-                    type='password'
-                    id='confirmPassword'
-                    name='confirmPassword'
-                    value={values.confirmPassword}
-                    onChange={handleChange("confirmPassword")}
-                    error={passwordError !== ""}
-                />
-                <Typography style={{ color: "red" }}>{passwordError}</Typography>
-                <Typography component='h6' variant='h6'>
+                </Typography> */}
+                <Box>
+                    <label
+                        for='confirmPassword'
+                        className='input_required'
+                        style={{
+                            display: "block",
+                            float: "left",
+                            width: "100px",
+                            textAlign: "left",
+                            lineHeight: "55px",
+                            marginRight: "10px",
+                        }}>
+                        비밀번호 확인
+                    </label>
+                    <TextField
+                        style={{ width: 280 }}
+                        margin='dense'
+                        placeholder='비밀번호 재확인'
+                        required //값 반드시 입력
+                        type='password'
+                        id='confirmPassword'
+                        name='confirmPassword'
+                        value={values.confirmPassword}
+                        onChange={handleChange("confirmPassword")}
+                        error={passwordError !== ""}
+                        size='small'
+                        sx={textFieldStyle}
+                    />
+                    <Typography style={{ color: "red", fontSize: "14px" }}>{passwordError}</Typography>
+                </Box>
+                {/* <Typography component='h6' variant='h6'>
                     이름
-                </Typography>
-                <TextField
-                    style={{ width: 350 }}
-                    margin='dense'
-                    placeholder='이름'
-                    required //값 반드시 입력
-                    type={values.name}
-                    id='name'
-                    name='name'
-                    value={values.name}
-                    onChange={handleChange("name")}
-                />
-                <Typography component='h1' variant='h6'>
+                </Typography> */}
+                <Box>
+                    <label
+                        for='name'
+                        className='input_required'
+                        style={{
+                            display: "block",
+                            float: "left",
+                            width: "100px",
+                            textAlign: "left",
+                            lineHeight: "55px",
+                            marginRight: "10px",
+                        }}>
+                        이름
+                    </label>
+                    <TextField
+                        style={{ width: 280 }}
+                        margin='dense'
+                        placeholder='이름'
+                        required //값 반드시 입력
+                        type={values.name}
+                        id='name'
+                        name='name'
+                        value={values.name}
+                        onChange={handleChange("name")}
+                        size='small'
+                        sx={textFieldStyle}
+                    />
+                </Box>
+                {/* <Typography component='h1' variant='h6'>
                     휴대전화
-                </Typography>
-                <TextField
-                    style={{ width: 350 }}
-                    margin='dense'
-                    placeholder='01012345678'
-                    required //값 반드시 입력
-                    type={values.tel}
-                    id='tel'
-                    name='tel'
-                    value={values.tel}
-                    onChange={handleChange("tel")}
-                    error={telError !== ""}
-                />
-                <Typography style={{ color: "red" }}>{telError}</Typography>
+                </Typography> */}
+                <Box>
+                    <label
+                        for='tel'
+                        className='input_required'
+                        style={{
+                            display: "block",
+                            float: "left",
+                            width: "100px",
+                            textAlign: "left",
+                            lineHeight: "55px",
+                            marginRight: "10px",
+                        }}>
+                        휴대전화
+                    </label>
+                    <TextField
+                        style={{ width: 280 }}
+                        margin='dense'
+                        placeholder='01012345678'
+                        required //값 반드시 입력
+                        type={values.tel}
+                        id='tel'
+                        name='tel'
+                        value={values.tel}
+                        onChange={handleChange("tel")}
+                        error={telError !== ""}
+                        size='small'
+                        sx={textFieldStyle}
+                    />
+                    <Typography style={{ color: "red", fontSize: "14px" }}>{telError}</Typography>
+                </Box>
                 <Box>
                     <Box>
-                        <Typography align='center' component='h1' variant='h6'>
+                        {/* <Typography align='center' component='h1' variant='h6'>
                             주소
-                        </Typography>
-                        <Button onClick={handleOpen}>주소 검색</Button>
+                        </Typography> */}
+                        <label
+                            for='street'
+                            className='input_required'
+                            style={{
+                                display: "block",
+                                float: "left",
+                                width: "100px",
+                                textAlign: "left",
+                                lineHeight: "55px",
+                                marginRight: "10px",
+                            }}>
+                            주소
+                        </label>
                         <Modal
                             open={open}
                             onClose={handleClose}
                             aria-labelledby='modal-modal-title'
-                            aria-describedby='modal-modal-description'
-                        >
+                            aria-describedby='modal-modal-description'>
                             <Box sx={style}>
                                 <DaumPostCode onComplete={handleComplete} className='post-code' />
                             </Box>
                         </Modal>
+                        <TextField
+                            // style={{ width: 280 }}
+                            value={values.address.city}
+                            placeholder='주소를 검색해주세요'
+                            margin='dense'
+                            disabled
+                            sx={{ backgroundColor: "#FBFBFD" }}
+                            size='small'></TextField>
+                        <Button onClick={handleOpen} sx={{ mt: 1 }}>
+                            주소 검색
+                        </Button>
                     </Box>
-                    <TextField style={{ width: 350 }} value={values.address.city} margin='dense' disabled></TextField>
+                    <TextField
+                        sx={textFieldStyle}
+                        margin='dense'
+                        placeholder='상세 주소'
+                        required //값 반드시 입력
+                        id='street'
+                        name='street'
+                        value={values.address.street}
+                        onChange={handleStreetChange("street")}
+                        size='small'
+                    />
                 </Box>
-                <TextField
-                    style={{ width: 350 }}
-                    margin='dense'
-                    placeholder='상세 주소'
-                    required //값 반드시 입력
-                    id='street'
-                    name='street'
-                    value={values.address.street}
-                    onChange={handleStreetChange("street")}
-                />
-                <Typography mt={5} align='right' component='h1' variant='h6'>
+                <Typography mt={5} align='center' component='h2' sx={{ fontSize: "18px", fontWeight: "600", mb: 2 }}>
                     반려동물 정보(선택입력사항)
                 </Typography>
                 <Grid
@@ -275,21 +391,35 @@ function UserJoin(props) {
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
-                    }}
-                >
-                    <Grid>
+                    }}>
+                    {/* <Grid>
                         <Typography mt={3} align='right' component='h1' variant='h6'>
                             이름
                         </Typography>
-                    </Grid>
+                    </Grid> */}
                     <Grid>
+                        <label
+                            for='name'
+                            style={{
+                                display: "block",
+                                float: "left",
+                                width: "100px",
+                                textAlign: "left",
+                                lineHeight: "55px",
+                                marginRight: "10px",
+                            }}>
+                            이름
+                        </label>
                         <TextField
-                            style={{ width: 350 }}
+                            style={{ width: 280 }}
+                            placeholder='반려동물 이름'
                             margin='dense'
                             id='name'
                             name='name'
                             value={pet.name}
                             onChange={handlePetChange("name")}
+                            size='small'
+                            sx={textFieldStyle}
                         />
                     </Grid>
                 </Grid>
@@ -299,27 +429,38 @@ function UserJoin(props) {
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
-                    }}
-                >
+                        mb: 1,
+                    }}>
                     <Grid>
-                        <Typography mt={3} align='right' component='h1' variant='h6'>
+                        {/* <Typography mt={3} align='right' component='h1' variant='h6'>
                             생년월일
-                        </Typography>
-                    </Grid>
-                    <Grid>
-                        <Stack component='form' noValidate spacing={3}>
-                            <TextField
-                                id='date'
-                                type='date'
-                                defaultValue='2022-02-01'
-                                sx={{ width: 350 }}
-                                value={pet.birthDate}
-                                onChange={handlePetChange("birthDate")}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                        </Stack>
+                        </Typography> */}
+                        <label
+                            for='date'
+                            style={{
+                                display: "block",
+                                float: "left",
+                                width: "100px",
+                                textAlign: "left",
+                                lineHeight: "55px",
+                                marginRight: "10px",
+                            }}>
+                            생년월일
+                        </label>
+                        {/* <Stack component='form' noValidate spacing={3}> */}
+                        <TextField
+                            id='date'
+                            type='date'
+                            defaultValue='2022-02-01'
+                            sx={textFieldStyle}
+                            value={pet.birthDate}
+                            onChange={handlePetChange("birthDate")}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            size='small'
+                        />
+                        {/* </Stack> */}
                     </Grid>
                 </Grid>
                 <Grid
@@ -328,21 +469,34 @@ function UserJoin(props) {
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
-                    }}
-                >
-                    <Grid>
+                    }}>
+                    {/* <Grid>
                         <Typography mt={3} align='right' component='h1' variant='h6'>
                             종
                         </Typography>
-                    </Grid>
+                    </Grid> */}
                     <Grid>
+                        <label
+                            for='species'
+                            style={{
+                                display: "block",
+                                float: "left",
+                                width: "100px",
+                                textAlign: "left",
+                                lineHeight: "55px",
+                                marginRight: "10px",
+                            }}>
+                            종
+                        </label>
                         <TextField
-                            style={{ width: 350 }}
+                            placeholder='종'
+                            sx={textFieldStyle}
                             margin='dense'
                             id='species'
                             name='species'
                             value={pet.species}
                             onChange={handlePetChange("species")}
+                            size='small'
                         />
                     </Grid>
                 </Grid>
@@ -352,24 +506,37 @@ function UserJoin(props) {
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
-                    }}
-                >
-                    <Grid>
+                    }}>
+                    {/* <Grid>
                         <Typography mt={3} align='right' component='h1' variant='h6'>
                             몸무게
                         </Typography>
-                    </Grid>
+                    </Grid> */}
                     <Grid>
+                        <label
+                            for='weight'
+                            style={{
+                                display: "block",
+                                float: "left",
+                                width: "100px",
+                                textAlign: "left",
+                                lineHeight: "55px",
+                                marginRight: "10px",
+                            }}>
+                            몸무게
+                        </label>
                         <TextField
-                            style={{ width: 350 }}
+                            placeholder='몸무게'
+                            sx={textFieldStyle}
                             margin='dense'
-                            id=''
-                            name=''
+                            id='weight'
+                            name='weight'
                             value={pet.weight}
                             onChange={handlePetChange("weight")}
                             InputProps={{
                                 endAdornment: <InputAdornment position='end'>kg</InputAdornment>,
                             }}
+                            size='small'
                         />
                     </Grid>
                 </Grid>
@@ -392,12 +559,11 @@ function UserJoin(props) {
                             console.log(values);
                             userRegister(values);
                         }
-                    }}
-                >
+                    }}>
                     가입하기
                 </Button>
             </Box>
-        </div>
+        </Box>
     );
 }
 
