@@ -80,11 +80,14 @@ public class PrescriptionService {
     @Transactional
     public Prescription updatePaymentInfo(Long prescriptionId, PaymentType paymentType) {
 
+        Long treatmentId = treatmentRepositry.findByPrescriptionId(prescriptionId).getId();
+        Long doctorId = treatmentRepositry.findByPrescriptionId(prescriptionId).getDoctor().getId();
+
         if(paymentType.equals(PaymentType.COMPLETE)){ // 처방전 결제가 됐다면
             // 의사에게 알림
             NoticePostReq noticeInfo = new NoticePostReq();
-            noticeInfo.setAccountId(treatmentRepositry.findByPrescriptionId(prescriptionId).getDoctor().getId());
-            noticeInfo.setContent("배송이 필요한 처방이 있습니다. 운송장 번호를 등록해주세요.");
+            noticeInfo.setAccountId(doctorId);
+            noticeInfo.setContent(treatmentId + "번 - 배송이 필요한 처방이 있습니다. 운송장 번호를 등록해주세요.");
             noticeInfo.setUrl("https://"); // 운송장 등록하는 사이트
             noticeInfo.setIsChecked(false);
             noticeInfo.setNoticeDate(LocalDateTime.now());
