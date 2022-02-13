@@ -1,18 +1,13 @@
 package com.ssafy.pettodoctor.api.service;
 
-import com.ssafy.pettodoctor.api.domain.Prescription;
-import com.ssafy.pettodoctor.api.domain.Treatment;
-import com.ssafy.pettodoctor.api.domain.TreatmentType;
-import com.ssafy.pettodoctor.api.repository.MedicineRepository;
-import com.ssafy.pettodoctor.api.repository.PrescriptionRepository;
-import com.ssafy.pettodoctor.api.repository.TreatmentRepositry;
-import com.ssafy.pettodoctor.api.request.MedicineReq;
-import com.ssafy.pettodoctor.api.request.PrescriptionPostReq;
-import com.ssafy.pettodoctor.api.request.ShippingReq;
+import com.ssafy.pettodoctor.api.domain.*;
+import com.ssafy.pettodoctor.api.repository.*;
+import com.ssafy.pettodoctor.api.request.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +18,7 @@ public class PrescriptionService {
     private final PrescriptionRepository prescriptionRepository;
     private final TreatmentRepositry treatmentRepositry;
     private final MedicineRepository medicineRepository;
+    private final NoticeRepository noticeRepository;
 
     public List<Prescription> findByIdList(Long doctor_id, TreatmentType type) {
         return prescriptionRepository.findByIdList(doctor_id, type);
@@ -43,8 +39,12 @@ public class PrescriptionService {
         medicineRepository.saveMedicines(prescription, prescriptionPostReq.getMedicines());
 
         prescriptionRepository.save(prescription);
+
         Treatment treatment = treatmentRepositry.findByTreatmentId(treatmentId);
         treatment.setPrescription(prescription);
+
+        // 처방전 등록하면 해당 알림 type 변경
+        noticeRepository.updateNotice(noticeRepository.findBytreatmentId(treatmentId).getId(), NoticeType.DELIVERY);
     }
 
     @Transactional
@@ -71,6 +71,26 @@ public class PrescriptionService {
         Prescription prescription = prescriptionRepository.findById(prescriptionId);
         prescription.updateShippingInfo(shippingReq.getInvoiceCode(), shippingReq.getAddress(), shippingReq.getShippingName(),
                 shippingReq.getShippingTel(), shippingReq.getShippingCost());
+
+        // 운송장을 등록하면 해당 알림 type 변경
+        noticeRepository.updateNotice(noticeRepository.findBytreatmentId(treatmentRepositry.findByPrescriptionId(prescriptionId).getId()).getId(), NoticeType.NOTIFICATION);
         return prescription;
+    }
+
+    @Transactional
+    public Prescription updatePaymentInfo(Long prescriptionId, PaymentType paymentType) {
+
+        if(paymentType.equals(PaymentType.COMPLETE)){ // 처방전 결제가 됐다면
+            // 의사에게 알림
+            NoticePostReq noticeInfo = new NoticePostReq();
+            noticeInfo.setAccountId(treatmentRepositry.findByPrescriptionId(prescriptionId).getDoctor().getId());
+            noticeInfo.setContent("배송이 필요한 처방이 있습니다. 운송장 번호를 등록해주세요.");
+            noticeInfo.setUrl("https://"); // 운송장 등록하는 사이트
+            noticeInfo.setIsChecked(false);
+            noticeInfo.setNoticeDate(LocalDateTime.now());
+            noticeRepository.registerNotice(noticeInfo, treatmentRepositry.findByPrescriptionId(prescriptionId).getDoctor(), null);
+        }
+
+        return prescriptionRepository.updatePaymentInfo(prescriptionId, paymentType);
     }
 }

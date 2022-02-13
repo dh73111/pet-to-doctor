@@ -5,6 +5,7 @@ import com.ssafy.pettodoctor.api.domain.User;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter @Setter
@@ -16,14 +17,14 @@ public class UserRes {
     private String name;
     private String role;
     private String tel;
-    private LocalDateTime joinDate;
+    private LocalDate joinDate;
 
     private Address address;
     private Boolean isOauth;
     private Boolean isCertificated;
 
     public UserRes(Long id, String email, String name,
-                   String tel, LocalDateTime joinDate,
+                   String tel, LocalDate joinDate,
                    Address address, Boolean isOauth, Boolean isCertificated) {
         this.id = id;
         this.email = email;

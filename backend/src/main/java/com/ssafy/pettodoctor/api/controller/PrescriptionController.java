@@ -1,8 +1,6 @@
 package com.ssafy.pettodoctor.api.controller;
 
-import com.ssafy.pettodoctor.api.domain.Medicine;
-import com.ssafy.pettodoctor.api.domain.Prescription;
-import com.ssafy.pettodoctor.api.domain.TreatmentType;
+import com.ssafy.pettodoctor.api.domain.*;
 import com.ssafy.pettodoctor.api.request.PrescriptionPostReq;
 import com.ssafy.pettodoctor.api.request.ShippingReq;
 import com.ssafy.pettodoctor.api.response.MedicineRes;
@@ -164,4 +162,33 @@ public class PrescriptionController {
         }
         return new ResponseEntity<ResVO<List<MedicineRes>>>(result, status);
     }
+
+    @PutMapping("/payment/{prescriptionId}")
+    @Operation(summary = "결제 정보 수정", description = "처방 정보 수정한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "401", description = "인증 실패"),
+            @ApiResponse(responseCode = "404", description = "사용자 없음"),
+            @ApiResponse(responseCode = "500", description = "서버 오류")
+    })
+    public ResponseEntity<ResVO<PrescriptionRes>> updatePaymentInfo(
+            @PathVariable @Parameter(description = "처방키") Long prescriptionId,
+            @RequestBody @Parameter(description = "결제 정보 상태") PaymentType paymentType) {
+        ResVO<PrescriptionRes> result = new ResVO<>();
+        HttpStatus status = null;
+
+        try{
+            Prescription prescription = prescriptionService.updatePaymentInfo(prescriptionId, paymentType);
+            result.setData(PrescriptionRes.convertToRes(prescription));
+            result.setMessage("성공");
+            status = HttpStatus.OK;
+        } catch (Exception e){
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            result.setMessage("서버오류");
+        }
+
+        return new ResponseEntity<ResVO<PrescriptionRes>>(result, status);
+    }
+
+
 }

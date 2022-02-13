@@ -37,7 +37,7 @@ const gridItemStyle = {
 
 function Home(props) {
     return (
-        <Box style={{ border: 1 }}>
+        <Box style={{ border: 1, backgroundColor: "#fafafa" }}>
             <MyImage>
                 {/* <img src={`${process.env.PUBLIC_URL}/img/image132.png`} width="100%" alt="mainVisual" /> */}
                 <Typography
@@ -48,7 +48,7 @@ function Home(props) {
                     건강을 지켜주세요 "
                 </Typography>
             </MyImage>
-            <Container sx={{ mt: 4 }}>
+            <Container sx={{ my: 4 }}>
                 <Grid container style={cardStyle} className='card'>
                     <Grid item sx={gridItemStyle} xs={12} md={4}>
                         <Box sx={{ color: "#29A1B1", fontSize: 25, fontWeight: "700" }}>
@@ -144,6 +144,7 @@ function Home(props) {
                             sx={{
                                 width: "100%",
                                 height: "100%",
+                                mt: 4,
                             }}>
                             <img src={`${process.env.PUBLIC_URL}/img/main3.png`} alt='진료상담' width='100%' />
                         </Box>

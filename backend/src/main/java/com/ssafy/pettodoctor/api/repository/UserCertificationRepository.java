@@ -43,4 +43,10 @@ public class UserCertificationRepository {
                 .getSingleResult();
         return Optional.ofNullable(findUc);
     }
+
+    public void deleteByUserId(Long userId){
+        em.createQuery("delete from UserCertification uc where uc.user.id = :userId")
+                .setParameter("userId", userId)
+                .executeUpdate();
+    }
 }

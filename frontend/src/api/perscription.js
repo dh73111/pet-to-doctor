@@ -19,7 +19,7 @@ async function medicineInfo(treatmentId) {
 
 // 진단서 확인
 async function checkPrescription(treatmentId) {
-    return (await api.get(`/prescription`)).data.data;
+    return (await api.get(`/prescription?prescription_id=${treatmentId}`)).data.data;
 }
 
 // 진단서 리스트 조회

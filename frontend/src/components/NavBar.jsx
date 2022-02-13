@@ -24,6 +24,7 @@ import MainSearchBar from "./user/resources/MainSearchBar";
 import { PersonOutlineOutlined } from "@mui/icons-material";
 import LiveHelpOutlined from "@mui/icons-material/LiveHelpOutlined";
 import Alarm from "./Alarm";
+import jwtDecode from "jwt-decode";
 
 const pages = [
     { id: 1, path: "/petodoctor/userreservation", name: "내 예약" },
@@ -61,7 +62,7 @@ const NavTop = (props) => {
     // const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
     const [open, setOpen] = useState(false);
-    // const [mode, setMode] = useState("user");
+    const [mode, setMode] = useState("");
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     // const handleClose = () => setOpen(false);
@@ -98,30 +99,30 @@ const NavTop = (props) => {
         </Box>
     );
 
-    // const NavItem = () => {
-    //   // 네비 모드 바꾸기
-    //   if (mode === "doctor") {
-    //     return (
-    //       <Box sx={{ width: "100%", display: { xs: "none", md: "flex" }, justifyContent: "space-between" }}>
-    //         {pages.map((page) => (
-    //           <NavLink to={page.path} key={page.path} style={{ textDecoration: "none" }}>
-    //             {props.selectedNav === page.id ? MyButton(page, "#29A1B1") : MyButton(page, "black")}
-    //           </NavLink>
-    //         ))}
-    //       </Box>
-    //     );
-    //   } else {
-    //     return (
-    //       <Box sx={{ width: "100%", display: { xs: "none", md: "flex" }, justifyContent: "space-between" }}>
-    //         {doctorpages.map((page) => (
-    //           <NavLink to={page.path} key={page.path} style={{ textDecoration: "none" }}>
-    //             {props.selectedNav === page.id ? MyButton(page, "#29A1B1") : MyButton(page, "black")}
-    //           </NavLink>
-    //         ))}
-    //       </Box>
-    //     );
-    //   }
-    // };
+    const NavItem = () => {
+        // 네비 모드 바꾸기
+        if (mode === "ROLE_USER") {
+            return (
+                <Box sx={{ width: "100%", display: { xs: "none", md: "flex" }, justifyContent: "space-between" }}>
+                    {pages.map((page) => (
+                        <NavLink to={page.path} key={page.path} style={{ textDecoration: "none" }}>
+                            {props.selectedNav === page.id ? MyButton(page, "#29A1B1") : MyButton(page, "black")}
+                        </NavLink>
+                    ))}
+                </Box>
+            );
+        } else {
+            return (
+                <Box sx={{ width: "100%", display: { xs: "none", md: "flex" }, justifyContent: "space-between" }}>
+                    {doctorpages.map((page) => (
+                        <NavLink to={page.path} key={page.path} style={{ textDecoration: "none" }}>
+                            {props.selectedNav === page.id ? MyButton(page, "#29A1B1") : MyButton(page, "black")}
+                        </NavLink>
+                    ))}
+                </Box>
+            );
+        }
+    };
 
     const LoginMenu = (props) => {
         const style = [
@@ -144,7 +145,6 @@ const NavTop = (props) => {
             },
         ];
         const isLogin = useSelector((store) => store.isLogin);
-
         const loginControls = [
             { title: "회원가입", link: "/petodoctor/userjoin" },
             { title: "로그인", link: "/petodoctor", func: handleOpen },
@@ -253,16 +253,17 @@ const NavTop = (props) => {
         </Box>
     );
 };
-
 // ------------- 스크롤 STICKY 하단 NAVBAR -------------
 function NavBottom(props) {
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [open, setOpen] = useState(false);
-    const [mode, setMode] = useState("user");
+    const [mode, setMode] = useState("");
     const handleClose = () => setOpen(false);
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
+    const isLogin = useSelector((store) => store.isLogin);
+    
     const handleCloseNavMenu = (id) => {
         console.log(id);
         if (id === props.selectNav) props.clickNav(id);
@@ -281,10 +282,16 @@ function NavBottom(props) {
 
     const NavItem = () => {
         // 네비 모드 바꾸기
-        if (mode === "user") {
+        if (isLogin) {
+            const loginres = sessionStorage.getItem("accessToken");
+            let decode_token = jwtDecode(loginres);
+            setMode(decode_token.role);
+            console.log("role :",mode );
+        }
+        if (mode === "ROLE_DOCTOR") {
             return (
                 <Box sx={{ width: "100%", display: { xs: "none", md: "flex" }, justifyContent: "space-between" }}>
-                    {pages.map((page) => (
+                    {doctorpages.map((page) => (
                         <NavLink to={page.path} key={page.path} style={{ textDecoration: "none" }} className='gnb'>
                             {props.selectedNav === page.id
                                 ? MyButton(page, "#29A1B1", "bold")
@@ -296,7 +303,7 @@ function NavBottom(props) {
         } else {
             return (
                 <Box sx={{ width: "100%", display: { xs: "none", md: "flex" }, justifyContent: "space-between" }}>
-                    {doctorpages.map((page) => (
+                    {pages.map((page) => (
                         <NavLink to={page.path} key={page.path} style={{ textDecoration: "none" }} className='gnb'>
                             {props.selectedNav === page.id
                                 ? MyButton(page, "#29A1B1", "bold")

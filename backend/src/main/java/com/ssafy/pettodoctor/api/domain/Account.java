@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,7 +22,7 @@ public class Account {
     private String name;
     private String role;
     private String tel;
-    private LocalDateTime joinDate;
+    private LocalDate joinDate;
 
     public String getAuthority(){
         return this.role;

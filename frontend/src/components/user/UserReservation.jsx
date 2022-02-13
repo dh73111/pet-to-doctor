@@ -10,15 +10,16 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import TablePaginationUnstyled from "@mui/base/TablePaginationUnstyled";
-import { Modal } from "@mui/material";
+import { Modal, Skeleton } from "@mui/material";
 import ReservationDetail from "../commons/ReservationDetail";
 import DatePicker from "@mui/lab/DatePicker";
 import TextField from "@mui/material/TextField";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { userTreatmentInfo } from "api/treatment";
 import { useSelector } from "react-redux";
+
 function createData(no, date, time, hospital, doctor, state, perscription, shipNo) {
     return { no, date, time, hospital, doctor, state, perscription, shipNo };
 }
@@ -82,17 +83,84 @@ const CustomTablePagination = styled(TablePaginationUnstyled)`
 `;
 function UserReservation(props) {
     const userId = useSelector((store) => store.user.id);
-    console.log(userId);
+    const [onLoad, setOnLoad] = useState(true);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [value, setValue] = useState(new Date());
     const [state, setState] = useState("");
+    const [treatmentInfo, setTreatmentInfo] = useState([]);
 
-    const [treatmentInfo, setTreatmentInfo] = useState();
-    useEffect(async () => {
-        const treat = await userTreatmentInfo(userId, "RES_REQUEST");
-        console.log(treat);
-        setTreatmentInfo(treat);
+    let treatAllList = [];
+    let treatRequest = [];
+    let treatPaid = [];
+    let treatCancel = [];
+    let treatReject = [];
+    let treatAccep = [];
+    let treatAccepCancel = [];
+    let treatComplete = [];
+
+    const convertor = {
+        RES_REQUEST: "신청(온라인)",
+        RES_PAID: "결제완료(온라인)",
+        RES_CANCEL: "취소(온라인)",
+        RES_REJECT: "거절(온라인)",
+        RES_ACCEPTED: "승인(온라인)",
+        RES_ACCEPTED_CANCEL: "승인취소(온라인)",
+        RES_COMPLETE: "상담완료(온라인)",
+        VST_REQUEST: "신청(방문)",
+        VST_PAID: "결제완료(방문)",
+        VST_REJECT: "거절(방문)",
+        VST_CANCEL: "취소(방문)",
+        VST_ACCEPTED: "승인(방문)",
+        VST_ACCEPTED_CANCEL: "승인취소(방문)",
+        VST_COMPLETE: "상담완료(방문)",
+    };
+
+    useEffect(() => {
+        const init = async () => {
+            const conditions = [
+                "RES_REQUEST",
+                "RES_PAID",
+                "RES_CANCEL",
+                "RES_REJECT",
+                "RES_ACCEPTED",
+                "RES_ACCEPTED_CANCEL",
+                "RES_COMPLETE",
+                "VST_REQUEST",
+                "VST_PAID",
+                "VST_REJECT",
+                "VST_CANCEL",
+                "VST_ACCEPTED",
+                "VST_ACCEPTED_CANCEL",
+                "VST_COMPLETE",
+            ];
+            for (let condition of conditions) {
+                const data = await userTreatmentInfo(userId, condition);
+                treatAllList = [...treatAllList, ...data];
+                // setTreatAllList([...treatAllList, ...data]);
+                if (data.length !== 0) {
+                    const status = data[0].type.substring(4);
+                    if (status === "REQUEST") {
+                        treatRequest.push(data);
+                    } else if (status === "CANCEL") {
+                        treatCancel.push(data);
+                    } else if (status === "REJECT ") {
+                        treatReject.push(data);
+                    } else if (status === "PAID") {
+                        treatPaid.push(data);
+                    } else if (status === "ACCEPTED") {
+                        treatAccep.push(data);
+                    } else if (status === "ACCEPTED_CANCEL") {
+                        treatAccepCancel.push(data);
+                    } else if (status === "COMPLETE") {
+                        treatComplete.push(data);
+                    }
+                }
+            }
+            setTreatmentInfo(treatAllList);
+            setOnLoad(false);
+        };
+        init();
     }, []);
 
     const [open, setOpen] = React.useState(false);
@@ -131,9 +199,15 @@ function UserReservation(props) {
 
     return (
         <Container>
+            <button
+                onClick={() => {
+                    console.log(treatmentInfo);
+                }}>
+                모든예약현황
+            </button>
             <Grid container>
                 <Typography variant='h4' component='h1' sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
-                    내 예약
+                    내 예약 예약현황
                 </Typography>
             </Grid>
             <Grid container>
@@ -188,8 +262,68 @@ function UserReservation(props) {
                                     <th>배송번호</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                {(rowsPerPage > 0
+                            {onLoad ? (
+                                <tr>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                </tr>
+                            ) : (
+                                <>
+                                    <tbody>
+                                        {treatmentInfo.map((treat, idx) => {
+                                            return (
+                                                <tr key={idx}>
+                                                    <td>{idx + 1}</td>
+                                                    <td>{treat.scheduleDate}</td>
+                                                    <td>{treat.scheduleDate}</td>
+                                                    <td>{treat.hospitalId}</td>
+                                                    <td>{treat.doctorId}</td>
+                                                    <td>{convertor[treat.type]}</td>
+                                                    <td>{treat.url ? treat.url : "X"}</td>
+                                                    <td>
+                                                        {treat.perscriptionId ? (
+                                                            "X"
+                                                        ) : (
+                                                            <Link
+                                                                to={`/petodoctor/persciption/${treat.prescriptionId}`}
+                                                                state={treat.prescriptionId}>
+                                                                처방전
+                                                            </Link>
+                                                        )}
+                                                    </td>
+                                                    <td>배송번호</td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </>
+                            )}
+                            {/* {(rowsPerPage > 0
                                     ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     : rows
                                 ).map((row) => (
@@ -228,8 +362,7 @@ function UserReservation(props) {
                                     <tr style={{ height: 41 * emptyRows }}>
                                         <td colSpan={3} />
                                     </tr>
-                                )}
-                            </tbody>
+                                )} */}
                             <tfoot>
                                 <tr sx={{ width: 1200 }}>
                                     <CustomTablePagination
