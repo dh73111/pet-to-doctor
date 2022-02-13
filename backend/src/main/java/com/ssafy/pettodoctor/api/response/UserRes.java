@@ -18,25 +18,29 @@ public class UserRes {
     private String role;
     private String tel;
     private LocalDate joinDate;
+    private String profileImgUrl;
 
     private Address address;
     private Boolean isOauth;
     private Boolean isCertificated;
 
     public UserRes(Long id, String email, String name,
-                   String tel, LocalDate joinDate,
+                   String tel, LocalDate joinDate, String profileImgUrl,
                    Address address, Boolean isOauth, Boolean isCertificated) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.tel = tel;
         this.joinDate = joinDate;
+        this.profileImgUrl = profileImgUrl;
         this.address = address;
         this.isOauth = isOauth;
         this.isCertificated = isCertificated;
     }
 
     public static UserRes convertToUserRes(User u) {
-        return new UserRes(u.getId(), u.getEmail(), u.getName(), u.getTel(), u.getJoinDate(), u.getAddress(), u.getIsOauth(), u.getIsCertificated());
+        return new UserRes(u.getId(), u.getEmail(), u.getName(),
+                u.getTel(), u.getJoinDate(), u.getProfileImgUrl(),
+                u.getAddress(), u.getIsOauth(), u.getIsCertificated());
     }
 }
