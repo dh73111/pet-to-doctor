@@ -263,7 +263,7 @@ function NavBottom(props) {
         setAnchorElNav(event.currentTarget);
     };
     const isLogin = useSelector((store) => store.isLogin);
-    
+
     const handleCloseNavMenu = (id) => {
         console.log(id);
         if (id === props.selectNav) props.clickNav(id);
@@ -286,7 +286,9 @@ function NavBottom(props) {
             const loginres = sessionStorage.getItem("accessToken");
             let decode_token = jwtDecode(loginres);
             setMode(decode_token.role);
-            console.log("role :",mode );
+            console.log("role :", mode);
+        } else {
+            setMode();
         }
         if (mode === "ROLE_DOCTOR") {
             return (
