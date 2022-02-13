@@ -47,7 +47,7 @@ async function changePassword(password) {
 //   api.post(`/user/login`, JSON.stringify(user)).then(success).catch(fail);
 // }
 async function loginUser(user) {
-    return (await api.post(`/user/login`, JSON.stringify(user))).data.data;
+    return (await api.post(`/account/login`, JSON.stringify(user))).data.data;
 }
 
 // 회원 정보

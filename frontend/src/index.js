@@ -31,6 +31,7 @@ function reducer(currentState, action) {
         newState.isLogin = true;
         return newState;
     }
+    
     if (action.type === "logout") {
         newState.user = {};
         newState.isLogin = false;
