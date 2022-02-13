@@ -41,9 +41,13 @@ public class ReviewRes {
     public static List<ReviewRes> convertToResList(List<Review> reviews){
         List<ReviewRes> result = new ArrayList<>();
         for(Review r : reviews){
-            ReviewRes rr = new ReviewRes(r.getId(), r.getUser().getId(),
-                    r.getHospital().getId(), r.getContent(), r.getRate(), r.getCreateTime(),
-                    r.getUser().getName(), r.getHospital().getName(), r.getHospital().getAddress());
+            ReviewRes rr = new ReviewRes(r.getId(),
+                    r.getUser() != null ? r.getUser().getId() : null,
+                    r.getHospital() != null ? r.getHospital().getId() : null,
+                    r.getContent(), r.getRate(), r.getCreateTime(),
+                    r.getUser() != null ? r.getUser().getName() : null,
+                    r. getHospital() != null ? r.getHospital().getName() : null,
+                    r.getHospital() != null ? r.getHospital().getAddress() : null);
             result.add(rr);
         }
         return result;
