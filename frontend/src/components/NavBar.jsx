@@ -14,6 +14,9 @@ import {
     MenuItem,
     Modal,
     Link,
+    Alert,
+    Snackbar,
+    Dialog,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
@@ -197,7 +200,17 @@ const NavTop = (props) => {
             </Box>
         );
     };
+
     const [alarmVisible, setAlarmVisible] = useState();
+    const isLogin = useSelector((store) => store.isLogin);
+    const [alertOpen, setAlertOpen] = useState(false);
+    const handleAlert = () => {
+        setAlertOpen(true);
+    };
+    const handleClick = () => {
+        setAlertOpen(false);
+    };
+
     return (
         <Box sx={{ position: "relative", mb: 2 }}>
             <Banner></Banner>
@@ -225,15 +238,33 @@ const NavTop = (props) => {
                                 {/* <div onClick={() => setAlarmVisible(!alarmVisible)}> */}
                                 {/* </div> */}
                                 <NotificationsNoneIcon
-                                    onClick={() => setAlarmVisible(!alarmVisible)}
+                                    onClick={() => {
+                                        if (isLogin === true) {
+                                            setAlarmVisible(!alarmVisible);
+                                        } else {
+                                            handleAlert();
+                                        }
+                                    }}
                                     sx={{ fontSize: "30px", color: "#309FB3" }}
                                 />
                                 {alarmVisible && <Alarm />}
                             </Box>
                             {/* </NavLink> */}
-                            <NavLink to='/petodoctor/usermypage' className='test'>
+                            <Box style={{ display: "inline-block" }} className='test'>
+                                <PersonOutlineOutlined
+                                    sx={{ fontSize: "30px", color: "#309FB3" }}
+                                    onClick={() => {
+                                        if (isLogin === true) {
+                                            console.log("마이페이지 이동");
+                                        } else {
+                                            handleAlert();
+                                        }
+                                    }}
+                                />
+                            </Box>
+                            {/* <NavLink to='/petodoctor/usermypage' className='test'>
                                 <PersonOutlineOutlined sx={{ fontSize: "30px", color: "#309FB3" }} />
-                            </NavLink>
+                            </NavLink> */}
                             <NavLink to='/petodoctor/qna' className='test2'>
                                 <LiveHelpOutlined sx={{ fontSize: "30px", color: "#309FB3" }} />
                             </NavLink>
@@ -241,6 +272,18 @@ const NavTop = (props) => {
                     </Box>
                 </Container>
             </Box>
+            <Snackbar
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                open={alertOpen}
+                onClose={handleClick}
+                autoHideDuration={2000}
+                // key={vertical + horizontal}
+            >
+                <Alert onClose={handleClick} severity='warning' sx={{ width: "100%" }}>
+                    로그인 후 이용해주세요
+                </Alert>
+            </Snackbar>
+
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -263,7 +306,7 @@ function NavBottom(props) {
         setAnchorElNav(event.currentTarget);
     };
     const isLogin = useSelector((store) => store.isLogin);
-    
+
     const handleCloseNavMenu = (id) => {
         console.log(id);
         if (id === props.selectNav) props.clickNav(id);
@@ -286,7 +329,7 @@ function NavBottom(props) {
             const loginres = sessionStorage.getItem("accessToken");
             let decode_token = jwtDecode(loginres);
             setMode(decode_token.role);
-            console.log("role :",mode );
+            console.log("role :", mode);
         }
         if (mode === "ROLE_DOCTOR") {
             return (
