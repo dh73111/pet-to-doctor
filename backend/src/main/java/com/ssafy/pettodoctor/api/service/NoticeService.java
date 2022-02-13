@@ -22,7 +22,6 @@ public class NoticeService {
     @Transactional
     public Long registerNotice(NoticePostReq noticeInfo) {
         Account account = accountRepository.findById(noticeInfo.getAccountId());
-//        Doctor doctor = doctorRepository.findById(noticeInfo.getDoctorId());
         Treatment treatment = treatmentRepositry.findByTreatmentId(noticeInfo.getTreatmentId());
 
         return noticeRepository.registerNotice(noticeInfo, account, treatment);
