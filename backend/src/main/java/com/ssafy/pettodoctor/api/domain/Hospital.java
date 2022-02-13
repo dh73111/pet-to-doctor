@@ -27,4 +27,5 @@ public class Hospital {
     private String businessNumber;
     private String dongCode;
     private String name;
+    private String profileImgUrl;
 }
