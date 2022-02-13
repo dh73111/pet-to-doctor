@@ -9,12 +9,15 @@ import com.ssafy.pettodoctor.api.repository.UserRepository;
 import com.ssafy.pettodoctor.api.request.NoticePostReq;
 import com.ssafy.pettodoctor.api.request.PaymentReq;
 import com.ssafy.pettodoctor.api.request.TreatmentPostReq;
+import com.ssafy.pettodoctor.common.util.CheckTaskUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +29,9 @@ public class TreatmentService {
     private final HospitalRepository hospitalRepository;
     private final PrescriptionRepository prescriptionRepository;
     private final NoticeRepository noticeRepository;
+//    private final ExecutorServiceUtil executorServiceUtil;
+    private final CheckTaskUtil checkTaskUtil;
+    ExecutorService executorService = Executors.newCachedThreadPool();
 
     public Treatment findById(Long id){
         return treatmentRepositry.findByTreatmentId(id);
@@ -127,6 +133,8 @@ public class TreatmentService {
     public Treatment updatePaymentInfo(Long treatmentId, PaymentReq paymentReq) {
         Treatment treatment = treatmentRepositry.findByTreatmentId(treatmentId);
         treatment.updatePaymentInfo(paymentReq.getPaymentCode(), paymentReq.getPrice());
+        executorService.submit(checkTaskUtil.new CheckTask(treatmentId, TreatmentType.RES_PAID));
+
         return treatment;
     }
 }
