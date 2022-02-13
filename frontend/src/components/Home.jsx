@@ -40,15 +40,21 @@ function Home(props) {
         <Box style={{ border: 1 }}>
             <MyImage>
                 {/* <img src={`${process.env.PUBLIC_URL}/img/image132.png`} width="100%" alt="mainVisual" /> */}
-                <Typography className="mainTitle" sx={{ fontSize: "42px", fontWeight: "600", pt: 26, fontFamily: "NanumSquare" }} textAlign="center">
-                    <Typography sx={{ fontSize: "24px" }}>원격 반료동물 진료 플랫폼</Typography>" 펫투닥터로 우리아이 건강을 지켜주세요 "
+                <Typography
+                    className='mainTitle'
+                    sx={{ fontSize: "42px", fontWeight: "600", pt: 26, fontFamily: "NanumSquare" }}
+                    textAlign='center'>
+                    <Typography sx={{ fontSize: "24px" }}>원격 반료동물 진료 플랫폼</Typography>" 펫투닥터로 우리아이
+                    건강을 지켜주세요 "
                 </Typography>
             </MyImage>
             <Container sx={{ mt: 4 }}>
-                <Grid container style={cardStyle} className="card">
+                <Grid container style={cardStyle} className='card'>
                     <Grid item sx={gridItemStyle} xs={12} md={4}>
                         <Box sx={{ color: "#29A1B1", fontSize: 25, fontWeight: "700" }}>
-                            <NavLink to="/petodoctor/hospitalsearch" style={{ color: "#29A1B1", textDecoration: "none" }}>
+                            <NavLink
+                                to='/petodoctor/hospitalsearch'
+                                style={{ color: "#29A1B1", textDecoration: "none" }}>
                                 병원찾기
                             </NavLink>
                         </Box>
@@ -72,7 +78,7 @@ function Home(props) {
                 </Grid>
             </Container>
             <Box sx={{ backgroundColor: "#fafafa", p: "200px 26px 160px 26px" }}>
-                <Grid container maxWidth="lg" sx={{ mx: "auto" }}>
+                <Grid container maxWidth='lg' sx={{ mx: "auto" }}>
                     <Grid item xs={12} md={6}>
                         <Box
                             sx={{
@@ -80,16 +86,24 @@ function Home(props) {
                                 height: "100%",
                                 // backgroundImage: `url(${process.env.PUBLIC_URL}/img/main2.png)`,
                                 // backgroundSize: "cover",
-                            }}
-                        >
-                            <img src={`${process.env.PUBLIC_URL}/img/main2.png`} alt="진료상담" width="100%" />
+                            }}>
+                            <img src={`${process.env.PUBLIC_URL}/img/main2.png`} alt='진료상담' width='100%' />
                         </Box>
                     </Grid>
                     <Grid item xs={12} md={6} sx={{ pl: { xs: 0, md: 6 } }}>
-                        <Typography sx={{ fontSize: "25px", fontWeight: "800", color: "#309FB3", mt: 12, fontFamily: "NanumSquare" }}>
+                        <Typography
+                            sx={{
+                                fontSize: "25px",
+                                fontWeight: "800",
+                                color: "#309FB3",
+                                mt: 12,
+                                fontFamily: "NanumSquare",
+                            }}>
                             진료/상담
                         </Typography>
-                        <Typography component="h2" sx={{ fontSize: "2.3rem", fontWeight: 800, fontFamily: "NanumSquare" }}>
+                        <Typography
+                            component='h2'
+                            sx={{ fontSize: "2.3rem", fontWeight: 800, fontFamily: "NanumSquare" }}>
                             상담 받고 병원을 결정하세요
                         </Typography>
                         <Typography sx={{ fontSize: "25px", mt: 3, lineHeight: "40px", fontFamily: "NanumSquare" }}>
@@ -101,12 +115,21 @@ function Home(props) {
                 </Grid>
             </Box>
             <Box sx={{ backgroundColor: "#ffffff", p: "200px 26px 160px 26px" }}>
-                <Grid container maxWidth="lg" sx={{ mx: "auto" }}>
+                <Grid container maxWidth='lg' sx={{ mx: "auto" }}>
                     <Grid item xs={12} md={6} sx={{ pl: { xs: 0, md: 6 } }}>
-                        <Typography sx={{ fontSize: "25px", fontWeight: 800, color: "#309FB3", mt: 12, fontFamily: "NanumSquare" }}>
+                        <Typography
+                            sx={{
+                                fontSize: "25px",
+                                fontWeight: 800,
+                                color: "#309FB3",
+                                mt: 12,
+                                fontFamily: "NanumSquare",
+                            }}>
                             정기검진
                         </Typography>
-                        <Typography component="h2" sx={{ fontSize: "2.3rem", fontWeight: 800, fontFamily: "NanumSquare" }}>
+                        <Typography
+                            component='h2'
+                            sx={{ fontSize: "2.3rem", fontWeight: 800, fontFamily: "NanumSquare" }}>
                             반려동물 건강상태를
                             <br /> 체크해보세요
                         </Typography>
@@ -121,9 +144,8 @@ function Home(props) {
                             sx={{
                                 width: "100%",
                                 height: "100%",
-                            }}
-                        >
-                            <img src={`${process.env.PUBLIC_URL}/img/main3.png`} alt="진료상담" width="100%" />
+                            }}>
+                            <img src={`${process.env.PUBLIC_URL}/img/main3.png`} alt='진료상담' width='100%' />
                         </Box>
                     </Grid>
                 </Grid>

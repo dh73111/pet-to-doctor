@@ -17,7 +17,7 @@ import TextField from "@mui/material/TextField";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { NavLink } from "react-router-dom";
-import { userTreatmentInfo } from 'api/treatment';
+import { userTreatmentInfo } from "api/treatment";
 import { useSelector } from "react-redux";
 function createData(no, date, time, hospital, doctor, state, perscription, shipNo) {
     return { no, date, time, hospital, doctor, state, perscription, shipNo };
@@ -82,7 +82,7 @@ const CustomTablePagination = styled(TablePaginationUnstyled)`
 `;
 function UserReservation(props) {
     const userId = useSelector((store) => store.user.id);
-    console.log(userId)
+    console.log(userId);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [value, setValue] = useState(new Date());
@@ -93,7 +93,7 @@ function UserReservation(props) {
         const treat = await userTreatmentInfo(userId, "RES_REQUEST");
         console.log(treat);
         setTreatmentInfo(treat);
-    }, [])
+    }, []);
 
     const [open, setOpen] = React.useState(false);
     const handleOpen = (event) => {
@@ -132,7 +132,7 @@ function UserReservation(props) {
     return (
         <Container>
             <Grid container>
-                <Typography variant="h4" component="h1" sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
+                <Typography variant='h4' component='h1' sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
                     내 예약
                 </Typography>
             </Grid>
@@ -142,8 +142,8 @@ function UserReservation(props) {
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DatePicker
                             disableFuture
-                            label="날짜"
-                            openTo="year"
+                            label='날짜'
+                            openTo='year'
                             views={["year", "month", "day"]}
                             value={value}
                             onChange={(newValue) => {
@@ -156,14 +156,13 @@ function UserReservation(props) {
                 <Grid item xs={2}>
                     <Box sx={{ width: 120 }}>
                         <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label">ALL</InputLabel>
+                            <InputLabel id='demo-simple-select-label'>ALL</InputLabel>
                             <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
+                                labelId='demo-simple-select-label'
+                                id='demo-simple-select'
                                 value={state}
-                                label="state"
-                                onChange={handleChange}
-                            >
+                                label='state'
+                                onChange={handleChange}>
                                 <MenuItem value={10}>예약 요청</MenuItem>
                                 <MenuItem value={20}>예약 취소</MenuItem>
                                 <MenuItem value={30}>예약 확인</MenuItem>
@@ -175,7 +174,7 @@ function UserReservation(props) {
             <Grid container>
                 <Grid item xs={12}>
                     <Root sx={{ mt: 3 }}>
-                        <table className="favhospital">
+                        <table className='favhospital'>
                             <thead>
                                 <tr>
                                     <th>예약번호</th>
@@ -196,30 +195,30 @@ function UserReservation(props) {
                                 ).map((row) => (
                                     <tr key={row.no}>
                                         <td style={{ width: 140 }}> {row.no}</td>
-                                        <td style={{ width: 140 }} align="right">
+                                        <td style={{ width: 140 }} align='right'>
                                             {row.date}
                                         </td>
-                                        <td style={{ width: 140 }} align="right">
+                                        <td style={{ width: 140 }} align='right'>
                                             {row.time}
                                         </td>
-                                        <td style={{ width: 140 }} align="right">
+                                        <td style={{ width: 140 }} align='right'>
                                             {row.hospital}
                                         </td>
-                                        <td style={{ width: 140 }} align="right">
+                                        <td style={{ width: 140 }} align='right'>
                                             {row.doctor}
                                         </td>
-                                        <td style={{ width: 140 }} align="right">
+                                        <td style={{ width: 140 }} align='right'>
                                             {row.state}
                                         </td>
-                                        <td style={{ width: 140 }} align="right">
+                                        <td style={{ width: 140 }} align='right'>
                                             <NavLink to={`/petodoctor/userconsulting/${row.no}`}>
-                                                <Button variant="contained">들어가기</Button>
+                                                <Button variant='contained'>들어가기</Button>
                                             </NavLink>
                                         </td>
-                                        <td style={{ width: 140 }} align="right">
-                                            <Button variant="contained">{row.perscription}</Button>
+                                        <td style={{ width: 140 }} align='right'>
+                                            <Button variant='contained'>{row.perscription}</Button>
                                         </td>
-                                        <td style={{ width: 140 }} align="right">
+                                        <td style={{ width: 140 }} align='right'>
                                             {row.shipNo}
                                         </td>
                                     </tr>
@@ -261,9 +260,8 @@ function UserReservation(props) {
             <Modal
                 open={open}
                 onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
+                aria-labelledby='modal-modal-title'
+                aria-describedby='modal-modal-description'>
                 <Box sx={style}>
                     <ReservationDetail></ReservationDetail>
                 </Box>
