@@ -46,7 +46,7 @@ public class AccountController {
                 status = HttpStatus.UNAUTHORIZED;
                 result.setMessage("비밀번호가 일치하지 않습니다.");
             } else if (account.getRole().equals("ROLE_USER")                                // 어카운트가 유저일 경우
-                    && userService.getUserById(account.getId()).get().getIsCertificated()   // 어카운트의 id로 유저를 찾아온 뒤 isCertificated 확인
+                    && !userService.getUserById(account.getId()).get().getIsCertificated()   // 어카운트의 id로 유저를 찾아온 뒤 isCertificated 확인
             ){
                 status = HttpStatus.UNAUTHORIZED;
                 result.setMessage("이메일 인증이 되지 않은 회원입니다.");
