@@ -25,7 +25,7 @@ public class ReviewRes {
     }
 
     public ReviewRes(Long id, Long userId, Long hospitalId, String content,
-                     Integer rate, LocalDateTime createTime, String username,
+                     Integer rate, LocalDateTime createTime, String userName,
                      String hospitalName, Address hospitalAddress) {
         this.id = id;
         this.userId = userId;
@@ -33,7 +33,7 @@ public class ReviewRes {
         this.content = content;
         this.rate = rate;
         this.createTime = createTime;
-        this.userName = username;
+        this.userName = userName;
         this.hospitalName = hospitalName;
         this.hospitalAddress = hospitalAddress;
     }
