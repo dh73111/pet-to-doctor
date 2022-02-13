@@ -50,12 +50,11 @@ function HospitalSearchReservation(props) {
     function MyButton(props) {
         return (
             <Button
-                variant="outlined"
+                variant='outlined'
                 sx={{ width: "98%", mt: 1, mx: 1 }}
                 onClick={() => {
                     console.log(props.time);
-                }}
-            >
+                }}>
                 {props.time}
             </Button>
         );
@@ -72,11 +71,11 @@ function HospitalSearchReservation(props) {
                     <Paper>
                         <Grid container>
                             <Grid item xs={4}>
-                                <img src="./img/resHospital.png" width="300px" height="300px" alt="동물병원사진"></img>
+                                <img src='./img/resHospital.png' width='300px' height='300px' alt='동물병원사진'></img>
                             </Grid>
                             <Grid item xs={8}>
                                 <Box>
-                                    <img src="./img/24hours.png" alt="동물병원사진" width="50px"></img>
+                                    <img src='./img/24hours.png' alt='동물병원사진' width='50px'></img>
                                 </Box>
                                 <Box>
                                     <Typography sx={{ fontSize: "25px", fontWeight: "bold", mx: 1 }}>
@@ -90,10 +89,10 @@ function HospitalSearchReservation(props) {
                                         소래동물병원
                                     </Typography>
                                     <Typography sx={{ fontSize: "16px", mx: 1, mt: 2 }}>
-                                        <Box sx={{ fontWeight: "bold" }} component="span">
+                                        <Box sx={{ fontWeight: "bold" }} component='span'>
                                             TEL
                                         </Box>
-                                        <Box sx={{ mx: 3 }} component="span">
+                                        <Box sx={{ mx: 3 }} component='span'>
                                             010-0000-000
                                         </Box>
                                     </Typography>
@@ -129,29 +128,27 @@ function HospitalSearchReservation(props) {
                         </Grid>
                         <Box>
                             <FormControl>
-                                <FormLabel id="demo-row-radio-buttons-group-label">진료 종료</FormLabel>
+                                <FormLabel id='demo-row-radio-buttons-group-label'>진료 종료</FormLabel>
                                 <RadioGroup
                                     row
-                                    aria-labelledby="demo-row-radio-buttons-group-label"
-                                    name="row-radio-buttons-group"
+                                    aria-labelledby='demo-row-radio-buttons-group-label'
+                                    name='row-radio-buttons-group'
                                     value={values.diagonose}
-                                    onChange={handleChange("diagonose")}
-                                >
-                                    <FormControlLabel value="visit" control={<Radio />} label="방문" />
-                                    <FormControlLabel value="video" control={<Radio />} label="화상" />
+                                    onChange={handleChange("diagonose")}>
+                                    <FormControlLabel value='visit' control={<Radio />} label='방문' />
+                                    <FormControlLabel value='video' control={<Radio />} label='화상' />
                                 </RadioGroup>
                             </FormControl>
                         </Box>
-                        <div id="map" style={{ width: "100%", height: "300px" }}></div>
+                        <div id='map' style={{ width: "100%", height: "300px" }}></div>
                         <Grid container sx={{ mt: 3 }}>
                             <Grid item xs={4}>
                                 <Box sx={{ fontWeight: "bold", fontSize: 22 }}>선택한 의사 선생님</Box>
                                 <Box sx={{ mt: 2 }}>
                                     <img
-                                        src="./img/loginDog.jpg"
-                                        alt="의사 사진"
-                                        style={{ width: "100%", height: "250px" }}
-                                    ></img>
+                                        src='./img/loginDog.jpg'
+                                        alt='의사 사진'
+                                        style={{ width: "100%", height: "250px" }}></img>
                                 </Box>
                             </Grid>
                             <Grid item xs={0.3} />
@@ -169,31 +166,31 @@ function HospitalSearchReservation(props) {
                                 <Grid container>
                                     <Grid item xs={8}>
                                         <Box sx={{ fontWeight: "bold", mt: 3, fontSize: 22 }}> 기본정보</Box>
-                                        <FormControl fullWidth sx={{ m: 1 }} variant="filled">
-                                            <InputLabel htmlFor="filled-adornment-name">이름</InputLabel>
+                                        <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
+                                            <InputLabel htmlFor='filled-adornment-name'>이름</InputLabel>
                                             <FilledInput
-                                                id="filled-adornment-name"
+                                                id='filled-adornment-name'
                                                 value={values.name}
                                                 onChange={handleChange("name")}
-                                                startAdornment={<InputAdornment position="start"></InputAdornment>}
+                                                startAdornment={<InputAdornment position='start'></InputAdornment>}
                                             />
                                         </FormControl>
-                                        <FormControl fullWidth sx={{ m: 1 }} variant="filled">
-                                            <InputLabel htmlFor="filled-adornment-specific">종</InputLabel>
+                                        <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
+                                            <InputLabel htmlFor='filled-adornment-specific'>종</InputLabel>
                                             <FilledInput
-                                                id="filled-adornment-specific"
+                                                id='filled-adornment-specific'
                                                 value={values.specific}
                                                 onChange={handleChange("specific")}
-                                                startAdornment={<InputAdornment position="start"></InputAdornment>}
+                                                startAdornment={<InputAdornment position='start'></InputAdornment>}
                                             />
                                         </FormControl>
-                                        <FormControl fullWidth sx={{ m: 1 }} variant="filled">
-                                            <InputLabel htmlFor="filled-adornment-weight">몸무게</InputLabel>
+                                        <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
+                                            <InputLabel htmlFor='filled-adornment-weight'>몸무게</InputLabel>
                                             <FilledInput
-                                                id="filled-adornment-weight"
+                                                id='filled-adornment-weight'
                                                 value={values.weight}
                                                 onChange={handleChange("weight")}
-                                                startAdornment={<InputAdornment position="start"></InputAdornment>}
+                                                startAdornment={<InputAdornment position='start'></InputAdornment>}
                                             />
                                         </FormControl>
                                     </Grid>
@@ -215,40 +212,40 @@ function HospitalSearchReservation(props) {
                         </Box>
                         <Grid container sx={{ mt: 2 }}>
                             <Grid item xs={1.5}>
-                                <MyButton time="10:00" />
-                                <MyButton time="12:55" />
-                                <MyButton time="15:50" />
-                                <MyButton time="18:45" />
+                                <MyButton time='10:00' />
+                                <MyButton time='12:55' />
+                                <MyButton time='15:50' />
+                                <MyButton time='18:45' />
                             </Grid>
                             <Grid item xs={1.5}>
-                                <MyButton time="10:25" />
-                                <MyButton time="13:20" />
-                                <MyButton time="16:15" />
+                                <MyButton time='10:25' />
+                                <MyButton time='13:20' />
+                                <MyButton time='16:15' />
                             </Grid>
                             <Grid item xs={1.5}>
-                                <MyButton time="10:50" />
-                                <MyButton time="13:45" />
-                                <MyButton time="16:40" />
+                                <MyButton time='10:50' />
+                                <MyButton time='13:45' />
+                                <MyButton time='16:40' />
                             </Grid>
                             <Grid item xs={1.5}>
-                                <MyButton time="11:15" />
-                                <MyButton time="14:10" />
-                                <MyButton time="17:05" />
+                                <MyButton time='11:15' />
+                                <MyButton time='14:10' />
+                                <MyButton time='17:05' />
                             </Grid>
                             <Grid item xs={1.5}>
-                                <MyButton time="11:40" />
-                                <MyButton time="14:35" />
-                                <MyButton time="17:30" />
+                                <MyButton time='11:40' />
+                                <MyButton time='14:35' />
+                                <MyButton time='17:30' />
                             </Grid>
                             <Grid item xs={1.5}>
-                                <MyButton time="12:05" />
-                                <MyButton time="15:00" />
-                                <MyButton time="17:55" />
+                                <MyButton time='12:05' />
+                                <MyButton time='15:00' />
+                                <MyButton time='17:55' />
                             </Grid>
                             <Grid item xs={1.5}>
-                                <MyButton time="12:30" />
-                                <MyButton time="15:25" />
-                                <MyButton time="18:20" />
+                                <MyButton time='12:30' />
+                                <MyButton time='15:25' />
+                                <MyButton time='18:20' />
                             </Grid>
                         </Grid>
                         <Box sx={{ fontWeight: "bold", mt: 5, fontSize: 22 }}>
@@ -256,11 +253,11 @@ function HospitalSearchReservation(props) {
                         </Box>
                         <Box sx={{ mt: 2 }}>
                             <TextField
-                                id="filled-multiline-static"
-                                label="특이사항"
+                                id='filled-multiline-static'
+                                label='특이사항'
                                 multiline
                                 rows={4}
-                                variant="filled"
+                                variant='filled'
                                 sx={{ width: "100%" }}
                                 value={values.symptom}
                                 onChange={handleChange("symptom")}
@@ -268,11 +265,10 @@ function HospitalSearchReservation(props) {
                         </Box>
                         <Box sx={{ mx: 130, width: "100px", mt: 3 }}>
                             <Button
-                                variant="contained"
+                                variant='contained'
                                 onClick={() => {
                                     console.log(values, date);
-                                }}
-                            >
+                                }}>
                                 예약하기
                             </Button>
                         </Box>
