@@ -255,7 +255,7 @@ const NavTop = (props) => {
                                     sx={{ fontSize: "30px", color: "#309FB3" }}
                                     onClick={() => {
                                         if (isLogin === true) {
-                                            console.log("마이페이지 이동");
+                                            navigate("/petodoctor/usermypage");
                                         } else {
                                             handleAlert();
                                         }

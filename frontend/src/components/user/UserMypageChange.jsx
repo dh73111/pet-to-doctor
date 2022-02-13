@@ -177,7 +177,6 @@ function UserMypageChange(props) {
     const changeProfilePic = () => {
         const fd = new FormData();
         Object.profileSend.forEach((file) => fd.append("profileImgUrl", file));
-        // modifyUserPic("256", profileSend);
         alert("프로필변경이완료됨");
     };
 
@@ -189,31 +188,25 @@ function UserMypageChange(props) {
     return (
         <Container>
             <ThemeProvider theme={newTheme}>
-                <Container>
-                    <Typography variant='h4' component='h1' sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
+                <Container sx={{ mb: 20 }}>
+                    <Typography variant='h4' component='h1' sx={{ mt: 10, mb: 2, fontWeight: 600, color: "#263747" }}>
                         회원정보 변경
                     </Typography>
-                    <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                        <Tabs value={value} onChange={handleChange} aria-label='basic tabs example'>
-                            <Tab label='회원정보 수정' {...a11yProps(0)} />
-                            <Tab label='비밀번호 변경' {...a11yProps(1)} />
-                        </Tabs>
-                    </Box>
-                    <form
-                        action={`http://localhost:8080/api/user/profile/${userId}`}
-                        method='post'
-                        enctype='multipart/form-data'
-                        target='param'>
-                        <TabPanel value={value} index={0}>
-                            <Paper sx={{ p: 2, margin: "auto", maxWidth: 900, flexGrow: 1 }}>
-                                {/* <button
-                onClick={function () {
-                }}
-              >
-                현재주소뭐야
-              </button> */}
+                    <Box sx={{ border: "1px solid #D7E2EB", p: 3, borderRadius: "0.55rem" }}>
+                        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                            <Tabs value={value} onChange={handleChange} aria-label='basic tabs example'>
+                                <Tab label='회원정보 수정' {...a11yProps(0)} />
+                                <Tab label='비밀번호 변경' {...a11yProps(1)} />
+                            </Tabs>
+                        </Box>
+                        <form
+                            action={`http://localhost:8080/api/user/profile/${userId}`}
+                            method='post'
+                            enctype='multipart/form-data'
+                            target='param'>
+                            <TabPanel value={value} index={0}>
                                 <Grid container spacing={2}>
-                                    <Grid item>
+                                    <Grid item sx={12} md={4}>
                                         <div
                                             className='preview'
                                             style={{
@@ -224,9 +217,11 @@ function UserMypageChange(props) {
                                                 backgroundSize: "cover",
                                             }}>
                                             {/* {modImg && <img src={modImg} alt="preview-img" />} */}
-                                            이미지 미리보기
                                         </div>
-                                        <label className='profile-img-upload-btn' for='input_profile'>
+                                        <label
+                                            className='profile-img-upload-btn'
+                                            for='input_profile'
+                                            style={{ marginTop: "20px" }}>
                                             이미지업로드
                                         </label>
                                         {/* http: */}
@@ -244,100 +239,129 @@ function UserMypageChange(props) {
                                         />
                                         {/* <Input type="file" /> */}
                                     </Grid>
-                                    <Grid item>
-                                        <Typography gutterBottom variant='subtitle1' component='div' pb={1}>
-                                            닉네임
-                                        </Typography>
-                                        <Typography gutterBottom variant='subtitle1' component='div' pb={1}>
-                                            이메일
-                                        </Typography>
-                                        <Typography gutterBottom variant='subtitle1' component='div' pb={1}>
-                                            연락처
-                                        </Typography>
-                                        <Typography gutterBottom variant='subtitle1' component='div' pb={1}>
-                                            주소
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item xs={12} sm container>
-                                        <Grid item xs container direction='column' spacing={2}>
-                                            <Grid item xs>
-                                                <TextField
-                                                    size='small'
-                                                    placeholder='이름'
-                                                    required //값 반드시 입력
-                                                    name='nickname'
-                                                    defaultValue={newUserInfo.name}
-                                                    onChange={handleChangeUserInfo("name")}
-                                                />
-                                                <br />
-                                                <TextField
-                                                    size='small'
-                                                    placeholder='example@example.com'
-                                                    required //값 반드시 입력
-                                                    name='email'
-                                                    defaultValue={newUserInfo.email}
-                                                    onChange={handleChangeUserInfo("email")}
-                                                />
-
-                                                <br />
-                                                <TextField
-                                                    size='small'
-                                                    placeholder='number'
-                                                    required //값 반드시 입력
-                                                    name='number'
-                                                    defaultValue={newUserInfo.tel}
-                                                    onChange={handleChangeUserInfo("tel")}
-                                                />
-                                                <br />
-                                                <TextField
-                                                    size='small'
-                                                    required //값 반드시 입력
-                                                    name='address'
-                                                    disabled
-                                                    placeholder='주소'
-                                                    value={newUserInfo.address.city}
-                                                    onChange={handleChangeUserInfo("city")}
-                                                />
-                                                <TextField
-                                                    size='small'
-                                                    placeholder='상세주소'
-                                                    required //값 반드시 입력
-                                                    name='addressdetail'
-                                                    defaultValue={newUserInfo.address.street}
-                                                    onChange={handleChangeUserInfo("street")}
-                                                />
-                                                <Button onClick={handleOpen}>주소 검색</Button>
-                                                <Modal
-                                                    open={open}
-                                                    onClose={handleClose}
-                                                    aria-labelledby='modal-modal-title'
-                                                    aria-describedby='modal-modal-description'>
-                                                    <Box sx={style}>
-                                                        <DaumPostCode
-                                                            onComplete={handleComplete}
-                                                            className='post-code'
-                                                        />
-                                                    </Box>
-                                                </Modal>
-                                            </Grid>
-                                        </Grid>
+                                    <Grid item xs={12} md={8} container sx={{ border: 1 }}>
+                                        <Box sx={{ border: 1 }}>
+                                            <label
+                                                for='nickname'
+                                                style={{
+                                                    display: "block",
+                                                    float: "left",
+                                                    width: "90px",
+                                                    textAlign: "left",
+                                                    lineHeight: "55px",
+                                                    marginRight: "20px",
+                                                }}>
+                                                닉네임
+                                            </label>
+                                            <TextField
+                                                size='small'
+                                                placeholder='이름'
+                                                required //값 반드시 입력
+                                                name='nickname'
+                                                defaultValue={newUserInfo.name}
+                                                onChange={handleChangeUserInfo("name")}
+                                            />
+                                        </Box>
+                                        <Box>
+                                            <label
+                                                for='email'
+                                                style={{
+                                                    display: "block",
+                                                    float: "left",
+                                                    width: "90px",
+                                                    textAlign: "left",
+                                                    lineHeight: "55px",
+                                                    marginRight: "20px",
+                                                }}>
+                                                이메일
+                                            </label>
+                                            <TextField
+                                                size='small'
+                                                placeholder='example@example.com'
+                                                required //값 반드시 입력
+                                                name='email'
+                                                defaultValue={newUserInfo.email}
+                                                onChange={handleChangeUserInfo("email")}
+                                            />
+                                        </Box>
+                                        <Box>
+                                            <label
+                                                for='number'
+                                                style={{
+                                                    display: "block",
+                                                    float: "left",
+                                                    width: "90px",
+                                                    textAlign: "left",
+                                                    lineHeight: "55px",
+                                                    marginRight: "20px",
+                                                }}>
+                                                연락처
+                                            </label>
+                                            <TextField
+                                                size='small'
+                                                placeholder='number'
+                                                required //값 반드시 입력
+                                                name='number'
+                                                defaultValue={newUserInfo.tel}
+                                                onChange={handleChangeUserInfo("tel")}
+                                            />
+                                        </Box>
+                                        <Box>
+                                            <label
+                                                for='address'
+                                                style={{
+                                                    display: "block",
+                                                    float: "left",
+                                                    width: "90px",
+                                                    textAlign: "left",
+                                                    lineHeight: "55px",
+                                                    marginRight: "20px",
+                                                }}>
+                                                주소
+                                            </label>
+                                            <TextField
+                                                size='small'
+                                                required //값 반드시 입력
+                                                name='address'
+                                                disabled
+                                                placeholder='주소'
+                                                value={newUserInfo.address.city}
+                                                onChange={handleChangeUserInfo("city")}
+                                            />
+                                            <TextField
+                                                size='small'
+                                                placeholder='상세주소'
+                                                required //값 반드시 입력
+                                                name='addressdetail'
+                                                defaultValue={newUserInfo.address.street}
+                                                onChange={handleChangeUserInfo("street")}
+                                            />
+                                        </Box>
+                                        <Button onClick={handleOpen}>주소 검색</Button>
+                                        <Modal
+                                            open={open}
+                                            onClose={handleClose}
+                                            aria-labelledby='modal-modal-title'
+                                            aria-describedby='modal-modal-description'>
+                                            <Box sx={style}>
+                                                <DaumPostCode onComplete={handleComplete} className='post-code' />
+                                            </Box>
+                                        </Modal>
                                     </Grid>
                                 </Grid>
-                            </Paper>
-                            <Box textAlign='center' sx={{ mt: 5 }}>
-                                <Button
-                                    type='submit'
-                                    onClick={() => {
-                                        requestChangeInfo(newUserInfo);
-                                    }}>
-                                    수정 완료
-                                </Button>
-                            </Box>
-                        </TabPanel>
-                        <iframe id='if' title='formhide' name='param' style={{ display: "none" }}></iframe>
-                    </form>
-                    <TabPanel value={value} index={1}>
-                        <Paper sx={{ p: 2, margin: "auto", maxWidth: "30%", flexGrow: 1 }}>
+                                <Box textAlign='center' sx={{ mt: 5 }}>
+                                    <Button
+                                        type='submit'
+                                        onClick={() => {
+                                            requestChangeInfo(newUserInfo);
+                                        }}>
+                                        수정 완료
+                                    </Button>
+                                </Box>
+                            </TabPanel>
+                            <iframe id='if' title='formhide' name='param' style={{ display: "none" }}></iframe>
+                        </form>
+                        <TabPanel value={value} index={1}>
                             <Grid container spacing={3}>
                                 <Grid item xs={12} sm container>
                                     <Grid item xs container direction='column'>
@@ -418,8 +442,8 @@ function UserMypageChange(props) {
                                     </Grid>
                                 </Grid>
                             </Grid>
-                        </Paper>
-                    </TabPanel>
+                        </TabPanel>
+                    </Box>
                 </Container>
             </ThemeProvider>
         </Container>

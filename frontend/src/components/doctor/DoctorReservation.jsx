@@ -117,7 +117,7 @@ function DoctorReservation(props) {
     return (
         <Container>
             <Grid container>
-                <Typography variant="h4" component="h1" sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
+                <Typography variant='h4' component='h1' sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
                     받은예약
                 </Typography>
                 {/* <Grid item xs={4}></Grid>
@@ -145,8 +145,8 @@ function DoctorReservation(props) {
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DatePicker
                             disableFuture
-                            label="날짜"
-                            openTo="year"
+                            label='날짜'
+                            openTo='year'
                             views={["year", "month", "day"]}
                             value={value}
                             onChange={(newValue) => {
@@ -159,8 +159,13 @@ function DoctorReservation(props) {
                 <Grid item xs={2}>
                     <Box sx={{ width: 120 }}>
                         <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label">ALL</InputLabel>
-                            <Select labelId="demo-simple-select-label" id="demo-simple-select" value={state} label="state" onChange={handleChange}>
+                            <InputLabel id='demo-simple-select-label'>ALL</InputLabel>
+                            <Select
+                                labelId='demo-simple-select-label'
+                                id='demo-simple-select'
+                                value={state}
+                                label='state'
+                                onChange={handleChange}>
                                 <MenuItem value={10}>예약 요청</MenuItem>
                                 <MenuItem value={20}>예약 취소</MenuItem>
                                 <MenuItem value={30}>예약 확인</MenuItem>
@@ -173,7 +178,7 @@ function DoctorReservation(props) {
                 {/* <Grid item xs={2}></Grid> */}
                 <Grid item xs={12}>
                     <Root sx={{ mt: 3 }}>
-                        <table aria-label="custom pagination table" className="favhospital">
+                        <table aria-label='custom pagination table' className='favhospital'>
                             <thead>
                                 <tr>
                                     <th>예약번호</th>
@@ -181,30 +186,36 @@ function DoctorReservation(props) {
                                     <th>예약시간</th>
                                     <th>예약상태</th>
                                     <th>자세히보기</th>
-                                    <th> </th>
+                                    <th>예약승인</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {(rowsPerPage > 0 ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : rows).map((row) => (
+                                {(rowsPerPage > 0
+                                    ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                    : rows
+                                ).map((row) => (
                                     <tr key={row.no}>
                                         <td style={{ width: 160 }}> {row.no}</td>
-                                        <td style={{ width: 160 }} align="right">
+                                        <td style={{ width: 160 }} align='right'>
                                             {row.date}
                                         </td>
-                                        <td style={{ width: 160 }} align="right">
+                                        <td style={{ width: 160 }} align='right'>
                                             {row.time}
                                         </td>
-                                        <td style={{ width: 160 }} align="right">
+                                        <td style={{ width: 160 }} align='right'>
                                             {row.state}
                                         </td>
-                                        <td style={{ width: 160 }} align="right">
-                                            <Button sx={{ fontWeight: "bold", display: "block" }} value={row.no} onClick={handleOpen}>
+                                        <td style={{ width: 160 }} align='right'>
+                                            <Button
+                                                sx={{ fontWeight: "bold", display: "block" }}
+                                                value={row.no}
+                                                onClick={handleOpen}>
                                                 {row.detail}
                                             </Button>
                                         </td>
-                                        <td style={{ width: 160 }} align="right">
-                                            <Button variant="contained">승인</Button>
-                                            <Button variant="contained" color="error" sx={{ mx: 2 }}>
+                                        <td style={{ width: 160 }} align='right'>
+                                            <Button variant='contained'>승인</Button>
+                                            <Button variant='contained' color='error' sx={{ mx: 2 }}>
                                                 취소
                                             </Button>
                                         </td>
@@ -245,7 +256,11 @@ function DoctorReservation(props) {
                 <Grid item xs={2}></Grid>
             </Grid>
 
-            <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby='modal-modal-title'
+                aria-describedby='modal-modal-description'>
                 <Box sx={style}>
                     <ReservationDetail></ReservationDetail>
                 </Box>
