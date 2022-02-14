@@ -21,8 +21,8 @@ public class ScheduleRes {
     }
 
     public static ScheduleRes convertToRes(Schedule s){
-        ScheduleRes sr = new ScheduleRes(s.getId(), s.getPlusDay(),
-                s.getBitmask(), s.getDoctor().getId());
+        ScheduleRes sr = new ScheduleRes(s.getId(), s.getPlusDay(), s.getBitmask(),
+                s.getDoctor() != null ? s.getDoctor().getId() : null);
         return sr;
     }
 }

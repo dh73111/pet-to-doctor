@@ -30,7 +30,12 @@ public class MarkRes {
     }
 
     public static MarkRes convertToMarkRes(Mark m) {
-        return new MarkRes(m.getId(), m.getUser().getId(), m.getHospital().getId(), m.getHospital().getName(), m.getHospital().getAddress(), m.getHospital().getTel());
+        return new MarkRes(m.getId(),
+                m.getUser() != null ? m.getUser().getId() : null,
+                m.getHospital() != null ? m.getHospital().getId() : null,
+                m.getHospital() != null ? m.getHospital().getName() : null,
+                m.getHospital() != null ? m.getHospital().getAddress() : null,
+                m.getHospital() != null ? m.getHospital().getTel() : null);
     }
 
     public static List<MarkRes> convertToMarkResList(List<Mark> markList) {
