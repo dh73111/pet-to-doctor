@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @DiscriminatorValue("D")
 public class Doctor extends Account {
-    private String pysicianLicenseNumber;
+    private String veterinarianLicenseNumber;
     private String specialty;
     private Integer price;
     private String profileImgUrl;
@@ -22,8 +22,7 @@ public class Doctor extends Account {
     private Hospital hospital;
 
 
-//    public static Doctor createDoctor(String pysicianLicenseNumber, String specialty, Integer price, Hospital hospital){
-    public static Doctor createDoctor(String email, String name, String password, String tel, String pysicianLicenseNumber, String specialty, Integer price){
+    public static Doctor createDoctor(String email, String name, String password, String tel, String veterinarianLicenseNumber, String specialty, Integer price){
         Doctor doctor = new Doctor();
         doctor.setEmail(email);
         doctor.setName(name);
@@ -32,7 +31,7 @@ public class Doctor extends Account {
         doctor.setTel(tel);
         doctor.setJoinDate(LocalDate.now());
 
-        doctor.setPysicianLicenseNumber(pysicianLicenseNumber);
+        doctor.setVeterinarianLicenseNumber(veterinarianLicenseNumber);
         doctor.setSpecialty(specialty);
         doctor.setPrice(price);
 //        doctor.setHospital(hospital);

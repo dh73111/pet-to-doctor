@@ -45,4 +45,6 @@ public class MarkService {
         markRepository.deleteById(user, markId);
     }
 
+    @Transactional
+    public void deleteByHospitalId(User user, Long hospitalId) { markRepository.deleteByHospitalId(user, hospitalId);}
 }

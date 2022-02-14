@@ -1,7 +1,6 @@
 package com.ssafy.pettodoctor.api.repository;
 
 import com.ssafy.pettodoctor.api.domain.Pet;
-import com.ssafy.pettodoctor.api.domain.TestTable;
 import com.ssafy.pettodoctor.api.domain.User;
 import com.ssafy.pettodoctor.api.domain.UserCertification;
 import org.assertj.core.api.Assertions;

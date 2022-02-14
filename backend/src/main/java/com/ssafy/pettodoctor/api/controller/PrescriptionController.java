@@ -60,7 +60,7 @@ public class PrescriptionController {
     }
 
     @GetMapping
-    @Operation(summary = "진단서 확인", description = "진단서 확인을 확인해준다.")
+    @Operation(summary = "id 진단서 확인", description = "id 진단서 확인을 확인해준다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공"),
             @ApiResponse(responseCode = "401", description = "인증 실패"),
@@ -68,7 +68,7 @@ public class PrescriptionController {
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
     public ResponseEntity<ResVO<PrescriptionRes>> getPrescription(
-            @RequestParam @Parameter(description = "리스트 아이디") Long prescription_id
+            @RequestParam @Parameter(description = "진단서 id") Long prescription_id
     ) {
         ResVO<PrescriptionRes> result = new ResVO<>();
         HttpStatus status = null;
@@ -84,15 +84,15 @@ public class PrescriptionController {
         return new ResponseEntity<ResVO<PrescriptionRes>>(result, status);
     }
 
-    @GetMapping("/list")
-    @Operation(summary = "진단서 리스트 조회", description = "해당 의사의 진단서 리스트를 조회해준다.")
+    @GetMapping("/list/doctor/type")
+    @Operation(summary = "의사 진단서 타입별 리스트 조회", description = "해당 의사의 특정타입 진단서 리스트를 조회해준다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공"),
             @ApiResponse(responseCode = "401", description = "인증 실패"),
             @ApiResponse(responseCode = "404", description = "사용자 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
-    public ResponseEntity<ResVO<List<PrescriptionRes>>> getPrescriptionList(
+    public ResponseEntity<ResVO<List<PrescriptionRes>>> getPrescriptionListByDoctorAndType(
             @RequestParam @Parameter(description = "의사 아이디") Long doctor_id ,
             @RequestParam @Parameter(description = "상태(전,후,전취,후취,완)") TreatmentType type
     ) {
@@ -100,7 +100,34 @@ public class PrescriptionController {
         HttpStatus status = null;
         try {
 
-            List<Prescription> prescriptions = prescriptionService.findByIdList(doctor_id, type);
+            List<Prescription> prescriptions = prescriptionService.findByDoctorIdAndType(doctor_id, type);
+            result.setData(PrescriptionRes.convertToResList(prescriptions));
+            result.setMessage("성공");
+
+            status = HttpStatus.OK;
+        } catch (Exception e) {
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            result.setMessage("서버오류");
+        }
+        return new ResponseEntity<ResVO<List<PrescriptionRes>>>(result, status);
+    }
+
+    @GetMapping("/list/doctor")
+    @Operation(summary = "의사 진단서 전체 리스트 조회", description = "해당 의사의 진단서 전체 리스트를 조회해준다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "401", description = "인증 실패"),
+            @ApiResponse(responseCode = "404", description = "사용자 없음"),
+            @ApiResponse(responseCode = "500", description = "서버 오류")
+    })
+    public ResponseEntity<ResVO<List<PrescriptionRes>>> getPrescriptionListByDoctor(
+            @RequestParam @Parameter(description = "의사 아이디") Long doctor_id
+     ) {
+        ResVO<List<PrescriptionRes>> result = new ResVO<>();
+        HttpStatus status = null;
+        try {
+
+            List<Prescription> prescriptions = prescriptionService.findByDoctorId(doctor_id);
             result.setData(PrescriptionRes.convertToResList(prescriptions));
             result.setMessage("성공");
 

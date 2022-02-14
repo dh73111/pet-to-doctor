@@ -10,7 +10,7 @@ public class DoctorPostReq {
     private String tel;
     private String name;
 
-    private String pysicianLicenseNumber;
+    private String veterinarianLicenseNumber;
     private String specialty;
     private Integer price;
 }
