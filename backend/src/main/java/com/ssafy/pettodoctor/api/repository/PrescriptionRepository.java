@@ -24,7 +24,7 @@ public class PrescriptionRepository {
 
     public List<Prescription> findByDoctorIdAndType(Long doctor_id, TreatmentType type) {
         return em.createQuery("select p from Prescription p where p.id IN " +
-                                "(select t.prescription.id from Treatment t where t.doctor.id = :doctor_id and t.type = :type) ",
+                                "(select t.prescription.id from Treatment t where t.doctor.id = :doctor_id and t.type = :type)  ORDER BY p.id DESC ",
                 Prescription.class)
                 .setParameter("doctor_id",doctor_id)
                 .setParameter("type",type)
@@ -32,8 +32,8 @@ public class PrescriptionRepository {
     }
 
     public List<Prescription> findByDoctorId(Long doctor_id) {
-        return em.createQuery("select p from Prescription p where p.id IN " +
-                                "(select t.prescription.id from Treatment t where t.doctor.id = :doctor_id) ",
+        return em.createQuery("select p from Prescription p where p.id IN" +
+                                "(select t.prescription.id from Treatment t where t.doctor.id = :doctor_id) ORDER BY p.id DESC ",
                         Prescription.class)
                 .setParameter("doctor_id",doctor_id)
                 .getResultList();
