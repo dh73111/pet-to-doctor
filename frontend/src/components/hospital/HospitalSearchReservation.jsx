@@ -23,6 +23,8 @@ import { addTreatment } from "api/treatment";
 import { useSelector } from "react-redux";
 import DatePicker from "@mui/lab/DatePicker";
 import { petList } from "api/pet";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+
 function HospitalSearchReservation(props) {
     const navigate = useNavigate();
     const { kakao } = window;
@@ -234,270 +236,306 @@ function HospitalSearchReservation(props) {
         init();
     }, []);
     return (
-        <Container>
+        <Container sx={{ mt: 10, mb: 15, border: "1px solid #D7E2EB", borderRadius: "0.55rem" }}>
             <Grid container>
                 {/* <Grid item xs={2.5}></Grid> */}
                 <Grid item xs={12} sx={{ mt: 5 }}>
-                    <Paper elevation={0}>
-                        <Grid container>
-                            <Grid item xs={4}>
-                                <img
-                                    src={`${process.env.PUBLIC_URL}/img/resHospital.png`}
-                                    width='300px'
-                                    height='300px'
-                                    alt='동물병원사진'></img>
-                            </Grid>
-                            <Grid item xs={8}>
-                                <Box>
-                                    <img
-                                        src={`${process.env.PUBLIC_URL}/img/24hours.png`}
-                                        alt='24시여부'
-                                        width='50px'></img>
-                                </Box>
-                                <Box>
-                                    <Typography sx={{ fontSize: "25px", fontWeight: "bold", mx: 1 }}>
-                                        {hospital.name}
-                                    </Typography>
-                                    <Typography sx={{ fontSize: "12px", fontWeight: "bold", mx: 1, mt: 2 }}>
-                                        {hospital.description}
-                                    </Typography>
-                                    <Typography sx={{ fontSize: "14px", mx: 1, mt: 2 }}>
-                                        {`${hospital.address.city} ${hospital.address.street} ${hospital.name}`}
-                                    </Typography>
-                                    <Typography sx={{ fontSize: "16px", mx: 1, mt: 2 }}>
-                                        <Box sx={{ fontWeight: "bold" }} component='span'>
-                                            TEL
-                                        </Box>
-                                        <Box sx={{ mx: 3 }} component='span'>
-                                            {hospital.tel}
-                                        </Box>
-                                    </Typography>
-                                    <Grid container sx={{ mt: 2.5 }}>
-                                        <Grid item xs={2}>
-                                            <Box>
-                                                <Box sx={{ fontWeight: "bold" }}>진료과목</Box>
-                                            </Box>
-                                            <Box>
-                                                <Box sx={{ fontWeight: "bold", mt: 3 }}>영업시간</Box>
-                                            </Box>
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            <Box sx={{ height: "45px" }}>{hospital.treatmentSubject} </Box>
-                                            <Box>{hospital.operatingTime}</Box>
-                                        </Grid>
-
-                                        <Grid item xs={2}>
-                                            <Box>
-                                                <Box sx={{ fontWeight: "bold" }}>대표 수의사</Box>
-                                            </Box>
-                                            <Box>
-                                                <Box sx={{ fontWeight: "bold", mt: 3 }}>수의사 수 </Box>
-                                            </Box>
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            <Box sx={{ height: "45px" }}>{doctor.leadDoctor}</Box>
-                                            <Box>{doctor.doctorCount}</Box>
-                                        </Grid>
-                                    </Grid>
-                                </Box>
-                            </Grid>
+                    <Grid container>
+                        <Grid item xs={4}>
+                            <img
+                                src={`${process.env.PUBLIC_URL}/img/resHospital.png`}
+                                width='300px'
+                                height='300px'
+                                style={{ float: "right", paddingRight: "40px" }}
+                                alt='동물병원사진'></img>
                         </Grid>
-                        <Box>
-                            <FormControl>
-                                <FormLabel id='demo-row-radio-buttons-group-label'>진료 종류</FormLabel>
-                                <RadioGroup
-                                    row
-                                    aria-labelledby='demo-row-radio-buttons-group-label'
-                                    name='row-radio-buttons-group'
-                                    value={values.type}
-                                    onChange={handleChange("type")}>
-                                    <FormControlLabel value='RES_REQUEST' control={<Radio />} label='방문' />
-                                    <FormControlLabel value='VST_REQUEST' control={<Radio />} label='화상' />
-                                </RadioGroup>
-                            </FormControl>
-                        </Box>
-                        <Box>
-                            <FormControl>
-                                <FormLabel id='demo-row-radio-buttons-group-label'>재진 여부</FormLabel>
-                                <RadioGroup
-                                    row
-                                    aria-labelledby='demo-row-radio-buttons-group-label'
-                                    name='row-radio-buttons-group'
-                                    value={values.reVisit}
-                                    onChange={handleChange("reVisit")}>
-                                    <FormControlLabel value='first' control={<Radio />} label='초진' />
-                                    <FormControlLabel value='reVisit' control={<Radio />} label='재진' />
-                                </RadioGroup>
-                            </FormControl>
-                        </Box>
-                        <div id='map' style={{ width: "100%", height: "300px" }}></div>
-                        <Grid container sx={{ mt: 3 }}>
-                            <Grid item xs={4}>
-                                <Box sx={{ fontWeight: "bold", fontSize: 22 }}>선택한 의사 선생님</Box>
-                                <Box sx={{ mt: 2 }}>
-                                    <img
-                                        src={`${process.env.PUBLIC_URL}/img/loginDog.jpg`}
-                                        alt='의사 사진'
-                                        style={{ width: "100%", height: "250px" }}></img>
-                                </Box>
-                            </Grid>
-                            <Grid item xs={0.3} />
-
-                            <Grid item xs={7.7} sx={{ mt: 8 }}>
-                                <Box sx={{ fontSize: 20, fontWeight: "bold" }}>이름 : {doctor.name}</Box>
-                                <Box sx={{ fontSize: 20, fontWeight: "bold" }}>전문 분야 : {doctor.specialty}</Box>
-                                <Box sx={{ fontSize: 20, fontWeight: "bold", mt: 2 }}>
-                                    한마디 : 최선을 다하겠습니다.
-                                </Box>
-                            </Grid>
-                        </Grid>
-                        <Box>
-                            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                <Grid container>
-                                    <Grid item xs={8}>
-                                        <Box sx={{ fontWeight: "bold", mt: 3, fontSize: 22 }}>
-                                            기본정보
-                                            <FormControl sx={{ mx: 2 }}>
-                                                <RadioGroup
-                                                    row
-                                                    aria-labelledby='demo-row-radio-buttons-group-label'
-                                                    name='row-radio-buttons-group'
-                                                    value={mode}
-                                                    onChange={handleChange("mode")}>
-                                                    <FormControlLabel
-                                                        value='write'
-                                                        control={<Radio />}
-                                                        label='직접 입력'
-                                                    />
-                                                    <FormControlLabel
-                                                        value='myPet'
-                                                        control={<Radio />}
-                                                        label='나의 반려동물'
-                                                    />
-                                                </RadioGroup>
-                                            </FormControl>
-                                        </Box>
-                                        {mode === "write" ? (
-                                            <Grid container>
-                                                <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
-                                                    <TextField
-                                                        id='outlined-basic'
-                                                        label='이름'
-                                                        variant='outlined'
-                                                        value={values.petName}
-                                                        onChange={handleChange("petName")}
-                                                    />
-                                                </FormControl>
-                                                <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
-                                                    <TextField
-                                                        id='outlined-basic'
-                                                        label='종'
-                                                        variant='outlined'
-                                                        value={values.petSpecies}
-                                                        onChange={handleChange("petSpecies")}
-                                                    />
-                                                </FormControl>
-                                                <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
-                                                    <TextField
-                                                        id='outlined-basic'
-                                                        label='체중'
-                                                        variant='outlined'
-                                                        value={values.petWeight}
-                                                        onChange={handleChange("petWeight")}
-                                                    />
-                                                </FormControl>
-                                                <FormControl fullWidth sx={{ m: 1 }}>
-                                                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                                        <DatePicker
-                                                            label='생년월일'
-                                                            value={values.birthDate}
-                                                            onChange={(newValue) => {
-                                                                setValues({ ...values, birthDate: newValue });
-                                                            }}
-                                                            renderInput={(params) => <TextField {...params} />}
-                                                        />
-                                                    </LocalizationProvider>
-                                                </FormControl>{" "}
-                                            </Grid>
-                                        ) : (
-                                            <Box sx={{ mt: 2 }}>
-                                                <FormControl sx={{ mx: 2 }}>
-                                                    <RadioGroup
-                                                        aria-labelledby='demo-row-radio-buttons-group-label'
-                                                        name='row-radio-buttons-group'
-                                                        value={selectPet}
-                                                        onChange={handleChange("selectPet")}>
-                                                        {userPetList.length === 0
-                                                            ? ""
-                                                            : userPetList.map((item, index) => (
-                                                                  <FormControlLabel
-                                                                      key={index}
-                                                                      value={index}
-                                                                      control={<Radio />}
-                                                                      label={item.name}
-                                                                  />
-                                                              ))}
-                                                    </RadioGroup>
-                                                </FormControl>
-                                            </Box>
-                                        )}
-                                    </Grid>
-
-                                    <Grid item xs={4} md={2}>
-                                        <Box sx={{ fontWeight: "bold", mt: 3, fontSize: 22, mx: 2 }}> 예약 날짜</Box>
-                                        <CalendarPicker
-                                            date={date}
-                                            onChange={(newDate) => {
-                                                const dayDiff = diffDay(newDate);
-                                                setSelectTime(-1);
-                                                setDate(newDate);
-                                                refreshSchedule(dayDiff);
-                                            }}
-                                            shouldDisableDate={(date) => {
-                                                const dayDiff = diffDay(date);
-                                                return dayDiff < 0 || dayDiff > 15;
-                                            }}
-                                        />
-                                    </Grid>
-                                </Grid>
-                            </LocalizationProvider>
-                        </Box>
-                        <Box sx={{ fontWeight: "bold", mt: 3, fontSize: 22 }}>
-                            <AccessTimeIcon /> 시간 선택
-                        </Box>
-                        <Grid container sx={{ mt: 2 }}>
-                            {[...schedule.bitmask].map((item, index) => (
-                                <Grid item xs={3} key={index}>
-                                    <MyButton time={reserveTime[index]} item={item} index={index} />
-                                </Grid>
-                            ))}
-                        </Grid>
-                        <Box sx={{ fontWeight: "bold", mt: 5, fontSize: 22 }}>
-                            특이사항(이전 병력, 증상, 상담을 원하는 이유 작성 부탁드립니다.)
-                        </Box>
-                        <Box sx={{ mt: 2 }}>
-                            <TextField
-                                id='filled-multiline-static'
-                                label='특이사항'
-                                multiline
-                                rows={4}
-                                variant='filled'
-                                sx={{ width: "100%" }}
-                                value={values.symptom}
-                                onChange={handleChange("symptom")}
-                            />
-                        </Box>
-                        <Box sx={{ mx: 130, width: "100px", mt: 3 }}>
-                            <Button
-                                variant='contained'
-                                type='submit'
-                                onClick={() => {
-                                    submitReservation();
+                        <Grid item xs={8}>
+                            <Box
+                                sx={{
+                                    width: "73px",
+                                    height: "24px",
+                                    borderRadius: "24px",
+                                    backgroundColor: "#309fb3",
+                                    color: "white",
+                                    fontSize: "12px",
+                                    textAlign: "center",
+                                    fontWeight: 0,
+                                    lineHeight: "24px",
                                 }}>
-                                예약하기
-                            </Button>
-                        </Box>
-                    </Paper>
+                                24시 병원
+                            </Box>
+                            <Box>
+                                <Typography sx={{ fontSize: "25px", fontWeight: "bold", mt: 1 }}>
+                                    {hospital.name}
+                                </Typography>
+                                <Typography sx={{ fontSize: "16px", mt: 2 }}>{hospital.description}</Typography>
+                                <Typography sx={{ fontSize: "14px", mt: 2 }}>
+                                    {`${hospital.address.city} ${hospital.address.street} ${hospital.name}`}
+                                </Typography>
+                                <Grid container>
+                                    <Grid item xs={12} md={6}>
+                                        <Typography sx={{ fontSize: "16px", mt: 2 }}>
+                                            <Box sx={{ fontWeight: "bold" }} component='span'>
+                                                TEL
+                                            </Box>
+                                            <Box sx={{ mx: 3 }} component='span'>
+                                                {hospital.tel}
+                                            </Box>
+                                        </Typography>
+                                        <Typography sx={{ fontSize: "16px", mt: 1 }}>
+                                            <Box sx={{ fontWeight: "bold" }} component='span'>
+                                                진료과목
+                                            </Box>
+                                            <Box sx={{ mx: 3 }} component='span'>
+                                                {hospital.treatmentSubject}
+                                            </Box>
+                                        </Typography>
+                                        <Typography sx={{ fontSize: "16px", mt: 1 }}>
+                                            <Box sx={{ fontWeight: "bold" }} component='span'>
+                                                영업시간
+                                            </Box>
+                                            <Box sx={{ mx: 3 }} component='span'>
+                                                {hospital.operatingTime}
+                                            </Box>
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={12} md={6}>
+                                        <Typography sx={{ fontSize: "16px", mt: 2 }}>
+                                            <Box sx={{ fontWeight: "bold" }} component='span'>
+                                                대표 수의사
+                                            </Box>
+                                            <Box sx={{ mx: 3 }} component='span'>
+                                                {doctor.leadDoctor !== null ? doctor.leadDoctor : "대표 수의사 없음"}
+                                            </Box>
+                                        </Typography>
+                                        <Typography sx={{ fontSize: "16px", mt: 1 }}>
+                                            <Box sx={{ fontWeight: "bold" }} component='span'>
+                                                수의사 수
+                                            </Box>
+                                            <Box sx={{ mx: 3 }} component='span'>
+                                                {doctor.doctorCount}
+                                            </Box>
+                                        </Typography>
+                                    </Grid>
+                                </Grid>
+                            </Box>
+                        </Grid>
+                    </Grid>
+                    <div
+                        id='map'
+                        style={{ width: "100%", height: "400px", marginTop: "30px", overflow: "hidden" }}></div>
+                    <div className='devider' style={{ marginTop: "30px" }}></div>
+                    <Box sx={{ fontWeight: "bold", fontSize: 22, pt: 2 }}>
+                        <span style={{ lineHeight: "26px" }}>선택한 수의사 선생님</span>
+                    </Box>
+                    <Grid container sx={{ mt: 3 }}>
+                        <Grid item xs={12} md={4}>
+                            <Box sx={{ mt: 2 }}>
+                                <img
+                                    src={`${process.env.PUBLIC_URL}/img/loginDog.jpg`}
+                                    alt='의사 사진'
+                                    style={{ width: "100%", height: "250px" }}></img>
+                            </Box>
+                        </Grid>
+                        <Grid item xs={12} md={8} sx={{ p: 8 }}>
+                            <Box sx={{ fontSize: 18 }}>이름 : {doctor.name !== null ? doctor.name : "의사 없음"}</Box>
+                            <Box sx={{ fontSize: 18 }}>전문 분야 : {doctor.specialty}</Box>
+                            <Box sx={{ fontSize: 18 }}>
+                                면허 번호 :{" "}
+                                {doctor.pysicianLicenseNumber !== null
+                                    ? doctor.pysicianLicenseNumber
+                                    : "면허 정보 미등록"}
+                            </Box>
+                            <Box sx={{ fontSize: 18 }}>진료비 : {doctor.price}</Box>
+                            <Box sx={{ fontSize: 18, mt: 2 }}>한마디 : 최선을 다하겠습니다.</Box>
+                        </Grid>
+                    </Grid>
+                    <div className='devider' style={{ marginTop: "30px" }}></div>
+                    <Box>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} md={4}>
+                                    <Box sx={{ fontWeight: "bold", mt: 3, fontSize: 22 }}> 예약 날짜</Box>
+                                    <CalendarPicker
+                                        date={date}
+                                        onChange={(newDate) => {
+                                            const dayDiff = diffDay(newDate);
+                                            setSelectTime(-1);
+                                            setDate(newDate);
+                                            refreshSchedule(dayDiff);
+                                        }}
+                                        shouldDisableDate={(date) => {
+                                            const dayDiff = diffDay(date);
+                                            return dayDiff < 0 || dayDiff > 15;
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={8}>
+                                    <Box sx={{ fontWeight: "bold", mt: 3, fontSize: 22 }}>시간 선택</Box>
+                                    <Grid container sx={{ mt: 4 }}>
+                                        {[...schedule.bitmask].map((item, index) => (
+                                            <Grid item xs={3} key={index}>
+                                                <MyButton time={reserveTime[index]} item={item} index={index} />
+                                            </Grid>
+                                        ))}
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                            <div className='devider' style={{ marginTop: "30px", marginBottom: "30px" }}></div>
+                        </LocalizationProvider>
+                    </Box>
+                    <Box>
+                        <FormControl>
+                            <FormLabel id='demo-row-radio-buttons-group-label'>진료 종류</FormLabel>
+                            <RadioGroup
+                                row
+                                aria-labelledby='demo-row-radio-buttons-group-label'
+                                name='row-radio-buttons-group'
+                                value={values.type}
+                                onChange={handleChange("type")}>
+                                <FormControlLabel value='RES_REQUEST' control={<Radio />} label='방문' />
+                                <FormControlLabel value='VST_REQUEST' control={<Radio />} label='화상' />
+                            </RadioGroup>
+                        </FormControl>
+                    </Box>
+                    <Box sx={{ mt: 2 }}>
+                        <FormControl>
+                            <FormLabel id='demo-row-radio-buttons-group-label'>재진 여부</FormLabel>
+                            <RadioGroup
+                                row
+                                aria-labelledby='demo-row-radio-buttons-group-label'
+                                name='row-radio-buttons-group'
+                                value={values.reVisit}
+                                onChange={handleChange("reVisit")}>
+                                <FormControlLabel value='first' control={<Radio />} label='초진' />
+                                <FormControlLabel value='reVisit' control={<Radio />} label='재진' />
+                            </RadioGroup>
+                        </FormControl>
+                    </Box>
+                    <div className='devider' style={{ marginTop: "30px" }}></div>
+                    <Grid container>
+                        <Grid item xs={8}>
+                            <Box sx={{ fontWeight: "bold", mt: 3, fontSize: 22 }}>
+                                기본정보
+                                <FormControl sx={{ mx: 2 }}>
+                                    <RadioGroup
+                                        row
+                                        aria-labelledby='demo-row-radio-buttons-group-label'
+                                        name='row-radio-buttons-group'
+                                        value={mode}
+                                        onChange={handleChange("mode")}>
+                                        <FormControlLabel value='write' control={<Radio />} label='직접 입력' />
+                                        <FormControlLabel
+                                            value='myPet'
+                                            control={<Radio />}
+                                            label='나의 반려동물중 선택'
+                                        />
+                                    </RadioGroup>
+                                </FormControl>
+                            </Box>
+                            {mode === "write" ? (
+                                <Grid container>
+                                    <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
+                                        <TextField
+                                            id='outlined-basic'
+                                            label='이름'
+                                            variant='outlined'
+                                            value={values.petName}
+                                            onChange={handleChange("petName")}
+                                            sx={{ backgroundColor: "#FBFBFD", width: "400px" }}
+                                            size='small'
+                                        />
+                                    </FormControl>
+                                    <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
+                                        <TextField
+                                            id='outlined-basic'
+                                            label='종'
+                                            variant='outlined'
+                                            value={values.petSpecies}
+                                            onChange={handleChange("petSpecies")}
+                                            sx={{ backgroundColor: "#FBFBFD", width: "400px" }}
+                                            size='small'
+                                        />
+                                    </FormControl>
+                                    <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
+                                        <TextField
+                                            id='outlined-basic'
+                                            label='체중'
+                                            variant='outlined'
+                                            value={values.petWeight}
+                                            onChange={handleChange("petWeight")}
+                                            sx={{ backgroundColor: "#FBFBFD", width: "400px" }}
+                                            size='small'
+                                        />
+                                    </FormControl>
+                                    <FormControl fullWidth sx={{ m: 1 }}>
+                                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                            <DatePicker
+                                                label='생년월일'
+                                                value={values.birthDate}
+                                                onChange={(newValue) => {
+                                                    setValues({ ...values, birthDate: newValue });
+                                                }}
+                                                renderInput={(params) => (
+                                                    <TextField
+                                                        {...params}
+                                                        size='small'
+                                                        sx={{ backgroundColor: "#FBFBFD", width: "400px" }}
+                                                    />
+                                                )}
+                                            />
+                                        </LocalizationProvider>
+                                    </FormControl>
+                                </Grid>
+                            ) : (
+                                <Box sx={{ mt: 2 }}>
+                                    <FormControl sx={{ mx: 2 }}>
+                                        <RadioGroup
+                                            aria-labelledby='demo-row-radio-buttons-group-label'
+                                            name='row-radio-buttons-group'
+                                            value={selectPet}
+                                            onChange={handleChange("selectPet")}>
+                                            {userPetList.length === 0
+                                                ? ""
+                                                : userPetList.map((item, index) => (
+                                                      <FormControlLabel
+                                                          key={index}
+                                                          value={index}
+                                                          control={<Radio />}
+                                                          label={item.name}
+                                                      />
+                                                  ))}
+                                        </RadioGroup>
+                                    </FormControl>
+                                </Box>
+                            )}
+                        </Grid>
+                        <div className='devider' style={{ marginTop: "30px" }}></div>
+                    </Grid>
+                    <Box sx={{ fontWeight: "bold", mt: 5, fontSize: 22 }}>
+                        특이사항(이전 병력, 증상, 상담을 원하는 이유 작성 부탁드립니다.)
+                    </Box>
+                    <Box sx={{ mt: 2 }}>
+                        <TextField
+                            label='특이사항'
+                            multiline
+                            rows={4}
+                            variant='outlined'
+                            sx={{ width: "100%", backgroundColor: "#FBFBFD" }}
+                            value={values.symptom}
+                            onChange={handleChange("symptom")}
+                        />
+                    </Box>
+                    <Box sx={{ mx: 130, width: "100px", mt: 3, mb: 5 }}>
+                        <Button
+                            variant='contained'
+                            type='submit'
+                            onClick={() => {
+                                submitReservation();
+                            }}>
+                            예약하기
+                        </Button>
+                    </Box>
                 </Grid>
                 {/* <Grid item xs={2.5}></Grid> */}
             </Grid>

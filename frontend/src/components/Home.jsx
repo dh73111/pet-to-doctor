@@ -23,7 +23,6 @@ const MyDiv = styled("div")({
 });
 const cardStyle = {
     backgroundColor: "#fff",
-    maxWidth: "1152px",
     // position: "relative",
     // top: "36rem",
     // left: "50%",
@@ -50,7 +49,20 @@ function Home(props) {
                 </Typography>
             </MyImage> */}
             <HomeSwiper />
-            <Container sx={{ my: 4 }}>
+            <Container sx={{ border: 1 }}>
+                <Grid container spacing={2}>
+                    <Grid item xs={12} md={4} sx={{ Border: 1 }}>
+                        1
+                    </Grid>
+                    <Grid item xs={12} md={4} sx={{ Border: 1 }}>
+                        2
+                    </Grid>
+                    <Grid item xs={12} md={4} sx={{ Border: 1 }}>
+                        3
+                    </Grid>
+                </Grid>
+            </Container>
+            {/* <Container sx={{ my: 4 }}>
                 <Grid container style={cardStyle} className='card'>
                     <Grid item sx={gridItemStyle} xs={12} md={4}>
                         <Box sx={{ color: "#29A1B1", fontSize: 25, fontWeight: "700" }}>
@@ -64,12 +76,16 @@ function Home(props) {
                             주변에 위치한 병원 정보를 <br /> 알려드립니다
                         </Box>
                     </Grid>
+                </Grid>
+                <Grid container style={cardStyle} className='card'>
                     <Grid item sx={gridItemStyle} xs={12} md={4}>
                         <Box sx={{ color: "#29A1B1", fontSize: 25, fontWeight: "700" }}>예약하기</Box>
                         <Box sx={{ fontSize: 18, mt: 2 }}>
                             온라인 진료 서비스를 위한 예약을 <br /> 도와드립니다.
                         </Box>
                     </Grid>
+                </Grid>
+                <Grid container style={cardStyle} className='card'>
                     <Grid item sx={{ height: "200px", p: 5 }} xs={12} md={4}>
                         <Box sx={{ color: "#29A1B1", fontSize: 25, fontWeight: "700" }}>공지사항</Box>
                         <Box sx={{ fontSize: 16, mt: 2 }}>
@@ -78,7 +94,7 @@ function Home(props) {
                         </Box>
                     </Grid>
                 </Grid>
-            </Container>
+            </Container> */}
             <Box sx={{ backgroundColor: "#fafafa", p: "200px 26px 160px 26px" }}>
                 <Grid container maxWidth='lg' sx={{ mx: "auto" }}>
                     <Grid item xs={12} md={6}>

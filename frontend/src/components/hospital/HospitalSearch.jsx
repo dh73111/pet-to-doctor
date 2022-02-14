@@ -21,9 +21,11 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { listNameHospital, listDongHospital } from "api/hospital.js";
 import { getDoctorInfoFromHospital } from "api/doctor.js";
 import { hospitalReviews } from "../../api/review.js";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, IconButton, Tooltip } from "@mui/material";
 import StarsIcon from "@mui/icons-material/Stars";
 import { useSelector } from "react-redux";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
 
 function HospitalSearch(props) {
     const { kakao } = window;
@@ -99,31 +101,24 @@ function HospitalSearch(props) {
             // 정보
             return (
                 <Box>
-                    <Box sx={{ fontSize: 14 }}>
-                        <Grid container sx={{ margin: 2, mt: 4, maxWidth: "360px" }}>
-                            <Grid item xs={0.3}></Grid>
+                    <Box xs={12} sx={{ fontSize: 16 }}>
+                        <Grid container sx={{ py: 5, px: 3, maxWidth: "360px" }}>
                             <Grid item xs={1}>
-                                <PlaceIcon sx={{ height: "25px" }}></PlaceIcon>
+                                <PlaceIcon sx={{ height: "25px", color: "#44576C" }}></PlaceIcon>
                             </Grid>
-                            <Grid item xs={10.4}>
+                            <Grid item xs={10.4} sx={{ color: "#44576C", lineHeight: "25px" }}>
                                 {`${hospital.address.city}  ${hospital.address.street}`}
                             </Grid>
-                            <Grid item xs={0.3}></Grid>
-
-                            <Grid item xs={0.3} sx={{ mt: 2 }}></Grid>
                             <Grid item xs={1} sx={{ mt: 2 }}>
-                                <AccessTimeIcon sx={{ height: "20px" }}></AccessTimeIcon>
+                                <AccessTimeIcon sx={{ height: "20px", color: "#44576C" }}></AccessTimeIcon>
                             </Grid>
-                            <Grid item xs={10.4} sx={{ mt: 2 }}>
+                            <Grid item xs={10.4} sx={{ mt: 2, color: "#44576C", lineHeight: "25px" }}>
                                 운영 시간 : {hospital.operatingTime}
                             </Grid>
-
-                            <Grid item xs={0.3} sx={{ mt: 1 }}></Grid>
-                            <Grid item xs={0.3} sx={{ mt: 2 }}></Grid>
                             <Grid item xs={1} sx={{ mt: 2 }}>
-                                <HomeIcon sx={{ height: "20px" }}></HomeIcon>
+                                <HomeIcon sx={{ height: "20px", color: "#44576C" }}></HomeIcon>
                             </Grid>
-                            <Grid item xs={10.4} sx={{ mt: 2 }}>
+                            <Grid item xs={10.4} sx={{ mt: 2, color: "#44576C", lineHeight: "25px" }}>
                                 <Link
                                     onClick={() => {
                                         window.location.href = hospital.url;
@@ -131,19 +126,16 @@ function HospitalSearch(props) {
                                     {hospital.url ? hospital.url : "홈페이지 없음"}
                                 </Link>
                             </Grid>
-
-                            <Grid item xs={0.3} sx={{ mt: 2 }}></Grid>
-                            <Grid item xs={0.3} sx={{ mt: 2 }}></Grid>
                             <Grid item xs={1} sx={{ mt: 2 }}>
-                                <PhoneIcon sx={{ height: "20px" }}></PhoneIcon>
+                                <PhoneIcon sx={{ height: "20px", color: "#44576C" }}></PhoneIcon>
                             </Grid>
-                            <Grid item xs={10.4} sx={{ mt: 2 }}>
+                            <Grid item xs={10.4} sx={{ mt: 2, color: "#44576C", lineHeight: "25px" }}>
                                 {hospital.tel}
                             </Grid>
                         </Grid>
                     </Box>
                     <Box sx={{ py: 5, px: 3, borderTop: "1px solid #D7E2EB", borderBottom: "1px solid #D7E2EB" }}>
-                        <Grid container sx={{ color: "#309FB3", fontSize: "14px" }}>
+                        <Grid container sx={{ color: "#309FB3", fontSize: "16px" }}>
                             <Grid item xs={4}>
                                 진료과목
                             </Grid>
@@ -167,19 +159,21 @@ function HospitalSearch(props) {
 
                     <Box
                         sx={{
-                            py: 6,
-                            px: 2,
                             fontWeight: "bold",
                             fontSize: "15px",
+                            px: 3,
+                            pt: 2,
                             // borderTop: "1px solid #D7E2EB",
                             borderBottom: "1px solid #D7E2EB",
                         }}>
                         <Grid container>
-                            <Grid item sx={{ color: "black", fontWeight: "bold", fontSize: "16px" }} xs={2.5}>
+                            <Grid item sx={{ color: "black", fontWeight: "bold", fontSize: "18px", pb: 1 }} xs={2.5}>
                                 수의사 수
                             </Grid>
-                            <Grid item xs={0.3}></Grid>
-                            <Grid item sx={{ color: "#309FB3", fontWeight: "bold", fontSize: "12px" }} xs={9.2}>
+                            <Grid
+                                item
+                                sx={{ color: "#309FB3", fontWeight: "bold", fontSize: "16px", lineHeight: "18px" }}
+                                xs={9.2}>
                                 {doctor.doctorList.length}
                             </Grid>
                             <Grid container sx={{ mt: 1 }}>
@@ -207,41 +201,58 @@ function HospitalSearch(props) {
         } else if (value === 1) {
             // 예약하기
             return (
-                <Box>
+                <Box sx={{ mt: 1 }}>
                     {doctor.doctorList.map((item, index) => (
-                        <Grid container>
-                            <Grid item xs={4.3}>
+                        <Grid container sx={{ p: 2 }}>
+                            <Grid item xs={5}>
                                 <img
                                     src={`${process.env.PUBLIC_URL}/img/loginDog.jpg`}
                                     alt='의사사진'
                                     width='150px'
                                     height='150'></img>
                             </Grid>
-                            <Grid item xs={7.7} sx={{ mt: 2 }}>
-                                <Box>
-                                    <Box component='span' sx={{ mx: 2, fontWeight: "bold" }}>
-                                        {item.name}
-                                    </Box>
+                            <Grid item xs={6} sx={{ mt: 2 }}>
+                                <Typography sx={{ fontSize: "16px", fontWeight: "bold", pl: 1 }}>
+                                    {item.name === null ? "수의사" : item.name}
+                                </Typography>
+                                <Typography sx={{ pl: 1 }}>
+                                    {item.specialty === null ? "없음" : item.specialty + " 전문"}
+                                </Typography>
+                                {/* <Box>
+                                    {item.name}
                                     <Box
                                         component='span'
-                                        sx={{ mx: 0.1, fontSize: 12, fontWeight: "bold", color: "gray" }}>
+                                        sx={{ mx: 0.1, fontSize: 16, fontWeight: "bold", color: "gray" }}>
                                         수의사
                                     </Box>
                                 </Box>
                                 <Box sx={{ mt: 2 }}>
                                     <Grid container>
                                         <Grid item xs={1}></Grid>
-                                        <Grid item xs={3} sx={{ fontWeight: "bold", fontSize: 10 }}>
+                                        <Grid item xs={3} sx={{ fontWeight: "bold", fontSize: 14 }}>
                                             전문
                                         </Grid>
-                                        <Grid item xs={8} sx={{ fontSize: 12, fontWeight: "bold" }}>
+                                        <Grid item xs={8} sx={{ fontSize: 14, fontWeight: "bold" }}>
                                             {item.specialty}
                                         </Grid>
                                     </Grid>
-                                </Box>
-                                <Box>
-                                    <Grid container>
-                                        <Grid item xs={7.5}></Grid>
+                                </Box> */}
+                                <Box sx={{ float: "right", mr: 2 }}>
+                                    <Button variant='contained' sx={{ mt: 3 }}>
+                                        <NavLink
+                                            to={`${process.env.PUBLIC_URL}/hospitalsearchreservation/${hospital.id}/${item.id}`}
+                                            state={doctor}
+                                            style={{ textDecoration: "none", color: "white" }}
+                                            onClick={(e) => {
+                                                if (!isLogin) {
+                                                    e.preventDefault();
+                                                    setAlertOpen(true);
+                                                }
+                                            }}>
+                                            예약하기
+                                        </NavLink>
+                                    </Button>
+                                    {/* <Grid container>
                                         <Grid item xs={4.5}>
                                             <Button variant='contained' sx={{ mt: 3 }}>
                                                 <NavLink
@@ -258,7 +269,7 @@ function HospitalSearch(props) {
                                                 </NavLink>
                                             </Button>
                                         </Grid>
-                                    </Grid>
+                                    </Grid> */}
                                 </Box>
                             </Grid>
                             <Snackbar
@@ -272,6 +283,7 @@ function HospitalSearch(props) {
                                     로그인 후 이용해주세요
                                 </Alert>
                             </Snackbar>
+                            <div className='devider' style={{ marginTop: "20px" }}></div>
                         </Grid>
                     ))}
                 </Box>
@@ -395,13 +407,23 @@ function HospitalSearch(props) {
         rating /= reviewList.length;
         return (
             <Grid container>
-                <Grid item xs={3.3}>
+                <Grid item xs={3.3} sx={{ position: "relative" }}>
                     <Box
-                        sx={{ position: "absolute", left: "780px", top: "50%" }}
+                        sx={{
+                            position: "absolute",
+                            right: "-20px",
+                            top: "50%",
+                            backgroundColor: "white",
+                            zIndex: 999,
+                            width: "40px",
+                            height: "50px",
+                            borderRadius: "4px",
+                            cursor: "pointer",
+                        }}
                         onClick={() => {
                             setMode("list");
                         }}>
-                        <ArrowCircleLeftIcon sx={{ fontSize: 40 }} />
+                        <ArrowBackIosIcon sx={{ mt: 1.5, ml: 2, color: "#D7E2EB" }} />
                     </Box>
 
                     <Box style={{ maxHeight: 890, overflow: "auto" }} elevation={0}>
@@ -410,7 +432,11 @@ function HospitalSearch(props) {
                             style={{ height: "200px", width: "100%" }}
                             alt='병원 이미지'></img>
 
-                        <Box display='flex' justifyContent='center' alignItems='center' sx={{ mt: 1 }}>
+                        <Box
+                            display='flex'
+                            justifyContent='center'
+                            alignItems='center'
+                            sx={{ mt: 1, position: "relative" }}>
                             {hospital.fullTime ? (
                                 // <img src={`${process.env.PUBLIC_URL}/img/24hospital.png`} alt='24시여부'></img>
                                 <Box
@@ -443,7 +469,19 @@ function HospitalSearch(props) {
                                     24시 병원
                                 </Box>
                             )}
-                            <StarsIcon sx={{ cursor: "pointer" }} />
+                            <Tooltip title='즐겨찾기' arrow>
+                                <BookmarkIcon
+                                    sx={{
+                                        cursor: "pointer",
+                                        position: "absolute",
+                                        top: "-200px",
+                                        right: "10px",
+                                        color: "#1dc6f6",
+                                        fontSize: "30px",
+                                        zIndex: 1,
+                                    }}
+                                />
+                            </Tooltip>
                         </Box>
                         <Box
                             display='flex'
@@ -457,20 +495,17 @@ function HospitalSearch(props) {
                                 sx={{ color: "#29A1B1", fontSize: 15, mr: 1.5, lineHeight: "16px", fontWeight: "700" }}>
                                 ★ {isNaN(rating) ? "0" : rating.toFixed(2)}
                             </Typography>
-                            <Typography sx={{ fontSize: 14, mt: 0.3, color: "gray", lineHeight: "16px" }}>
+                            <Typography sx={{ fontSize: 15, mt: 0.3, color: "gray", lineHeight: "16px" }}>
                                 리뷰 {reviewList.length}
                             </Typography>
-                            {/* <Grid container>
-                                <Grid item xs={4} />
-                                <Grid item xs={2} sx={{ color: "#29A1B1", fontSize: "12px" }}>
-                                    ★ {isNaN(rating) ? "0" : rating.toFixed(2)}
-                                </Grid>
-                                <Grid item xs={3} sx={{ fontSize: 12, mt: 0.3, color: "gray" }}>
-                                    리뷰 : {reviewList.length}
-                                </Grid>
-                            </Grid> */}
                         </Box>
-                        <Box sx={{ mt: 2, fontSize: 15 }}>
+                        <Box
+                            sx={{
+                                mt: 3,
+                                fontSize: 15,
+                                // borderBottom: "1px solid #D7E2EB",
+                                borderTop: "1px solid #D7E2EB",
+                            }}>
                             <Tabs
                                 value={value}
                                 onChange={handleChange}
@@ -558,7 +593,7 @@ function HospitalSearch(props) {
                     </Button>
                 </Box>
                 {onLoad ? (
-                    <CircularProgress />
+                    <CircularProgress sx={{ position: "absolute", top: "540px", left: "180px" }} />
                 ) : (
                     <Box
                         style={{
