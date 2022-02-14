@@ -198,7 +198,9 @@ function HospitalSearchReservation(props) {
         // console.log(data);
         // const result = await addTreatment(sendData)
         // console.log(result);
-        navigate(`/petodoctor/userreservationpayment/`, { state: { data: sendData, treatmentId: 831 , hospital : hospital } }); // 하드코딩대신 resultId필요
+        navigate(`/petodoctor/userreservationpayment/`, {
+            state: { data: sendData, treatmentId: 831, hospital: hospital },
+        }); // 하드코딩대신 resultId필요
     };
     const diffDay = (date) => {
         let now = new Date();
@@ -441,45 +443,6 @@ function HospitalSearchReservation(props) {
                                                 </FormControl>
                                             </Box>
                                         )}
-                                        {/* <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
-                                            <TextField
-                                                id='outlined-basic'
-                                                label='이름'
-                                                variant='outlined'
-                                                value={values.petName}
-                                                onChange={handleChange("petName")}
-                                            />
-                                        </FormControl>
-                                        <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
-                                            <TextField
-                                                id='outlined-basic'
-                                                label='종'
-                                                variant='outlined'
-                                                value={values.petSpecies}
-                                                onChange={handleChange("petSpecies")}
-                                            />
-                                        </FormControl>
-                                        <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
-                                            <TextField
-                                                id='outlined-basic'
-                                                label='체중'
-                                                variant='outlined'
-                                                value={values.petWeight}
-                                                onChange={handleChange("petWeight")}
-                                            />
-                                        </FormControl>
-                                        <FormControl fullWidth sx={{ m: 1 }}>
-                                            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                                <DatePicker
-                                                    label='생년월일'
-                                                    value={values.birthDate}
-                                                    onChange={(newValue) => {
-                                                        setValues({ ...values, birthDate: newValue });
-                                                    }}
-                                                    renderInput={(params) => <TextField {...params} />}
-                                                />
-                                            </LocalizationProvider>
-                                        </FormControl> */}
                                     </Grid>
 
                                     <Grid item xs={4} md={2}>
