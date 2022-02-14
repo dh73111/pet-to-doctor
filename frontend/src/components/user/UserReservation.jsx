@@ -215,6 +215,12 @@ function UserReservation(props) {
 
     return (
         <Container>
+            {/* <button
+                onClick={() => {
+                    console.log(treatmentInfo);
+                }}>
+                모든예약현황
+            </button> */}
             <Grid container>
                 <Typography variant='h4' component='h1' sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
                     내 예약
@@ -389,6 +395,28 @@ function UserReservation(props) {
                                         <td colSpan={3} />
                                     </tr>
                                 )} */}
+                            <tfoot>
+                                {/* <tr sx={{ width: 1200 }}>
+                                    <CustomTablePagination
+                                        rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+                                        colSpan={9}
+                                        count={rows.length}
+                                        rowsPerPage={rowsPerPage}
+                                        page={page}
+                                        componentsProps={{
+                                            select: {
+                                                "aria-label": "rows per page",
+                                            },
+                                            actions: {
+                                                showFirstButton: true,
+                                                showLastButton: true,
+                                            },
+                                        }}
+                                        onPageChange={handleChangePage}
+                                        onRowsPerPageChange={handleChangeRowsPerPage}
+                                    />
+                                </tr> */}
+                            </tfoot>
                         </table>
                     </Root>
                 </Grid>

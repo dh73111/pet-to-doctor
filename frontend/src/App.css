@@ -10,6 +10,13 @@
     -ms-overflow-style: none;
     color: "#263747";
 }
+.mainicon {
+    transition: 0.5s;
+}
+.mainicon:hover {
+    margin-top: 10px;
+    box-shadow: rgb(0 0 0 / 10%) 4px 12px 30px 6px;
+}
 .mainTitle {
     color: white;
     font-weight: bold;

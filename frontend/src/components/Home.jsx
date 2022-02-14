@@ -8,6 +8,7 @@ import { Container, Typography } from "@mui/material";
 import Footer from "./Footer";
 import { NavLink } from "react-router-dom";
 import HomeSwiper from "./commons/HomeSwiper";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 const MyImage = styled("div")({
     position: "relative",
@@ -34,6 +35,7 @@ const gridItemStyle = {
     borderRight: { md: "1px solid #eaeaea" },
     borderBottom: { xs: "1px solid #eaeaea", md: "0" },
 };
+const mainicon = { height: "18rem", textAlign: "center", padding: 2, borderRadius: "0.55rem", cursor: "pointer" };
 
 function Home(props) {
     return (
@@ -49,19 +51,50 @@ function Home(props) {
                 </Typography>
             </MyImage> */}
             <HomeSwiper />
-            <Container sx={{ border: 1 }}>
-                <Grid container spacing={2}>
-                    <Grid item xs={12} md={4} sx={{ Border: 1 }}>
-                        1
+            <Box sx={{ mt: 8, backgroundColor: "#fafafa" }}>
+                <Container sx={{ p: 3 }}>
+                    <Grid container spacing={4}>
+                        <Grid item xs={12} md={4}>
+                            <Box
+                                className='mainicon'
+                                sx={{
+                                    ...mainicon,
+                                    backgroundImage: `url(${process.env.PUBLIC_URL}/img/hospital.jpg)`,
+                                    backgroundSize: "cover",
+                                    backgroundPosition: "center",
+                                }}>
+                                병원찾기
+                            </Box>
+                        </Grid>
+                        <Grid item xs={12} md={4}>
+                            <Box
+                                className='mainicon'
+                                sx={{
+                                    ...mainicon,
+                                    backgroundImage: `url(${process.env.PUBLIC_URL}/img/review.png)`,
+                                    backgroundSize: "cover",
+                                    backgroundPosition: "center",
+                                }}>
+                                펫투닥터 후기
+                            </Box>
+                        </Grid>
+                        <Grid item xs={12} md={4}>
+                            <Box
+                                className='mainicon'
+                                sx={{
+                                    ...mainicon,
+                                    backgroundImage: `url(${process.env.PUBLIC_URL}/img/faq.png)`,
+                                    backgroundSize: "60%",
+                                    backgroundRepeat: "no-repeat",
+                                    backgroundPosition: "center",
+                                    backgroundColor: "#FAC8BF",
+                                }}>
+                                자주묻는 질문
+                            </Box>
+                        </Grid>
                     </Grid>
-                    <Grid item xs={12} md={4} sx={{ Border: 1 }}>
-                        2
-                    </Grid>
-                    <Grid item xs={12} md={4} sx={{ Border: 1 }}>
-                        3
-                    </Grid>
-                </Grid>
-            </Container>
+                </Container>
+            </Box>
             {/* <Container sx={{ my: 4 }}>
                 <Grid container style={cardStyle} className='card'>
                     <Grid item sx={gridItemStyle} xs={12} md={4}>
@@ -108,7 +141,7 @@ function Home(props) {
                             <img src={`${process.env.PUBLIC_URL}/img/main2.png`} alt='진료상담' width='100%' />
                         </Box>
                     </Grid>
-                    <Grid item xs={12} md={6} sx={{ pl: { xs: 0, md: 6 } }}>
+                    <Grid item xs={12} md={6} sx={{ pl: { xs: 0, md: 12 } }}>
                         <Typography
                             sx={{
                                 fontSize: "25px",
@@ -125,7 +158,7 @@ function Home(props) {
                             상담 받고 병원을 결정하세요
                         </Typography>
                         <Typography sx={{ fontSize: "25px", mt: 3, lineHeight: "40px", fontFamily: "NanumSquare" }}>
-                            수의사의 방문 전 간단한 상담으로
+                            수의사와의 방문 전 간단한 상담으로
                             <br />
                             병원이 나에게 맞을 지 확인해보세요.
                         </Typography>
