@@ -73,28 +73,28 @@ function UserJoin(props) {
         }
     };
     async function userRegister(user) {
-        await registerUser({
-            email: user.email,
-            password: user.password,
-            name: user.name,
-            tel: user.tel,
-            address: {
-                zipcode: user.address.zipcode,
-                city: user.address.city,
-                street: user.address.street,
-            },
-            pets: [
-                {
-                    name: user.pets[0].name,
-                    birthDate: user.pets[0].birthDate,
-                    species: user.pets[0].species,
-                    weight: user.pets[0].weight,
-                },
-            ],
-        });
-        dispatch({ type: "register" });
-        alert("가입 성공");
-        navigate("/petodoctor");
+        // await registerUser({
+        //     email: user.email,
+        //     password: user.password,
+        //     name: user.name,
+        //     tel: user.tel,
+        //     address: {
+        //         zipcode: user.address.zipcode,
+        //         city: user.address.city,
+        //         street: user.address.street,
+        //     },
+        //     pets: [
+        //         {
+        //             name: user.pets[0].name,
+        //             birthDate: user.pets[0].birthDate,
+        //             species: user.pets[0].species,
+        //             weight: user.pets[0].weight,
+        //         },
+        //     ],
+        // });
+        // dispatch({ type: "register" });
+        // alert("가입 성공");
+        navigate(`/petodoctor/usersignupconfirm/${user.email}`);
     }
 
     const [pet, setPet] = useState({
