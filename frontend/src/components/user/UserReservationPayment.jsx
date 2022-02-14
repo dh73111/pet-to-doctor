@@ -71,7 +71,13 @@ function UserReservationPayment(props) {
                     </Box>
                     <Grid container spacing={2}>
                         <Grid item xs={12} md={8} sx={{ display: "flex", flexDirection: "column" }}>
-                            <Box sx={{ backgroundColor: "#F5F6F7", p: 4 }}>
+                            <Box
+                                sx={{
+                                    backgroundColor: "#fff",
+                                    p: 4,
+                                    border: "1px solid #D7E2EB",
+                                    borderRadius: "0.55rem",
+                                }}>
                                 <Typography variant='h6' sx={{ fontWeight: 600, mb: 2 }}>
                                     진료정보
                                 </Typography>
@@ -166,7 +172,13 @@ function UserReservationPayment(props) {
                             </Box>
                         </Grid>
                         <Grid item xs={12} md={4}>
-                            <Box sx={{ backgroundColor: "#F5F6F7", p: 4 }}>
+                            <Box
+                                sx={{
+                                    backgroundColor: "#fff",
+                                    p: 4,
+                                    border: "1px solid #D7E2EB",
+                                    borderRadius: "0.55rem",
+                                }}>
                                 <Typography variant='h6' sx={{ fontWeight: 600, mb: 2 }}>
                                     최종결제금액
                                 </Typography>

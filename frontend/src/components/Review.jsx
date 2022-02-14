@@ -3,10 +3,12 @@ import { Box, Button, Container, Rating, Typography } from "@mui/material";
 import { allReview } from "../api/review";
 import ReviewSwiper from "./commons/ReviewSwiper";
 import StarIcon from "@mui/icons-material/Star";
+import CircularProgress from "@mui/material/CircularProgress";
 
 function Review() {
     const [reviews, setReviews] = useState([]);
     const [sortTime, setSortTime] = useState(false);
+    const [onLoad, setonLoad] = useState(true);
     let sortByOld = [...reviews];
     const allReviews = {
         message: "성공",
@@ -26,6 +28,7 @@ function Review() {
             const res = await allReview();
             await setReviews(res);
             sortByOld = res;
+            setonLoad(false);
         };
         init();
     }, []);
@@ -95,32 +98,38 @@ function Review() {
                         </Button>
                     </Box>
                 </Box>
-                <Box sx={{ pt: 12 }}>
-                    {reviews.map((review, idx) => {
-                        return (
-                            <Box
-                                key={idx}
-                                sx={{
-                                    backgroundColor: "#F7F7FB",
-                                    border: "1px solid #D7E2EB",
-                                    borderRadius: "0.25rem",
-                                    p: 3,
-                                    mb: 3,
-                                }}>
-                                <Typography sx={{ float: "right", color: "#263747", opacity: "0.4" }}>
-                                    {review.createTime.slice(0, 10)}
-                                </Typography>
-                                <Typography sx={{ fontWeight: "700", mb: 1, pl: 0.5 }}>{review.username}</Typography>
-                                <Rating
-                                    defaultValue={review.rate}
-                                    readOnly
-                                    emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize='inherit' />}
-                                />
-                                <Typography sx={{ mt: 2 }}>{review.content}</Typography>
-                            </Box>
-                        );
-                    })}
-                </Box>
+                {onLoad ? (
+                    <CircularProgress sx={{ my: 20, ml: "38%" }} />
+                ) : (
+                    <Box sx={{ pt: 12 }}>
+                        {reviews.map((review, idx) => {
+                            return (
+                                <Box
+                                    key={idx}
+                                    sx={{
+                                        backgroundColor: "#F7F7FB",
+                                        border: "1px solid #D7E2EB",
+                                        borderRadius: "0.25rem",
+                                        p: 3,
+                                        mb: 3,
+                                    }}>
+                                    <Typography sx={{ float: "right", color: "#263747", opacity: "0.4" }}>
+                                        {review.createTime.slice(0, 10)}
+                                    </Typography>
+                                    <Typography sx={{ fontWeight: "700", mb: 1, pl: 0.5 }}>
+                                        {review.username}
+                                    </Typography>
+                                    <Rating
+                                        defaultValue={review.rate}
+                                        readOnly
+                                        emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize='inherit' />}
+                                    />
+                                    <Typography sx={{ mt: 2 }}>{review.content}</Typography>
+                                </Box>
+                            );
+                        })}
+                    </Box>
+                )}
             </Container>
         </>
     );
