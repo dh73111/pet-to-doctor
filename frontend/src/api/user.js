@@ -22,7 +22,7 @@ async function deleteUser(userId) {
 async function checkPassword(password) {
     console.log(typeof password, "from user api");
     const loginApi = loginApiInstance();
-    return await loginApi.post(`/user/password/check`, password);
+    return await loginApi.post(`/user/password/check`, { password: password });
 }
 
 // 비밀번호 변경
