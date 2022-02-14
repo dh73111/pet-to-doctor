@@ -112,7 +112,7 @@ function Review() {
                                 </Typography>
                                 <Typography sx={{ fontWeight: "700", mb: 1, pl: 0.5 }}>{review.username}</Typography>
                                 <Rating
-                                    defaultValue={review.rate}
+                                    value={review.rate}
                                     readOnly
                                     emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize='inherit' />}
                                 />

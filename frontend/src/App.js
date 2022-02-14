@@ -32,7 +32,7 @@ import UserMedicinePayment from "components/user/UserMedicinePayment";
 import UserRating from "components/user/UserRating";
 import Qna from "components/user/Qna";
 import ReservationDetail from "components/commons/ReservationDetail";
-import PrescriptionDetail from "components/commons/PrescriptionDetail"
+import PrescriptionDetail from "components/commons/PrescriptionDetail";
 function App() {
     const fontTheme = createTheme({
         typography: {
@@ -56,7 +56,7 @@ function App() {
                         <Route path='/petodoctor/doctordiagnosis' element={<DoctorDianosis />}></Route>
                         <Route path='/petodoctor/doctorprescription' element={<DoctorPrescription />}></Route>
                         <Route path='/petodoctor/doctormypage' element={<DoctorMypage />}></Route>
-                        <Route path='/petodoctor/doctorprescriptonform' element={<DoctorPrescriptionForm />}></Route>
+                        <Route path='/doctorprescriptonform' element={<DoctorPrescriptionForm />}></Route>
                         <Route path='/petodoctor/doctorconsulting' element={<DoctorConsuliting />}></Route>
 
                         {/* user */}
