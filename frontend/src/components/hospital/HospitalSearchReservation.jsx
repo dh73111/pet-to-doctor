@@ -76,6 +76,7 @@ function HospitalSearchReservation(props) {
         businessNumber: "string",
         dongCode: "string",
     });
+    const offset = new Date().getTimezoneOffset() * 60000;
     const [date, setDate] = useState(new Date());
     const [schedule, setSchedule] = useState({ bitmask: "0000000000000000", diff: 0 });
     const handleChange = (prop) => (event) => {
@@ -164,7 +165,8 @@ function HospitalSearchReservation(props) {
         } else {
             time = reserveTime[selectTime];
         }
-        time = date.toISOString().substring(0, 11) + time + date.toISOString().substring(16);
+        let koranTime = new Date(date.getTime() - offset);
+        time = koranTime.toISOString().substring(0, 11) + time + koranTime.toISOString().substring(16);
         let sendData;
         if (mode === "write") {
             sendData = { ...values };
