@@ -17,8 +17,9 @@ import TextField from "@mui/material/TextField";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { Link } from "react-router-dom";
-import { userTreatmentInfo } from "api/treatment";
+import { userAllTreatmentList } from "api/treatment";
 import { useSelector } from "react-redux";
+import { SwitchCameraSharp } from "@mui/icons-material";
 
 function createData(no, date, time, hospital, doctor, state, perscription, shipNo) {
     return { no, date, time, hospital, doctor, state, perscription, shipNo };
@@ -89,81 +90,76 @@ function UserReservation(props) {
     const [value, setValue] = useState(new Date());
     const [state, setState] = useState("");
     const [treatmentInfo, setTreatmentInfo] = useState([]);
-
-    let treatAllList = [];
-    let treatRequest = [];
-    let treatPaid = [];
-    let treatCancel = [];
-    let treatReject = [];
-    let treatAccep = [];
-    let treatAccepCancel = [];
-    let treatComplete = [];
+    const [treatAllList, setTreatAllList] = useState([]);
+    const [treatRequest, setTreatRequest] = useState([]);
+    const [treatPaid, setTreatPaid] = useState([]);
+    const [treatCancel, setTreatCancel] = useState([]);
+    const [treatConfirm, setTreatConfirm] = useState([]);
+    const [treatComplete, setTreatComplete] = useState([]);
 
     const convertor = {
         RES_REQUEST: "신청(온라인)",
         RES_PAID: "결제완료(온라인)",
         RES_CANCEL: "취소(온라인)",
-        RES_REJECT: "거절(온라인)",
-        RES_ACCEPTED: "승인(온라인)",
-        RES_ACCEPTED_CANCEL: "승인취소(온라인)",
-        RES_COMPLETE: "상담완료(온라인)",
+        RES_CONFIRMED: "승인(온라인)",
+        RES_COMPLETED: "상담완료(온라인)",
         VST_REQUEST: "신청(방문)",
         VST_PAID: "결제완료(방문)",
-        VST_REJECT: "거절(방문)",
         VST_CANCEL: "취소(방문)",
-        VST_ACCEPTED: "승인(방문)",
-        VST_ACCEPTED_CANCEL: "승인취소(방문)",
-        VST_COMPLETE: "상담완료(방문)",
+        VST_CONFIRMED: "승인(방문)",
+        VST_COMPLETED: "상담완료(방문)",
     };
 
+    const conditions = [
+        "RES_REQUEST",
+        "RES_PAID",
+        "RES_CANCEL",
+        "RES_CONFIRMED",
+        "RES_COMPLETED",
+        "VST_REQUEST",
+        "VST_PAID",
+        "VST_CANCEL",
+        "VST_CONFIRMED",
+        "VST_COMPLETED",
+    ];
     useEffect(() => {
         const init = async () => {
-            const conditions = [
-                "RES_REQUEST",
-                "RES_PAID",
-                "RES_CANCEL",
-                "RES_REJECT",
-                "RES_ACCEPTED",
-                "RES_ACCEPTED_CANCEL",
-                "RES_COMPLETE",
-                "VST_REQUEST",
-                "VST_PAID",
-                "VST_REJECT",
-                "VST_CANCEL",
-                "VST_ACCEPTED",
-                "VST_ACCEPTED_CANCEL",
-                "VST_COMPLETE",
-            ];
-            for (let condition of conditions) {
-                const data = await userTreatmentInfo(userId, condition);
-                treatAllList = [...treatAllList, ...data];
-                // setTreatAllList([...treatAllList, ...data]);
-                if (data.length !== 0) {
-                    const status = data[0].type.substring(4);
-                    if (status === "REQUEST") {
-                        treatRequest.push(data);
-                    } else if (status === "CANCEL") {
-                        treatCancel.push(data);
-                    } else if (status === "REJECT ") {
-                        treatReject.push(data);
-                    } else if (status === "PAID") {
-                        treatPaid.push(data);
-                    } else if (status === "ACCEPTED") {
-                        treatAccep.push(data);
-                    } else if (status === "ACCEPTED_CANCEL") {
-                        treatAccepCancel.push(data);
-                    } else if (status === "COMPLETE") {
-                        treatComplete.push(data);
-                    }
+            console.log("useEffect");
+            const list = await userAllTreatmentList(userId);
+
+            console.log(list, "list");
+            let tempRequestList = [];
+            let tempCancelList = [];
+            let tempConfirmList = [];
+            let tempPaidList = [];
+            let tempCompleteList = [];
+            for (let item of list) {
+                const status = item.type.substring(4);
+                if (status === "REQUEST") {
+                    tempRequestList.push(item);
+                } else if (status === "CANCEL") {
+                    tempCancelList.push(item);
+                } else if (status === "CONFIRMED ") {
+                    tempConfirmList.push(item);
+                } else if (status === "PAID") {
+                    tempPaidList.push(item);
+                } else if (status === "COMPLETED") {
+                    tempCompleteList.push(item);
                 }
             }
-            setTreatmentInfo(treatAllList);
+            setTreatmentInfo(list);
+            setTreatAllList(list);
+            setTreatRequest(tempRequestList);
+            setTreatPaid(tempPaidList);
+            setTreatCancel(tempCancelList);
+            setTreatConfirm(tempConfirmList);
+            setTreatComplete(tempCompleteList);
             setOnLoad(false);
         };
         init();
     }, []);
 
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const handleOpen = (event) => {
         console.log(event.target.value);
         setOpen(true);
@@ -172,6 +168,29 @@ function UserReservation(props) {
 
     const handleChange = (event) => {
         setState(event.target.value);
+        switch (event.target.value) {
+            case 0:
+                setTreatmentInfo(treatAllList);
+                break;
+            case 1:
+                setTreatmentInfo(treatRequest);
+                break;
+            case 2:
+                setTreatmentInfo(treatCancel);
+                break;
+            case 3:
+                setTreatmentInfo(treatPaid);
+                break;
+            case 4:
+                setTreatmentInfo(treatConfirm);
+                break;
+            case 5:
+                setTreatmentInfo(treatComplete);
+                break;
+            default:
+                setTreatmentInfo(treatComplete);
+                break;
+        }
     };
 
     const style = {
@@ -231,17 +250,21 @@ function UserReservation(props) {
                 <Grid item xs={2}>
                     <Box sx={{ width: 120 }}>
                         <FormControl fullWidth>
-                            <InputLabel id='demo-simple-select-label'>ALL</InputLabel>
+                            <InputLabel id='demo-simple-select-label'>선택</InputLabel>
                             <Select
+                                sx={{ height: 55 }}
                                 labelId='demo-simple-select-label'
                                 id='demo-simple-select'
                                 value={state}
                                 label='state'
                                 size='small'
                                 onChange={handleChange}>
-                                <MenuItem value={10}>예약 요청</MenuItem>
-                                <MenuItem value={20}>예약 취소</MenuItem>
-                                <MenuItem value={30}>예약 확인</MenuItem>
+                                <MenuItem value={0}>모두 보기</MenuItem>
+                                <MenuItem value={1}>예약 신청</MenuItem>
+                                <MenuItem value={2}>예약 취소</MenuItem>
+                                <MenuItem value={3}>예약 승인</MenuItem>
+                                <MenuItem value={4}>결제 완료</MenuItem>
+                                <MenuItem value={5}>진료 완료</MenuItem>
                             </Select>
                         </FormControl>
                     </Box>

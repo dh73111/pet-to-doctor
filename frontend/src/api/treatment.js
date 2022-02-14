@@ -42,11 +42,6 @@ async function userAllTreatmentList(userId) {
         await api.get(`/treatment/user/all/${userId}`)
     ).data.data;
 }
-async function doctorAllTreatmentList(doctorId) {
-    return await (
-        await api.get(`/treatment/doctor/all/${doctorId}`)
-    ).data.data;
-}
 
 export {
     treatmentInfo,
@@ -57,5 +52,4 @@ export {
     treatmentState,
     treatmentPay,
     userAllTreatmentList,
-    doctorAllTreatmentList,
 };
