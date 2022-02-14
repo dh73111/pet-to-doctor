@@ -1,27 +1,34 @@
 import React, { useEffect, useState } from "react";
+import { Container, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
+import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
+import Skeleton from "@mui/material/Skeleton";
 import { styled } from "@mui/system";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 import TablePaginationUnstyled from "@mui/base/TablePaginationUnstyled";
-import { Typography, Modal, Skeleton } from "@mui/material";
-import ReservationDetail from "../commons/ReservationDetail";
+import PerscriptionDetail from "../commons/PrescriptionDetail";
 import DatePicker from "@mui/lab/DatePicker";
 import TextField from "@mui/material/TextField";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import { treatments } from "../../api/treatment.js";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import { prescriptionAll } from "../../api/prescription";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
+function createData(no, state, deliveryNo) {
+    return { no, state, deliveryNo };
+}
+
+const rows = [createData(1, "완료", "3456789"), createData(1, "완료", "")].sort((a, b) => (a.no < b.no ? -1 : 1));
+
 const Root = styled("div")`
     table {
-        font-family: arial, sans-serif;
+        font-family: noto sans, sans-serif;
         border-collapse: collapse;
         width: 100%;
     }
@@ -33,60 +40,87 @@ const Root = styled("div")`
     }
 `;
 
-function DoctorReservation(props) {
-    const doctorId = useSelector((store) => store.user.id);
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
-    const [value, setValue] = useState(new Date());
-    const [state, setState] = useState("");
-    const [open, setOpen] = useState(false);
+function DoctorPrescription(props) {
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [value, setValue] = React.useState(new Date());
+    const [state, setState] = React.useState("");
+    const [open, setOpen] = React.useState(false);
     const handleOpen = (event) => {
         console.log(event.target.value);
         setOpen(true);
     };
     const handleClose = () => setOpen(false);
-    const handleChange = (event) => {
-        setState(event.target.value);
+
+    const [onLoad, setOnLoad] = useState(true);
+    const doctorId = useSelector((store) => store.user.id);
+    const [prescriptionsInfo, setPrescriptionInfo] = useState([]);
+    const [prescriptions, setPrescription] = useState([]);
+    const [prescComplete, setPrescComplete] = useState([]);
+    const [prescUncomplete, setPrescUncomplete] = useState([]);
+    const convertor = {
+        COMPLETE: "결제완료",
+        UNCOMPELETE: "결제대기",
     };
 
+    const conditions = ["COMPLELTE", "UNCOMPLELTE"];
+
+    useEffect(() => {
+        const getdata = async () => {
+            const data = await prescriptionAll(doctorId);
+            console.log(data, "data");
+            let tempCompleteList = [];
+            let tempUncompleteList = [];
+            for (let item of data) {
+                const status = item.type;
+                if (status === "COMPLETE") {
+                    tempCompleteList.push(item);
+                } else if (status === "UNCOMPLETE") {
+                    tempUncompleteList.push(item);
+                }
+            }
+            setPrescription(data); // 전체 처방전
+            setPrescriptionInfo(data);
+            setPrescComplete(tempCompleteList);
+            setPrescUncomplete(tempUncompleteList);
+        };
+        getdata();
+
+        setOnLoad(false);
+        console.log(doctorId, "doctorId");
+
+        console.log(prescriptions, "prescriptions");
+    }, []);
+
+    const handleChange = (event) => {
+        setState(event.target.value);
+        switch (event.target.value) {
+            case 0:
+                setPrescription(prescriptionsInfo);
+                break;
+            case 1:
+                setPrescription(prescComplete);
+                break;
+            case 2:
+                setPrescription(prescUncomplete);
+                break;
+        }
+    };
     const style = {
         position: "absolute",
         top: "50%",
         left: "50%",
         transform: "translate(-50%, -50%)",
-        width: 780,
-        // height: 800,
+        width: 680,
         bgcolor: "background.paper",
         boxShadow: 24,
-        boxSizing: "border-box",
     };
-    const [reservations, setReservations] = useState([]);
-    const [onLoad, setOnLoad] = useState(true);
-    const [type, setType] = useState("");
 
-    useEffect(() => {
-        const getdata = async () => {
-            const data = await treatments(doctorId);
-            console.log(data, "data");
-            setReservations(data);
-        };
-        getdata();
-        setOnLoad(false);
-
-        console.log(reservations, "reservations");
-    }, []);
-
-    const handleChangeCompleted = (event) => {
-        setType("예약");
-    };
-    const handleChangeCanceled = (event) => {
-        setType("취소");
-    };
     return (
         <Container>
             <Grid container>
                 <Typography variant='h4' component='h1' sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
-                    받은예약
+                    처방현황
                 </Typography>
             </Grid>
             <Grid container>
@@ -110,16 +144,10 @@ function DoctorReservation(props) {
                     <Box sx={{ width: 120 }}>
                         <FormControl fullWidth>
                             <InputLabel id='demo-simple-select-label'>ALL</InputLabel>
-                            <Select
-                                labelId='demo-simple-select-label'
-                                id='demo-simple-select'
-                                value={state}
-                                label='state'
-                                size='small'
-                                onChange={handleChange}>
-                                <MenuItem value={10}>예약 요청</MenuItem>
-                                <MenuItem value={20}>예약 취소</MenuItem>
-                                <MenuItem value={30}>예약 확인</MenuItem>
+                            <Select id='demo-simple-select' value={state} label='state' onChange={handleChange}>
+                                <MenuItem value={0}>모두 보기</MenuItem>
+                                <MenuItem value={1}>결제 완료</MenuItem>
+                                <MenuItem value={2}>결제 대기</MenuItem>
                             </Select>
                         </FormControl>
                     </Box>
@@ -131,12 +159,10 @@ function DoctorReservation(props) {
                         <table className='favhospital'>
                             <thead>
                                 <tr>
-                                    <th>예약번호</th>
-                                    <th>예약일</th>
-                                    <th>예약시간</th>
-                                    <th>예약상태</th>
-                                    <th>자세히보기</th>
-                                    <th>예약승인</th>
+                                    <th>처방번호</th>
+                                    <th>처방정보</th>
+                                    <th>결제상태</th>
+                                    <th>운송장번호/택배사</th>
                                 </tr>
                             </thead>
                             {onLoad === 0 ? (
@@ -163,28 +189,25 @@ function DoctorReservation(props) {
                             ) : (
                                 <>
                                     <tbody>
-                                        {reservations.map((res, idx) => {
+                                        {prescriptions.map((res, idx) => {
                                             return (
                                                 <tr key={idx}>
-                                                    <td>{idx + 1}</td>
-                                                    <td>{res.scheduleDate.substring(0, 10)}</td>
-                                                    <td>{res.scheduleDate.substring(11, 16)}</td>
-                                                    <td>{res.type}</td>
-                                                    {/* <td>{convertor[treat.type]}</td> */}
+                                                    <td>{res.id}</td>
                                                     <td>
                                                         {res.perscriptionId ? (
                                                             "X"
                                                         ) : (
                                                             <Link
-                                                                to={`/petodoctor/reservation/${res.id}`}
+                                                                to={`/petodoctor/presciption/${res.id}`}
                                                                 state={res.id}>
-                                                                예약 내용
+                                                                처방 내용
                                                             </Link>
                                                         )}
                                                     </td>
+                                                    <td>{res.type === "COMPLETE" ? "결제 완료" : " 결제 대기"}</td>
+                                                    <td>{res.type === "COMPLETE" ? res.innvoiceCode : ""}</td>
                                                     <td>
-                                                        <Button onClick={handleChangeCompleted}>승인</Button>
-                                                        <Button onClick={handleChangeCanceled}>취소</Button>
+                                                        <button>운송장 번호 등록</button>
                                                     </td>
                                                 </tr>
                                             );
@@ -202,12 +225,10 @@ function DoctorReservation(props) {
                 onClose={handleClose}
                 aria-labelledby='modal-modal-title'
                 aria-describedby='modal-modal-description'>
-                <Box sx={style}>
-                    <ReservationDetail></ReservationDetail>
-                </Box>
+                <Box sx={style}></Box>
             </Modal>
         </Container>
     );
 }
 
-export default DoctorReservation;
+export default DoctorPrescription;
