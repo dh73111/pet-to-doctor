@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Button, Container, Typography } from "@mui/material";
 import { allReview } from "../api/review";
+import ReviewSwiper from "./commons/ReviewSwiper";
 
 function Review() {
     const [reviews, setReviews] = useState([]);
@@ -50,7 +51,7 @@ function Review() {
             <Box sx={{ backgroundColor: "#F7F7FB", pb: 2 }}>
                 <Container>
                     <Typography variant='h5' component='h1' sx={{ pt: 10, pb: 2, fontWeight: 600 }}>
-                        펫투닥터 진료상담후기
+                        펫투닥터 BEST 후기👑
                     </Typography>
                     <Box
                         sx={{
@@ -58,13 +59,14 @@ function Review() {
                             borderRadius: "0.25rem",
                             backgroundColor: "white",
                             mb: 4,
-                            p: 3,
+                            // p: 3,
                         }}>
-                        병원리뷰순위 뿌려줄것임 아니면.. 음.. 머 대충그런거
+                        <ReviewSwiper />
+                        {/* 병원리뷰순위 뿌려줄것임 아니면.. 음.. 머 대충그런거
                         <br /> 리뷰는 페이징으로하고 안되면 무한스크롤링ㄱ
                         <Box>병원2위</Box>
                         <Box>병원1위</Box>
-                        <Box>병원3위</Box>
+                        <Box>병원3위</Box> */}
                     </Box>
                 </Container>
             </Box>

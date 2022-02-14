@@ -108,3 +108,10 @@
     cursor: pointer;
     transform: translateX(-50%);
 }
+
+.swiper-button-next,
+.swiper-button-prev {
+    color: white !important;
+    fill: white !important;
+    stroke: white !important;
+}
