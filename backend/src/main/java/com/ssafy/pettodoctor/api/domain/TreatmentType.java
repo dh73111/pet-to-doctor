@@ -5,16 +5,11 @@ public enum TreatmentType {
     , RES_PAID
     , RES_CANCEL
     , RES_CONFIRMED
-//    , RES_REJECT
-//    , RES_ACCEPTED
-//    , RES_ACCEPTED_CANCEL
-    , RES_COMPLETE
+    , RES_COMPLETED
+
     , VST_REQUEST
     , VST_PAID
-//    , VST_REJECT
     , VST_CANCEL
     , VST_CONFIRMED
-//    , VST_ACCEPTED
-//    , VST_ACCEPTED_CANCEL
-    , VST_COMPLETE
+    , VST_COMPLETED
 }

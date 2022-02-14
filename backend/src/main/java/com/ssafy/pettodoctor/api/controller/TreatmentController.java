@@ -242,7 +242,7 @@ public class TreatmentController {
                 case RES_CONFIRMED:
                     treatment = treatmentService.updateConfirm(treatmentId);
                     break;
-                case RES_COMPLETE:
+                case RES_COMPLETED:
                     treatment = treatmentService.updateComplete(treatmentId);
                     break;
             }

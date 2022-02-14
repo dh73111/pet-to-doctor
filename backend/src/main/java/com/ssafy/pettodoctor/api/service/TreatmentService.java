@@ -159,7 +159,7 @@ public class TreatmentService {
             executorService.submit(checkTaskUtil.new CheckTask(treatmentId, TreatmentType.VST_PAID));
 
         // 의사에게 알림 필요
-        Notice notice = Notice.createNotice2(treatment.getDoctor(), treatment, NoticeType.PAYMENT
+        Notice notice = Notice.createNotice2(treatment.getDoctor(), treatment, NoticeType.RESERVATION
                 , treatment.getId() + "번 - 승인이 필요한 예약이 있습니다.");
         noticeRepository.save(notice);
         return treatment;
@@ -170,8 +170,8 @@ public class TreatmentService {
     public Treatment cancleTreatment(Long treatmentId, String reason) throws Exception{
         Treatment treatment = treatmentRepositry.findByTreatmentId(treatmentId);
 
-        if(treatment.equals(TreatmentType.RES_COMPLETE)
-                || treatment.equals(TreatmentType.VST_COMPLETE))
+        if(treatment.equals(TreatmentType.RES_COMPLETED)
+                || treatment.equals(TreatmentType.VST_COMPLETED))
             throw new Exception("잘못된 접근입니다.");
 
 
@@ -197,11 +197,11 @@ public class TreatmentService {
             treatment.setType(TreatmentType.VST_CANCEL);
 
         // 유저 알람 생성
-        Notice notice1 = Notice.createNotice2(treatment.getUser(), treatment, NoticeType.PAYMENT
+        Notice notice1 = Notice.createNotice2(treatment.getUser(), treatment, NoticeType.RESERVATION
                 , treatment.getId() + "번 - 예약이 취소 돼었습니다.");
         noticeRepository.save(notice1);
         // 의사에게 알림 필요
-        Notice notice2 = Notice.createNotice2(treatment.getDoctor(), treatment, NoticeType.PAYMENT
+        Notice notice2 = Notice.createNotice2(treatment.getDoctor(), treatment, NoticeType.RESERVATION
                 , treatment.getId() + "번 - 예약이 취소 돼었습니다.");
         noticeRepository.save(notice2);
 
@@ -226,7 +226,7 @@ public class TreatmentService {
         }
 
         // 유저 알람 생성
-        Notice notice1 = Notice.createNotice2(treatment.getUser(), treatment, NoticeType.PAYMENT
+        Notice notice1 = Notice.createNotice2(treatment.getUser(), treatment, NoticeType.RESERVATION
                 , treatment.getId() + "번 - 예약이 수락 돼었습니다.");
         noticeRepository.save(notice1);
 
@@ -245,17 +245,17 @@ public class TreatmentService {
 
         if(treatment.getType().equals(TreatmentType.RES_CONFIRMED))
         {
-            treatment.setType(TreatmentType.RES_COMPLETE);
+            treatment.setType(TreatmentType.RES_COMPLETED);
         } else{
-            treatment.setType(TreatmentType.VST_COMPLETE);
+            treatment.setType(TreatmentType.VST_COMPLETED);
         }
 
         // 유저 알람 생성
-        Notice notice1 = Notice.createNotice2(treatment.getUser(), treatment, NoticeType.PAYMENT
+        Notice notice1 = Notice.createNotice2(treatment.getUser(), treatment, NoticeType.RESERVATION
                 , treatment.getId() + "번 - 예약이 완료 돼었습니다.");
         noticeRepository.save(notice1);
         // 의사에게 알림 필요
-        Notice notice2 = Notice.createNotice2(treatment.getDoctor(), treatment, NoticeType.PAYMENT
+        Notice notice2 = Notice.createNotice2(treatment.getDoctor(), treatment, NoticeType.RESERVATION
                 , treatment.getId() + "번 - 예약이 완료 돼었습니다.");
         noticeRepository.save(notice2);
 

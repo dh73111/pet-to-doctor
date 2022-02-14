@@ -31,11 +31,10 @@ public class TreatmentRes {
     private String petWeight;
 
     private Integer price;
-    private String url;
 
     public TreatmentRes(){}
 
-    public TreatmentRes(Long id, Long userId, Long doctorId, Long prescriptionId, Long hospitalId, String paymentCode, LocalDateTime scheduleDate, TreatmentType type, Boolean reVisit, String petName, String symptom, LocalDate birthDate, String petSpecies, String petWeight, Integer price, String url) {
+    public TreatmentRes(Long id, Long userId, Long doctorId, Long prescriptionId, Long hospitalId, String paymentCode, LocalDateTime scheduleDate, TreatmentType type, Boolean reVisit, String petName, String symptom, LocalDate birthDate, String petSpecies, String petWeight, Integer price) {
         this.id = id;
         this.userId = userId;
         this.doctorId = doctorId;
@@ -51,7 +50,6 @@ public class TreatmentRes {
         this.petSpecies = petSpecies;
         this.petWeight = petWeight;
         this.price = price;
-        this.url = url;
     }
 
     public static TreatmentRes convertToRes(Treatment t){
@@ -61,7 +59,7 @@ public class TreatmentRes {
                 , t.getHospital() != null ? t.getHospital().getId() : null
                 ,t.getPaymentCode(), t.getScheduleDate(), t.getType()
                 ,t.getReVisit(), t.getPetName(), t.getSymptom(), t.getBirthDate()
-                ,t.getPetSpecies(), t.getPetWeight(), t.getPrice(), t.getUrl());
+                ,t.getPetSpecies(), t.getPetWeight(), t.getPrice());
         return tr;
     }
 

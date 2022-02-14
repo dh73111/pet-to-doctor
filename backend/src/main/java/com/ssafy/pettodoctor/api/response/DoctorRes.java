@@ -17,7 +17,7 @@ public class DoctorRes {
     private String role;
     private String tel;
     private LocalDate joinDate;
-    private String pysicianLicenseNumber;
+    private String veterinarianLicenseNumber;
     private String specialty;
     private Integer price;
     private Long hospitalId;
@@ -27,14 +27,14 @@ public class DoctorRes {
 
     }
 
-    public DoctorRes(Long id, String email, String name, String role, String tel, LocalDate joinDate, String pysicianLicenseNumber, String specialty, Integer price, Long hospitalId, String profileImgUrl) {
+    public DoctorRes(Long id, String email, String name, String role, String tel, LocalDate joinDate, String veterinarianLicenseNumber, String specialty, Integer price, Long hospitalId, String profileImgUrl) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.role = role;
         this.tel = tel;
         this.joinDate = joinDate;
-        this.pysicianLicenseNumber = pysicianLicenseNumber;
+        this.veterinarianLicenseNumber = veterinarianLicenseNumber;
         this.specialty = specialty;
         this.price = price;
         this.hospitalId = hospitalId;
@@ -44,7 +44,7 @@ public class DoctorRes {
     public static DoctorRes converToRes(Doctor d){
         DoctorRes dr = new DoctorRes(d.getId(), d.getEmail(), d.getName()
                 , d.getRole(), d.getTel(),d.getJoinDate(),
-                d.getPysicianLicenseNumber(), d.getSpecialty()
+                d.getVeterinarianLicenseNumber(), d.getSpecialty()
                 , d.getPrice(), d.getHospital().getId(), d.getProfileImgUrl());
         return dr;
     }

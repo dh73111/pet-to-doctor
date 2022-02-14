@@ -1,30 +1,12 @@
 package com.ssafy.pettodoctor.api.service;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.ssafy.pettodoctor.api.domain.Treatment;
 import com.ssafy.pettodoctor.api.domain.TreatmentType;
 import com.ssafy.pettodoctor.api.repository.TreatmentRepositry;
 import com.ssafy.pettodoctor.common.util.CancleRequestUtil;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 
 @Service
 @RequiredArgsConstructor
