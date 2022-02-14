@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { useLocation, useNavigate } from "react-router-dom";
 import Typography from "@mui/material/Typography";
-import { treatmentStatem, treatmentInfo } from "api/treatment";
+import { treatmentPay, treatmentInfo } from "api/treatment";
 import { getHosiptal } from "api/hospital";
 import {
     Checkbox,
@@ -37,32 +37,24 @@ function UserReservationPayment(props) {
     IMP.init("imp36272840");
     const navigate = useNavigate();
     const pay = async () => {
-        navigate("/petodoctor/userreservationcomplete");
-        // IMP.request_pay(
-        //     {
-        //         pg: "kakaopay",
-        //         pay_method: "kakaopay",
-        //         // merchant_uid: state.treatmentId,
-        //         merchant_uid: "8000000000000001111155555551111222",
-        //         name: `${state.data.petName} 진료 예약`,
-        //         amount: state.data.price,
-        //     },
-        //     async (response) => {
-        //         console.log(response);
-        //         // const result = await treatmentState(state.data.treatmentState, "RES_PAID");
-        //     }
-        // );
-        // const result = await treatmentState(831, "RES_PAID");
+        IMP.request_pay(
+            {
+                pg: "kakaopay",
+                pay_method: "kakaopay",
+                merchant_uid: String(state.treatmentId),
+                name: `${state.data.petName} 진료 예약`,
+                amount: state.data.price,
+            },
+            async (response) => {
+                console.log(response, " 결과!!!!!!!!!!");
+                await treatmentPay(state.treatmentId, { paymentCode: state.treatmentId, price: state.data.price });
+                navigate("/petodoctor/userreservationcomplete");
+            }
+        );
     };
     console.log(state);
-
-    useEffect(async () => {
-        const treatmentData = await treatmentInfo(831);
-        // console.log(data, " 데이터 ! ");
-    }, []);
-    const testSubmit = (e) => {
-        console.log(e);
-    };
+    console.log(state.treatmentId);
+    useEffect(() => {}, []);
 
     return (
         <ThemeProvider theme={newTheme}>

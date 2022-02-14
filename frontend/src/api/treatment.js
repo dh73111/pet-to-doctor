@@ -24,18 +24,21 @@ async function doctorTreatmentAllInfo(doctorId) {
 
 // 진료 정보 등록
 async function addTreatment(treatmentInfo) {
-    return await api.post(`/treatment`, JSON.stringify(treatmentInfo));
+    return await (
+        await api.post(`/treatment`, JSON.stringify(treatmentInfo))
+    ).data.data;
 }
 
 // 진료 상태 수정
 async function treatmentState(treatmentId, status) {
     console.log(treatmentId, status);
-    return await api.put(`/treatment/${treatmentId}`, JSON.stringify(status));
+    return await api.put(`/treatment/${treatmentId}?treatmentType=${status}`);
 }
 
 // 결제 정보 수정
-async function treatmentPay(treatmentId) {
-    return await api.put(`/treatment/payment/${treatmentId}`);
+async function treatmentPay(treatmentId, data) {
+    console.log(data);
+    return await api.put(`/treatment/payment/${treatmentId}`, JSON.stringify(data));
 }
 async function userAllTreatmentList(userId) {
     return await (
