@@ -31,8 +31,8 @@ public class CheckTaskUtil {
         @Override
         public String call() throws Exception {
             System.out.println("체크 테스크 시작");
-            // TimeUnit.MINUTES.sleep(1);
-            TimeUnit.MILLISECONDS.sleep(5000);
+             TimeUnit.MINUTES.sleep(3);
+//            TimeUnit.MILLISECONDS.sleep(5000);
 
             Treatment treatment = paymentService.findById(this.treatmentId);
             // 여전히 결제 or 컨펌이 안된 경우

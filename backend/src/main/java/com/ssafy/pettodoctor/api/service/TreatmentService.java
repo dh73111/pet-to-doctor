@@ -157,6 +157,7 @@ public class TreatmentService {
             executorService.submit(checkTaskUtil.new CheckTask(treatmentId, TreatmentType.RES_PAID));
         else if(treatment.getType().equals(TreatmentType.VST_PAID))
             executorService.submit(checkTaskUtil.new CheckTask(treatmentId, TreatmentType.VST_PAID));
+
         // 의사에게 알림 필요
         Notice notice = Notice.createNotice2(treatment.getDoctor(), treatment, NoticeType.PAYMENT
                 , treatment.getId() + "번 - 승인이 필요한 예약이 있습니다.");
@@ -168,6 +169,12 @@ public class TreatmentService {
     @Transactional
     public Treatment cancleTreatment(Long treatmentId, String reason) throws Exception{
         Treatment treatment = treatmentRepositry.findByTreatmentId(treatmentId);
+
+        if(treatment.equals(TreatmentType.RES_COMPLETE)
+                || treatment.equals(TreatmentType.VST_COMPLETE))
+            throw new Exception("잘못된 접근입니다.");
+
+
         if(treatment.getType().equals(TreatmentType.RES_PAID)
                 || treatment.equals(TreatmentType.RES_CONFIRMED)
                 || treatment.getType().equals(TreatmentType.VST_PAID)
@@ -183,14 +190,11 @@ public class TreatmentService {
 
         // 상태 Cancel 로 변경
         if(treatment.equals(TreatmentType.RES_REQUEST)
-            || treatment.equals(TreatmentType.RES_PAID)
-            || treatment.equals(TreatmentType.RES_CONFIRMED))
+                || treatment.equals(TreatmentType.RES_PAID)
+                || treatment.equals(TreatmentType.RES_CONFIRMED))
             treatment.setType(TreatmentType.RES_CANCEL);
-        else if(!treatment.equals(TreatmentType.RES_COMPLETE)
-                && !treatment.equals(TreatmentType.VST_COMPLETE))
-            treatment.setType(TreatmentType.VST_CANCEL);
         else
-            throw new Exception("잘못된 접근입니다.");
+            treatment.setType(TreatmentType.VST_CANCEL);
 
         // 유저 알람 생성
         Notice notice1 = Notice.createNotice2(treatment.getUser(), treatment, NoticeType.PAYMENT
@@ -209,14 +213,17 @@ public class TreatmentService {
     public Treatment updateConfirm(Long treatmentId) throws Exception{
 
         Treatment treatment = treatmentRepositry.findByTreatmentId(treatmentId);
+
+        if(!treatment.getType().equals(TreatmentType.RES_PAID)
+                && !treatment.getType().equals(TreatmentType.VST_PAID))
+            throw new Exception("잘못된 접근입니다.");
+
         if(treatment.getType().equals(TreatmentType.RES_PAID))
         {
             treatment.setType(TreatmentType.RES_CONFIRMED);
-        } else if(treatment.getType().equals(TreatmentType.VST_PAID)){
+        } else{
             treatment.setType(TreatmentType.VST_CONFIRMED);
         }
-        else
-            throw new Exception("잘못된 접근입니다.");
 
         // 유저 알람 생성
         Notice notice1 = Notice.createNotice2(treatment.getUser(), treatment, NoticeType.PAYMENT
@@ -231,14 +238,17 @@ public class TreatmentService {
     public Treatment updateComplete(Long treatmentId) throws Exception{
 
         Treatment treatment = treatmentRepositry.findByTreatmentId(treatmentId);
+
+        if(!treatment.getType().equals(TreatmentType.RES_CONFIRMED)
+                && !treatment.getType().equals(TreatmentType.VST_CONFIRMED))
+            throw new Exception("잘못된 접근입니다.");
+
         if(treatment.getType().equals(TreatmentType.RES_CONFIRMED))
         {
             treatment.setType(TreatmentType.RES_COMPLETE);
-        } else if(treatment.getType().equals(TreatmentType.VST_CONFIRMED)){
+        } else{
             treatment.setType(TreatmentType.VST_COMPLETE);
         }
-        else
-            throw new Exception("잘못된 접근입니다.");
 
         // 유저 알람 생성
         Notice notice1 = Notice.createNotice2(treatment.getUser(), treatment, NoticeType.PAYMENT

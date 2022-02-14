@@ -197,7 +197,7 @@ public class TreatmentController {
             @ApiResponse(responseCode = "404", description = "사용자 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
-    public ResponseEntity<ResVO<TreatmentRes>> updateTreatmentState(
+    public ResponseEntity<ResVO<TreatmentRes>> cancleTreatment(
             @PathVariable @Parameter(description = "진료키") Long treatmentId,
             @RequestParam @Parameter(description = "취소 사유")String reason) {
         ResVO<TreatmentRes> result = new ResVO<>();
