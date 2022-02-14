@@ -176,8 +176,8 @@ function HospitalSearchReservation(props) {
         } else {
             sendData = { ...values };
             console.log(sendData);
-            console.log(userPetList[selectPet]);
             let pet = userPetList[selectPet];
+            console.log(userPetList[selectPet]);
             sendData = {
                 ...sendData,
                 petName: pet.name,
@@ -194,11 +194,11 @@ function HospitalSearchReservation(props) {
             sendSchedule.substring(0, selectTime) + "1" + sendSchedule.substring(selectTime + 1, sendSchedule.length);
         console.log(sendSchedule);
         let sendScheduleData = { doctorId: doctor.id, plusDay: schedule.diff, bitmask: sendSchedule };
-        navigate("/petodoctor/userreservationpayment");
         // const data = await updateSchedule(sendScheduleData);
         // console.log(data);
         // const result = await addTreatment(sendData)
         // console.log(result);
+        navigate(`/petodoctor/userreservationpayment/`, { state: { data: sendData, treatmentId: 831 , hospital : hospital } }); // 하드코딩대신 resultId필요
     };
     const diffDay = (date) => {
         let now = new Date();

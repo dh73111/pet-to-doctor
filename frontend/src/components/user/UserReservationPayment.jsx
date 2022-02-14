@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import { useLocation, useNavigate } from "react-router-dom";
 import Typography from "@mui/material/Typography";
+import { treatmentStatem, treatmentInfo } from "api/treatment";
+import { getHosiptal } from "api/hospital";
 import {
     Checkbox,
     Container,
@@ -17,9 +20,11 @@ import {
 } from "@mui/material";
 // import NavBar from '../NavBar';
 import StepBar from "./resources/StepBar";
+import { SettingsInputAntennaTwoTone } from "@mui/icons-material";
 
 function UserReservationPayment(props) {
-    const contentBg = "#F5F6F7";
+    const { state } = useLocation();
+
     const newTheme = createTheme({
         palette: {
             primary: {
@@ -28,65 +33,33 @@ function UserReservationPayment(props) {
         },
     });
 
-    const state = {
-        next_redirect_pc_url: "",
-        tid: "",
-        params: {
-            cid: "TC0ONETIME",
-            partner_order_id: "partner_order_id",
-            partner_user_id: "partner_user_id",
-            item_name: "초코파이",
-            quantity: 1,
-            total_amount: 2200,
-            vat_amount: 200,
-            tax_free_amount: 1000,
-            approval_url: "http://localhost:3000/petodoctor/reserpaymentcomplete",
-            fail_url: "http://localhost:3000/petodoctor/userreservationpayment",
-            cancel_url: "http://localhost:3000/petodoctor",
-        },
-    };
     const { IMP } = window;
-    console.log(IMP);
     IMP.init("imp36272840");
-    console.log(IMP);
-    // IMP.init("{imp36272840}");
-    // const kakaoPayment = () => {
-    //     const { params } = state;
-    //     axios({
-    //         url: "/v1/payment/ready",
-    //         Host: "kapi.kakao.com",
-    //         method: "POST",
-    //         headers: {
-    //             Authorization: "KakaoAK 0627f2e80aae5aa83c9c715cb1b9e1d8",
-    //             "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
-    //         },
-    //         params,
-    //     })
-    //         .then((res) => {
-    //             console.log(res);
-    //             const next_redirect_pc_url = res.data.next_redirect_pc_url;
-    //             console.log(next_redirect_pc_url);
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //         });
-    // };
-    const pay = () => {
-        IMP.request_pay(
-            {
-                pg: "kakaopay",
-                pay_method: "kakaopay",
-                merchant_uid: "ORD20180131-0000011112",
-                name: "노르웨이 회전 의자",
-                amount: 1,
-                buyer_postcode: "01181111111111111",
-            },
-            (response) => {
-                console.log(response);
-            }
-        );
+    const navigate = useNavigate();
+    const pay = async () => {
+        navigate("/petodoctor/userreservationcomplete");
+        // IMP.request_pay(
+        //     {
+        //         pg: "kakaopay",
+        //         pay_method: "kakaopay",
+        //         // merchant_uid: state.treatmentId,
+        //         merchant_uid: "8000000000000001111155555551111222",
+        //         name: `${state.data.petName} 진료 예약`,
+        //         amount: state.data.price,
+        //     },
+        //     async (response) => {
+        //         console.log(response);
+        //         // const result = await treatmentState(state.data.treatmentState, "RES_PAID");
+        //     }
+        // );
+        // const result = await treatmentState(831, "RES_PAID");
     };
+    console.log(state);
 
+    useEffect(async () => {
+        const treatmentData = await treatmentInfo(831);
+        // console.log(data, " 데이터 ! ");
+    }, []);
     const testSubmit = (e) => {
         console.log(e);
     };
@@ -111,28 +84,40 @@ function UserReservationPayment(props) {
                                 </Typography>
                                 <Grid container sx={{ mt: 2 }}>
                                     <Grid item xs={12} md={5} sx={{ display: "flex", flexDirection: "column" }}>
-                                        <Grid item sx={{ display: "flex", flexDirection: "row" }}>
-                                            <Grid item xs={12} md={12}>
-                                                <Typography sx={{ fontWeight: 600 }}>병원</Typography>
+                                        <Grid item sx={{ display: "flex", flexDirection: "row", mt: 0.5 }}>
+                                            <Grid item xs={12} md={3.5}>
+                                                <Typography sx={{ fontWeight: 600 }}>병원 이름 :</Typography>
                                             </Grid>
-                                            <Grid item xs={12} md={12}>
-                                                <Typography>한마음동물병원</Typography>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item sx={{ display: "flex", flexDirection: "row" }}>
-                                            <Grid item xs={12} md={12}>
-                                                <Typography sx={{ fontWeight: 600 }}>예약 날짜</Typography>
-                                            </Grid>
-                                            <Grid item xs={12} md={12}>
-                                                <Typography>2020년 1월 1일</Typography>
+                                            <Grid item xs={12} md={8.5}>
+                                                <Typography>{state.hospital.name}</Typography>
                                             </Grid>
                                         </Grid>
-                                        <Grid item sx={{ display: "flex", flexDirection: "row" }}>
-                                            <Grid item xs={12} md={12}>
-                                                <Typography sx={{ fontWeight: 600 }}>예약 시간</Typography>
+                                        <Grid item sx={{ display: "flex", flexDirection: "row", mt: 0.5 }}>
+                                            <Grid item xs={12} md={3.5}>
+                                                <Typography sx={{ fontWeight: 600 }}>예약 날짜 :</Typography>
                                             </Grid>
-                                            <Grid item xs={12} md={12}>
-                                                <Typography>10:00</Typography>
+                                            <Grid item xs={12} md={8.5}>
+                                                <Typography>{`${state.data.scheduleDate.substring(
+                                                    0,
+                                                    4
+                                                )}년 ${state.data.scheduleDate.substring(5, 7)}월
+                                                ${state.data.scheduleDate.substring(8, 10)}일 `}</Typography>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item sx={{ display: "flex", flexDirection: "row", mt: 1 }}>
+                                            <Grid item xs={12} md={3.5}>
+                                                <Typography sx={{ fontWeight: 600 }}>예약 시간 :</Typography>
+                                            </Grid>
+                                            <Grid item xs={12} md={8.5}>
+                                                <Typography>{state.data.scheduleDate.substring(11, 16)}</Typography>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item sx={{ display: "flex", flexDirection: "row", mt: 1 }}>
+                                            <Grid item xs={12} md={3.5}>
+                                                <Typography sx={{ fontWeight: 600 }}>병원 소개 :</Typography>
+                                            </Grid>
+                                            <Grid item xs={12} md={8.5}>
+                                                <Typography>{state.hospital.description}</Typography>
                                             </Grid>
                                         </Grid>
                                     </Grid>
@@ -148,7 +133,7 @@ function UserReservationPayment(props) {
                                                     반려동물
                                                 </Typography>
                                                 <Typography xs={12} md={8}>
-                                                    김진돌
+                                                    {state.data.petName}
                                                 </Typography>
                                             </Grid>
                                             <Grid item xs={12} md={6} sx={{ display: "flex", flexDirection: "row" }}>
@@ -156,7 +141,7 @@ function UserReservationPayment(props) {
                                                     생년월일
                                                 </Typography>
                                                 <Typography xs={12} md={12}>
-                                                    2020/01/01
+                                                    {state.data.birthDate}
                                                 </Typography>
                                             </Grid>
                                             <Grid item xs={12} md={6} sx={{ display: "flex", flexDirection: "row" }}>
@@ -164,19 +149,7 @@ function UserReservationPayment(props) {
                                                     몸무게
                                                 </Typography>
                                                 <Typography xs={12} md={12}>
-                                                    12kg
-                                                </Typography>
-                                            </Grid>
-                                            <Grid
-                                                item
-                                                xs={12}
-                                                md={12}
-                                                sx={{ display: "flex", flexDirection: "row", mt: 1 }}>
-                                                <Typography xs={12} md={12} sx={{ fontWeight: 600 }} minWidth='80px'>
-                                                    이전병력
-                                                </Typography>
-                                                <Typography xs={12} md={12}>
-                                                    당뇨, 뇌졸중, 슬개골탈구, 당뇨, 뇌졸중, 슬개골탈구
+                                                    {state.data.petWeight}
                                                 </Typography>
                                             </Grid>
                                         </Grid>
@@ -185,50 +158,18 @@ function UserReservationPayment(props) {
                                             xs={12}
                                             md={12}
                                             sx={{ mt: 2, display: "flex", flexDirection: "column" }}>
-                                            <Grid item sx={{ display: "flex", flexDirection: "row" }}>
-                                                <Typography xs={12} md={6} sx={{ fontWeight: 600 }} minWidth='80px'>
-                                                    증상
-                                                </Typography>
-                                                <Typography xs={12} md={6}>
-                                                    밥을 잘 안먹어요 밥을 잘 안먹어요밥을 잘 안먹어요밥을 잘
-                                                    안먹어요밥을 잘 안먹어요밥을 잘 안먹어요
-                                                </Typography>
-                                            </Grid>
                                             <Grid item sx={{ display: "flex", flexDirection: "column", mt: 2 }}>
                                                 <Typography sx={{ fontWeight: 600, mr: 2 }} minWidth='140px'>
                                                     추가상담 희망내용
                                                 </Typography>
                                                 <Typography xs={12} md={6} sx={{ mt: 1 }}>
-                                                    체중 조절 방법 노하우를 알고싶어요체중 조절 방법 노하우를
-                                                    알고싶어요체중 조절 방법 노하우를 알고싶어요 체중 조절 방법 노하우를
-                                                    알고싶어요체중 조절 방법 노하우를 알고싶어요체중 조절 방법 노하우를
-                                                    알고싶어요
+                                                    {state.data.symptom}
                                                 </Typography>
                                             </Grid>
                                         </Grid>
                                     </Grid>
                                     <Grid item xs={12} md={6}></Grid>
                                 </Grid>
-                            </Box>
-                            <Box sx={{ backgroundColor: "#F5F6F7", p: 4, mt: 2 }}>
-                                <Typography variant='h6' sx={{ fontWeight: 600, mb: 2 }}>
-                                    결제하기
-                                </Typography>
-                                <Button
-                                    variant='contained'
-                                    onClick={() => {
-                                        pay();
-                                    }}>
-                                    결제
-                                </Button>
-                                <RadioGroup
-                                    aria-labelledby='demo-radio-buttons-group-label'
-                                    name='radio-buttons-group'
-                                    onSubmit={testSubmit}>
-                                    <FormControlLabel value='kakaopay' control={<Radio />} label='카카오페이' />
-                                    <FormControlLabel value='naverpay' control={<Radio />} label='네이버페이' />
-                                    <FormControlLabel value='visit' control={<Radio />} label='방문결제' />
-                                </RadioGroup>
                             </Box>
                         </Grid>
                         <Grid item xs={12} md={4}>
@@ -242,7 +183,7 @@ function UserReservationPayment(props) {
                                     </Grid>
                                     <Grid align='right' item xs={7}>
                                         <Typography xs={6} sx={{ ml: 3, pr: 1 }}>
-                                            3,000원
+                                            {`${state.data.price} 원`}
                                         </Typography>
                                     </Grid>
                                 </Grid>
@@ -260,13 +201,18 @@ function UserReservationPayment(props) {
                                     </Grid>
                                     <Grid item xs={8}>
                                         <Typography variant='h4' sx={{ textAlign: "right" }}>
-                                            200,000원
+                                            {`${state.data.price} 원`}
                                         </Typography>
                                     </Grid>
                                 </Grid>
                             </Box>
                             <Box sx={{ p: 4 }}>
-                                <Button variant='contained' sx={{ width: "100%", height: "40px", mx: "auto" }}>
+                                <Button
+                                    variant='contained'
+                                    sx={{ width: "100%", height: "40px", mx: "auto" }}
+                                    onClick={() => {
+                                        pay();
+                                    }}>
                                     결제
                                 </Button>
                             </Box>

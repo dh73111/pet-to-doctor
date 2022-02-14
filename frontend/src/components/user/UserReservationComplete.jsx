@@ -15,13 +15,15 @@ function UserReservationComplete(props) {
                 <Typography sx={{ mb: 4 }}>
                     더 자세한 상담예약 내역은 메뉴 탭의 내 예약에서 보실 수 있습니다.
                 </Typography>
-                <Link to={`/petodoctor/userreservation`}>
+                <Link to={`/petodoctor/userreservation`} style={{ textDecoration: "none" }}>
                     <Button variant='contained' sx={{ backgroundColor: "#309FB3", width: "360px" }}>
                         내 예약
                     </Button>
                 </Link>
-                <Link to={`/petodoctor/`}>
-                    <Button variant='contained' sx={{ backgroundColor: "#E7E7E7", width: "360px", mt: 1 }}>
+                <Link to={`/petodoctor`} style={{ textDecoration: "none" }}>
+                    <Button
+                        variant='contained'
+                        sx={{ backgroundColor: "#E7E7E7", color: "black", width: "360px", mt: 1 }}>
                         메인으로
                     </Button>
                 </Link>
