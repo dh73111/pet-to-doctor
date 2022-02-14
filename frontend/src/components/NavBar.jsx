@@ -68,6 +68,7 @@ const NavTop = (props) => {
     const [mode, setMode] = useState("");
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
     // const handleClose = () => setOpen(false);
     // const handleOpenNavMenu = (event) => {
     //   setAnchorElNav(event.currentTarget);
@@ -365,7 +366,6 @@ function NavBottom(props) {
                             className='gnb'
                             onClick={(e) => {
                                 console.log("클릭");
-                                console.log(typeof page.id);
                                 if (isLogin === false && page.id === 1) {
                                     setAlertOpen(true);
                                     props.clickNav(page.id);
