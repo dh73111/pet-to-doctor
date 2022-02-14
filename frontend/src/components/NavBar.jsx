@@ -95,7 +95,7 @@ const NavTop = (props) => {
         <Box
             key={page}
             onClick={() => {
-                props.clickNav(page.id);
+                // props.clickNav(page.id);
             }}
             sx={{ color: selectedColor, display: "block" }}>
             <Typography sx={{ fontSize: 17 }}>{page.name}</Typography>
@@ -313,6 +313,7 @@ function NavBottom(props) {
         setAnchorElNav(event.currentTarget);
     };
     const isLogin = useSelector((store) => store.isLogin);
+    const [alertOpen, setAlertOpen] = useState(false);
 
     const handleCloseNavMenu = (id) => {
         console.log(id);
@@ -332,7 +333,6 @@ function NavBottom(props) {
 
     const NavItem = () => {
         // 네비 모드 바꾸기
-        const [alertOpen, setAlertOpen] = useState(false);
         const handleClick = () => {
             setAlertOpen(false);
         };
@@ -364,12 +364,15 @@ function NavBottom(props) {
                             style={{ textDecoration: "none" }}
                             className='gnb'
                             onClick={(e) => {
-                                e.preventDefault();
+                                console.log("클릭");
+                                console.log(typeof page.id);
                                 if (isLogin === false && page.id === 1) {
                                     setAlertOpen(true);
+                                    props.clickNav(page.id);
                                 } else {
                                     navigate(page.path);
                                 }
+                                e.preventDefault();
                             }}>
                             {props.selectedNav === page.id
                                 ? MyButton(page, "#29A1B1", "bold")
