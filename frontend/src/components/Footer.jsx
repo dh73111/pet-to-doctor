@@ -7,6 +7,7 @@ function Footer(props) {
     const MyFooter = styled("div")({
         width: "100%",
         // height: "300px",
+        borderTop: "1px solid rgb(241, 241, 241)",
         backgroundColor: "rgb(249, 249, 249)",
         // backgroundColor: "#FFF5F6",
         // position: "relative",

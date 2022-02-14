@@ -20,6 +20,7 @@ import { listNameHospital, listDongHospital } from "api/hospital.js";
 import { getDoctorInfoFromHospital } from "api/doctor.js";
 import { hospitalReviews } from "../../api/review.js";
 import { CircularProgress } from "@mui/material";
+import StarsIcon from "@mui/icons-material/Stars";
 function HospitalSearch(props) {
     const { kakao } = window;
     const [mode, setMode] = useState("list");
@@ -417,6 +418,7 @@ function HospitalSearch(props) {
                                     24시 병원
                                 </Box>
                             )}
+                            <StarsIcon sx={{ cursor: "pointer" }} />
                         </Box>
                         <Box
                             display='flex'

@@ -107,7 +107,15 @@ function UserInfo(props) {
                                 {/* {informationUser.address.city}
                                 <br />
                                 {informationUser.address.street} */}
-                                {informationUser.address !== null ? "있음" : "없음"}
+                                {informationUser.address !== null ? (
+                                    <>
+                                        {informationUser.address.city}
+                                        <br />
+                                        {informationUser.address.street}
+                                    </>
+                                ) : (
+                                    "없음"
+                                )}
                             </Box>
                         </Box>
                     </Grid>
@@ -377,8 +385,7 @@ function FavoriteHospital() {
             <table className='favhospital'>
                 <thead>
                     <tr>
-                        <Checkbox />
-                        <th>이미지</th>
+                        <th>No.</th>
                         <th>병원이름</th>
                         <th>주소</th>
                         <th>연락처</th>
@@ -386,26 +393,11 @@ function FavoriteHospital() {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>
-                            <Checkbox />
-                        </td>
-                        <td>이미지</td>
-                        <td>로이병원</td>
-                        <td>인천광역시 남동구 논현동 751-1 에코메트로3차 더타워상가 C동 1층 24시 소래동물병원</td>
-                        <td>02-1234-5678</td>
-                        <td>
-                            <Button>즐겨찾기 삭제 깡통</Button>
-                        </td>
-                    </tr>
                     {favHospitals.map((fav, idx) => {
                         const favId = fav.id;
                         return (
-                            <tr key={idx}>
-                                <td>
-                                    <Checkbox />
-                                </td>
-                                <td>이미지</td>
+                            <tr key={idx} style={{ textAlign: "center" }}>
+                                <td>{idx + 1}</td>
                                 <td>{fav.hospital_name}</td>
                                 <td>
                                     {fav.hospital_address.city} {fav.hospital_address.street}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import { useLocation } from "react-router-dom";
-import { medicineInfo, checkPrescription } from "api/perscription";
+import { medicineInfo, checkPrescription } from "api/prescription";
 
 function PerscriptionDetail(props) {
     const location = useLocation(); // 넘겨주는 user값 location으로 주소

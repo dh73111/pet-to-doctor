@@ -28,13 +28,14 @@ async function addTreatment(treatmentInfo) {
 }
 
 // 진료 상태 수정
-async function treatmentState(treatmentId) {
-    return await api.post(`/treatment/${treatmentId}`);
+async function treatmentState(treatmentId, status) {
+    console.log(treatmentId, status);
+    return await api.put(`/treatment/${treatmentId}`, JSON.stringify(status));
 }
 
 // 결제 정보 수정
 async function treatmentPay(treatmentId) {
-    return await api.post(`/treatment/payment/${treatmentId}`);
+    return await api.put(`/treatment/payment/${treatmentId}`);
 }
 
 // 의사의 전체 진료 정보 반환

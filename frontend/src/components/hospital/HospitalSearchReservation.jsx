@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
-import FilledInput from "@mui/material/FilledInput";
 import Paper from "@mui/material/Paper";
-import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
-import InputAdornment from "@mui/material/InputAdornment";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
@@ -21,24 +18,27 @@ import { Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import { getHosiptal } from "api/hospital";
 import { getDoctorInfo } from "api/doctor";
-import { getSchedule } from "api/schedule";
+import { getSchedule, updateSchedule } from "api/schedule";
+import { addTreatment } from "api/treatment";
 import { useSelector } from "react-redux";
+import DatePicker from "@mui/lab/DatePicker";
+import { petList } from "api/pet";
 function HospitalSearchReservation(props) {
+    const navigate = useNavigate();
     const { kakao } = window;
     const store = useSelector((store) => store);
     const [values, setValues] = useState({
-        type: "RES_REQUEST",
         userId: store.user.id,
         doctorId: 0,
         hospitalId: 0,
-        petId: 0,
-        scheduleDate: "2022-02-13T10:15:29.800Z",
+        scheduleDate: "",
+        type: "RES_REQUEST",
         reVisit: "first",
-        petName: "string",
-        symptom: "string",
-        birthDate: "2022-02-13",
-        petSpecies: "string",
-        petWeight: "string",
+        petName: "",
+        symptom: "",
+        birthDate: null,
+        petSpecies: "",
+        petWeight: "",
         price: "",
     });
     const [doctor, setDoctor] = useState({
@@ -53,6 +53,8 @@ function HospitalSearchReservation(props) {
         price: 0,
         hospitalId: 0,
         profileImgUrl: "string",
+        leadDoctor: "",
+        doctorCount: "",
     });
     const [hospital, setHospital] = useState({
         id: 0,
@@ -72,18 +74,25 @@ function HospitalSearchReservation(props) {
         businessNumber: "string",
         dongCode: "string",
     });
-    const [leadDoctor, setLeadDoctor] = useState("");
-    const [doctorCount, setDoctorCount] = useState("");
     const [date, setDate] = useState(new Date());
-    const [schedule, setSchedule] = useState("0000000000000000");
-    const [originSchedule, setOriginSchedule] = useState("0000000000000000");
+    const [schedule, setSchedule] = useState({ bitmask: "0000000000000000", diff: 0 });
     const handleChange = (prop) => (event) => {
+        if (prop === "mode") {
+            setMode(event.target.value);
+            return;
+        }
+        if (prop === "selectPet") {
+            setPet(event.target.value);
+        }
         setValues({ ...values, [prop]: event.target.value });
     };
-    const [selectTime, setSelectTime] = useState("-1");
+    const [userPetList, setPetList] = useState([]);
+    const [selectPet, setPet] = useState(-1);
+    const [selectTime, setSelectTime] = useState(-1);
+    const [mode, setMode] = useState("write");
     const reserveTime = [
-        "9:00",
-        "9:30",
+        "09:00",
+        "09:30",
         "10:00",
         "10:30",
         "11:00",
@@ -124,24 +133,72 @@ function HospitalSearchReservation(props) {
                 color={props.index === selectTime ? "success" : "primary"}
                 sx={{ width: "98%", mt: 1, mx: 1 }}
                 onClick={() => {
-                    console.log(props.time);
                     setSelectTime(props.index);
-                    // setSchedule(
-                    //     originSchedule.substring(0, props.index) +
-                    //         "1" +
-                    //         originSchedule.substring(props.index + 1, originSchedule.length)
-                    // );
-                    console.log(selectTime);
-                    console.log(props.item);
                 }}>
                 {props.time}
             </Button>
         );
     }
-    const submitReservation = () => {
-        console.log(values, date);
-        console.log(selectTime);
-        console.log(date);
+    const submitReservation = async () => {
+        if (
+            (mode === "write" &&
+                (values.birthDate == null ||
+                    values.petName.trim() === "" ||
+                    values.petWeight.trim() === "" ||
+                    values.petSpecies.trim() === "" ||
+                    values.symptom.trim() === "")) ||
+            selectTime === -1 ||
+            (mode === "myPet" && selectPet === -1)
+        ) {
+            alert("입력 항목을 확인해주세요");
+            return;
+        }
+        let time;
+
+        if (selectTime >= 6) {
+            time =
+                (Number(reserveTime[selectTime].substring(0, 1)) + 12).toString() +
+                reserveTime[selectTime].substring(1);
+        } else {
+            time = reserveTime[selectTime];
+        }
+        time = date.toISOString().substring(0, 11) + time + date.toISOString().substring(16);
+        let sendData;
+        if (mode === "write") {
+            sendData = { ...values };
+            let birthDate = values.birthDate.toISOString().substring(0, 10);
+            sendData = {
+                ...sendData,
+                birthDate: birthDate,
+                scheduleDate: time,
+                reVisit: values.reVisit === "reVisit" ? true : false,
+            };
+        } else {
+            sendData = { ...values };
+            console.log(sendData);
+            let pet = userPetList[selectPet];
+            console.log(userPetList[selectPet]);
+            sendData = {
+                ...sendData,
+                petName: pet.name,
+                petWeight: pet.weight,
+                petSpecies: pet.species,
+                scheduleDate: time,
+                reVisit: values.reVisit === "reVisit" ? true : false,
+            };
+        }
+        // console.log(sendData, "등록"); // 진료 등록용 데이터
+        let sendSchedule = schedule.bitmask; //
+        console.log(sendData);
+        sendSchedule =
+            sendSchedule.substring(0, selectTime) + "1" + sendSchedule.substring(selectTime + 1, sendSchedule.length);
+        console.log(sendSchedule);
+        let sendScheduleData = { doctorId: doctor.id, plusDay: schedule.diff, bitmask: sendSchedule };
+        // const data = await updateSchedule(sendScheduleData);
+        // console.log(data);
+        // const result = await addTreatment(sendData)
+        // console.log(result);
+        navigate(`/petodoctor/userreservationpayment/`, { state: { data: sendData, treatmentId: 831 , hospital : hospital } }); // 하드코딩대신 resultId필요
     };
     const diffDay = (date) => {
         let now = new Date();
@@ -151,7 +208,8 @@ function HospitalSearchReservation(props) {
     };
 
     const refreshSchedule = async (diff) => {
-        setSchedule((await getSchedule(params.doctorId, diff)).bitmask);
+        const schedule = (await getSchedule(params.doctorId, diff)).bitmask;
+        setSchedule({ ...schedule, bitmask: schedule, diff: diff });
     };
 
     useEffect(() => {
@@ -161,15 +219,17 @@ function HospitalSearchReservation(props) {
     const location = useLocation();
     useEffect(() => {
         const init = async () => {
-            const hospital = await getHosiptal(params.hospitalId);
             const doctor = await getDoctorInfo(params.doctorId);
-            const schedule = (await getSchedule(params.doctorId, 0)).bitmask;
-            setOriginSchedule(schedule);
-            setSchedule(schedule);
-            setHospital(hospital);
-            setDoctor(doctor);
-            setLeadDoctor(location.state.leadDoctor.name);
-            setDoctorCount(location.state.doctorList.length);
+            const scheduleData = (await getSchedule(params.doctorId, 0)).bitmask;
+            setPetList(await petList());
+            setValues({ ...values, hospitalId: doctor.hospitalId, doctorId: doctor.id, price: doctor.price });
+            setSchedule({ ...schedule, bitmask: scheduleData });
+            setHospital(await getHosiptal(params.hospitalId));
+            setDoctor({
+                ...doctor,
+                leadDoctor: location.state.leadDoctor.name,
+                doctorCount: location.state.doctorList.length,
+            });
         };
         init();
     }, []);
@@ -235,8 +295,8 @@ function HospitalSearchReservation(props) {
                                             </Box>
                                         </Grid>
                                         <Grid item xs={4}>
-                                            <Box sx={{ height: "45px" }}>{leadDoctor}</Box>
-                                            <Box>{doctorCount}</Box>
+                                            <Box sx={{ height: "45px" }}>{doctor.leadDoctor}</Box>
+                                            <Box>{doctor.doctorCount}</Box>
                                         </Grid>
                                     </Grid>
                                 </Box>
@@ -295,34 +355,131 @@ function HospitalSearchReservation(props) {
                             <LocalizationProvider dateAdapter={AdapterDateFns}>
                                 <Grid container>
                                     <Grid item xs={8}>
-                                        <Box sx={{ fontWeight: "bold", mt: 3, fontSize: 22 }}> 기본정보</Box>
-                                        <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
-                                            <InputLabel htmlFor='filled-adornment-name'>이름</InputLabel>
-                                            <FilledInput
-                                                id='filled-adornment-name'
+                                        <Box sx={{ fontWeight: "bold", mt: 3, fontSize: 22 }}>
+                                            기본정보
+                                            <FormControl sx={{ mx: 2 }}>
+                                                <RadioGroup
+                                                    row
+                                                    aria-labelledby='demo-row-radio-buttons-group-label'
+                                                    name='row-radio-buttons-group'
+                                                    value={mode}
+                                                    onChange={handleChange("mode")}>
+                                                    <FormControlLabel
+                                                        value='write'
+                                                        control={<Radio />}
+                                                        label='직접 입력'
+                                                    />
+                                                    <FormControlLabel
+                                                        value='myPet'
+                                                        control={<Radio />}
+                                                        label='나의 반려동물'
+                                                    />
+                                                </RadioGroup>
+                                            </FormControl>
+                                        </Box>
+                                        {mode === "write" ? (
+                                            <Grid container>
+                                                <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
+                                                    <TextField
+                                                        id='outlined-basic'
+                                                        label='이름'
+                                                        variant='outlined'
+                                                        value={values.petName}
+                                                        onChange={handleChange("petName")}
+                                                    />
+                                                </FormControl>
+                                                <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
+                                                    <TextField
+                                                        id='outlined-basic'
+                                                        label='종'
+                                                        variant='outlined'
+                                                        value={values.petSpecies}
+                                                        onChange={handleChange("petSpecies")}
+                                                    />
+                                                </FormControl>
+                                                <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
+                                                    <TextField
+                                                        id='outlined-basic'
+                                                        label='체중'
+                                                        variant='outlined'
+                                                        value={values.petWeight}
+                                                        onChange={handleChange("petWeight")}
+                                                    />
+                                                </FormControl>
+                                                <FormControl fullWidth sx={{ m: 1 }}>
+                                                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                                        <DatePicker
+                                                            label='생년월일'
+                                                            value={values.birthDate}
+                                                            onChange={(newValue) => {
+                                                                setValues({ ...values, birthDate: newValue });
+                                                            }}
+                                                            renderInput={(params) => <TextField {...params} />}
+                                                        />
+                                                    </LocalizationProvider>
+                                                </FormControl>{" "}
+                                            </Grid>
+                                        ) : (
+                                            <Box sx={{ mt: 2 }}>
+                                                <FormControl sx={{ mx: 2 }}>
+                                                    <RadioGroup
+                                                        aria-labelledby='demo-row-radio-buttons-group-label'
+                                                        name='row-radio-buttons-group'
+                                                        value={selectPet}
+                                                        onChange={handleChange("selectPet")}>
+                                                        {userPetList.length === 0
+                                                            ? ""
+                                                            : userPetList.map((item, index) => (
+                                                                  <FormControlLabel
+                                                                      key={index}
+                                                                      value={index}
+                                                                      control={<Radio />}
+                                                                      label={item.name}
+                                                                  />
+                                                              ))}
+                                                    </RadioGroup>
+                                                </FormControl>
+                                            </Box>
+                                        )}
+                                        {/* <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
+                                            <TextField
+                                                id='outlined-basic'
+                                                label='이름'
+                                                variant='outlined'
                                                 value={values.petName}
                                                 onChange={handleChange("petName")}
-                                                startAdornment={<InputAdornment position='start'></InputAdornment>}
                                             />
                                         </FormControl>
                                         <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
-                                            <InputLabel htmlFor='filled-adornment-specific'>종</InputLabel>
-                                            <FilledInput
-                                                id='filled-adornment-specific'
+                                            <TextField
+                                                id='outlined-basic'
+                                                label='종'
+                                                variant='outlined'
                                                 value={values.petSpecies}
                                                 onChange={handleChange("petSpecies")}
-                                                startAdornment={<InputAdornment position='start'></InputAdornment>}
                                             />
                                         </FormControl>
                                         <FormControl fullWidth sx={{ m: 1 }} variant='filled'>
-                                            <InputLabel htmlFor='filled-adornment-weight'>몸무게</InputLabel>
-                                            <FilledInput
-                                                id='filled-adornment-weight'
+                                            <TextField
+                                                id='outlined-basic'
+                                                label='체중'
+                                                variant='outlined'
                                                 value={values.petWeight}
                                                 onChange={handleChange("petWeight")}
-                                                startAdornment={<InputAdornment position='start'></InputAdornment>}
                                             />
                                         </FormControl>
+                                        <FormControl fullWidth sx={{ m: 1 }}>
+                                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                                <DatePicker
+                                                    label='생년월일'
+                                                    value={values.birthDate}
+                                                    onChange={(newValue) => {
+                                                        setValues({ ...values, birthDate: newValue });
+                                                    }}
+                                                    renderInput={(params) => <TextField {...params} />}
+                                                />
+                                            </LocalizationProvider>
+                                        </FormControl> */}
                                     </Grid>
 
                                     <Grid item xs={4} md={2}>
@@ -348,7 +505,7 @@ function HospitalSearchReservation(props) {
                             <AccessTimeIcon /> 시간 선택
                         </Box>
                         <Grid container sx={{ mt: 2 }}>
-                            {[...schedule].map((item, index) => (
+                            {[...schedule.bitmask].map((item, index) => (
                                 <Grid item xs={3} key={index}>
                                     <MyButton time={reserveTime[index]} item={item} index={index} />
                                 </Grid>

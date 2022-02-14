@@ -14,7 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -130,4 +132,30 @@ public class HospitalController {
 
         return new ResponseEntity<ResVO<List<Hospital>>>(result, status);
     }
+
+    @PostMapping("/profile/{hospitalId}")
+    @Operation(summary = "프로필 업데이트", description = "프로필 사진을 업데이트한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "401", description = "인증 실패"),
+            @ApiResponse(responseCode = "500", description = "서버 오류")
+    })
+    public ResponseEntity<ResVO<String>> updateProfile(
+            @PathVariable @Parameter(description = "병원 아이디") Long hospitalId,
+            @RequestParam("profileImgUrl") @Parameter(description = "프로필 사진") MultipartFile multipartFile,
+            HttpServletRequest req) {
+        ResVO<String> result = new ResVO<>();
+        HttpStatus status = null;
+        try{
+            status = HttpStatus.OK;
+            hospitalService.updateProfile(hospitalId, multipartFile) ;
+            result.setMessage("성공");
+        } catch (Exception e){
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            result.setMessage("서버 오류");
+        }
+
+        return new ResponseEntity<ResVO<String>>(result, status);
+    }
+
 }

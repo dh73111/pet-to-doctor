@@ -16,7 +16,7 @@ import DatePicker from "@mui/lab/DatePicker";
 import TextField from "@mui/material/TextField";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { userTreatmentInfo } from "api/treatment";
 import { useSelector } from "react-redux";
 

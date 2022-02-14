@@ -6,7 +6,8 @@ function UserPets(props) {
     const pet = props.pet;
     const petCoverStyle = {
         width: "100%",
-        height: "140px",
+        height: "100%",
+        minHeight: "140px",
         backgroundImage: `url(${process.env.PUBLIC_URL}/img/dogDefaultProfile.jpg)`,
         backgroundSize: "cover",
     };

@@ -34,7 +34,7 @@ function UserJoin(props) {
     const handleStreetChange = (prop) => (event) => {
         setValues({
             ...values,
-            ["address"]: {
+            address: {
                 city: values.address.city,
                 zipcode: values.address.zipcode,
                 street: event.target.value,
@@ -73,28 +73,28 @@ function UserJoin(props) {
         }
     };
     async function userRegister(user) {
-        await registerUser({
-            email: user.email,
-            password: user.password,
-            name: user.name,
-            tel: user.tel,
-            address: {
-                zipcode: user.zipcode,
-                city: user.city,
-                street: user.street,
-            },
-            pets: [
-                {
-                    name: user.pets.name,
-                    birthDate: user.pets.birthDate,
-                    species: user.pets.species,
-                    weight: user.pets.weight,
-                },
-            ],
-        });
-        dispatch({ type: "register" });
-        alert("가입 성공");
-        navigate("/petodoctor");
+        // await registerUser({
+        //     email: user.email,
+        //     password: user.password,
+        //     name: user.name,
+        //     tel: user.tel,
+        //     address: {
+        //         zipcode: user.address.zipcode,
+        //         city: user.address.city,
+        //         street: user.address.street,
+        //     },
+        //     pets: [
+        //         {
+        //             name: user.pets[0].name,
+        //             birthDate: user.pets[0].birthDate,
+        //             species: user.pets[0].species,
+        //             weight: user.pets[0].weight,
+        //         },
+        //     ],
+        // });
+        // dispatch({ type: "register" });
+        // alert("가입 성공");
+        navigate(`/petodoctor/usersignupconfirm/${user.email}`);
     }
 
     const [pet, setPet] = useState({
@@ -140,7 +140,7 @@ function UserJoin(props) {
         console.log(fullAddress, data.zonecode, data.sido);
         setValues({
             ...values,
-            ["address"]: { city: fullAddress, zipcode: data.zonecode },
+            address: { city: fullAddress, zipcode: data.zonecode },
         });
         // console.log(values);
         handleClose();
