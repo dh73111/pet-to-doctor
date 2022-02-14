@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -15,6 +15,8 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { prescriptionAll } from "../../api/prescription";
+
 function createData(no, state, deliveryNo) {
     return { no, state, deliveryNo };
 }
@@ -35,49 +37,11 @@ const Root = styled("div")`
     }
 `;
 
-const CustomTablePagination = styled(TablePaginationUnstyled)`
-    & .MuiTablePaginationUnstyled-toolbar {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-
-        @media (min-width: 768px) {
-            flex-direction: row;
-            align-items: center;
-        }
-    }
-
-    & .MuiTablePaginationUnstyled-selectLabel {
-        margin: 0;
-    }
-
-    & .MuiTablePaginationUnstyled-displayedRows {
-        margin: 0;
-
-        @media (min-width: 768px) {
-            margin-left: auto;
-        }
-    }
-
-    & .MuiTablePaginationUnstyled-spacer {
-        display: none;
-    }
-
-    & .MuiTablePaginationUnstyled-actions {
-        display: flex;
-        gap: 0.25rem;
-    }
-`;
 function DoctorPerscription(props) {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [value, setValue] = React.useState(new Date());
     const [state, setState] = React.useState("");
-
-    // Avoid a layout jump when reaching the last page with empty rows.
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
     const [open, setOpen] = React.useState(false);
     const handleOpen = (event) => {
         console.log(event.target.value);
@@ -89,6 +53,24 @@ function DoctorPerscription(props) {
         setState(event.target.value);
     };
 
+    /*
+    const doctorId = useSelector((store) => store.user.id);
+    const [prescriptions, setPrescription] = useState([]);
+    const [onLoad, setOnLoad] = useState(true);
+
+    useEffect(() => {
+        const getdata = async () => {
+            const data = await prescriptionAll(doctorId);
+            console.log(data, "data");
+            setReservations(data);
+        };
+        getdata();
+        setOnLoad(false);
+
+        console.log(reservations, "reservations");
+    }, []);
+    */
+
     const style = {
         position: "absolute",
         top: "50%",
@@ -98,19 +80,11 @@ function DoctorPerscription(props) {
         bgcolor: "background.paper",
         boxShadow: 24,
     };
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
 
     return (
         <Container>
             <Grid container>
-                <Typography variant="h4" component="h1" sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
+                <Typography variant='h4' component='h1' sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
                     처방현황
                 </Typography>
             </Grid>
@@ -120,8 +94,8 @@ function DoctorPerscription(props) {
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DatePicker
                             disableFuture
-                            label="날짜"
-                            openTo="year"
+                            label='날짜'
+                            openTo='year'
                             views={["year", "month", "day"]}
                             value={value}
                             onChange={(newValue) => {
@@ -134,8 +108,13 @@ function DoctorPerscription(props) {
                 <Grid item xs={2}>
                     <Box sx={{ width: 120 }}>
                         <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label">ALL</InputLabel>
-                            <Select labelId="demo-simple-select-label" id="demo-simple-select" value={state} label="state" onChange={handleChange}>
+                            <InputLabel id='demo-simple-select-label'>ALL</InputLabel>
+                            <Select
+                                labelId='demo-simple-select-label'
+                                id='demo-simple-select'
+                                value={state}
+                                label='state'
+                                onChange={handleChange}>
                                 <MenuItem value={10}>결제 대기</MenuItem>
                                 <MenuItem value={20}>결제 완료</MenuItem>
                             </Select>
@@ -146,7 +125,7 @@ function DoctorPerscription(props) {
             <Grid container>
                 <Grid item xs={12}>
                     <Root sx={{ width: "100%", mt: 3 }}>
-                        <table aria-label="custom pagination table" className="favhospital">
+                        <table aria-label='custom pagination table' className='favhospital'>
                             <thead>
                                 <tr>
                                     <th>처방번호</th>
@@ -156,19 +135,25 @@ function DoctorPerscription(props) {
                                 </tr>
                             </thead>
                             <tbody>
-                                {(rowsPerPage > 0 ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : rows).map((row) => (
+                                {(rowsPerPage > 0
+                                    ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                    : rows
+                                ).map((row) => (
                                     <tr key={row.no}>
                                         <td>{row.no}</td>
                                         <td>
                                             {" "}
-                                            <Button sx={{ fontWeight: "bold", display: "block" }} value={row.no} onClick={handleOpen}>
+                                            <Button
+                                                sx={{ fontWeight: "bold", display: "block" }}
+                                                value={row.no}
+                                                onClick={handleOpen}>
                                                 처방전
                                             </Button>
                                         </td>
-                                        <td align="right">{row.state}</td>
-                                        <td align="right">
+                                        <td align='right'>{row.state}</td>
+                                        <td align='right'>
                                             {row.deliveryNo === "" ? (
-                                                <Button color="inherit" variant="contained">
+                                                <Button color='inherit' variant='contained'>
                                                     등록
                                                 </Button>
                                             ) : (
@@ -177,40 +162,16 @@ function DoctorPerscription(props) {
                                         </td>
                                     </tr>
                                 ))}
-
-                                {emptyRows > 0 && (
-                                    <tr style={{ height: 41 * emptyRows }}>
-                                        <td colSpan={3} />
-                                    </tr>
-                                )}
                             </tbody>
-                            <tfoot>
-                                <tr sx={{ width: 1200 }}>
-                                    <CustomTablePagination
-                                        rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-                                        colSpan={6}
-                                        count={rows.length}
-                                        rowsPerPage={rowsPerPage}
-                                        page={page}
-                                        componentsProps={{
-                                            select: {
-                                                "aria-label": "rows per page",
-                                            },
-                                            actions: {
-                                                showFirstButton: true,
-                                                showLastButton: true,
-                                            },
-                                        }}
-                                        onPageChange={handleChangePage}
-                                        onRowsPerPageChange={handleChangeRowsPerPage}
-                                    />
-                                </tr>
-                            </tfoot>
                         </table>
                     </Root>
                 </Grid>
             </Grid>
-            <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby='modal-modal-title'
+                aria-describedby='modal-modal-description'>
                 <Box sx={style}>
                     <PerscriptionDetail onClose={handleClose}></PerscriptionDetail>
                 </Box>

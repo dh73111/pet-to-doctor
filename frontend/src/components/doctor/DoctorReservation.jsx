@@ -9,7 +9,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import TablePaginationUnstyled from "@mui/base/TablePaginationUnstyled";
-import { Typography, Modal } from "@mui/material";
+import { Typography, Modal, Skeleton } from "@mui/material";
 import ReservationDetail from "../commons/ReservationDetail";
 import DatePicker from "@mui/lab/DatePicker";
 import TextField from "@mui/material/TextField";
@@ -17,14 +17,7 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { treatments } from "../../api/treatment.js";
 import { useSelector } from "react-redux";
-function createData(no, date, time, state, detail) {
-    return { no, date, time, state, detail };
-}
-
-const rows = [
-    createData(1, "2022-01-19", "15:30", "RES_REQUEST", "자세히 보기"),
-    createData(2, "2022-01-19", "15:30", "RES_REQUEST", "자세히 보기"),
-].sort((a, b) => (a.no < b.no ? -1 : 1));
+import { Link } from "react-router-dom";
 
 const Root = styled("div")`
     table {
@@ -40,47 +33,13 @@ const Root = styled("div")`
     }
 `;
 
-const CustomTablePagination = styled(TablePaginationUnstyled)`
-    & .MuiTablePaginationUnstyled-toolbar {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-
-        @media (min-width: 768px) {
-            flex-direction: row;
-            align-items: center;
-        }
-    }
-
-    & .MuiTablePaginationUnstyled-selectLabel {
-        margin: 0;
-    }
-
-    & .MuiTablePaginationUnstyled-displayedRows {
-        margin: 0;
-
-        @media (min-width: 768px) {
-            margin-left: auto;
-        }
-    }
-
-    & .MuiTablePaginationUnstyled-spacer {
-        display: none;
-    }
-
-    & .MuiTablePaginationUnstyled-actions {
-        display: flex;
-        gap: 0.25rem;
-    }
-`;
 function DoctorReservation(props) {
     const doctorId = useSelector((store) => store.user.id);
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    const [value, setValue] = React.useState(new Date());
-    const [state, setState] = React.useState("");
-    const [open, setOpen] = React.useState(false);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [value, setValue] = useState(new Date());
+    const [state, setState] = useState("");
+    const [open, setOpen] = useState(false);
     const handleOpen = (event) => {
         console.log(event.target.value);
         setOpen(true);
@@ -101,67 +60,38 @@ function DoctorReservation(props) {
         boxShadow: 24,
         boxSizing: "border-box",
     };
-
-    // Avoid a layout jump when reaching the last page with empty rows.
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
-    console.log(doctorId, "1");
-
     const [reservations, setReservations] = useState([]);
-    // const getReservations = async () => {
-    //     const data = await treatments("691");
-    //     // console.log(reservations.data);
-    //     setReservations(data);
-    //     // console.log(reservation);
-    // };
-    // useEffect(() => {
-    //     getReservations();
-    //     console.log(reservations);
-    // }, []);
+    const [onLoad, setOnLoad] = useState(true);
+    const [type, setType] = useState("");
+
     useEffect(() => {
         const getdata = async () => {
-            const data = await treatments("691");
+            const data = await treatments(doctorId);
+            console.log(data, "data");
             setReservations(data);
         };
         getdata();
-        console.log(reservations);
+        setOnLoad(false);
+
+        console.log(reservations, "reservations");
     }, []);
+
+    const handleChangeCompleted = (event) => {
+        setType("예약");
+    };
+    const handleChangeCanceled = (event) => {
+        setType("취소");
+    };
     return (
         <Container>
             <Grid container>
                 <Typography variant='h4' component='h1' sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
                     받은예약
                 </Typography>
-                {/* <Grid item xs={4}></Grid>
-                <Grid item xs={4}>
-                    <Box
-                        sx={{
-                            background: "#CDEEF4",
-                            mt: 10,
-                            width: "100%",
-                            height: "80px",
-                            fontWeight: "bold",
-                            textAlign: "center",
-                            fontSize: 30,
-                            pt: 5,
-                        }}
-                    >
-                        받은 예약
-                    </Box>
-                </Grid>
-                <Grid item xs={4}></Grid> */}
             </Grid>
             <Grid container>
                 <Grid item xs={8}></Grid>
-                <Grid item xs={2}>
+                <Grid item xs={2} sx={{ px: 4 }}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DatePicker
                             disableFuture
@@ -185,6 +115,7 @@ function DoctorReservation(props) {
                                 id='demo-simple-select'
                                 value={state}
                                 label='state'
+                                size='small'
                                 onChange={handleChange}>
                                 <MenuItem value={10}>예약 요청</MenuItem>
                                 <MenuItem value={20}>예약 취소</MenuItem>
@@ -195,10 +126,9 @@ function DoctorReservation(props) {
                 </Grid>
             </Grid>
             <Grid container>
-                {/* <Grid item xs={2}></Grid> */}
                 <Grid item xs={12}>
                     <Root sx={{ mt: 3 }}>
-                        <table aria-label='custom pagination table' className='favhospital'>
+                        <table className='favhospital'>
                             <thead>
                                 <tr>
                                     <th>예약번호</th>
@@ -209,71 +139,62 @@ function DoctorReservation(props) {
                                     <th>예약승인</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                {(rowsPerPage > 0
-                                    ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                    : rows
-                                ).map((row) => (
-                                    <tr key={row.no}>
-                                        <td style={{ width: 160 }}> {row.no}</td>
-                                        <td style={{ width: 160 }} align='right'>
-                                            {row.date}
-                                        </td>
-                                        <td style={{ width: 160 }} align='right'>
-                                            {row.time}
-                                        </td>
-                                        <td style={{ width: 160 }} align='right'>
-                                            {row.state}
-                                        </td>
-                                        <td style={{ width: 160 }} align='right'>
-                                            <Button
-                                                sx={{ fontWeight: "bold", display: "block" }}
-                                                value={row.no}
-                                                onClick={handleOpen}>
-                                                {row.detail}
-                                            </Button>
-                                        </td>
-                                        <td style={{ width: 160 }} align='right'>
-                                            <Button variant='contained'>승인</Button>
-                                            <Button variant='contained' color='error' sx={{ mx: 2 }}>
-                                                취소
-                                            </Button>
-                                        </td>
-                                    </tr>
-                                ))}
-
-                                {emptyRows > 0 && (
-                                    <tr style={{ height: 41 * emptyRows }}>
-                                        <td colSpan={3} />
-                                    </tr>
-                                )}
-                            </tbody>
-                            <tfoot>
-                                <tr sx={{ width: 1200 }}>
-                                    <CustomTablePagination
-                                        rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-                                        colSpan={6}
-                                        count={rows.length}
-                                        rowsPerPage={rowsPerPage}
-                                        page={page}
-                                        componentsProps={{
-                                            select: {
-                                                "aria-label": "rows per page",
-                                            },
-                                            actions: {
-                                                showFirstButton: true,
-                                                showLastButton: true,
-                                            },
-                                        }}
-                                        onPageChange={handleChangePage}
-                                        onRowsPerPageChange={handleChangeRowsPerPage}
-                                    />
+                            {onLoad === 0 ? (
+                                <tr>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
                                 </tr>
-                            </tfoot>
+                            ) : (
+                                <>
+                                    <tbody>
+                                        {reservations.map((res, idx) => {
+                                            return (
+                                                <tr key={idx}>
+                                                    <td>{idx + 1}</td>
+                                                    <td>{res.scheduleDate.substring(0, 10)}</td>
+                                                    <td>{res.scheduleDate.substring(11, 16)}</td>
+                                                    <td>{res.type}</td>
+                                                    {/* <td>{convertor[treat.type]}</td> */}
+                                                    <td>
+                                                        {res.perscriptionId ? (
+                                                            "X"
+                                                        ) : (
+                                                            <Link
+                                                                to={`/petodoctor/reservation/${res.id}`}
+                                                                state={res.id}>
+                                                                예약 내용
+                                                            </Link>
+                                                        )}
+                                                    </td>
+                                                    <td>
+                                                        <Button onClick={handleChangeCompleted}>승인</Button>
+                                                        <Button onClick={handleChangeCanceled}>취소</Button>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </>
+                            )}
                         </table>
                     </Root>
                 </Grid>
-                <Grid item xs={2}></Grid>
             </Grid>
 
             <Modal
