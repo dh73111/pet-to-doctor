@@ -52,20 +52,37 @@ function DoctorPrescription(props) {
     };
     const handleClose = () => setOpen(false);
 
-    const handleChange = (event) => {
-        setState(event.target.value);
+    const [onLoad, setOnLoad] = useState(true);
+    const doctorId = useSelector((store) => store.user.id);
+    const [prescriptionsInfo, setPrescriptionInfo] = useState([]);
+    const [prescriptions, setPrescription] = useState([]);
+    const [prescComplete, setPrescComplete] = useState([]);
+    const [prescUncomplete, setPrescUncomplete] = useState([]);
+    const convertor = {
+        COMPLETE: "결제완료",
+        UNCOMPELETE: "결제대기",
     };
 
-    const [onLoad, setOnLoad] = useState(true);
-
-    const doctorId = useSelector((store) => store.user.id);
-    const [prescriptions, setPrescription] = useState([]);
+    const conditions = ["COMPLELTE", "UNCOMPLELTE"];
 
     useEffect(() => {
         const getdata = async () => {
             const data = await prescriptionAll(doctorId);
             console.log(data, "data");
-            setPrescription(data);
+            let tempCompleteList = [];
+            let tempUncompleteList = [];
+            for (let item of data) {
+                const status = item.type;
+                if (status === "COMPLETE") {
+                    tempCompleteList.push(item);
+                } else if (status === "UNCOMPLETE") {
+                    tempUncompleteList.push(item);
+                }
+            }
+            setPrescription(data); // 전체 처방전
+            setPrescriptionInfo(data);
+            setPrescComplete(tempCompleteList);
+            setPrescUncomplete(tempUncompleteList);
         };
         getdata();
 
@@ -75,6 +92,20 @@ function DoctorPrescription(props) {
         console.log(prescriptions, "prescriptions");
     }, []);
 
+    const handleChange = (event) => {
+        setState(event.target.value);
+        switch (event.target.value) {
+            case 0:
+                setPrescription(prescriptionsInfo);
+                break;
+            case 1:
+                setPrescription(prescComplete);
+                break;
+            case 2:
+                setPrescription(prescUncomplete);
+                break;
+        }
+    };
     const style = {
         position: "absolute",
         top: "50%",
@@ -113,14 +144,10 @@ function DoctorPrescription(props) {
                     <Box sx={{ width: 120 }}>
                         <FormControl fullWidth>
                             <InputLabel id='demo-simple-select-label'>ALL</InputLabel>
-                            <Select
-                                labelId='demo-simple-select-label'
-                                id='demo-simple-select'
-                                value={state}
-                                label='state'
-                                onChange={handleChange}>
-                                <MenuItem value={10}>결제 대기</MenuItem>
-                                <MenuItem value={20}>결제 완료</MenuItem>
+                            <Select id='demo-simple-select' value={state} label='state' onChange={handleChange}>
+                                <MenuItem value={0}>모두 보기</MenuItem>
+                                <MenuItem value={1}>결제 완료</MenuItem>
+                                <MenuItem value={2}>결제 대기</MenuItem>
                             </Select>
                         </FormControl>
                     </Box>
@@ -177,8 +204,8 @@ function DoctorPrescription(props) {
                                                             </Link>
                                                         )}
                                                     </td>
-                                                    <td>{res.type}</td>
-                                                    <td>{res.type === "COMPLETE" ? res.innvoiceCode : "x"}</td>
+                                                    <td>{res.type === "COMPLETE" ? "결제 완료" : " 결제 대기"}</td>
+                                                    <td>{res.type === "COMPLETE" ? res.innvoiceCode : ""}</td>
                                                     <td>
                                                         <button>운송장 번호 등록</button>
                                                     </td>

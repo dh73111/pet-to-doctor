@@ -48,7 +48,6 @@ async function treatments(doctorId) {
     return (await api.get(`/treatment/doctor/all/${doctorId}`)).data.data;
 }
 
-export { treatmentInfo, userTreatmentInfo, doctorTreatmentAllInfo, doctorTreatmentInfo, addTreatment, treatmentState, treatmentPay, treatments };
 export {
     treatmentInfo,
     userTreatmentInfo,
@@ -58,4 +57,5 @@ export {
     treatmentState,
     treatmentPay,
     userAllTreatmentList,
+    treatments
 };
