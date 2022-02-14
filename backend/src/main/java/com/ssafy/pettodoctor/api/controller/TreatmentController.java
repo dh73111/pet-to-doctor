@@ -187,8 +187,10 @@ public class TreatmentController {
         return new ResponseEntity<ResVO<Long>>(result, status);
     }
 
-    @PutMapping("/{treatmentId}")
-    @Operation(summary = "진료 상태 수정", description = "진료 정보 수정한다.")
+    @PutMapping("/cancel/{treatmentId}")
+    @Operation(summary = "진료 취소",
+            description = " RES_REQUEST, RES_PAID, RES_CONFIRMED -> RES_CANCLE" +
+                    "시 사용한다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공"),
             @ApiResponse(responseCode = "401", description = "인증 실패"),
@@ -197,12 +199,54 @@ public class TreatmentController {
     })
     public ResponseEntity<ResVO<TreatmentRes>> updateTreatmentState(
             @PathVariable @Parameter(description = "진료키") Long treatmentId,
-            @RequestBody @Parameter(description = "진료 정보 상태")TreatmentType treatmentType) {
+            @RequestParam @Parameter(description = "취소 사유")String reason) {
         ResVO<TreatmentRes> result = new ResVO<>();
         HttpStatus status = null;
 
         try{
-            Treatment treatment = treatmentService.updateTreatment(treatmentId, treatmentType);
+            Treatment treatment = treatmentService.cancleTreatment(treatmentId, reason);
+
+            result.setData(TreatmentRes.convertToRes(treatment));
+            result.setMessage("성공");
+            status = HttpStatus.OK;
+        } catch (Exception e){
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            result.setMessage("서버오류");
+        }
+
+        return new ResponseEntity<ResVO<TreatmentRes>>(result, status);
+    }
+
+    @PutMapping("/{treatmentId}")
+    @Operation(summary = "진료 상태 수정",
+            description = "RES_PAID -> RES_CONFIRMED" +
+                    ", RES_CONFIRMED -> RES_COMPLETE " +
+                    "시 사용한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "401", description = "인증 실패"),
+            @ApiResponse(responseCode = "404", description = "사용자 없음"),
+            @ApiResponse(responseCode = "500", description = "서버 오류")
+    })
+    public ResponseEntity<ResVO<TreatmentRes>> updateTreatmentState(
+            @PathVariable @Parameter(description = "진료키") Long treatmentId,
+            @RequestParam @Parameter(description = "진료 정보 상태")TreatmentType treatmentType) {
+        ResVO<TreatmentRes> result = new ResVO<>();
+        HttpStatus status = null;
+
+        try{
+            Treatment treatment = null;
+            //Treatment treatment = treatmentService.updateTreatment(treatmentId, treatmentType);
+
+            switch(treatmentType){
+                case RES_CONFIRMED:
+                    treatment = treatmentService.updateConfirm(treatmentId);
+                    break;
+                case RES_COMPLETE:
+                    treatment = treatmentService.updateComplete(treatmentId);
+                    break;
+            }
+
             result.setData(TreatmentRes.convertToRes(treatment));
             result.setMessage("성공");
             status = HttpStatus.OK;
@@ -215,7 +259,8 @@ public class TreatmentController {
     }
 
     @PutMapping("/payment/{treatmentId}")
-    @Operation(summary = "결제 정보 수정", description = "진료 정보 수정한다.")
+    @Operation(summary = "결제 정보 수정"
+            , description = "진료 정보 수정한다. TreatmentType이 RES_PAID로 변경된다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공"),
             @ApiResponse(responseCode = "401", description = "인증 실패"),

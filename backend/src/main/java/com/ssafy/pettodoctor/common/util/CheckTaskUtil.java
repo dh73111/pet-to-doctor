@@ -37,7 +37,7 @@ public class CheckTaskUtil {
             Treatment treatment = paymentService.findById(this.treatmentId);
             // 여전히 결제 or 컨펌이 안된 경우
         if(treatment.getType().equals(this.treatmentType)) {
-            paymentService.cancleTreatment(this.treatmentId);
+            paymentService.cancleTreatment(this.treatmentId, "컨펌 지연 시간 초과");
         }
             System.out.println("체크 테스크 종료");
 

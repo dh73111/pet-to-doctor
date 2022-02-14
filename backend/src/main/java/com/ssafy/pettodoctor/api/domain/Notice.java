@@ -32,6 +32,9 @@ public class Notice {
     private Boolean isChecked;
     private LocalDateTime noticeDate;
 
+
+
+    // == 생성 메서드 == //
     public static Notice createNotice(Account account, Treatment treatment, NoticePostReq req) {
         Notice notice = new Notice();
         notice.setAccount(account);
@@ -45,4 +48,18 @@ public class Notice {
 
         return notice;
     }
+
+    public static Notice createNotice2(Account account, Treatment treatment, NoticeType type, String content){
+        Notice notice = new Notice();
+        notice.setAccount(account);
+        notice.setContent(content);
+        notice.setType(type);
+        notice.setTreatment(treatment);
+        notice.setIsChecked(false);
+
+        notice.setNoticeDate(LocalDateTime.now());
+
+        return notice;
+    }
+
 }
