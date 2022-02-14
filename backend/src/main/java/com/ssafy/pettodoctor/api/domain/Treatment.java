@@ -33,6 +33,8 @@ public class Treatment {
     private Hospital hospital;
 
     private String paymentCode;
+    private Integer price;
+
     private LocalDateTime scheduleDate;
     @Enumerated(value = EnumType.STRING)
     private TreatmentType type;
@@ -44,9 +46,6 @@ public class Treatment {
     private LocalDate birthDate;
     private String petSpecies;
     private String petWeight;
-
-    private Integer price;
-    private String url;
 
     // 생성자
     public static Treatment createTreatment(TreatmentPostReq req
