@@ -88,7 +88,7 @@ function UserReservation(props) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [value, setValue] = useState(new Date());
-    const [state, setState] = useState("");
+    const [state, setState] = useState(0);
     const [treatmentInfo, setTreatmentInfo] = useState([]);
     const [treatAllList, setTreatAllList] = useState([]);
     const [treatRequest, setTreatRequest] = useState([]);
@@ -122,11 +122,18 @@ function UserReservation(props) {
         "VST_CONFIRMED",
         "VST_COMPLETED",
     ];
+    const dateCheck = (list, date) => {
+        let checkList = [];
+        let selectDay = date.toISOString().substring(0, 10);
+        for (let item of list) {
+            if (item.scheduleDate.substring(0, 10) === selectDay) checkList.push(item);
+        }
+        return checkList;
+    };
     useEffect(() => {
         const init = async () => {
             console.log("useEffect");
             const list = await userAllTreatmentList(userId);
-
             console.log(list, "list");
             let tempRequestList = [];
             let tempCancelList = [];
@@ -147,7 +154,8 @@ function UserReservation(props) {
                     tempCompleteList.push(item);
                 }
             }
-            setTreatmentInfo(list);
+            console.log(value.toISOString(), "날짜!!!");
+            setTreatmentInfo(dateCheck(list, value));
             setTreatAllList(list);
             setTreatRequest(tempRequestList);
             setTreatPaid(tempPaidList);
@@ -160,35 +168,36 @@ function UserReservation(props) {
     }, []);
 
     const [open, setOpen] = useState(false);
-    const handleOpen = (event) => {
-        console.log(event.target.value);
-        setOpen(true);
-    };
     const handleClose = () => setOpen(false);
-
+    const enterConsulting = () => {};
     const handleChange = (event) => {
         setState(event.target.value);
-        switch (event.target.value) {
+        setList(event.target.value, value);
+    };
+    console.log(treatmentInfo);
+    const setList = (value, date) => {
+        console.log(value);
+        switch (value) {
             case 0:
-                setTreatmentInfo(treatAllList);
+                setTreatmentInfo(dateCheck(treatAllList, date));
                 break;
             case 1:
-                setTreatmentInfo(treatRequest);
+                setTreatmentInfo(dateCheck(treatRequest, date));
                 break;
             case 2:
-                setTreatmentInfo(treatCancel);
+                setTreatmentInfo(dateCheck(treatCancel, date));
                 break;
             case 3:
-                setTreatmentInfo(treatPaid);
+                setTreatmentInfo(dateCheck(treatPaid, date));
                 break;
             case 4:
-                setTreatmentInfo(treatConfirm);
+                setTreatmentInfo(dateCheck(treatConfirm, date));
                 break;
             case 5:
-                setTreatmentInfo(treatComplete);
+                setTreatmentInfo(dateCheck(treatComplete, date));
                 break;
             default:
-                setTreatmentInfo(treatComplete);
+                setTreatmentInfo(dateCheck(treatAllList, date));
                 break;
         }
     };
@@ -204,26 +213,8 @@ function UserReservation(props) {
         boxShadow: 24,
     };
 
-    // Avoid a layout jump when reaching the last page with empty rows.
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
-
     return (
         <Container>
-            <button
-                onClick={() => {
-                    console.log(treatmentInfo);
-                }}>
-                모든예약현황
-            </button>
             <Grid container>
                 <Typography variant='h4' component='h1' sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
                     내 예약 예약현황
@@ -240,7 +231,9 @@ function UserReservation(props) {
                             views={["year", "month", "day"]}
                             value={value}
                             onChange={(newValue) => {
+                                console.log(newValue, "newValue");
                                 setValue(newValue);
+                                setList(state, newValue);
                             }}
                             size='small'
                             renderInput={(params) => <TextField {...params} />}
@@ -324,14 +317,22 @@ function UserReservation(props) {
                                             return (
                                                 <tr key={idx}>
                                                     <td>{idx + 1}</td>
-                                                    <td>{treat.scheduleDate}</td>
+                                                    <td>{treat.scheduleDate.substring(0, 10)}</td>
                                                     <td>{treat.scheduleDate.substring(11, 16)}</td>
-                                                    <td>{treat.hospitalId}</td>
-                                                    <td>{treat.doctorId}</td>
+                                                    <td>{treat.hospitalName}</td>
+                                                    <td>{treat.doctorName}</td>
                                                     <td>{convertor[treat.type]}</td>
-                                                    <td>{treat.url ? treat.url : "X"}</td>
                                                     <td>
-                                                        {treat.perscriptionId ? (
+                                                        <Button
+                                                            variant='contained'
+                                                            onClick={() => {
+                                                                enterConsulting();
+                                                            }}>
+                                                            입장하기
+                                                        </Button>
+                                                    </td>
+                                                    <td>
+                                                        {treat.prescriptionId === null ? (
                                                             "X"
                                                         ) : (
                                                             <Link
@@ -388,28 +389,6 @@ function UserReservation(props) {
                                         <td colSpan={3} />
                                     </tr>
                                 )} */}
-                            <tfoot>
-                                <tr sx={{ width: 1200 }}>
-                                    <CustomTablePagination
-                                        rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-                                        colSpan={9}
-                                        count={rows.length}
-                                        rowsPerPage={rowsPerPage}
-                                        page={page}
-                                        componentsProps={{
-                                            select: {
-                                                "aria-label": "rows per page",
-                                            },
-                                            actions: {
-                                                showFirstButton: true,
-                                                showLastButton: true,
-                                            },
-                                        }}
-                                        onPageChange={handleChangePage}
-                                        onRowsPerPageChange={handleChangeRowsPerPage}
-                                    />
-                                </tr>
-                            </tfoot>
                         </table>
                     </Root>
                 </Grid>

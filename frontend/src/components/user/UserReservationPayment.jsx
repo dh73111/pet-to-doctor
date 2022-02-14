@@ -46,7 +46,6 @@ function UserReservationPayment(props) {
                 amount: state.data.price,
             },
             async (response) => {
-                console.log(response, " 결과!!!!!!!!!!");
                 await treatmentPay(state.treatmentId, { paymentCode: state.treatmentId, price: state.data.price });
                 navigate("/petodoctor/userreservationcomplete");
             }
