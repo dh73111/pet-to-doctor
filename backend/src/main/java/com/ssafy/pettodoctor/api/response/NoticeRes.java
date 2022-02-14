@@ -31,7 +31,9 @@ public class NoticeRes {
     }
 
     public static NoticeRes convertToRes(Notice n){
-        NoticeRes nr = new NoticeRes(n.getId(), n.getAccount().getId(), n.getContent(), n.getUrl(), n.getType(), n.getIsChecked(), n.getNoticeDate());
+        NoticeRes nr = new NoticeRes(n.getId(),
+                n.getAccount() != null ? n.getAccount().getId() : null,
+                n.getContent(), n.getUrl(), n.getType(), n.getIsChecked(), n.getNoticeDate());
         return nr;
     }
 
