@@ -4,8 +4,8 @@
 /* .notosanskr * {
 } */
 * {
-    /* font-family: "Noto Sans KR", sans-serif; */
-    font-family: "나눔스퀘어", "NanumSquare", sans-serif;
+    font-family: "Noto Sans KR", sans-serif;
+    /* font-family: "나눔스퀘어", "NanumSquare", sans-serif; */
     margin: 0;
     -ms-overflow-style: none;
     color: "#263747";

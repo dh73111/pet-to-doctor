@@ -226,7 +226,7 @@ function UserReservation(props) {
             </button>
             <Grid container>
                 <Typography variant='h4' component='h1' sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
-                    내 예약 예약현황
+                    내 예약
                 </Typography>
             </Grid>
             <Grid container>
