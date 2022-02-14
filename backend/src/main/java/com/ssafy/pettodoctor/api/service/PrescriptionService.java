@@ -20,8 +20,12 @@ public class PrescriptionService {
     private final MedicineRepository medicineRepository;
     private final NoticeRepository noticeRepository;
 
-    public List<Prescription> findByIdList(Long doctor_id, TreatmentType type) {
-        return prescriptionRepository.findByIdList(doctor_id, type);
+    public List<Prescription> findByDoctorIdAndType(Long doctor_id, TreatmentType type) {
+        return prescriptionRepository.findByDoctorIdAndType(doctor_id, type);
+    }
+
+    public List<Prescription> findByDoctorId(Long doctor_id) {
+        return prescriptionRepository.findByDoctorId(doctor_id);
     }
 
     @Transactional
