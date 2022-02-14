@@ -7,6 +7,7 @@ import Grid from "@mui/material/Grid";
 import { Container, Typography } from "@mui/material";
 import Footer from "./Footer";
 import { NavLink } from "react-router-dom";
+import HomeSwiper from "./commons/HomeSwiper";
 
 const MyImage = styled("div")({
     position: "relative",
@@ -38,8 +39,8 @@ const gridItemStyle = {
 function Home(props) {
     return (
         <Box style={{ border: 1, backgroundColor: "#fafafa" }}>
-            <MyImage>
-                {/* <img src={`${process.env.PUBLIC_URL}/img/image132.png`} width="100%" alt="mainVisual" /> */}
+            {/* <MyImage>
+                <img src={`${process.env.PUBLIC_URL}/img/image132.png`} width="100%" alt="mainVisual" />
                 <Typography
                     className='mainTitle'
                     sx={{ fontSize: "42px", fontWeight: "600", pt: 26, fontFamily: "NanumSquare" }}
@@ -47,7 +48,8 @@ function Home(props) {
                     <Typography sx={{ fontSize: "24px" }}>원격 반료동물 진료 플랫폼</Typography>" 펫투닥터로 우리아이
                     건강을 지켜주세요 "
                 </Typography>
-            </MyImage>
+            </MyImage> */}
+            <HomeSwiper />
             <Container sx={{ my: 4 }}>
                 <Grid container style={cardStyle} className='card'>
                     <Grid item sx={gridItemStyle} xs={12} md={4}>

@@ -73,14 +73,16 @@ function Review() {
                     <Typography sx={{ fontWeight: "bold", fontSize: 22, float: "left" }}>
                         모든 후기({reviews.length})
                     </Typography>
-                    <Box sx={{ border: 1, float: "right" }}>
+                    <Box sx={{ float: "right" }}>
                         <Button
+                            sx={{ mr: 1 }}
                             onClick={() => {
                                 sortByTime("최신순");
                             }}>
                             최신순
                         </Button>
                         <Button
+                            sx={{ mr: 1 }}
                             onClick={() => {
                                 sortByTime("작성순");
                             }}>

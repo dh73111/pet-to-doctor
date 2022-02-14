@@ -67,6 +67,10 @@
     /* border: 1px solid blue; */
     border-top: 1px solid #e5e5e5;
     margin-bottom: 200px;
+    padding-top: 5px;
+}
+.favhospital th {
+    padding-bottom: 10px;
 }
 .favhospital thead tr {
     border-bottom: 1px solid black;
@@ -102,4 +106,5 @@
     border-radius: 4px;
     color: white;
     cursor: pointer;
+    transform: translateX(-50%);
 }
