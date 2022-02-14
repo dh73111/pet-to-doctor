@@ -19,10 +19,10 @@ function ReviewSwiper(props) {
                 }}
                 speed={1500}
                 loop={true}
-                // autoplay={{
-                //     delay: 7000,
-                //     disableOnInteraction: false,
-                // }}
+                autoplay={{
+                    delay: 7000,
+                    disableOnInteraction: false,
+                }}
                 spaceBetween={0}
                 slidesPerView={1}
                 modules={[Navigation, Pagination, Autoplay]}>
@@ -40,7 +40,6 @@ function ReviewSwiper(props) {
                             <Typography sx={{ fontSize: 20, fontWeight: "600", fontFamily: "NanumSquare", pt: 4 }}>
                                 #첫번째 #처방 #친절 #저렴
                             </Typography>
-                            <Typography sx={{ float: "right" }}>★★★★★</Typography>
                             <Typography>정*린 회원님</Typography>
                             <Typography
                                 sx={{ pt: 1.5, fontFamily: "NanumSquare", height: "156px", textOverflow: "ellipsis" }}>
@@ -70,7 +69,6 @@ function ReviewSwiper(props) {
                             <Typography sx={{ fontSize: 20, fontWeight: "600", fontFamily: "NanumSquare", pt: 4 }}>
                                 #강아지 #행동교정 #정기상담 #편리
                             </Typography>
-                            <Typography sx={{ float: "right" }}>★★★★★</Typography>
                             <Typography>한*은 회원님</Typography>
                             <Typography
                                 sx={{ pt: 1.5, fontFamily: "NanumSquare", height: "156px", textOverflow: "ellipsis" }}>
@@ -98,7 +96,6 @@ function ReviewSwiper(props) {
                             <Typography sx={{ fontSize: 20, fontWeight: "600", fontFamily: "NanumSquare", pt: 4 }}>
                                 #페럿 #처방 #펫탑동물병원
                             </Typography>
-                            <Typography sx={{ float: "right" }}>★★★★★</Typography>
                             <Typography>나*정 회원님</Typography>
                             <Typography
                                 sx={{ pt: 1.5, fontFamily: "NanumSquare", height: "156px", textOverflow: "ellipsis" }}>
@@ -128,7 +125,6 @@ function ReviewSwiper(props) {
                             <Typography sx={{ fontSize: 20, fontWeight: "600", fontFamily: "NanumSquare", pt: 4 }}>
                                 #햄스터 #진료 #병원찾기 #편리
                             </Typography>
-                            <Typography sx={{ float: "right" }}>★★★★★</Typography>
                             <Typography>김*나 회원님</Typography>
                             <Typography
                                 sx={{ pt: 1.5, fontFamily: "NanumSquare", height: "156px", textOverflow: "ellipsis" }}>
@@ -155,7 +151,6 @@ function ReviewSwiper(props) {
                             <Typography sx={{ fontSize: 20, fontWeight: "600", fontFamily: "NanumSquare", pt: 4 }}>
                                 #약처방 #검진 #진료 #저렴
                             </Typography>
-                            <Typography sx={{ float: "right" }}>★★★★★</Typography>
                             <Typography>김*숙 회원님</Typography>
                             <Typography
                                 sx={{ pt: 1.5, fontFamily: "NanumSquare", height: "156px", textOverflow: "ellipsis" }}>

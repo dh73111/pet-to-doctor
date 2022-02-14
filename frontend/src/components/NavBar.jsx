@@ -247,7 +247,7 @@ const NavTop = (props) => {
                                                 handleAlert();
                                             }
                                         }}
-                                        sx={{ fontSize: "30px", color: "#309FB3" }}
+                                        sx={{ fontSize: "30px", color: "#1dc6f6" }}
                                     />
                                     {alarmVisible && <Alarm />}
                                 </Box>
@@ -256,7 +256,7 @@ const NavTop = (props) => {
                             <Tooltip title='마이페이지' arrow>
                                 <Box style={{ display: "inline-block" }} className='test'>
                                     <PersonOutlineOutlined
-                                        sx={{ fontSize: "30px", color: "#309FB3" }}
+                                        sx={{ fontSize: "30px", color: "#1dc6f6" }}
                                         onClick={() => {
                                             if (isLogin === true) {
                                                 navigate("/petodoctor/usermypage");
@@ -272,7 +272,7 @@ const NavTop = (props) => {
                             </NavLink> */}
                             <Tooltip title='자주하는 질문' arrow>
                                 <NavLink to='/petodoctor/qna' className='test2'>
-                                    <LiveHelpOutlined sx={{ fontSize: "30px", color: "#309FB3" }} />
+                                    <LiveHelpOutlined sx={{ fontSize: "30px", color: "#1dc6f6" }} />
                                 </NavLink>
                             </Tooltip>
                         </Box>
@@ -348,16 +348,19 @@ function NavBottom(props) {
                 <Box sx={{ width: "100%", display: { xs: "none", md: "flex" }, justifyContent: "space-between" }}>
                     {doctorpages.map((page) => (
                         <NavLink to={page.path} key={page.path} style={{ textDecoration: "none" }} className='gnb'>
-                            {props.selectedNav === page.id
-                                ? MyButton(page, "#29A1B1", "bold")
-                                : MyButton(page, "black")}
+                            {props.selectedNav === page.id ? MyButton(page, "#1dc6f6", "800") : MyButton(page, "black")}
                         </NavLink>
                     ))}
                 </Box>
             );
         } else {
             return (
-                <Box sx={{ width: "100%", display: { xs: "none", md: "flex" }, justifyContent: "space-between" }}>
+                <Box
+                    sx={{
+                        width: "100%",
+                        display: { xs: "none", md: "flex" },
+                        justifyContent: "space-between",
+                    }}>
                     {pages.map((page) => (
                         <NavLink
                             to={page.path}
@@ -374,9 +377,7 @@ function NavBottom(props) {
                                 }
                                 e.preventDefault();
                             }}>
-                            {props.selectedNav === page.id
-                                ? MyButton(page, "#29A1B1", "bold")
-                                : MyButton(page, "black")}
+                            {props.selectedNav === page.id ? MyButton(page, "#1dc6f6", "800") : MyButton(page, "black")}
                         </NavLink>
                     ))}
                     <Snackbar
