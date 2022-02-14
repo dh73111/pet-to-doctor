@@ -46,7 +46,7 @@ public class ReviewRes {
                     r.getHospital() != null ? r.getHospital().getId() : null,
                     r.getContent(), r.getRate(), r.getCreateTime(),
                     r.getUser() != null ? r.getUser().getName() : null,
-                    r. getHospital() != null ? r.getHospital().getName() : null,
+                    r.getHospital() != null ? r.getHospital().getName() : null,
                     r.getHospital() != null ? r.getHospital().getAddress() : null);
             result.add(rr);
         }
