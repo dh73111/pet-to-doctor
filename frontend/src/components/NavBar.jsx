@@ -38,8 +38,8 @@ const pages = [
 const doctorpages = [
     { id: 1, path: "/petodoctor/doctorreservation", name: "받은예약" },
     { id: 2, path: "/petodoctor/doctordiagnosis", name: "진료현황" },
-    { id: 3, path: "/petodoctor/doctorperscripton", name: "처방현황" },
-    { id: 4, path: "/petodoctor/doctorperscriptonform", name: "처방작성 테스트용" },
+    { id: 3, path: "/petodoctor/doctorprescription", name: "처방현황" },
+    { id: 4, path: "/petodoctor/doctorprescriptonform", name: "처방작성 테스트용" },
 ];
 const settings = [
     { title: "내 예약", link: "/petodoctor/userreservation" },

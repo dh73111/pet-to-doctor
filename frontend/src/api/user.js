@@ -40,6 +40,7 @@ async function changePassword(password) {
 //   api.post(`/user/login`, JSON.stringify(user)).then(success).catch(fail);
 // }
 async function loginUser(user) {
+    console.log(JSON.stringify(user));
     return (await api.post(`/account/login`, JSON.stringify(user))).data.data;
 }
 

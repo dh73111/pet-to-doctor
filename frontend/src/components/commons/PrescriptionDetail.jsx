@@ -3,17 +3,17 @@ import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import { medicineInfo, checkPrescription } from "api/prescription";
 
-function PerscriptionDetail(props) {
+function PrescriptionDetail(props) {
     const location = useLocation(); // 넘겨주는 user값 location으로 주소
-    const [persc, setPersc] = useState({});
+    const [presc, setPresc] = useState({});
     const [drugs, setDrugs] = useState([]);
     useEffect(() => {
         const init = async () => {
-            const percId = location.state;
-            const data = await checkPrescription(percId);
-            setPersc(data);
-            console.log(persc);
-            const drugs = await medicineInfo(percId);
+            const precId = location.state;
+            const data = await checkPrescription(precId);
+            setPresc(data);
+            console.log(presc);
+            const drugs = await medicineInfo(precId);
             setDrugs(drugs);
             console.log(drugs, "약");
         };
@@ -37,8 +37,8 @@ function PerscriptionDetail(props) {
                     <Box sx={{ mt: 2 }}>특이사항</Box>
                 </Grid>
                 <Grid item xs={6} sx={{ textAlign: "right", fontWeight: "bold", mb: 3 }}>
-                    <Box sx={{ mt: 2 }}>{persc.diagnosis} </Box>
-                    <Box sx={{ mt: 2 }}>{persc.opinion}</Box>
+                    <Box sx={{ mt: 2 }}>{presc.diagnosis} </Box>
+                    <Box sx={{ mt: 2 }}>{presc.opinion}</Box>
                     <Box sx={{ mt: 2 }}>
                         {drugs.map((drug, idx) => {
                             return (
@@ -48,10 +48,10 @@ function PerscriptionDetail(props) {
                             );
                         })}
                     </Box>
-                    <Box sx={{ mt: 2 }}>{persc.administration}</Box>
-                    <Box sx={{ mt: 2 }}>{persc.medicineCost}</Box>
-                    <Box sx={{ mt: 2 }}>{persc.isShipping}</Box>
-                    <Box sx={{ mt: 2 }}>{persc.additionalCost}</Box>
+                    <Box sx={{ mt: 2 }}>{presc.administration}</Box>
+                    <Box sx={{ mt: 2 }}>{presc.medicineCost}</Box>
+                    <Box sx={{ mt: 2 }}>{presc.isShipping}</Box>
+                    <Box sx={{ mt: 2 }}>{presc.additionalCost}</Box>
                 </Grid>
             </Grid>
             <div className='devider'></div>
@@ -67,4 +67,4 @@ function PerscriptionDetail(props) {
     );
 }
 
-export default PerscriptionDetail;
+export default PrescriptionDetail;

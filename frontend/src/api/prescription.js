@@ -8,7 +8,7 @@ async function addInvoice(prescriptionId) {
 }
 
 // 진단서 작성
-async function addPerscription(treatmentId) {
+async function addPrescription(treatmentId) {
   return (await api.post(`/prescription/${treatmentId}`)).data.data;
 }
 
@@ -27,4 +27,8 @@ async function checkPrescriptionList(id, status) {
   return (await api.get(`/prescription/list?doctor_id=${id}&type=${status}'`)).data.data;
 }
 
-export { addInvoice, addPerscription, medicineInfo, checkPrescription, checkPrescriptionList };
+// 의사의 전체 진단서 리스트 조회
+async function prescriptionAll(id) {
+  return (await api.get(`/prescription/list/doctor?doctor_id=${id}`)).data.data;
+}
+export { addInvoice, addPrescription, medicineInfo, checkPrescription, checkPrescriptionList, prescriptionAll };

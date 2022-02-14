@@ -185,24 +185,22 @@ function HospitalSearchReservation(props) {
                 petName: pet.name,
                 petWeight: pet.weight,
                 petSpecies: pet.species,
+                birthDate: pet.birthDate,
                 scheduleDate: time,
                 reVisit: values.reVisit === "reVisit" ? true : false,
             };
         }
-        // console.log(sendData, "등록"); // 진료 등록용 데이터
-        let sendSchedule = schedule.bitmask; //
-        console.log(sendData);
+        let sendSchedule = schedule.bitmask;
+        console.log(sendData, " send Data!!!");
         sendSchedule =
             sendSchedule.substring(0, selectTime) + "1" + sendSchedule.substring(selectTime + 1, sendSchedule.length);
         console.log(sendSchedule);
         let sendScheduleData = { doctorId: doctor.id, plusDay: schedule.diff, bitmask: sendSchedule };
-        // const data = await updateSchedule(sendScheduleData);
-        // console.log(data);
-        // const result = await addTreatment(sendData)
-        // console.log(result);
+        await updateSchedule(sendScheduleData);
+        const result = await addTreatment(sendData);
         navigate(`/petodoctor/userreservationpayment/`, {
-            state: { data: sendData, treatmentId: 831, hospital: hospital },
-        }); // 하드코딩대신 resultId필요
+            state: { data: sendData, treatmentId: result, hospital: hospital },
+        });
     };
     const diffDay = (date) => {
         let now = new Date();
