@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { TextField, Grid, Checkbox, Button, FormControlLabel, Typography, Box, Link, Paper } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { loginUser, changePassword, userInfo } from "api/user.js";
+import { getDoctorInfo } from "api/doctor.js";
 import { useNavigate } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import { useDispatch } from "react-redux";
@@ -31,10 +32,18 @@ function UserLoginModal(props) {
     const REDIRECT_URI = "http://localhost:3000/kakaooauth";
     const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
     const userLogin = async (user) => {
+        console.log(user.email, user.password);
         const loginRes = await loginUser({ email: user.email, password: user.password });
+        console.log(loginRes);
         sessionStorage.setItem("accessToken", loginRes);
         let decode_token = jwtDecode(loginRes);
-        const info = await userInfo(decode_token.sub);
+        console.log(decode_token);
+        let info;
+        if (decode_token.role === "ROLE_DOCTOR") info = await getDoctorInfo(decode_token.sub);
+        else {
+            info = await userInfo(decode_token.sub);
+        }
+
         await dispatch({ type: "login", userData: info });
         props.onClose();
         console.log(user);

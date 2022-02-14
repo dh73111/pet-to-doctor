@@ -36,6 +36,7 @@ function UserReservationPayment(props) {
     const { IMP } = window;
     IMP.init("imp36272840");
     const navigate = useNavigate();
+    console.log(String(state.treatmentId));
     const pay = async () => {
         IMP.request_pay(
             {
@@ -46,6 +47,7 @@ function UserReservationPayment(props) {
                 amount: state.data.price,
             },
             async (response) => {
+                console.log(response);
                 await treatmentPay(state.treatmentId, { paymentCode: state.treatmentId, price: state.data.price });
                 navigate("/petodoctor/userreservationcomplete");
             }

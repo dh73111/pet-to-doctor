@@ -183,12 +183,13 @@ function HospitalSearchReservation(props) {
                 petName: pet.name,
                 petWeight: pet.weight,
                 petSpecies: pet.species,
+                birthDate: pet.birthDate,
                 scheduleDate: time,
                 reVisit: values.reVisit === "reVisit" ? true : false,
             };
         }
-        let sendSchedule = schedule.bitmask; //
-        console.log(sendData);
+        let sendSchedule = schedule.bitmask;
+        console.log(sendData, " send Data!!!");
         sendSchedule =
             sendSchedule.substring(0, selectTime) + "1" + sendSchedule.substring(selectTime + 1, sendSchedule.length);
         console.log(sendSchedule);
