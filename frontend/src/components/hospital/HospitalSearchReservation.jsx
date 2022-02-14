@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
-import FilledInput from "@mui/material/FilledInput";
 import Paper from "@mui/material/Paper";
-import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
-import InputAdornment from "@mui/material/InputAdornment";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
@@ -25,9 +22,9 @@ import { getSchedule, updateSchedule } from "api/schedule";
 import { addTreatment } from "api/treatment";
 import { useSelector } from "react-redux";
 import DatePicker from "@mui/lab/DatePicker";
-import { RestaurantRounded } from "@mui/icons-material";
 import { petList } from "api/pet";
 function HospitalSearchReservation(props) {
+    const navigate = useNavigate();
     const { kakao } = window;
     const store = useSelector((store) => store);
     const [values, setValues] = useState({
@@ -179,8 +176,8 @@ function HospitalSearchReservation(props) {
         } else {
             sendData = { ...values };
             console.log(sendData);
-            console.log(userPetList[selectPet]);
             let pet = userPetList[selectPet];
+            console.log(userPetList[selectPet]);
             sendData = {
                 ...sendData,
                 petName: pet.name,
@@ -201,6 +198,7 @@ function HospitalSearchReservation(props) {
         // console.log(data);
         // const result = await addTreatment(sendData)
         // console.log(result);
+        navigate(`/petodoctor/userreservationpayment/`, { state: { data: sendData, treatmentId: 831 , hospital : hospital } }); // 하드코딩대신 resultId필요
     };
     const diffDay = (date) => {
         let now = new Date();

@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Button, Container, Grid, Paper, Typography } from "@mui/material";
 import DraftsOutlinedIcon from "@mui/icons-material/DraftsOutlined";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams, useNavigate } from "react-router-dom";
 
 const newTheme = createTheme({
     palette: {
@@ -19,8 +19,9 @@ const newTheme = createTheme({
         },
     },
 });
-const userEmail = "petToDoctor@test.com";
 function UserSignupConfirm(props) {
+    const userEmail = useParams().userid;
+    const navigate = useNavigate();
     return (
         <div>
             <ThemeProvider theme={newTheme}>
@@ -43,7 +44,12 @@ function UserSignupConfirm(props) {
                             </NavLink>
                             &nbsp;로 이메일 주소 수정을 요청해 주시기 바랍니다.
                         </Typography>
-                        <Button variant='contained' style={{ width: "176px" }}>
+                        <Button
+                            variant='contained'
+                            style={{ width: "176px" }}
+                            onClick={() => {
+                                navigate("/petodoctor");
+                            }}>
                             메인으로 가기
                         </Button>
                         <Typography sx={{ my: 4 }} style={{ fontSize: "12px" }}>
