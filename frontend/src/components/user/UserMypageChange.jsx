@@ -13,6 +13,9 @@ import {
     Button,
     Modal,
     Input,
+    InputAdornment,
+    IconButton,
+    OutlinedInput,
 } from "@mui/material";
 import { useLocation, useParams, NavLink, Link } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -22,6 +25,8 @@ import { useNavigate } from "react-router-dom";
 import { modifyUser, modifyUserPic, checkPassword, changePassword } from "../../api/user.js";
 import { modifyPetPic } from "api/pet";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -161,13 +166,15 @@ function UserMypageChange(props) {
     const requestPwChange = async () => {
         setChanged(true);
         const prev = passwords.password;
+        console.log(prev, "비번체크할것");
         const currentPwConf = await checkPassword(prev);
-        console.log(currentPwConf.data.result);
+        console.log(currentPwConf.data.result, "checkpassword result");
         if (currentPwConf.data.result === true) {
             if (passwordError === "비밀번호 일치") {
                 const changePw = await changePassword(passwords);
                 console.log(changePw, "비번변경완료");
                 alert("비밀번호가 성공적으로 변경되었습니다.");
+                window.location.href = "http://localhost:3000/petodoctor/usermypage";
             } else {
                 alert("새로운 비밀번호와 확인이 일치하지 않습니다.");
             }
@@ -197,6 +204,14 @@ function UserMypageChange(props) {
     };
 
     const [changed, setChanged] = useState(false);
+    const [showPassword, setShowPassword] = useState({
+        password: false,
+        newPassword: false,
+        newPasswordConf: false,
+    });
+    const handleClickShowPassword = (category, value) => {
+        setShowPassword({ ...showPassword, [category]: !value });
+    };
 
     return (
         <ThemeProvider theme={newTheme}>
@@ -410,7 +425,7 @@ function UserMypageChange(props) {
                                     maxWidth: "600px",
                                     mx: "auto",
                                 }}>
-                                <Box>
+                                <Box sx={{ mt: 2 }}>
                                     <label
                                         for='password'
                                         className='input_required'
@@ -419,22 +434,34 @@ function UserMypageChange(props) {
                                             float: "left",
                                             width: "140px",
                                             textAlign: "left",
-                                            lineHeight: "55px",
+                                            lineHeight: "40px",
                                             marginRight: "20px",
                                         }}>
                                         비밀번호
                                     </label>
-                                    <TextField
+                                    <OutlinedInput
                                         size='small'
+                                        required
+                                        sx={{ backgroundColor: "#FBFBFD", width: "224px" }}
                                         placeholder='비밀번호'
-                                        required //값 반드시 입력
-                                        // type="password"
-                                        name='password'
+                                        type={showPassword.password ? "text" : "password"}
+                                        value={passwords.password}
                                         onChange={handlePasswords("password")}
-                                        sx={{ backgroundColor: "#FBFBFD" }}
+                                        endAdornment={
+                                            <InputAdornment position='end'>
+                                                <IconButton
+                                                    aria-label='toggle password visibility'
+                                                    onClick={(e) => {
+                                                        handleClickShowPassword("password", showPassword.password);
+                                                    }}
+                                                    edge='end'>
+                                                    {showPassword.password ? <VisibilityOff /> : <Visibility />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        }
                                     />
                                 </Box>
-                                <Box>
+                                <Box sx={{ mt: 2 }}>
                                     <label
                                         for='NewPassword'
                                         className='input_required'
@@ -443,22 +470,38 @@ function UserMypageChange(props) {
                                             float: "left",
                                             width: "150px",
                                             textAlign: "left",
-                                            lineHeight: "55px",
+                                            lineHeight: "40px",
                                             marginRight: "10px",
                                         }}>
-                                        비밀번호 확인
+                                        새 비밀번호
                                     </label>
-                                    <TextField
+                                    <OutlinedInput
                                         size='small'
+                                        required
+                                        name='NewPassword'
+                                        sx={{ backgroundColor: "#FBFBFD", width: "224px" }}
                                         placeholder='비밀번호'
-                                        required //값 반드시 입력
-                                        name='newPassword'
-                                        type='newPassword'
+                                        type={showPassword.newPassword ? "text" : "password"}
+                                        value={passwords.newPassword}
                                         onChange={handlePasswords("newPassword")}
-                                        sx={{ backgroundColor: "#FBFBFD" }}
+                                        endAdornment={
+                                            <InputAdornment position='end'>
+                                                <IconButton
+                                                    aria-label='toggle password visibility'
+                                                    onClick={() => {
+                                                        handleClickShowPassword(
+                                                            "newPassword",
+                                                            showPassword.newPassword
+                                                        );
+                                                    }}
+                                                    edge='end'>
+                                                    {showPassword.newPassword ? <VisibilityOff /> : <Visibility />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        }
                                     />
                                 </Box>
-                                <Box>
+                                <Box sx={{ mt: 2 }}>
                                     <label
                                         for='confirmNewPassword'
                                         className='input_required'
@@ -467,23 +510,58 @@ function UserMypageChange(props) {
                                             float: "left",
                                             width: "150px",
                                             textAlign: "left",
-                                            lineHeight: "55px",
+                                            lineHeight: "40px",
                                             marginRight: "10px",
                                         }}>
                                         새 비밀번호 확인
                                     </label>
-                                    <TextField
+                                    <OutlinedInput
                                         size='small'
-                                        placeholder='비밀번호'
-                                        required //값 반드시 입력
-                                        type='newPasswordConf'
+                                        required
                                         name='newPasswordConf'
+                                        sx={{ backgroundColor: "#FBFBFD", width: "224px" }}
+                                        placeholder='비밀번호'
+                                        type={showPassword.newPasswordConf ? "text" : "password"}
+                                        value={passwords.newPasswordConf}
                                         onChange={handlePasswords("newPasswordConf")}
-                                        sx={{ backgroundColor: "#FBFBFD" }}
                                         error={passwordError === "비밀번호 불일치"}
                                         color={passwordError === "비밀번호 일치" ? "success" : "primary"}
+                                        endAdornment={
+                                            <InputAdornment position='end'>
+                                                <IconButton
+                                                    aria-label='toggle password visibility'
+                                                    onClick={() => {
+                                                        handleClickShowPassword(
+                                                            "newPasswordConf",
+                                                            showPassword.newPasswordConf
+                                                        );
+                                                    }}
+                                                    edge='end'>
+                                                    {showPassword.newPasswordConf ? <VisibilityOff /> : <Visibility />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        }
                                     />
-                                    <Typography style={{ color: "red", fontSize: "14px" }}>{passwordError}</Typography>
+                                    <Typography
+                                        style={{
+                                            color: "red",
+                                            fontSize: "14px",
+                                            marginTop: "6px",
+                                            marginLeft: "50px",
+                                            textAlign: "center",
+                                        }}>
+                                        {passwordError === "비밀번호 불일치" ? "비밀번호 불일치" : ""}
+                                    </Typography>
+                                    <Typography
+                                        style={{
+                                            color: "green",
+                                            fontSize: "14px",
+                                            marginTop: "6px",
+                                            marginLeft: "36px",
+                                            textAlign: "center",
+                                        }}>
+                                        {passwordError === "비밀번호 일치" ? "비밀번호 일치" : ""}
+                                    </Typography>
                                 </Box>
                                 <Box textAlign='center'>
                                     <Button

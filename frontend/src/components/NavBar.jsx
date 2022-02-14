@@ -234,40 +234,46 @@ const NavTop = (props) => {
                         <MainSearchBar />
                         <Box sx={{ pt: 1, position: "relative" }}>
                             {/* <NavLink to="/petodoctor" className="test"> */}
-                            <Box style={{ display: "inline-block" }} className='test'>
-                                {/* <div onClick={() => setAlarmVisible(!alarmVisible)}> */}
-                                {/* </div> */}
-                                <NotificationsNoneIcon
-                                    onClick={() => {
-                                        if (isLogin === true) {
-                                            setAlarmVisible(!alarmVisible);
-                                        } else {
-                                            handleAlert();
-                                        }
-                                    }}
-                                    sx={{ fontSize: "30px", color: "#309FB3" }}
-                                />
-                                {alarmVisible && <Alarm />}
-                            </Box>
+                            <Tooltip title='알람' arrow>
+                                <Box style={{ display: "inline-block" }} className='test'>
+                                    {/* <div onClick={() => setAlarmVisible(!alarmVisible)}> */}
+                                    {/* </div> */}
+                                    <NotificationsNoneIcon
+                                        onClick={() => {
+                                            if (isLogin === true) {
+                                                setAlarmVisible(!alarmVisible);
+                                            } else {
+                                                handleAlert();
+                                            }
+                                        }}
+                                        sx={{ fontSize: "30px", color: "#309FB3" }}
+                                    />
+                                    {alarmVisible && <Alarm />}
+                                </Box>
+                            </Tooltip>
                             {/* </NavLink> */}
-                            <Box style={{ display: "inline-block" }} className='test'>
-                                <PersonOutlineOutlined
-                                    sx={{ fontSize: "30px", color: "#309FB3" }}
-                                    onClick={() => {
-                                        if (isLogin === true) {
-                                            navigate("/petodoctor/usermypage");
-                                        } else {
-                                            handleAlert();
-                                        }
-                                    }}
-                                />
-                            </Box>
+                            <Tooltip title='마이페이지' arrow>
+                                <Box style={{ display: "inline-block" }} className='test'>
+                                    <PersonOutlineOutlined
+                                        sx={{ fontSize: "30px", color: "#309FB3" }}
+                                        onClick={() => {
+                                            if (isLogin === true) {
+                                                navigate("/petodoctor/usermypage");
+                                            } else {
+                                                handleAlert();
+                                            }
+                                        }}
+                                    />
+                                </Box>
+                            </Tooltip>
                             {/* <NavLink to='/petodoctor/usermypage' className='test'>
                                 <PersonOutlineOutlined sx={{ fontSize: "30px", color: "#309FB3" }} />
                             </NavLink> */}
-                            <NavLink to='/petodoctor/qna' className='test2'>
-                                <LiveHelpOutlined sx={{ fontSize: "30px", color: "#309FB3" }} />
-                            </NavLink>
+                            <Tooltip title='자주하는 질문' arrow>
+                                <NavLink to='/petodoctor/qna' className='test2'>
+                                    <LiveHelpOutlined sx={{ fontSize: "30px", color: "#309FB3" }} />
+                                </NavLink>
+                            </Tooltip>
                         </Box>
                     </Box>
                 </Container>
@@ -298,6 +304,7 @@ const NavTop = (props) => {
 };
 // ------------- 스크롤 STICKY 하단 NAVBAR -------------
 function NavBottom(props) {
+    const navigate = useNavigate();
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [open, setOpen] = useState(false);
     const [mode, setMode] = useState("");
@@ -325,6 +332,10 @@ function NavBottom(props) {
 
     const NavItem = () => {
         // 네비 모드 바꾸기
+        const [alertOpen, setAlertOpen] = useState(false);
+        const handleClick = () => {
+            setAlertOpen(false);
+        };
         if (isLogin) {
             const loginres = sessionStorage.getItem("accessToken");
             let decode_token = jwtDecode(loginres);
@@ -347,12 +358,35 @@ function NavBottom(props) {
             return (
                 <Box sx={{ width: "100%", display: { xs: "none", md: "flex" }, justifyContent: "space-between" }}>
                     {pages.map((page) => (
-                        <NavLink to={page.path} key={page.path} style={{ textDecoration: "none" }} className='gnb'>
+                        <NavLink
+                            to={page.path}
+                            key={page.path}
+                            style={{ textDecoration: "none" }}
+                            className='gnb'
+                            onClick={(e) => {
+                                e.preventDefault();
+                                if (isLogin === false && page.id === 1) {
+                                    setAlertOpen(true);
+                                } else {
+                                    navigate(page.path);
+                                }
+                            }}>
                             {props.selectedNav === page.id
                                 ? MyButton(page, "#29A1B1", "bold")
                                 : MyButton(page, "black")}
                         </NavLink>
                     ))}
+                    <Snackbar
+                        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                        open={alertOpen}
+                        onClose={handleClick}
+                        autoHideDuration={2000}
+                        // key={vertical + horizontal}
+                    >
+                        <Alert onClose={handleClick} severity='warning' sx={{ width: "100%" }}>
+                            로그인 후 이용해주세요
+                        </Alert>
+                    </Snackbar>
                 </Box>
             );
         }

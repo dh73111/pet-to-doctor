@@ -15,9 +15,15 @@ function HomeSwiper(props) {
         <>
             <Swiper
                 navigation={true}
-                Pagination={true}
+                pagination={{
+                    clickable: true,
+                }}
+                speed={1500}
                 loop={true}
-                Autoplay={true}
+                autoplay={{
+                    delay: 7000,
+                    disableOnInteraction: false,
+                }}
                 modules={[Navigation, Pagination, Autoplay]}
                 className='mySwiper'>
                 <SwiperSlide>
@@ -173,7 +179,7 @@ function HomeSwiper(props) {
                                         건강상담, 행동교정, 진료, 약처방까지
                                     </Typography>
                                 </Grid>
-                                <Grid item xs={12} md={6.5} sx={{ mt: { xs: 0, md: 8 } }}>
+                                <Grid item xs={12} md={6.5} sx={{ mt: { xs: 2, md: 8 } }}>
                                     <img src={`${process.env.PUBLIC_URL}/img/main_dog_walk3.gif`} width='600px' />
                                 </Grid>
                             </Grid>
