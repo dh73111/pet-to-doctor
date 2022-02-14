@@ -154,8 +154,8 @@ function UserReservation(props) {
                     tempCompleteList.push(item);
                 }
             }
-            console.log(value.toISOString(), "날짜!!!");
-            setTreatmentInfo(dateCheck(list, value));
+            // console.log(value.toISOString(), "날짜!!!");
+            setTreatmentInfo(list);
             setTreatAllList(list);
             setTreatRequest(tempRequestList);
             setTreatPaid(tempPaidList);
@@ -172,32 +172,59 @@ function UserReservation(props) {
     const enterConsulting = () => {};
     const handleChange = (event) => {
         setState(event.target.value);
+        // setList(event.target.value, value);
         setList(event.target.value, value);
     };
     console.log(treatmentInfo);
-    const setList = (value, date) => {
-        console.log(value);
+    // 날짜용 setList
+    // const setList = (value, date) => {
+    //     console.log(value);
+    //     switch (value) {
+    //         case 0:
+    //             setTreatmentInfo(dateCheck(treatAllList, date));
+    //             break;
+    //         case 1:
+    //             setTreatmentInfo(dateCheck(treatRequest, date));
+    //             break;
+    //         case 2:
+    //             setTreatmentInfo(dateCheck(treatCancel, date));
+    //             break;
+    //         case 3:
+    //             setTreatmentInfo(dateCheck(treatPaid, date));
+    //             break;
+    //         case 4:
+    //             setTreatmentInfo(dateCheck(treatConfirm, date));
+    //             break;
+    //         case 5:
+    //             setTreatmentInfo(dateCheck(treatComplete, date));
+    //             break;
+    //         default:
+    //             setTreatmentInfo(dateCheck(treatAllList, date));
+    //             break;
+    //     }
+    // };
+    const setList = (value) => {
         switch (value) {
             case 0:
-                setTreatmentInfo(dateCheck(treatAllList, date));
+                setTreatmentInfo(treatAllList);
                 break;
             case 1:
-                setTreatmentInfo(dateCheck(treatRequest, date));
+                setTreatmentInfo(treatRequest);
                 break;
             case 2:
-                setTreatmentInfo(dateCheck(treatCancel, date));
+                setTreatmentInfo(treatCancel);
                 break;
             case 3:
-                setTreatmentInfo(dateCheck(treatPaid, date));
+                setTreatmentInfo(treatPaid);
                 break;
             case 4:
-                setTreatmentInfo(dateCheck(treatConfirm, date));
+                setTreatmentInfo(treatConfirm);
                 break;
             case 5:
-                setTreatmentInfo(dateCheck(treatComplete, date));
+                setTreatmentInfo(treatComplete);
                 break;
             default:
-                setTreatmentInfo(dateCheck(treatAllList, date));
+                setTreatmentInfo(treatAllList);
                 break;
         }
     };
@@ -223,7 +250,7 @@ function UserReservation(props) {
             <Grid container>
                 <Grid item xs={8}></Grid>
                 <Grid item xs={2} sx={{ px: 4 }}>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DatePicker
                             disableFuture
                             label='날짜'
@@ -238,7 +265,7 @@ function UserReservation(props) {
                             size='small'
                             renderInput={(params) => <TextField {...params} />}
                         />
-                    </LocalizationProvider>
+                    </LocalizationProvider> */}
                 </Grid>
                 <Grid item xs={2}>
                     <Box sx={{ width: 120 }}>

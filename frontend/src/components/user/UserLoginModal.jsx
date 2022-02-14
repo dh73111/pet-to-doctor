@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { TextField, Grid, Checkbox, Button, FormControlLabel, Typography, Box, Link, Paper } from "@mui/material";
+import { TextField, Grid, Button, Typography, Box, Link } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { loginUser, changePassword, userInfo } from "api/user.js";
+import { loginUser, userInfo } from "api/user.js";
 import { getDoctorInfo } from "api/doctor.js";
 import { useNavigate } from "react-router-dom";
 import jwtDecode from "jwt-decode";
@@ -46,18 +46,8 @@ function UserLoginModal(props) {
 
         await dispatch({ type: "login", userData: info });
         props.onClose();
-        console.log(user);
         navigate("/petodoctor");
     };
-    async function userChangePwd() {
-        await changePassword(
-            { password: "123", passwordConf: "123", newPassword: "1234" },
-            (res) => {
-                console.log(res);
-            },
-            () => {}
-        );
-    }
 
     return (
         <ThemeProvider theme={newTheme}>
@@ -134,7 +124,7 @@ function UserLoginModal(props) {
                                         fullWidth
                                         variant='contained'
                                         sx={{ mt: 3, mb: 1, py: 1 }}>
-                                        의사로그인
+                                        의사 로그인
                                     </Button>
                                 )}
 
@@ -144,11 +134,8 @@ function UserLoginModal(props) {
                                             href='#'
                                             variant='body2'
                                             sx={{ mr: 1, color: "#BABABA" }}
-                                            underline='hover'
-                                            onClick={() => {
-                                                userChangePwd();
-                                            }}>
-                                            이메일찾기
+                                            underline='hover'>
+                                            이메일 찾기
                                         </Link>
                                         <Box sx={{ color: "#CACACA", display: "inline" }}>|</Box>
                                         <Link
@@ -156,7 +143,7 @@ function UserLoginModal(props) {
                                             variant='body2'
                                             sx={{ ml: 1, color: "#BABABA" }}
                                             underline='hover'>
-                                            비밀번호찾기
+                                            비밀번호 찾기
                                         </Link>
                                     </Grid>
                                 </Grid>
