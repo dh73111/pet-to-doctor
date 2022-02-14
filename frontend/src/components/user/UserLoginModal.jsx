@@ -32,18 +32,15 @@ function UserLoginModal(props) {
     const REDIRECT_URI = "http://localhost:3000/kakaooauth";
     const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
     const userLogin = async (user) => {
-        console.log(user.email, user.password);
         const loginRes = await loginUser({ email: user.email, password: user.password });
-        console.log(loginRes);
         sessionStorage.setItem("accessToken", loginRes);
         let decode_token = jwtDecode(loginRes);
-        console.log(decode_token);
         let info;
         if (decode_token.role === "ROLE_DOCTOR") info = await getDoctorInfo(decode_token.sub);
         else {
             info = await userInfo(decode_token.sub);
         }
-
+        info = { ...info, role: decode_token.role };
         await dispatch({ type: "login", userData: info });
         props.onClose();
         navigate("/petodoctor");

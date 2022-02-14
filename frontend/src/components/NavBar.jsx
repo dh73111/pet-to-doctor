@@ -60,6 +60,8 @@ const style = {
 
 // ------------- 상단 NAVBAR -------------
 const NavTop = (props) => {
+    const { socket } = props.store;
+    const { id } = props.store.user;
     const dispatch = useDispatch();
     const navigate = useNavigate();
     // const [anchorElNav, setAnchorElNav] = useState(null);
@@ -176,7 +178,12 @@ const NavTop = (props) => {
                     ) : (
                         <>
                             <Typography>
-                                <NavLink style={style[0]} to='/petodoctor/usermypage'>
+                                <NavLink
+                                    style={style[0]}
+                                    to='/petodoctor/usermypage'
+                                    onClick={() => {
+                                        if (socket !== undefined) socket.emit("disconnectA", id);
+                                    }}>
                                     마이페이지
                                 </NavLink>
                             </Typography>
@@ -185,6 +192,7 @@ const NavTop = (props) => {
                                     style={style[0]}
                                     to='/petodoctor'
                                     onClick={() => {
+                                        if (socket !== undefined) socket.emit("disconnectA", id);
                                         logOut();
                                     }}>
                                     로그아웃
@@ -193,7 +201,13 @@ const NavTop = (props) => {
                         </>
                     )}
                     <Typography sx={{ pl: 1 }}>
-                        <NavLink style={style[1]} key={2} to='/petodoctor/qna'>
+                        <NavLink
+                            style={style[1]}
+                            key={2}
+                            to='/petodoctor/qna'
+                            onClick={() => {
+                                if (socket !== undefined) socket.emit("disconnectA", id);
+                            }}>
                             고객센터
                         </NavLink>
                     </Typography>
@@ -305,6 +319,8 @@ const NavTop = (props) => {
 };
 // ------------- 스크롤 STICKY 하단 NAVBAR -------------
 function NavBottom(props) {
+    const { socket } = props.store;
+    const { id } = props.store.user;
     const navigate = useNavigate();
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [open, setOpen] = useState(false);
@@ -317,7 +333,6 @@ function NavBottom(props) {
     const [alertOpen, setAlertOpen] = useState(false);
 
     const handleCloseNavMenu = (id) => {
-        console.log(id);
         if (id === props.selectNav) props.clickNav(id);
     };
 
@@ -347,7 +362,14 @@ function NavBottom(props) {
             return (
                 <Box sx={{ width: "100%", display: { xs: "none", md: "flex" }, justifyContent: "space-between" }}>
                     {doctorpages.map((page) => (
-                        <NavLink to={page.path} key={page.path} style={{ textDecoration: "none" }} className='gnb'>
+                        <NavLink
+                            to={page.path}
+                            key={page.path}
+                            style={{ textDecoration: "none" }}
+                            onClick={() => {
+                                if (socket !== undefined) socket.emit("disconnectA", id);
+                            }}
+                            className='gnb'>
                             {props.selectedNav === page.id ? MyButton(page, "#1dc6f6", "800") : MyButton(page, "black")}
                         </NavLink>
                     ))}
@@ -368,7 +390,9 @@ function NavBottom(props) {
                             style={{ textDecoration: "none" }}
                             className='gnb'
                             onClick={(e) => {
-                                console.log("클릭");
+                                if (socket !== undefined) {
+                                    socket.emit("disconnectA", id);
+                                }
                                 if (isLogin === false && page.id === 1) {
                                     setAlertOpen(true);
                                     props.clickNav(page.id);
@@ -472,14 +496,15 @@ function NavBottom(props) {
 
 function NavBar() {
     const [open, setOpen] = useState(false);
+    const store = useSelector((store) => store);
     let [selectedNav, setSelectedNav] = useState(0);
     function clickNav(selected) {
         setSelectedNav(selected);
     }
     return (
         <>
-            <NavTop selectedNav={selectedNav} clickNav={clickNav}></NavTop>
-            <NavBottom selectedNav={selectedNav} clickNav={clickNav}></NavBottom>
+            <NavTop selectedNav={selectedNav} store={store} clickNav={clickNav}></NavTop>
+            <NavBottom selectedNav={selectedNav} store={store} clickNav={clickNav}></NavBottom>
         </>
     );
 }

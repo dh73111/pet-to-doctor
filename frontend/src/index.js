@@ -10,7 +10,7 @@ import { persistStore, persistReducer } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { Provider } from "react-redux";
-//
+// react router dom v6
 import { BrowserRouter } from "react-router-dom";
 const persistConfig = {
     key: "root",
@@ -31,7 +31,13 @@ function reducer(currentState, action) {
         newState.isLogin = true;
         return newState;
     }
-    
+
+    if (action.type === "socket") {
+        newState.socket = action.socket;
+        console.log(newState);
+        return newState;
+    }
+
     if (action.type === "logout") {
         newState.user = {};
         newState.isLogin = false;
