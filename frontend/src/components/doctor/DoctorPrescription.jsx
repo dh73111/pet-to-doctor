@@ -4,9 +4,10 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
+import Skeleton from "@mui/material/Skeleton";
 import { styled } from "@mui/system";
 import TablePaginationUnstyled from "@mui/base/TablePaginationUnstyled";
-import PerscriptionDetail from "../commons/PerscriptionDetail";
+import PerscriptionDetail from "../commons/PrescriptionDetail";
 import DatePicker from "@mui/lab/DatePicker";
 import TextField from "@mui/material/TextField";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
@@ -16,6 +17,8 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { prescriptionAll } from "../../api/prescription";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 function createData(no, state, deliveryNo) {
     return { no, state, deliveryNo };
@@ -37,7 +40,7 @@ const Root = styled("div")`
     }
 `;
 
-function DoctorPerscription(props) {
+function DoctorPrescription(props) {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [value, setValue] = React.useState(new Date());
@@ -53,23 +56,24 @@ function DoctorPerscription(props) {
         setState(event.target.value);
     };
 
-    /*
+    const [onLoad, setOnLoad] = useState(true);
+
     const doctorId = useSelector((store) => store.user.id);
     const [prescriptions, setPrescription] = useState([]);
-    const [onLoad, setOnLoad] = useState(true);
 
     useEffect(() => {
         const getdata = async () => {
             const data = await prescriptionAll(doctorId);
             console.log(data, "data");
-            setReservations(data);
+            setPrescription(data);
         };
         getdata();
-        setOnLoad(false);
 
-        console.log(reservations, "reservations");
+        setOnLoad(false);
+        console.log(doctorId, "doctorId");
+
+        console.log(prescriptions, "prescriptions");
     }, []);
-    */
 
     const style = {
         position: "absolute",
@@ -124,8 +128,8 @@ function DoctorPerscription(props) {
             </Grid>
             <Grid container>
                 <Grid item xs={12}>
-                    <Root sx={{ width: "100%", mt: 3 }}>
-                        <table aria-label='custom pagination table' className='favhospital'>
+                    <Root sx={{ mt: 3 }}>
+                        <table className='favhospital'>
                             <thead>
                                 <tr>
                                     <th>처방번호</th>
@@ -134,50 +138,70 @@ function DoctorPerscription(props) {
                                     <th>운송장번호/택배사</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                {(rowsPerPage > 0
-                                    ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                    : rows
-                                ).map((row) => (
-                                    <tr key={row.no}>
-                                        <td>{row.no}</td>
-                                        <td>
-                                            {" "}
-                                            <Button
-                                                sx={{ fontWeight: "bold", display: "block" }}
-                                                value={row.no}
-                                                onClick={handleOpen}>
-                                                처방전
-                                            </Button>
-                                        </td>
-                                        <td align='right'>{row.state}</td>
-                                        <td align='right'>
-                                            {row.deliveryNo === "" ? (
-                                                <Button color='inherit' variant='contained'>
-                                                    등록
-                                                </Button>
-                                            ) : (
-                                                row.deliveryNo
-                                            )}
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
+                            {onLoad === 0 ? (
+                                <tr>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                </tr>
+                            ) : (
+                                <>
+                                    <tbody>
+                                        {prescriptions.map((res, idx) => {
+                                            return (
+                                                <tr key={idx}>
+                                                    <td>{res.id}</td>
+                                                    <td>
+                                                        {res.perscriptionId ? (
+                                                            "X"
+                                                        ) : (
+                                                            <Link
+                                                                to={`/petodoctor/presciption/${res.id}`}
+                                                                state={res.id}>
+                                                                처방 내용
+                                                            </Link>
+                                                        )}
+                                                    </td>
+                                                    <td>{res.type}</td>
+                                                    <td>{res.type === "COMPLETE" ? res.innvoiceCode : "x"}</td>
+                                                    <td>
+                                                        <button>운송장 번호 등록</button>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </>
+                            )}
                         </table>
                     </Root>
                 </Grid>
             </Grid>
+
             <Modal
                 open={open}
                 onClose={handleClose}
                 aria-labelledby='modal-modal-title'
                 aria-describedby='modal-modal-description'>
-                <Box sx={style}>
-                    <PerscriptionDetail onClose={handleClose}></PerscriptionDetail>
-                </Box>
+                <Box sx={style}></Box>
             </Modal>
         </Container>
     );
 }
 
-export default DoctorPerscription;
+export default DoctorPrescription;

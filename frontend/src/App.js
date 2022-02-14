@@ -10,8 +10,8 @@ import HospitalSearchReservation from "./components/hospital/HospitalSearchReser
 import HospitalSearch from "./components/hospital/HospitalSearch";
 import DoctorReservation from "./components/doctor/DoctorReservation";
 import DoctorDianosis from "./components/doctor/DoctorDiagnosis";
-import DoctorPerscription from "./components/doctor/DoctorPerscription";
-import DoctorPerscriptionForm from "components/doctor/DoctorPerscriptionForm";
+import DoctorPrescription from "./components/doctor/DoctorPrescription";
+import DoctorPrescriptionForm from "components/doctor/DoctorPrescriptionForm";
 import DoctorConsuliting from "components/doctor/DoctorConsuliting";
 import DoctorPasswordChange from "./components/doctor/DoctorPasswordChange";
 import DoctorMypage from "components/doctor/DoctorMypage";
@@ -31,8 +31,8 @@ import UserConsulting from "components/user/UserConsulting";
 import UserMedicinePayment from "components/user/UserMedicinePayment";
 import UserRating from "components/user/UserRating";
 import Qna from "components/user/Qna";
-import PerscriptionDetail from "components/commons/PerscriptionDetail";
 import ReservationDetail from "components/commons/ReservationDetail";
+import PrescriptionDetail from "components/commons/PrescriptionDetail"
 function App() {
     const fontTheme = createTheme({
         typography: {
@@ -54,9 +54,9 @@ function App() {
                         {/* doctor */}
                         <Route path='/petodoctor/doctorreservation' element={<DoctorReservation />}></Route>
                         <Route path='/petodoctor/doctordiagnosis' element={<DoctorDianosis />}></Route>
-                        <Route path='/petodoctor/doctorperscripton' element={<DoctorPerscription />}></Route>
+                        <Route path='/petodoctor/doctorprescription' element={<DoctorPrescription />}></Route>
                         <Route path='/petodoctor/doctormypage' element={<DoctorMypage />}></Route>
-                        <Route path='/petodoctor/doctorperscriptonform' element={<DoctorPerscriptionForm />}></Route>
+                        <Route path='/petodoctor/doctorprescriptonform' element={<DoctorPrescriptionForm />}></Route>
                         <Route path='/petodoctor/doctorconsulting' element={<DoctorConsuliting />}></Route>
 
                         {/* user */}
@@ -78,7 +78,7 @@ function App() {
                             path='/petodoctor/userreservationpaymenting'
                             element={<UserReservationPaymenting />}></Route>
                         <Route path='/petodoctor/userreservationcomplete' element={<UserReservationComplete />}></Route>
-                        <Route path='/petodoctor/persciption/:perscId' element={<PerscriptionDetail />}></Route>
+                        <Route path='/petodoctor/presciption/:prescId' element={<PrescriptionDetail />}></Route>
                         <Route path='/petodoctor/reservation/:resId' element={<ReservationDetail />}></Route>
                         <Route path='/petodoctor/usermedipayment' element={<UserMedicinePayment />}></Route>
                         <Route path='/petodoctor/userconsulting/:id' element={<UserConsulting />}></Route>
