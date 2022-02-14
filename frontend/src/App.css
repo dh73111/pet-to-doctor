@@ -1,68 +1,120 @@
 @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+@import url(https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css);
 
 /* .notosanskr * {
 } */
 * {
-  font-family: "Noto Sans KR", sans-serif;
-  margin: 0;
-  -ms-overflow-style: none;
+    font-family: "Noto Sans KR", sans-serif;
+    /* font-family: "나눔스퀘어", "NanumSquare", sans-serif; */
+    margin: 0;
+    -ms-overflow-style: none;
+    color: "#263747";
 }
 .mainTitle {
-  color: white;
-  font-weight: bold;
-  text-shadow: 1px 0px 10px #000;
+    color: white;
+    font-weight: bold;
+    text-shadow: 1px 0px 10px #000;
+}
+.gnb div:hover {
+    color: #1dc6f6;
 }
 .card {
-  /* transform: translateX(-50%); */
-  box-shadow: rgb(0 0 0 / 20%) 0px 2px 1px -1px, rgb(0 0 0 / 14%) 0px 1px 1px 0px, rgb(0 0 0 / 12%) 0px 1px 3px 0px;
-  padding: 20px;
+    /* transform: translateX(-50%); */
+    box-shadow: rgb(0 0 0 / 20%) 0px 2px 1px -1px, rgb(0 0 0 / 14%) 0px 1px 1px 0px, rgb(0 0 0 / 12%) 0px 1px 3px 0px;
+    padding: 20px;
 }
 .searchbar {
-  position: relative;
-  padding: 2px 0;
+    position: relative;
+    padding: 2px 0;
 }
 .mainSearchBar {
-  width: 380px;
-  height: 100%;
-  border: 4px solid #1dc6f6;
-  box-sizing: border-box;
-  padding-left: 10px;
-  font-size: 16px;
+    width: 380px;
+    height: 100%;
+    border: 4px solid #1dc6f6;
+    box-sizing: border-box;
+    padding-left: 10px;
+    font-size: 16px;
 }
+/* 스타일링용 */
+.devider {
+    width: 100%;
+    height: 1px;
+    background-color: rgb(221, 221, 221);
+}
+/* 스타일링용끝 */
+
+/* 회원가입 스타일 */
+.input_required::after {
+    content: "*";
+    display: inline;
+    color: #1dc6f6;
+}
+/* 회원가입 스타일 끝 */
+.pet_card {
+    transition: 0.5s;
+}
+.pet_card:hover {
+    /* border-color: #1dc6f6; */
+    box-shadow: 1px 1px 10px rgb(0 0 0 / 12%);
+    /* border-color: #309fb3; */
+    cursor: pointer;
+}
+
 .mainSearchBar:focus {
-  outline: none;
+    outline: none;
 }
 
 .favhospital {
-  border-spacing: 0;
-  width: 100%;
-  /* border: 1px solid blue; */
-  border-top: 2px solid black;
-  margin-bottom: 200px;
+    border-spacing: 0;
+    width: 100%;
+    /* border: 1px solid blue; */
+    border-top: 1px solid #e5e5e5;
+    margin-bottom: 200px;
+    padding-top: 5px;
+}
+.favhospital th {
+    padding-bottom: 10px;
 }
 .favhospital thead tr {
-  border-bottom: 1px solid black;
+    border-bottom: 1px solid black;
 }
 .favhospital tbody tr td {
-  border-top: 1px solid #e5e5e5;
+    border-top: 1px solid #e5e5e5;
 }
 
 ::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 
 .test {
-  display: inline-block;
-  height: 80%;
-  border-radius: 100px;
-  margin-right: 10px;
+    display: inline-block;
+    height: 80%;
+    border-radius: 100px;
+    margin-right: 10px;
+    cursor: pointer;
 }
 .test2 {
-  display: inline-block;
-  height: 80%;
-  border-radius: 100px;
+    display: inline-block;
+    height: 80%;
+    border-radius: 100px;
 }
 .test:hover,
 .test2:hover {
-  background-color: rgba(0, 0, 0, 0.05);
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.profile-img-upload-btn {
+    padding: 6px 25px;
+    background-color: #1dc6f6;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    transform: translateX(-50%);
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+    color: white !important;
+    fill: white !important;
+    stroke: white !important;
 }

@@ -1,23 +1,29 @@
 import React, { useRef, useEffect, useState } from "react";
 import io from "socket.io-client";
 import { Box, Grid, BottomNavigation, BottomNavigationAction } from "@mui/material";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import MicIcon from "@mui/icons-material/Mic";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
 import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
+import { useDispatch, useSelector } from "react-redux";
 const pc_config = {
-    iceServer: [{ urls: "stun:stun.l.google.com:19302" }],
+    iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
 };
+// const SOCKET_SERVER_URL = "https://i6b209.p.ssafy.io/signaling"; 배포용
 const SOCKET_SERVER_URL = "http://192.168.35.26:9000";
 
 function UserConsulting(props) {
+    const dispatch = useDispatch();
+    const { id } = useParams();
     const navigate = useNavigate();
     const socketRef = useRef();
     const pcRef = useRef();
     const localVideoRef = useRef(null);
     const remoteVideoRef = useRef(null);
     const [state, setState] = useState("doctor");
+    const { user } = useSelector((store) => store);
+    console.log(user);
     let stream;
     const setVideoTracks = async () => {
         try {
@@ -41,17 +47,19 @@ function UserConsulting(props) {
             pcRef.current.oniceconnectionstatechange = (e) => {
                 console.log(e);
             };
+
             pcRef.current.ontrack = (ev) => {
+                console.log(ev.stream);
                 console.log("add remotetrack success");
                 if (remoteVideoRef.current) {
                     remoteVideoRef.current.srcObject = ev.streams[0];
+                    console.log(remoteVideoRef.current.srcObject);
                 }
             };
             socketRef.current.emit("joinRoom", {
-                room: "1234",
+                room: id,
+                userId: user.id,
             });
-            console.dir(localVideoRef.current.srcObject.getVideoTracks());
-            console.dir(localVideoRef.current.srcObject.getAudioTracks());
         } catch (e) {
             console.error(e);
         }
@@ -91,7 +99,7 @@ function UserConsulting(props) {
         const init = async () => {
             socketRef.current = await io.connect(SOCKET_SERVER_URL);
             pcRef.current = await new RTCPeerConnection(pc_config);
-
+            await socketRef.current.emit("disconnectA", user.id);
             socketRef.current.on("all_users", (allUsers) => {
                 if (allUsers.length > 0) {
                     createOffer();
@@ -113,6 +121,11 @@ function UserConsulting(props) {
                 await pcRef.current.addIceCandidate(new RTCIceCandidate(candidate));
                 console.log("candidate add success");
             });
+            socketRef.current.on("invalid", () => {
+                alert("중복 입장은 불가능합니다.");
+                navigate("/petodoctor");
+            });
+            await dispatch({ type: "socket", socket: socketRef.current });
             await setVideoTracks();
         };
 
@@ -135,16 +148,14 @@ function UserConsulting(props) {
         localVideoRef.current.srcObject.getVideoTracks().forEach((track) => {
             track.enabled = !track.enabled;
         });
-        console.dir(localVideoRef.current.srcObject.getVideoTracks());
     };
 
     const micStartOrStop = () => {
         localVideoRef.current.srcObject.getAudioTracks().forEach((track) => {
             track.enabled = !track.enabled;
         });
-        console.dir(localVideoRef.current.srcObject.getAudioTracks());
     };
-
+    console.log(user, "user");
     return (
         <Box>
             <Grid container>
@@ -154,8 +165,7 @@ function UserConsulting(props) {
                             style={{ width: "98%", height: 500, margin: 5, background: "black" }}
                             ref={localVideoRef}
                             autoPlay
-                            muted
-                        ></video>
+                            muted></video>
                     </Box>
                 </Grid>
                 <Grid item md={6}>
@@ -163,8 +173,7 @@ function UserConsulting(props) {
                         <video
                             style={{ width: "98%", height: 500, margin: 5, background: "black" }}
                             ref={remoteVideoRef}
-                            autoPlay
-                        ></video>
+                            autoPlay></video>
                     </Box>
                     <Box></Box>
                 </Grid>
@@ -183,9 +192,6 @@ function UserConsulting(props) {
                     />
                     <BottomNavigationAction
                         onClick={() => {
-                            socketRef.current.emit("joinRoom", {
-                                room: "1234",
-                            });
                             setMic(!mic);
                             micStartOrStop(!mic);
                         }}
@@ -194,7 +200,7 @@ function UserConsulting(props) {
                         }
                         icon={<MicIcon sx={{ fontSize: 35 }} color={mic ? "primary" : ""} />}
                     />
-                    {state === "doctor" ? (
+                    {user.role === "ROLE_DOCTOR" ? (
                         <BottomNavigationAction
                             label={<Box sx={{ fontSize: 20, fontWeight: "bold" }}>처방작성</Box>}
                             icon={<MedicalServicesIcon sx={{ fontSize: 35, color: "red" }} />}
@@ -204,13 +210,11 @@ function UserConsulting(props) {
                     )}
                     <BottomNavigationAction
                         onClick={() => {
-                            socketRef.current.emit("disconnect");
-
+                            socketRef.current.emit("disconnectA", user.userId);
                             navigate("/petodoctor");
                         }}
                         label={<Box sx={{ fontSize: 20, fontWeight: "bold" }}>나가기</Box>}
-                        icon={<ExitToAppIcon sx={{ fontSize: 35, color: "blue" }} />}
-                    ></BottomNavigationAction>
+                        icon={<ExitToAppIcon sx={{ fontSize: 35, color: "blue" }} />}></BottomNavigationAction>
                 </BottomNavigation>
             </Box>
         </Box>
