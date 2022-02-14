@@ -50,7 +50,7 @@ public class DoctorService {
                 doctorInfo.getTel(),
 
 
-                doctorInfo.getPysicianLicenseNumber(),
+                doctorInfo.getVeterinarianLicenseNumber(),
                 doctorInfo.getSpecialty(),
                 doctorInfo.getPrice()
 

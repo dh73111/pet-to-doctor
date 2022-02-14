@@ -6,6 +6,8 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import PlaceIcon from "@mui/icons-material/Place";
 import HomeIcon from "@mui/icons-material/Home";
@@ -21,14 +23,20 @@ import { getDoctorInfoFromHospital } from "api/doctor.js";
 import { hospitalReviews } from "../../api/review.js";
 import { CircularProgress } from "@mui/material";
 import StarsIcon from "@mui/icons-material/Stars";
+import { useSelector } from "react-redux";
+
 function HospitalSearch(props) {
     const { kakao } = window;
+    const isLogin = useSelector((store) => store.isLogin);
     const [mode, setMode] = useState("list");
-    const [doneSearch, setDoneSearch] = useState(false);
     const [value, setValue] = useState(0);
     const [hospitalNo, setHospitalNo] = useState(0);
     const [lat, setLat] = useState(33.450701);
     const [lng, setLng] = useState(126.570667);
+    const [alertOpen, setAlertOpen] = useState(false);
+    const handleClick = () => {
+        setAlertOpen(false);
+    };
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -239,7 +247,13 @@ function HospitalSearch(props) {
                                                 <NavLink
                                                     to={`${process.env.PUBLIC_URL}/hospitalsearchreservation/${hospital.id}/${item.id}`}
                                                     state={doctor}
-                                                    style={{ textDecoration: "none", color: "white" }}>
+                                                    style={{ textDecoration: "none", color: "white" }}
+                                                    onClick={(e) => {
+                                                        if (!isLogin) {
+                                                            e.preventDefault();
+                                                            setAlertOpen(true);
+                                                        }
+                                                    }}>
                                                     예약하기
                                                 </NavLink>
                                             </Button>
@@ -247,6 +261,17 @@ function HospitalSearch(props) {
                                     </Grid>
                                 </Box>
                             </Grid>
+                            <Snackbar
+                                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                                open={alertOpen}
+                                onClose={handleClick}
+                                autoHideDuration={2000}
+                                // key={vertical + horizontal}
+                            >
+                                <Alert onClose={handleClick} severity='warning' sx={{ width: "100%" }}>
+                                    로그인 후 이용해주세요
+                                </Alert>
+                            </Snackbar>
                         </Grid>
                     ))}
                 </Box>

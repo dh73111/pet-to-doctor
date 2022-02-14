@@ -34,7 +34,7 @@ public class PetRes {
                 p.getBirthDate(),
                 p.getSpecies(),
                 p.getWeight(),
-                p.getUser().getId(),
+                p.getUser() != null ? p.getUser().getId() : null,
                 p.getProfileImgUrl());
     }
 

@@ -49,7 +49,7 @@ public class NoticeRepository {
             notice.setContent(content + "처방전이 등록되었습니다. 결제를 진행해 주세요");
             notice.setUrl("https://");
         }
-        else if(noticeType.equals(NoticeType.NOTIFICATION)){
+        else if(noticeType.equals(NoticeType.DELIVERY)){
             notice.setContent(content + "운송장이 등록되었습니다.");
             notice.setUrl("https://");
         }

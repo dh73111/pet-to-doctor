@@ -122,4 +122,31 @@ public class MarkController {
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
+    @DeleteMapping("delHospital/{hospitalId}")
+    @Operation(summary = "병원 ID로 즐겨찾기 삭제", description = "사용자의 즐겨찾기 하나를 병원 Id를 통해 삭제한다.(로그인필요)")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "404", description = "사용자 또는 병원 없음"),
+            @ApiResponse(responseCode = "500", description = "서버 오류")
+    })
+    public ResponseEntity<Map<String, Object>> deleteMarkbyHospitalId(
+            @PathVariable @Parameter(description = "병원 ID") Long hospitalId) {
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        HttpStatus status = null;
+
+        try {
+            AccountUserDetails userDetails = (AccountUserDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
+            User nowUser = userService.getUserById(userDetails.getUserId()).get();
+            markService.deleteByHospitalId(nowUser, hospitalId);
+            resultMap.put("message", "성공");
+            status = HttpStatus.OK;
+
+        } catch (Exception e) {
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            resultMap.put("message", "서버 오류");
+        }
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
 }
