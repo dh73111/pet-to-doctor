@@ -107,7 +107,15 @@ function UserInfo(props) {
                                 {/* {informationUser.address.city}
                                 <br />
                                 {informationUser.address.street} */}
-                                {informationUser.address !== null ? "있음" : "없음"}
+                                {informationUser.address !== null ? (
+                                    <>
+                                        {informationUser.address.city}
+                                        <br />
+                                        {informationUser.address.street}
+                                    </>
+                                ) : (
+                                    "없음"
+                                )}
                             </Box>
                         </Box>
                     </Grid>
