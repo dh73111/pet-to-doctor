@@ -24,7 +24,7 @@ public class TreatmentRepositry {
     }
 
     public List<Treatment> findByUserIdAndType(Long id, TreatmentType treatmentType){
-        return em.createQuery("select t from Treatment t join t.user u where u.id = :id and t.type = :treatmentType",
+        return em.createQuery("select t from Treatment t join t.user u where u.id = :id and t.type = :treatmentType ORDER BY t.id DESC",
                 Treatment.class)
                 .setParameter("id", id)
                 .setParameter("treatmentType", treatmentType)
@@ -32,7 +32,7 @@ public class TreatmentRepositry {
     }
 
     public List<Treatment> findByDoctorIdAndType(Long id, TreatmentType treatmentType){
-        return em.createQuery("select t from Treatment t join t.doctor d where d.id = :id and t.type =: treatmentType",
+        return em.createQuery("select t from Treatment t join t.doctor d where d.id = :id and t.type =: treatmentType ORDER BY t.id DESC",
                         Treatment.class)
                 .setParameter("id", id)
                 .setParameter("treatmentType", treatmentType)
@@ -40,14 +40,14 @@ public class TreatmentRepositry {
     }
 
     public List<Treatment> findByDoctorId(Long id){
-        return em.createQuery("select t from Treatment t join t.doctor d where d.id = :id",
+        return em.createQuery("select t from Treatment t join t.doctor d where d.id = :id ORDER BY t.id DESC",
                         Treatment.class)
                 .setParameter("id", id)
                 .getResultList();
     }
 
     public List<Treatment> findByUserId(Long id){
-        return em.createQuery("select t from Treatment t join t.user u where u.id = :id",
+        return em.createQuery("select t from Treatment t join t.user u where u.id = :id ORDER BY t.id DESC",
                         Treatment.class)
                 .setParameter("id", id)
                 .getResultList();
