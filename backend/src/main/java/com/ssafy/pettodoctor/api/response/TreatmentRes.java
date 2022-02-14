@@ -19,7 +19,7 @@ public class TreatmentRes {
     private Long hospitalId;
 
     private String doctorName;
-    private String hopitalName;
+    private String hospitalName;
 
     private String paymentCode;
     private LocalDateTime scheduleDate;
@@ -44,7 +44,7 @@ public class TreatmentRes {
         this.prescriptionId = prescriptionId;
         this.hospitalId = hospitalId;
         this.doctorName = doctorName;
-        this.hopitalName = hopitalName;
+        this.hospitalName = hopitalName;
         this.paymentCode = paymentCode;
         this.scheduleDate = scheduleDate;
         this.type = type;
