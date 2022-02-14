@@ -159,19 +159,21 @@ function HospitalSearch(props) {
 
                     <Box
                         sx={{
-                            py: 6,
-                            px: 2,
                             fontWeight: "bold",
                             fontSize: "15px",
+                            px: 3,
+                            pt: 2,
                             // borderTop: "1px solid #D7E2EB",
                             borderBottom: "1px solid #D7E2EB",
                         }}>
                         <Grid container>
-                            <Grid item sx={{ color: "black", fontWeight: "bold", fontSize: "16px" }} xs={2.5}>
+                            <Grid item sx={{ color: "black", fontWeight: "bold", fontSize: "18px", pb: 1 }} xs={2.5}>
                                 수의사 수
                             </Grid>
-                            <Grid item xs={0.3}></Grid>
-                            <Grid item sx={{ color: "#309FB3", fontWeight: "bold", fontSize: "12px" }} xs={9.2}>
+                            <Grid
+                                item
+                                sx={{ color: "#309FB3", fontWeight: "bold", fontSize: "16px", lineHeight: "18px" }}
+                                xs={9.2}>
                                 {doctor.doctorList.length}
                             </Grid>
                             <Grid container sx={{ mt: 1 }}>
@@ -199,41 +201,58 @@ function HospitalSearch(props) {
         } else if (value === 1) {
             // 예약하기
             return (
-                <Box>
+                <Box sx={{ mt: 1 }}>
                     {doctor.doctorList.map((item, index) => (
                         <Grid container sx={{ p: 2 }}>
-                            <Grid item xs={4.3}>
+                            <Grid item xs={5}>
                                 <img
                                     src={`${process.env.PUBLIC_URL}/img/loginDog.jpg`}
                                     alt='의사사진'
                                     width='150px'
                                     height='150'></img>
                             </Grid>
-                            <Grid item xs={7.7} sx={{ mt: 2 }}>
-                                <Box>
-                                    <Box component='span' sx={{ mx: 2, fontWeight: "bold" }}>
-                                        {item.name}
-                                    </Box>
+                            <Grid item xs={6} sx={{ mt: 2 }}>
+                                <Typography sx={{ fontSize: "16px", fontWeight: "bold", pl: 1 }}>
+                                    {item.name === null ? "수의사" : item.name}
+                                </Typography>
+                                <Typography sx={{ pl: 1 }}>
+                                    {item.specialty === null ? "없음" : item.specialty + " 전문"}
+                                </Typography>
+                                {/* <Box>
+                                    {item.name}
                                     <Box
                                         component='span'
-                                        sx={{ mx: 0.1, fontSize: 12, fontWeight: "bold", color: "gray" }}>
+                                        sx={{ mx: 0.1, fontSize: 16, fontWeight: "bold", color: "gray" }}>
                                         수의사
                                     </Box>
                                 </Box>
                                 <Box sx={{ mt: 2 }}>
                                     <Grid container>
                                         <Grid item xs={1}></Grid>
-                                        <Grid item xs={3} sx={{ fontWeight: "bold", fontSize: 10 }}>
+                                        <Grid item xs={3} sx={{ fontWeight: "bold", fontSize: 14 }}>
                                             전문
                                         </Grid>
-                                        <Grid item xs={8} sx={{ fontSize: 12, fontWeight: "bold" }}>
+                                        <Grid item xs={8} sx={{ fontSize: 14, fontWeight: "bold" }}>
                                             {item.specialty}
                                         </Grid>
                                     </Grid>
-                                </Box>
-                                <Box>
-                                    <Grid container>
-                                        <Grid item xs={7.5}></Grid>
+                                </Box> */}
+                                <Box sx={{ float: "right", mr: 2 }}>
+                                    <Button variant='contained' sx={{ mt: 3 }}>
+                                        <NavLink
+                                            to={`${process.env.PUBLIC_URL}/hospitalsearchreservation/${hospital.id}/${item.id}`}
+                                            state={doctor}
+                                            style={{ textDecoration: "none", color: "white" }}
+                                            onClick={(e) => {
+                                                if (!isLogin) {
+                                                    e.preventDefault();
+                                                    setAlertOpen(true);
+                                                }
+                                            }}>
+                                            예약하기
+                                        </NavLink>
+                                    </Button>
+                                    {/* <Grid container>
                                         <Grid item xs={4.5}>
                                             <Button variant='contained' sx={{ mt: 3 }}>
                                                 <NavLink
@@ -250,7 +269,7 @@ function HospitalSearch(props) {
                                                 </NavLink>
                                             </Button>
                                         </Grid>
-                                    </Grid>
+                                    </Grid> */}
                                 </Box>
                             </Grid>
                             <Snackbar
@@ -264,6 +283,7 @@ function HospitalSearch(props) {
                                     로그인 후 이용해주세요
                                 </Alert>
                             </Snackbar>
+                            <div className='devider' style={{ marginTop: "20px" }}></div>
                         </Grid>
                     ))}
                 </Box>
@@ -458,7 +478,7 @@ function HospitalSearch(props) {
                                         right: "10px",
                                         color: "#1dc6f6",
                                         fontSize: "30px",
-                                        zIndex: 9999999,
+                                        zIndex: 1,
                                     }}
                                 />
                             </Tooltip>
@@ -479,7 +499,13 @@ function HospitalSearch(props) {
                                 리뷰 {reviewList.length}
                             </Typography>
                         </Box>
-                        <Box sx={{ mt: 2, fontSize: 15 }}>
+                        <Box
+                            sx={{
+                                mt: 3,
+                                fontSize: 15,
+                                // borderBottom: "1px solid #D7E2EB",
+                                borderTop: "1px solid #D7E2EB",
+                            }}>
                             <Tabs
                                 value={value}
                                 onChange={handleChange}
