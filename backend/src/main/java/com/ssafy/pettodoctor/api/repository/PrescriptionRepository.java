@@ -22,12 +22,20 @@ public class PrescriptionRepository {
         return em.find(Prescription.class, id);
     }
 
-    public List<Prescription> findByIdList(Long doctor_id, TreatmentType type) {
+    public List<Prescription> findByDoctorIdAndType(Long doctor_id, TreatmentType type) {
         return em.createQuery("select p from Prescription p where p.id IN " +
                                 "(select t.prescription.id from Treatment t where t.doctor.id = :doctor_id and t.type = :type) ",
                 Prescription.class)
                 .setParameter("doctor_id",doctor_id)
                 .setParameter("type",type)
+                .getResultList();
+    }
+
+    public List<Prescription> findByDoctorId(Long doctor_id) {
+        return em.createQuery("select p from Prescription p where p.id IN " +
+                                "(select t.prescription.id from Treatment t where t.doctor.id = :doctor_id) ",
+                        Prescription.class)
+                .setParameter("doctor_id",doctor_id)
                 .getResultList();
     }
 
