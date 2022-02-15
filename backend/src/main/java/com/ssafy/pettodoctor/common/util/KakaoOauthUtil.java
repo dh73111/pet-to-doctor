@@ -20,9 +20,9 @@ public class KakaoOauthUtil {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", "17e88fdcd4825e84145e1f5676bf6007");
+        params.add("redirect_uri","https://i6b209.p.ssafy.io/petodoctor/kakaooauth");
 //        params.add("redirect_uri","http://localhost:3000/petodoctor/kakaooauth");
-        params.add("redirect_uri","http://localhost:3000/kakaooauth");
-//        params.add("redirect_uri", "http://localhost:3000/kakaooauth");
+//        params.add("redirect_uri","http://localhost:3000/kakaooauth");
         params.add("code", code);
 
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest =
