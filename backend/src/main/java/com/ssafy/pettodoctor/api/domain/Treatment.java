@@ -54,7 +54,6 @@ public class Treatment {
         treatment.setDoctor(doctor);
         treatment.setUser(user);
         treatment.setHospital(hospital);
-        treatment.setPaymentCode(req.getPaymentCode());
         treatment.setReVisit(req.getReVisit());
         treatment.setScheduleDate(req.getScheduleDate());
         treatment.setSymptom(req.getSymptom());
