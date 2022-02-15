@@ -5,6 +5,7 @@ import com.ssafy.pettodoctor.api.domain.User;
 import com.ssafy.pettodoctor.api.domain.UserCertification;
 import com.ssafy.pettodoctor.api.repository.UserCertificationRepository;
 import com.ssafy.pettodoctor.api.repository.UserRepository;
+import com.ssafy.pettodoctor.common.util.PasswordUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,7 @@ public class SendMailService {
 
     private final UserRepository userRepository;
     private final UserCertificationRepository userCertificationRepository;
+    private final PasswordUtil passwordUtil;
 
     final private static String myMail = "jh.javamail@gmail.com";
     final private static String password = "a789a789";
@@ -50,7 +52,11 @@ public class SendMailService {
 
         User user = userRepository.findByEmail(userEmail);
 
-        user.setPassword(getRandomKey());
+        String tmpPassword = getRandomKey();
+        String hash = new String(PasswordUtil.hash(tmpPassword.toCharArray(), user.getSalt()));
+
+//        user.setPassword(getRandomKey());
+        user.setPassword(hash);
 
         String subject = "펫투닥터 비밀번호 재발급";
 
@@ -58,7 +64,7 @@ public class SendMailService {
         content.append("<h1>펫투닥터에서 재발급된 비밀번호입니다.</h1>\n");
         content.append("<br>");
         content.append("<h3>새 비밀번호 : ");
-        content.append(user.getPassword());
+        content.append(tmpPassword);
         content.append("</h3>\n");
         content.append("<a href=\"http://localhost:8080/swagger-ui/index.html#/\">대충 로그인 링크</a>");
 
