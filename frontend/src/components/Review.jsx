@@ -120,7 +120,7 @@ function Review() {
                                         {review.username}
                                     </Typography>
                                     <Rating
-                                        defaultValue={review.rate}
+                                        value={review.rate}
                                         readOnly
                                         emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize='inherit' />}
                                     />

@@ -33,6 +33,8 @@ import UserRating from "components/user/UserRating";
 import Qna from "components/user/Qna";
 import ReservationDetail from "components/commons/ReservationDetail";
 import PrescriptionDetail from "components/commons/PrescriptionDetail";
+import Wrong from "components/commons/wrong";
+
 function App() {
     const fontTheme = createTheme({
         typography: {
@@ -88,6 +90,9 @@ function App() {
                     </Routes>
                     <Routes>
                         <Route path='/petodoctor/*' element={<Footer />}></Route>
+                    </Routes>
+                    <Routes>
+                        <Route path='/wrong' element={<Wrong />}></Route>
                     </Routes>
                 </div>
             </Box>

@@ -126,3 +126,10 @@
     fill: white !important;
     stroke: white !important;
 }
+
+.error_to_main {
+    text-decoration: none;
+}
+.error_to_main:hover {
+    text-decoration: underline;
+}
