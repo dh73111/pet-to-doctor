@@ -20,7 +20,7 @@ class QnaRepositoryTest {
 
     @Autowired
     AdminRepository adminRepository;
-
+/*
     @Test
     public void 큐엔에이_등록_조회_테스트(){
         // 질문자, 관리자 등록
@@ -125,4 +125,5 @@ class QnaRepositoryTest {
         Assertions.assertEquals(1, qnaRepository.findByTitle("titl").size(),"삭제 실패2");
 
     }
+ */
 }

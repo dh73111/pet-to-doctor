@@ -5,6 +5,7 @@ import com.ssafy.pettodoctor.api.domain.Pet;
 import com.ssafy.pettodoctor.api.repository.DoctorRepository;
 import com.ssafy.pettodoctor.api.request.DoctorPostReq;
 
+import com.ssafy.pettodoctor.common.util.PasswordUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -29,6 +30,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class DoctorService {
     private final DoctorRepository doctorRepository;
+    private final PasswordUtil passwordUtil;
 
     @Value("${profileImg.path}")
     private String uploadFolder;
@@ -43,17 +45,19 @@ public class DoctorService {
 
     @Transactional
     public void registerDoctor(DoctorPostReq doctorInfo){
+        byte[] salt = PasswordUtil.getNextSalt();
+        String hash = new String(PasswordUtil.hash(doctorInfo.getPassword().toCharArray(), salt));
+
         Doctor doctor = Doctor.createDoctor(
                 doctorInfo.getEmail(),
                 doctorInfo.getName(),
-                doctorInfo.getPassword(),
+                hash,
                 doctorInfo.getTel(),
-
-
                 doctorInfo.getVeterinarianLicenseNumber(),
                 doctorInfo.getSpecialty(),
-                doctorInfo.getPrice()
+                doctorInfo.getPrice(),
 
+                salt
                 // 병원은 어캐 받지
 //                doctorInfo.get
         );
