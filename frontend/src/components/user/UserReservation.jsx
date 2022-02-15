@@ -16,19 +16,10 @@ import DatePicker from "@mui/lab/DatePicker";
 import TextField from "@mui/material/TextField";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { userAllTreatmentList } from "api/treatment";
 import { useSelector } from "react-redux";
 import { SwitchCameraSharp } from "@mui/icons-material";
-
-function createData(no, date, time, hospital, doctor, state, perscription, shipNo) {
-    return { no, date, time, hospital, doctor, state, perscription, shipNo };
-}
-
-const rows = [
-    createData(1, "2022-01-19", "15:30", "hospital", "doctor", "RES_REQUEST", "", "1234"),
-    createData(2, "2022-01-19", "15:30", "hospital", "doctor", "RES_REQUEST", "처방", "1234"),
-].sort((a, b) => (a.no < b.no ? -1 : 1));
 
 const Root = styled("div")`
     table {
@@ -48,40 +39,6 @@ const Root = styled("div")`
     }
 `;
 
-const CustomTablePagination = styled(TablePaginationUnstyled)`
-    & .MuiTablePaginationUnstyled-toolbar {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-
-        @media (min-width: 768px) {
-            flex-direction: row;
-            align-items: center;
-        }
-    }
-
-    & .MuiTablePaginationUnstyled-selectLabel {
-        margin: 0;
-    }
-
-    & .MuiTablePaginationUnstyled-displayedRows {
-        margin: 0;
-
-        @media (min-width: 768px) {
-            margin-left: auto;
-        }
-    }
-
-    & .MuiTablePaginationUnstyled-spacer {
-        display: none;
-    }
-
-    & .MuiTablePaginationUnstyled-actions {
-        display: flex;
-        gap: 0.25rem;
-    }
-`;
 function UserReservation(props) {
     const userId = useSelector((store) => store.user.id);
     const [onLoad, setOnLoad] = useState(true);
@@ -122,19 +79,17 @@ function UserReservation(props) {
         "VST_CONFIRMED",
         "VST_COMPLETED",
     ];
-    const dateCheck = (list, date) => {
-        let checkList = [];
-        let selectDay = date.toISOString().substring(0, 10);
-        for (let item of list) {
-            if (item.scheduleDate.substring(0, 10) === selectDay) checkList.push(item);
-        }
-        return checkList;
-    };
+    // const dateCheck = (list, date) => {
+    //     let checkList = [];
+    //     let selectDay = date.toISOString().substring(0, 10);
+    //     for (let item of list) {
+    //         if (item.scheduleDate.substring(0, 10) === selectDay) checkList.push(item);
+    //     }
+    //     return checkList;
+    // };
     useEffect(() => {
         const init = async () => {
-            console.log("useEffect");
             const list = await userAllTreatmentList(userId);
-            console.log(list, "list");
             let tempRequestList = [];
             let tempCancelList = [];
             let tempConfirmList = [];
@@ -154,8 +109,7 @@ function UserReservation(props) {
                     tempCompleteList.push(item);
                 }
             }
-            console.log(value.toISOString(), "날짜!!!");
-            setTreatmentInfo(dateCheck(list, value));
+            setTreatmentInfo(list);
             setTreatAllList(list);
             setTreatRequest(tempRequestList);
             setTreatPaid(tempPaidList);
@@ -166,38 +120,79 @@ function UserReservation(props) {
         };
         init();
     }, []);
-
     const [open, setOpen] = useState(false);
     const handleClose = () => setOpen(false);
-    const enterConsulting = () => {};
+    const navigate = useNavigate();
+    const offset = new Date().getTimezoneOffset() * 60000; // 1000밀리초 * 60  -> 1분
+    const enterConsulting = (time, id) => {
+        // 입장가능 로직 -> 확인해야함
+        // let currentTime = new Date(Date.now() - offset).toISOString();
+        // let start = Number(time.substring(14, 16));
+        // let end = start + 30;
+        // let currentMin = currentTime.substring(14, 16);
+        // if (
+        //     currentTime.substring(0, 10) === time.substring(0, 10) &&
+        //     currentTime.substring(11, 13) === time.substring(11, 13) &&
+        //     start <= currentMin &&
+        //     currentMin <= end
+        // ) {
+        // } else alert("입장이 불가능합니다.");
+        navigate(`/petodoctor/userconsulting/${id}`);
+    };
     const handleChange = (event) => {
         setState(event.target.value);
+        // setList(event.target.value, value);
         setList(event.target.value, value);
     };
-    console.log(treatmentInfo);
-    const setList = (value, date) => {
-        console.log(value);
+    // 날짜용 setList
+    // const setList = (value, date) => {
+    //     console.log(value);
+    //     switch (value) {
+    //         case 0:
+    //             setTreatmentInfo(dateCheck(treatAllList, date));
+    //             break;
+    //         case 1:
+    //             setTreatmentInfo(dateCheck(treatRequest, date));
+    //             break;
+    //         case 2:
+    //             setTreatmentInfo(dateCheck(treatCancel, date));
+    //             break;
+    //         case 3:
+    //             setTreatmentInfo(dateCheck(treatPaid, date));
+    //             break;
+    //         case 4:
+    //             setTreatmentInfo(dateCheck(treatConfirm, date));
+    //             break;
+    //         case 5:
+    //             setTreatmentInfo(dateCheck(treatComplete, date));
+    //             break;
+    //         default:
+    //             setTreatmentInfo(dateCheck(treatAllList, date));
+    //             break;
+    //     }
+    // };
+    const setList = (value) => {
         switch (value) {
             case 0:
-                setTreatmentInfo(dateCheck(treatAllList, date));
+                setTreatmentInfo(treatAllList);
                 break;
             case 1:
-                setTreatmentInfo(dateCheck(treatRequest, date));
+                setTreatmentInfo(treatRequest);
                 break;
             case 2:
-                setTreatmentInfo(dateCheck(treatCancel, date));
+                setTreatmentInfo(treatCancel);
                 break;
             case 3:
-                setTreatmentInfo(dateCheck(treatPaid, date));
+                setTreatmentInfo(treatPaid);
                 break;
             case 4:
-                setTreatmentInfo(dateCheck(treatConfirm, date));
+                setTreatmentInfo(treatConfirm);
                 break;
             case 5:
-                setTreatmentInfo(dateCheck(treatComplete, date));
+                setTreatmentInfo(treatComplete);
                 break;
             default:
-                setTreatmentInfo(dateCheck(treatAllList, date));
+                setTreatmentInfo(treatAllList);
                 break;
         }
     };
@@ -229,7 +224,7 @@ function UserReservation(props) {
             <Grid container>
                 <Grid item xs={8}></Grid>
                 <Grid item xs={2} sx={{ px: 4 }}>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DatePicker
                             disableFuture
                             label='날짜'
@@ -244,7 +239,7 @@ function UserReservation(props) {
                             size='small'
                             renderInput={(params) => <TextField {...params} />}
                         />
-                    </LocalizationProvider>
+                    </LocalizationProvider> */}
                 </Grid>
                 <Grid item xs={2}>
                     <Box sx={{ width: 120 }}>
@@ -283,7 +278,6 @@ function UserReservation(props) {
                                     <th>예약상태</th>
                                     <th>상담실</th>
                                     <th>처방전</th>
-                                    <th>배송번호</th>
                                 </tr>
                             </thead>
                             {onLoad ? (
@@ -329,26 +323,37 @@ function UserReservation(props) {
                                                     <td>{treat.doctorName}</td>
                                                     <td>{convertor[treat.type]}</td>
                                                     <td>
+                                                        {treat.type !== "RES_CONFIRMED" ? (
+                                                            <Box sx={{ mx: 2 }}>-</Box>
+                                                        ) : (
+                                                            <Button
+                                                                variant='contained'
+                                                                onClick={() => {
+                                                                    enterConsulting(treat.scheduleDate);
+                                                                }}>
+                                                                입장하기
+                                                            </Button>
+                                                        )}
                                                         <Button
                                                             variant='contained'
                                                             onClick={() => {
-                                                                enterConsulting();
+                                                                enterConsulting(treat.scheduleDate, treat.id);
                                                             }}>
-                                                            입장하기
+                                                            입장하기 테스트
                                                         </Button>
                                                     </td>
                                                     <td>
                                                         {treat.prescriptionId === null ? (
-                                                            "X"
+                                                            <Box sx={{ mx: 2 }}>-</Box>
                                                         ) : (
                                                             <Link
-                                                                to={`/petodoctor/persciption/${treat.prescriptionId}`}
-                                                                state={treat.prescriptionId}>
+                                                                to={`/petodoctor/presciption/${treat.prescriptionId}`}
+                                                                state={treat.prescriptionId}
+                                                                style={{ textDecoration: "none", color: "blue" }}>
                                                                 처방전
                                                             </Link>
                                                         )}
                                                     </td>
-                                                    <td>배송번호</td>
                                                 </tr>
                                             );
                                         })}
