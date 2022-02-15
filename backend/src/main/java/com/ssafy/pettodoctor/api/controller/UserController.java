@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,6 +39,7 @@ import java.util.Map;
 public class UserController {
     private final UserService userService;
     private final SendMailService sendMailService;
+    String pattern = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
 
     @GetMapping("/duplication")
     @Operation(summary = "이메일 중복 확인", description = "이메일 중복을 확인해준다. 중복이라면 true 반환")
@@ -52,6 +54,10 @@ public class UserController {
         ResVO<Boolean> result = new ResVO<>();
         HttpStatus status = null;
         try {
+            // 이메일 유효성 검사
+            if(!Pattern.matches(pattern, email))
+                throw new Exception("이메일 유효성 검증 실패");
+
             Boolean isDuplicated = userService.isDuplicated(email);
             result.setData(isDuplicated);
             result.setMessage("성공");
@@ -78,7 +84,12 @@ public class UserController {
         ResVO<Long> result = new ResVO<>();
         HttpStatus status = null;
 
+
         try{
+            // 이메일 유효성 검사
+            if(!Pattern.matches(pattern, signupInfo.getEmail()))
+                throw new Exception("이메일 유효성 검증 실패");
+
             userService.signup(signupInfo);
             sendMailService.sendCertification(signupInfo.getEmail());
             result.setMessage("성공");
@@ -367,6 +378,7 @@ public class UserController {
             status = HttpStatus.OK;
 
         } catch (Exception e) {
+            e.printStackTrace();
             status = HttpStatus.INTERNAL_SERVER_ERROR;
             resultMap.put("message", "서버 오류");
         }

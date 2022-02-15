@@ -24,6 +24,8 @@ public class Account {
     private String tel;
     private LocalDate joinDate;
 
+    private byte[] salt;
+
     public String getAuthority(){
         return this.role;
     }

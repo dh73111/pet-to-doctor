@@ -22,7 +22,7 @@ public class Doctor extends Account {
     private Hospital hospital;
 
 
-    public static Doctor createDoctor(String email, String name, String password, String tel, String veterinarianLicenseNumber, String specialty, Integer price){
+    public static Doctor createDoctor(String email, String name, String password, String tel, String veterinarianLicenseNumber, String specialty, Integer price, byte[] salt){
         Doctor doctor = new Doctor();
         doctor.setEmail(email);
         doctor.setName(name);
@@ -34,6 +34,9 @@ public class Doctor extends Account {
         doctor.setVeterinarianLicenseNumber(veterinarianLicenseNumber);
         doctor.setSpecialty(specialty);
         doctor.setPrice(price);
+
+        doctor.setSalt(salt);
+
 //        doctor.setHospital(hospital);
 
         return doctor;

@@ -6,6 +6,7 @@ import com.ssafy.pettodoctor.api.response.ResVO;
 import com.ssafy.pettodoctor.api.service.AccountService;
 import com.ssafy.pettodoctor.api.service.UserService;
 import com.ssafy.pettodoctor.common.util.JwtTokenUtil;
+import com.ssafy.pettodoctor.common.util.PasswordUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -15,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.regex.Pattern;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/account/")
@@ -23,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
 public class AccountController {
     private final AccountService accountService;
     private final UserService userService;
-
+    String pattern = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
 
     @PostMapping("/login")
     @Operation(summary = "로그인", description = "<strong>아이디와 패스워드</strong>를 통해 로그인한다.")
@@ -38,11 +41,17 @@ public class AccountController {
         HttpStatus status = null;
 
         try{
+            // 이메일 유효성
+            if(!Pattern.matches(pattern, loginPostReq.getEmail()))
+                throw new Exception("이메일 유효성 검증 실패");
+
             Account account = accountService.findByEmail(loginPostReq.getEmail());
             if(account == null) {
                 status = HttpStatus.NOT_ACCEPTABLE;
                 result.setMessage("잘못된 이메일입니다.");
-            } else if (!loginPostReq.getPassword().equals(account.getPassword())) {
+            } else if (!account.getPassword().equals(
+                    new String(PasswordUtil.hash(loginPostReq.getPassword().toCharArray(), account.getSalt()))
+            )) {
                 status = HttpStatus.UNAUTHORIZED;
                 result.setMessage("비밀번호가 일치하지 않습니다.");
             } else if (account.getRole().equals("ROLE_USER")                                // 어카운트가 유저일 경우
