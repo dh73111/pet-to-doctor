@@ -45,8 +45,13 @@ public class PrescriptionService {
         Treatment treatment = treatmentRepositry.findByTreatmentId(treatmentId);
         treatment.setPrescription(prescription);
 
-        // 처방전 등록하면 해당 알림 type 변경
-        noticeRepository.updateNotice(noticeRepository.findBytreatmentId(treatmentId).getId(), NoticeType.DELIVERY);
+        // 처방전이 등록되면 유저에게 알림
+        NoticePostReq noticeInfo = new NoticePostReq();
+        noticeInfo.setAccountId(treatment.getUser().getId());
+        noticeInfo.setType(NoticeType.NOTIFICATION);
+
+        noticeRepository.registerNotice(noticeInfo, treatment.getUser(), treatment);
+
     }
 
     @Transactional
@@ -73,8 +78,18 @@ public class PrescriptionService {
         Prescription prescription = prescriptionRepository.findById(prescriptionId);
         prescription.updateShippingInfo(invoiceCode);
 
+        // 운송장이 등록되면 유저에게 알림
+        Treatment treatment = treatmentRepositry.findByPrescriptionId(prescriptionId);
+        NoticePostReq noticeInfo = new NoticePostReq();
+        noticeInfo.setAccountId(treatment.getUser().getId());
+        noticeInfo.setType(NoticeType.DELIVERY);
+
+        noticeRepository.registerNotice(noticeInfo, treatment.getUser(), treatment);
+
+
+
         // 운송장을 등록하면 해당 알림 type 변경
-        noticeRepository.updateNotice(noticeRepository.findBytreatmentId(treatmentRepositry.findByPrescriptionId(prescriptionId).getId()).getId(), NoticeType.DELIVERY);
+//        noticeRepository.updateNotice(noticeRepository.findBytreatmentId(treatmentRepositry.findByPrescriptionId(prescriptionId).getId()).getId(), NoticeType.DELIVERY);
         return prescription;
     }
 
@@ -84,22 +99,17 @@ public class PrescriptionService {
         Long treatmentId = treatmentRepositry.findByPrescriptionId(prescriptionId).getId();
         Long doctorId = treatmentRepositry.findByPrescriptionId(prescriptionId).getDoctor().getId();
         Prescription prescription = prescriptionRepository.findById(prescriptionId);
+        Treatment treatment = treatmentRepositry.findByTreatmentId(treatmentId);
 
         if(!prescription.getType().equals(PaymentType.UNCOMPLETE)) throw new Exception("잘못된 접근입니다.");
 
         prescription.updatePaymentInfo(shippingReq);
-
         if(prescription.getType().equals(PaymentType.COMPLETE)){ // 처방전 결제가 됐다면
-            // 의사에게 알림
-            NoticePostReq noticeInfo = new NoticePostReq();
-            noticeInfo.setAccountId(doctorId);
-            noticeInfo.setContent(treatmentId + "번 - 배송이 필요한 처방이 있습니다. 운송장 번호를 등록해주세요.");
-            noticeInfo.setUrl("https://"); // 운송장 등록하는 사이트
-            noticeInfo.setIsChecked(false);
-            noticeInfo.setNoticeDate(LocalDateTime.now());
-            noticeRepository.registerNotice(noticeInfo, treatmentRepositry.findByPrescriptionId(prescriptionId).getDoctor(), null);
-        }
 
+            // 의사에게 알림
+            Notice notice = Notice.createNotice2(treatment.getDoctor(), treatment, NoticeType.DELIVERY, treatment.getId() + "번 - 배송이 필요한 처방이 있습니다. 운송장 번호를 등록해주세요.");
+            noticeRepository.save(notice);
+        }
         return prescription;
     }
 }
