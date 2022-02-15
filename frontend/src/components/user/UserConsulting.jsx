@@ -209,9 +209,9 @@ function UserConsulting(props) {
                         <></>
                     )}
                     <BottomNavigationAction
-                        onClick={() => {
+                        onClick={async () => {
                             socketRef.current.emit("disconnectA", user.userId);
-                            navigate("/petodoctor");
+                            window.location.href = "http://localhost:3000/petodoctor";
                         }}
                         label={<Box sx={{ fontSize: 20, fontWeight: "bold" }}>나가기</Box>}
                         icon={<ExitToAppIcon sx={{ fontSize: 35, color: "blue" }} />}></BottomNavigationAction>

@@ -379,8 +379,6 @@ function NavBottom(props) {
             const loginres = sessionStorage.getItem("accessToken");
             let decode_token = jwtDecode(loginres);
             setMode(decode_token.role);
-            // setLoginAlert(true);
-            console.log("role :", mode);
         }
         if (mode === "ROLE_DOCTOR") {
             return (
