@@ -83,6 +83,11 @@ const NavTop = (props) => {
     //   console.log(id);
     //   if (id === props.selectNav) props.clickNav(id);
     // };
+    const [loginAlert, setLoginAlert] = useState(false);
+    const handleLoginAlert = () => {
+        console.log("로그인변화스낵");
+        setLoginAlert(!loginAlert);
+    };
 
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
@@ -91,6 +96,7 @@ const NavTop = (props) => {
     const logOut = () => {
         sessionStorage.clear();
         dispatch({ type: "logout" });
+        handleLoginAlert();
         navigate("/petodocor");
     };
 
@@ -193,6 +199,7 @@ const NavTop = (props) => {
                                     to='/petodoctor'
                                     onClick={() => {
                                         if (socket !== undefined) socket.emit("disconnectA", id);
+                                        handleLoginAlert();
                                         logOut();
                                     }}>
                                     로그아웃
@@ -212,6 +219,17 @@ const NavTop = (props) => {
                         </NavLink>
                     </Typography>
                 </Box>
+                <Snackbar
+                    anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                    open={loginAlert}
+                    onClose={handleLoginAlert}
+                    autoHideDuration={2000}
+                    // key={vertical + horizontal}
+                >
+                    <Alert onClose={handleLoginAlert} severity='success' sx={{ width: "100%" }}>
+                        로그아웃이 완료되었습니다
+                    </Alert>
+                </Snackbar>
             </Box>
         );
     };
@@ -346,6 +364,11 @@ function NavBottom(props) {
             <Typography sx={{ fontSize: 16, fontWeight: fontWeight }}>{page.name}</Typography>
         </Box>
     );
+
+    // const [loginAlert, setLoginAlert] = useState(false);
+    // const handleLoginAlert = () => {
+    //     setLoginAlert(false);
+    // };
 
     const NavItem = () => {
         // 네비 모드 바꾸기

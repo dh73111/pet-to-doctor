@@ -15,9 +15,10 @@ import DatePicker from "@mui/lab/DatePicker";
 import TextField from "@mui/material/TextField";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import { treatments } from "../../api/treatment.js";
+import { doctorAllTreatmentList, treatmentState } from "../../api/treatment.js";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { SliderValueLabelUnstyled } from "@mui/base";
 
 const Root = styled("div")`
     table {
@@ -45,10 +46,32 @@ function DoctorReservation(props) {
         setOpen(true);
     };
     const handleClose = () => setOpen(false);
-    const handleChange = (event) => {
-        setState(event.target.value);
+
+    const convertor = {
+        RES_REQUEST: "신청(온라인)",
+        RES_PAID: "결제완료(온라인)",
+        RES_CANCEL: "취소(온라인)",
+        RES_CONFIRMED: "승인(온라인)",
+        RES_COMPLETED: "상담완료(온라인)",
+        VST_REQUEST: "신청(방문)",
+        VST_PAID: "결제완료(방문)",
+        VST_CANCEL: "취소(방문)",
+        VST_CONFIRMED: "승인(방문)",
+        VST_COMPLETED: "상담완료(방문)",
     };
 
+    const conditions = [
+        "RES_REQUEST",
+        "RES_PAID",
+        "RES_CANCEL",
+        "RES_CONFIRMED",
+        "RES_COMPLETED",
+        "VST_REQUEST",
+        "VST_PAID",
+        "VST_CANCEL",
+        "VST_CONFIRMED",
+        "VST_COMPLETED",
+    ];
     const style = {
         position: "absolute",
         top: "50%",
@@ -60,27 +83,104 @@ function DoctorReservation(props) {
         boxShadow: 24,
         boxSizing: "border-box",
     };
-    const [reservations, setReservations] = useState([]);
     const [onLoad, setOnLoad] = useState(true);
-    const [type, setType] = useState("");
-
+    const [treatmentInfo, setTreatmentInfo] = useState([]);
+    const [treatAllList, setTreatAllList] = useState([]);
+    const [treatRequest, setTreatRequest] = useState([]);
+    const [treatPaid, setTreatPaid] = useState([]);
+    const [treatCancel, setTreatCancel] = useState([]);
+    const [treatConfirm, setTreatConfirm] = useState([]);
+    const [treatComplete, setTreatComplete] = useState([]);
     useEffect(() => {
         const getdata = async () => {
-            const data = await treatments(doctorId);
-            console.log(data, "data");
-            setReservations(data);
+            const data = await doctorAllTreatmentList(doctorId);
+            let tempRequestList = [];
+            let tempCancelList = [];
+            let tempConfirmList = [];
+            let tempPaidList = [];
+            let tempCompleteList = [];
+            for (let item of data) {
+                const status = item.type.substring(4);
+                if (status === "REQUEST") {
+                    tempRequestList.push(item);
+                } else if (status === "CANCEL") {
+                    tempCancelList.push(item);
+                } else if (status === "CONFIRMED ") {
+                    tempConfirmList.push(item);
+                } else if (status === "PAID") {
+                    tempPaidList.push(item);
+                } else if (status === "COMPLETED") {
+                    tempCompleteList.push(item);
+                }
+            }
+            setTreatmentInfo(data);
+            setTreatAllList(data);
+            setTreatRequest(tempRequestList);
+            setTreatPaid(tempPaidList);
+            setTreatCancel(tempCancelList);
+            setTreatConfirm(tempConfirmList);
+            setTreatComplete(tempCompleteList);
+            setOnLoad(false);
         };
         getdata();
-        setOnLoad(false);
-
-        console.log(reservations, "reservations");
     }, []);
-
-    const handleChangeCompleted = (event) => {
-        setType("예약");
+    const handleChange = (event) => {
+        setState(event.target.value);
+        // setList(event.target.value, value);
+        setList(event.target.value, value);
     };
-    const handleChangeCanceled = (event) => {
-        setType("취소");
+    const [statechange, SetStatechange] = useState({
+        treatmentId: "",
+        treatmentType: "",
+    });
+    const handleChangeCompleted = async (idx) => {
+        console.log(treatmentInfo, "treatmentInfo");
+        const id = treatmentInfo[idx].id;
+        const type = treatmentInfo[idx].type;
+        console.log(id, "idd");
+        console.log(type, "typeee");
+        if (type === "RES_PAID") {
+            const data = {
+                treatmentId: id,
+                treatmentType: "RES_CONFIRMED",
+            };
+            SetStatechange(data);
+            console.log(data, "data");
+            await treatmentState(data.treatmentId, data.treatmentType);
+        } else if (type === "VST_REQUEST") {
+            const data = {
+                treatmentId: id,
+                treatmentType: "VST_CONFIRMED",
+            };
+            SetStatechange(data);
+            await treatmentState(data.treatmentId, data.treatmentType);
+        }
+    };
+
+    const setList = (value) => {
+        switch (value) {
+            case 0:
+                setTreatmentInfo(treatAllList);
+                break;
+            case 1:
+                setTreatmentInfo(treatRequest);
+                break;
+            case 2:
+                setTreatmentInfo(treatCancel);
+                break;
+            case 3:
+                setTreatmentInfo(treatPaid);
+                break;
+            case 4:
+                setTreatmentInfo(treatConfirm);
+                break;
+            case 5:
+                setTreatmentInfo(treatComplete);
+                break;
+            default:
+                setTreatmentInfo(treatAllList);
+                break;
+        }
     };
     return (
         <Container>
@@ -109,17 +209,21 @@ function DoctorReservation(props) {
                 <Grid item xs={2}>
                     <Box sx={{ width: 120 }}>
                         <FormControl fullWidth>
-                            <InputLabel id='demo-simple-select-label'>ALL</InputLabel>
+                            <InputLabel id='demo-simple-select-label'>선택</InputLabel>
                             <Select
+                                sx={{ height: 55 }}
                                 labelId='demo-simple-select-label'
                                 id='demo-simple-select'
                                 value={state}
                                 label='state'
                                 size='small'
                                 onChange={handleChange}>
-                                <MenuItem value={10}>예약 요청</MenuItem>
-                                <MenuItem value={20}>예약 취소</MenuItem>
-                                <MenuItem value={30}>예약 확인</MenuItem>
+                                <MenuItem value={0}>모두 보기</MenuItem>
+                                <MenuItem value={1}>예약 신청</MenuItem>
+                                <MenuItem value={2}>예약 취소</MenuItem>
+                                <MenuItem value={3}>예약 승인</MenuItem>
+                                <MenuItem value={4}>결제 완료</MenuItem>
+                                <MenuItem value={5}>진료 완료</MenuItem>
                             </Select>
                         </FormControl>
                     </Box>
@@ -163,13 +267,13 @@ function DoctorReservation(props) {
                             ) : (
                                 <>
                                     <tbody>
-                                        {reservations.map((res, idx) => {
+                                        {treatmentInfo.map((res, idx) => {
                                             return (
                                                 <tr key={idx}>
                                                     <td>{idx + 1}</td>
                                                     <td>{res.scheduleDate.substring(0, 10)}</td>
                                                     <td>{res.scheduleDate.substring(11, 16)}</td>
-                                                    <td>{res.type}</td>
+                                                    <td>{convertor[res.type]}</td>
                                                     {/* <td>{convertor[treat.type]}</td> */}
                                                     <td>
                                                         {res.perscriptionId ? (
@@ -183,8 +287,13 @@ function DoctorReservation(props) {
                                                         )}
                                                     </td>
                                                     <td>
-                                                        <Button onClick={handleChangeCompleted}>승인</Button>
-                                                        <Button onClick={handleChangeCanceled}>취소</Button>
+                                                        {res.type === "RES_PAID" ? (
+                                                            <Button onClick={() => handleChangeCompleted(idx)}>
+                                                                승인
+                                                            </Button>
+                                                        ) : (
+                                                            ""
+                                                        )}
                                                     </td>
                                                 </tr>
                                             );

@@ -80,12 +80,18 @@ function ShipmentInfo(props) {
                         </Typography>
                         <Box sx={{ display: "flex", flexDirection: "column", flex: 1 }}>
                             <Box>
-                                <TextField sx={{ mb: 1 }} variant='outlined' size='small' disabled />
+                                <TextField
+                                    sx={{ mb: 1 }}
+                                    variant='outlined'
+                                    size='small'
+                                    disabled
+                                    value={props.zipcode}
+                                />
                                 <Button sx={{ ml: 1 }} onClick={openPopup} variant='contained'>
                                     우편번호 검색
                                 </Button>
                             </Box>
-                            <TextField sx={{ mb: 1 }} variant='outlined' size='small' disabled />
+                            <TextField sx={{ mb: 1 }} variant='outlined' size='small' disabled value={props.city} />
                             <TextField
                                 variant='outlined'
                                 size='small'

@@ -17,7 +17,7 @@ import DoctorPasswordChange from "./components/doctor/DoctorPasswordChange";
 import DoctorMypage from "components/doctor/DoctorMypage";
 import Notice from "components/Notice";
 import Review from "components/Review";
-
+import Index from "components/Index";
 import UserLoginModal from "components/user/UserLoginModal";
 import UserJoin from "components/user/UserJoin";
 import UserSignupConfirm from "components/user/UserSignupConfirm";
@@ -48,6 +48,7 @@ function App() {
                     </Routes>
                     <Routes>
                         <Route path='/petodoctor/' element={<Home />}></Route>
+                        <Route path='/' element={<Index />}></Route>
                         <Route path='/petodoctor/kakaooauth*' element={<Home />}></Route>
                     </Routes>
                     <Routes>
@@ -56,7 +57,7 @@ function App() {
                         <Route path='/petodoctor/doctordiagnosis' element={<DoctorDianosis />}></Route>
                         <Route path='/petodoctor/doctorprescription' element={<DoctorPrescription />}></Route>
                         <Route path='/petodoctor/doctormypage' element={<DoctorMypage />}></Route>
-                        <Route path='/doctorprescriptonform' element={<DoctorPrescriptionForm />}></Route>
+                        <Route path='/doctorprescriptonform/:id' element={<DoctorPrescriptionForm />}></Route>
                         <Route path='/petodoctor/doctorconsulting' element={<DoctorConsuliting />}></Route>
 
                         {/* user */}
@@ -71,7 +72,7 @@ function App() {
                         <Route path='/petodoctor/usersignupconfirm' element={<UserSignupConfirm />}></Route>
                         <Route path='/petodoctor/usermypage' element={<UserMypage />}></Route>
                         <Route path='/petodoctor/usermypage/:userId' element={<UserMypageChange />}></Route>
-                        <Route path='/petodoctor/userrating' element={<UserRating />}></Route>
+                        <Route path='/petodoctor/userrating/:hospitalId' element={<UserRating />}></Route>
                         <Route path='/petodoctor/userreservation' element={<UserReservation />}></Route>
                         <Route path='/petodoctor/userreservationpayment' element={<UserReservationPayment />}></Route>
                         <Route
@@ -81,7 +82,7 @@ function App() {
                         <Route path='/petodoctor/presciption/:prescId' element={<PrescriptionDetail />}></Route>
                         <Route path='/petodoctor/reservation/:resId' element={<ReservationDetail />}></Route>
                         <Route path='/petodoctor/usermedipayment' element={<UserMedicinePayment />}></Route>
-                        <Route path='/petodoctor/userconsulting/:id' element={<UserConsulting />}></Route>
+                        <Route path='/petodoctor/userconsulting/:id/:hospitalId' element={<UserConsulting />}></Route>
                         <Route path='/petodoctor/usersignupconfirm/:userid' element={<UserSignupConfirm />}></Route>
                         <Route path='/petodoctor/qna' element={<Qna />}></Route>
                         <Route path='/petodoctor/review' element={<Review />}></Route>

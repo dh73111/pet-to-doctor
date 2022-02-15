@@ -51,12 +51,16 @@ public class AccountController {
             Account account = accountService.findByEmail(loginPostReq.getEmail());
             if(account == null || (account.getRole().equals("ROLE_USER")
                     && userService.getUserById(account.getId()).get().getIsOauth())) { // oauth 일반로그인 제한
+
                 status = HttpStatus.NOT_ACCEPTABLE;
                 result.setMessage("잘못된 이메일입니다.");
             }
             else if (!account.getPassword().equals(
                     new String(PasswordUtil.hash(loginPostReq.getPassword().toCharArray(), account.getSalt()))
             )) {
+                System.out.println(Character.UnicodeBlock.forName(account.getPassword()));
+                Character.UnicodeBlock.forName(account.getPassword());
+                System.out.println(new String(PasswordUtil.hash(loginPostReq.getPassword().toCharArray(), account.getSalt())));
                 status = HttpStatus.UNAUTHORIZED;
                 result.setMessage("비밀번호가 일치하지 않습니다.");
             } else if (account.getRole().equals("ROLE_USER")                                // 어카운트가 유저일 경우
@@ -72,11 +76,14 @@ public class AccountController {
             }
 
         }catch (Exception e){
+            e.printStackTrace();
             status = HttpStatus.INTERNAL_SERVER_ERROR;
             result.setMessage("서버 오류");
         }
 
         return new ResponseEntity<ResVO<String>>(result, status);
     }
+
+//    public static final Character.UnicodeBlock forName(String blockName)
 
 }

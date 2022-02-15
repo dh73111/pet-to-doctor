@@ -6,21 +6,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import { treatmentPay, treatmentInfo } from "api/treatment";
 import { getHosiptal } from "api/hospital";
-import {
-    Checkbox,
-    Container,
-    createTheme,
-    Divider,
-    FormControlLabel,
-    FormGroup,
-    Grid,
-    Radio,
-    RadioGroup,
-    ThemeProvider,
-} from "@mui/material";
+import { Container, createTheme, Divider, Grid, ThemeProvider } from "@mui/material";
 // import NavBar from '../NavBar';
 import StepBar from "./resources/StepBar";
-import { SettingsInputAntennaTwoTone } from "@mui/icons-material";
 
 function UserReservationPayment(props) {
     const { state } = useLocation();
@@ -53,9 +41,6 @@ function UserReservationPayment(props) {
             }
         );
     };
-    console.log(state);
-    console.log(state.treatmentId);
-    useEffect(() => {}, []);
 
     return (
         <ThemeProvider theme={newTheme}>
