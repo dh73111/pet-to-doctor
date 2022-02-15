@@ -12,6 +12,7 @@ import com.ssafy.pettodoctor.api.response.ResVO;
 import com.ssafy.pettodoctor.api.service.UserService;
 //import io.swagger.annotations.*;
 import com.ssafy.pettodoctor.common.util.JwtTokenUtil;
+import com.ssafy.pettodoctor.common.util.KakaoOauthUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -55,8 +56,11 @@ public class UserController {
         HttpStatus status = null;
         try {
             // 이메일 유효성 검사
-            if(!Pattern.matches(pattern, email))
-                throw new Exception("이메일 유효성 검증 실패");
+            if(!Pattern.matches(pattern, email)) {
+                status = HttpStatus.BAD_REQUEST;
+                result.setMessage("이메일 유효성 검증 실패");
+                return new ResponseEntity<ResVO<Boolean>>(result, status);
+            }
 
             Boolean isDuplicated = userService.isDuplicated(email);
             result.setData(isDuplicated);
@@ -87,8 +91,11 @@ public class UserController {
 
         try{
             // 이메일 유효성 검사
-            if(!Pattern.matches(pattern, signupInfo.getEmail()))
-                throw new Exception("이메일 유효성 검증 실패");
+            if(!Pattern.matches(pattern, signupInfo.getEmail())) {
+                status = HttpStatus.BAD_REQUEST;
+                result.setMessage("이메일 유효성 검증 실패");
+                return new ResponseEntity<ResVO<Long>>(result, status);
+            }
 
             userService.signup(signupInfo);
             sendMailService.sendCertification(signupInfo.getEmail());
@@ -117,7 +124,7 @@ public class UserController {
 
         //------------ 통신 ---------------//
         // 토큰 관련 정보 얻기
-        ResponseEntity<String> responseToken = getKakaoToken(code);
+        ResponseEntity<String> responseToken = KakaoOauthUtil.getKakaoToken(code);
         if(responseToken == null){
             result.setMessage("유효하지 않은 카카오 인증 코드 입니다.");
             status = HttpStatus.BAD_REQUEST;
@@ -139,7 +146,7 @@ public class UserController {
 
         //------------ 통신 ---------------//
         // 토큰으로 프로필 정보 가져오기
-        ResponseEntity<String> responseProfile = getKakaoProfile(oauthToken);
+        ResponseEntity<String> responseProfile = KakaoOauthUtil.getKakaoProfile(oauthToken);
         if(responseProfile == null){
             result.setMessage("유효하지 않은 토큰 입니다.");
             status = HttpStatus.BAD_REQUEST;
@@ -149,7 +156,7 @@ public class UserController {
         // 프로필 정보 추출
         KakaoProfile kakaoProfile = null;
         try {
-            kakaoProfile = objectMapper.readValue(getKakaoProfile(oauthToken).getBody(), KakaoProfile.class);
+            kakaoProfile = objectMapper.readValue(responseProfile.getBody(), KakaoProfile.class);
         } catch (JsonProcessingException e) { // 파싱 에러
             e.printStackTrace();
             status = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -180,66 +187,6 @@ public class UserController {
 
         return new ResponseEntity<ResVO<String>>(result, status);
     }
-
-    private ResponseEntity<String> getKakaoToken(String code) {
-        ResponseEntity<String> tokens = null;
-        // 카카오 토큰 요청
-        RestTemplate rt = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("grant_type", "authorization_code");
-        params.add("client_id", "17e88fdcd4825e84145e1f5676bf6007");
-        params.add("redirect_uri","http://localhost:3000/petodoctor/kakaooauth");
-//        params.add("redirect_uri", "http://localhost:3000/kakaooauth");
-        params.add("code", code);
-
-        HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest =
-                new HttpEntity<>(params, headers);
-        try {
-            tokens = rt.exchange(
-                    "https://kauth.kakao.com/oauth/token",
-                    HttpMethod.POST,
-                    kakaoTokenRequest,
-                    String.class
-            );
-//            System.out.println(tokens);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return tokens;
-    }
-
-    private ResponseEntity<String> getKakaoProfile(OauthToken oauthToken) {
-        ResponseEntity<String> response = null;
-        // 카카오 토큰 요청
-        RestTemplate rt = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + oauthToken.getAccess_token());
-        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-
-//        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-//        params.add("property_keys", "[\"properties.nickname\", \"kakao_acount.email\"]");
-
-        HttpEntity<MultiValueMap<String, String>> kakaoInfoRequest =
-                new HttpEntity<>(headers);
-        try {
-            response = rt.exchange(
-                    "https://kapi.kakao.com/v2/user/me",
-                    HttpMethod.POST,
-                    kakaoInfoRequest,
-                    String.class
-            );
-//            System.out.println(response);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return response;
-    }
-
 
     // 사용자 프로필 업데이트
     @PostMapping("/profile/{userId}")
@@ -367,6 +314,13 @@ public class UserController {
         try {
             AccountUserDetails userDetails = (AccountUserDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
             User nowUser = userService.getUserById(userDetails.getUserId()).get();
+
+            if(nowUser.getIsOauth()){
+                status = HttpStatus.NOT_ACCEPTABLE;
+                resultMap.put("message", "소셜로그인은 접근할 수 없습니다.");
+                return new ResponseEntity<Map<String, Object>>(resultMap, status);
+            }
+
             boolean checkResult = userService.checkPassword(inputPass.getPassword(), nowUser);
 
             if (checkResult) {
@@ -400,6 +354,13 @@ public class UserController {
         try {
             AccountUserDetails userDetails = (AccountUserDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
             Long nowUserId = userDetails.getUserId();
+
+            if(userService.getUserById(nowUserId).get().getIsOauth()){
+                status = HttpStatus.NOT_ACCEPTABLE;
+                resultMap.put("message", "소셜로그인은 접근할 수 없습니다.");
+                return new ResponseEntity<Map<String, Object>>(resultMap, status);
+            }
+
             boolean changeResult = userService.changePassword(nowUserId, upcr);
 
             if (changeResult) {
@@ -424,22 +385,43 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "성공"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
-    public ResponseEntity<Map<String, Object>> sendPassword(
+    public ResponseEntity<ResVO<Void>> sendPassword(
             @PathVariable("userEmail") @Parameter(description = "회원 이메일") String userEmail) {
-        Map<String, Object> resultMap = new HashMap<String, Object>();
+        ResVO<Void> result = new ResVO<Void>();
         HttpStatus status = null;
 
         try {
+            // 이메일 유효성 검사
+            if(!Pattern.matches(pattern, userEmail)) {
+                status = HttpStatus.BAD_REQUEST;
+                result.setMessage("이메일 유효성 검증 실패");
+                return new ResponseEntity<ResVO<Void>>(result, status);
+            }
+
+            User user = userService.getUserByEmail(userEmail);
+
+            if(user == null){
+                status = HttpStatus.BAD_REQUEST;
+                result.setMessage("해당 이메일의 사용자를 찾을 수 없습니다.");
+                return new ResponseEntity<ResVO<Void>>(result, status);
+            }
+
+            if(!user.getIsOauth()){
+                status = HttpStatus.NOT_ACCEPTABLE;
+                result.setMessage("소셜로그인은 접근할 수 없습니다.");
+                return new ResponseEntity<ResVO<Void>>(result, status);
+            }
+
             sendMailService.sendPassword(userEmail);
             status = HttpStatus.OK;
 
         } catch (Exception e) {
             e.printStackTrace();
             status = HttpStatus.INTERNAL_SERVER_ERROR;
-            resultMap.put("message", "서버 오류");
+            result.setMessage("서버 오류");
         }
 
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        return new ResponseEntity<ResVO<Void>>(result, status);
     }
 
 

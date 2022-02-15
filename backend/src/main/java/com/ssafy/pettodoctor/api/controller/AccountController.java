@@ -42,14 +42,19 @@ public class AccountController {
 
         try{
             // 이메일 유효성
-            if(!Pattern.matches(pattern, loginPostReq.getEmail()))
-                throw new Exception("이메일 유효성 검증 실패");
+            if(!Pattern.matches(pattern, loginPostReq.getEmail())) {
+                status = HttpStatus.BAD_REQUEST;
+                result.setMessage("이메일 유효성 검증 실패");
+                return new ResponseEntity<ResVO<String>>(result, status);
+            }
 
             Account account = accountService.findByEmail(loginPostReq.getEmail());
-            if(account == null) {
+            if(account == null || (account.getRole().equals("ROLE_USER")
+                    && userService.getUserById(account.getId()).get().getIsOauth())) { // oauth 일반로그인 제한
                 status = HttpStatus.NOT_ACCEPTABLE;
                 result.setMessage("잘못된 이메일입니다.");
-            } else if (!account.getPassword().equals(
+            }
+            else if (!account.getPassword().equals(
                     new String(PasswordUtil.hash(loginPostReq.getPassword().toCharArray(), account.getSalt()))
             )) {
                 status = HttpStatus.UNAUTHORIZED;
