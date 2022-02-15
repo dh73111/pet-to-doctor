@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import { medicineInfo, checkPrescription } from "api/prescription";
@@ -8,11 +9,11 @@ function PrescriptionDetail(props) {
     const [presc, setPresc] = useState({});
     const [drugs, setDrugs] = useState([]);
     const navigate = useNavigate();
-
+    const { user } = useSelector((store) => store);
+    console.log(user, "user");
     const sum = () => {
         let sum = 0;
         for (let item of drugs) {
-            console.log(typeof item.price);
             sum += item.price;
         }
         return sum;
@@ -27,7 +28,7 @@ function PrescriptionDetail(props) {
         };
         init();
     }, []);
-    console.log(presc);
+
     return (
         <Container>
             {/* <Box sx={{ fontSize: 40, mt: 7, textAlign: "center", fontWeight: "bold" }}>처방전</Box>; */}
@@ -69,7 +70,7 @@ function PrescriptionDetail(props) {
                 }}>
                 확인
             </Button>
-            {presc.type !== "COMPLETE" ? (
+            {presc.type !== "COMPLETE" && user.role !== "ROLE_DOCTOR" ? (
                 <Button
                     variant='contained'
                     sx={{ mx: 1, mt: 3, mb: 3, float: "right" }}

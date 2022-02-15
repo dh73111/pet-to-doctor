@@ -36,18 +36,23 @@ function UserMedicinePayment(props) {
     const [tel, setTel] = useState("");
     const [shippingName, setShippingName] = useState("");
     const [street, setStreet] = useState("");
-    const [zipCode, setZipcode] = useState("");
+    const [zipcode, setZipcode] = useState("");
     const [city, setCity] = useState("");
     const user = useSelector((store) => store.user);
-    console.log(user, " ddd");
     const userInfo = {
         name: user.name,
         tel: user.tel,
     };
-    console.log(useLocation());
     const { drug } = useLocation().state;
     const { shippingCost } = useLocation().state;
-
+    const sum = () => {
+        let sum = 0;
+        for (let item of drug) {
+            sum += item.price;
+        }
+        return sum;
+    };
+    console.log(drug);
     // const total = prescription.data.price;
     return (
         <ThemeProvider theme={newTheme}>
@@ -86,6 +91,8 @@ function UserMedicinePayment(props) {
                                 setStreet={setStreet}
                                 setShippingName={setShippingName}
                                 setTel={setTel}
+                                zipcode={zipcode}
+                                city={city}
                             />
                             {/* <PayMethod /> */}
                         </Grid>
@@ -100,7 +107,7 @@ function UserMedicinePayment(props) {
                                     </Grid>
                                     <Grid align='right' item xs={7}>
                                         <Typography xs={6} sx={{ ml: 3, pr: 1 }}>
-                                            3,000원
+                                            {shippingCost}
                                         </Typography>
                                     </Grid>
                                 </Grid>
@@ -118,7 +125,7 @@ function UserMedicinePayment(props) {
                                     </Grid>
                                     <Grid item xs={8}>
                                         <Typography variant='h4' sx={{ textAlign: "right" }}>
-                                            {shippingCost}원
+                                            {sum() + shippingCost}원
                                         </Typography>
                                     </Grid>
                                 </Grid>
