@@ -27,11 +27,6 @@ public class NoticeService {
         return noticeRepository.registerNotice(noticeInfo, account, treatment);
     }
 
-    @Transactional
-    public Notice updateNotice(Long noticeId, NoticeType noticeType) {
-        return noticeRepository.updateNotice(noticeId, noticeType);
-    }
-
 
     @Transactional
     public Notice updateCheckInfo(Long noticeId) {
