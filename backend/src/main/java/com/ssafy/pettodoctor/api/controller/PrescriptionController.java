@@ -191,7 +191,7 @@ public class PrescriptionController {
     }
 
     @PutMapping("/payment/{prescriptionId}")
-    @Operation(summary = "결제 정보 수정", description = "처방 정보 수정한다.")
+    @Operation(summary = "결제 정보 수정", description = "처방 정보 수정한다. PayemntType이 COMPLETE로 변경된다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공"),
             @ApiResponse(responseCode = "401", description = "인증 실패"),
@@ -200,12 +200,12 @@ public class PrescriptionController {
     })
     public ResponseEntity<ResVO<PrescriptionRes>> updatePaymentInfo(
             @PathVariable @Parameter(description = "처방키") Long prescriptionId,
-            @RequestBody @Parameter(description = "결제 정보 상태") PaymentType paymentType) {
+            @RequestBody @Parameter(description = "결제 코드") String paymentCode) {
         ResVO<PrescriptionRes> result = new ResVO<>();
         HttpStatus status = null;
 
         try{
-            Prescription prescription = prescriptionService.updatePaymentInfo(prescriptionId, paymentType);
+            Prescription prescription = prescriptionService.updatePaymentInfo(prescriptionId, paymentCode);
             result.setData(PrescriptionRes.convertToRes(prescription));
             result.setMessage("성공");
             status = HttpStatus.OK;

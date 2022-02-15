@@ -34,7 +34,6 @@ public class PrescriptionService {
                 prescriptionPostReq.getAdministration(),
                 prescriptionPostReq.getDiagnosis(),
                 prescriptionPostReq.getOpinion(),
-                prescriptionPostReq.getType(),
                 prescriptionPostReq.getMedicineCost(),
                 prescriptionPostReq.getAdditionalCost(),
                 prescriptionPostReq.getIsShipping()
@@ -58,7 +57,6 @@ public class PrescriptionService {
         updatePrescription.ifPresent(selectPrescription -> {
             selectPrescription.setIsShipping(certificateInfo.getIsShipping());
             selectPrescription.setInvoiceCode(certificateInfo.getInvoiceCode());
-            selectPrescription.setPaymentCode(certificateInfo.getPaymentCode());
             selectPrescription.setShippingAddress(certificateInfo.getAddress());
             selectPrescription.setShippingName(certificateInfo.getShippingName());
             selectPrescription.setShippingTel(certificateInfo.getShippingTel());
@@ -82,12 +80,17 @@ public class PrescriptionService {
     }
 
     @Transactional
-    public Prescription updatePaymentInfo(Long prescriptionId, PaymentType paymentType) {
+    public Prescription updatePaymentInfo(Long prescriptionId, String paymentCode) throws Exception {
 
         Long treatmentId = treatmentRepositry.findByPrescriptionId(prescriptionId).getId();
         Long doctorId = treatmentRepositry.findByPrescriptionId(prescriptionId).getDoctor().getId();
+        Prescription prescription = prescriptionRepository.findById(prescriptionId);
 
-        if(paymentType.equals(PaymentType.COMPLETE)){ // 처방전 결제가 됐다면
+        if(!prescription.getType().equals(PaymentType.UNCOMPLETE)) throw new Exception("잘못된 접근입니다.");
+
+        prescription.updatePaymentInfo(paymentCode);
+
+        if(prescription.getType().equals(PaymentType.COMPLETE)){ // 처방전 결제가 됐다면
             // 의사에게 알림
             NoticePostReq noticeInfo = new NoticePostReq();
             noticeInfo.setAccountId(doctorId);
@@ -98,6 +101,8 @@ public class PrescriptionService {
             noticeRepository.registerNotice(noticeInfo, treatmentRepositry.findByPrescriptionId(prescriptionId).getDoctor(), null);
         }
 
-        return prescriptionRepository.updatePaymentInfo(prescriptionId, paymentType);
+
+//        return prescriptionRepository.updatePaymentInfo(prescriptionId, paymentType);
+        return prescription;
     }
 }

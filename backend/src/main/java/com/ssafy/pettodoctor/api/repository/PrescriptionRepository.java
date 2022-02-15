@@ -39,9 +39,9 @@ public class PrescriptionRepository {
                 .getResultList();
     }
 
-    public Prescription updatePaymentInfo(Long prescriptionId, PaymentType paymentType) {
-        Prescription prescription = em.find(Prescription.class, prescriptionId);
-        prescription.setType(paymentType);
-        return prescription;
-    }
+//    public Prescription updatePaymentInfo(Long prescriptionId, PaymentType paymentType) {
+//        Prescription prescription = em.find(Prescription.class, prescriptionId);
+//        prescription.setType(paymentType);
+//        return prescription;
+//    }
 }
