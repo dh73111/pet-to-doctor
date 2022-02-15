@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import { medicineInfo, checkPrescription } from "api/prescription";
@@ -8,6 +9,14 @@ function PrescriptionDetail(props) {
     const [presc, setPresc] = useState({});
     const [drugs, setDrugs] = useState([]);
     const navigate = useNavigate();
+    const { user } = useSelector((store) => store);
+    const sum = () => {
+        let sum = 0;
+        for (let item of drugs) {
+            sum += item.price;
+        }
+        return sum;
+    };
     useEffect(() => {
         const init = async () => {
             const precId = location.state;
@@ -18,7 +27,6 @@ function PrescriptionDetail(props) {
         };
         init();
     }, []);
-    console.log(presc);
     return (
         <Container>
             {/* <Box sx={{ fontSize: 40, mt: 7, textAlign: "center", fontWeight: "bold" }}>처방전</Box>; */}
@@ -48,7 +56,7 @@ function PrescriptionDetail(props) {
                             );
                         })}
                     </Box>
-                    <Box sx={{ mt: 2 }}>가격 : {presc.medicineCost} 원</Box>
+                    <Box sx={{ mt: 2 }}>가격 : {sum()} 원</Box>
                 </Box>
             </Box>
             <div className='devider'></div>
@@ -60,12 +68,14 @@ function PrescriptionDetail(props) {
                 }}>
                 확인
             </Button>
-            {presc.type !== "COMPLETE" ? (
+            {presc.type !== "COMPLETE" && user.role !== "ROLE_DOCTOR" ? (
                 <Button
                     variant='contained'
                     sx={{ mx: 1, mt: 3, mb: 3, float: "right" }}
                     onClick={() => {
-                        navigate("/petodoctor/usermedipayment", { state: { drug: drugs } });
+                        navigate("/petodoctor/usermedipayment", {
+                            state: { drug: drugs, shippingCost: presc.shippingCost, id: presc.id },
+                        });
                     }}>
                     결제
                 </Button>

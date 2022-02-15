@@ -81,15 +81,27 @@ function ShipmentInfo(props) {
                         <Box sx={{ display: "flex", flexDirection: "column", flex: 1 }}>
                             <Box>
                                 <TextField
+<<<<<<< HEAD
                                     sx={{ mb: 1, backgroundColor: "#FBFBFD" }}
                                     variant='outlined'
                                     size='small'
                                     disabled
+=======
+                                    sx={{ mb: 1 }}
+                                    variant='outlined'
+                                    size='small'
+                                    disabled
+                                    value={props.zipcode}
+>>>>>>> feat/api/frontend
                                 />
                                 <Button sx={{ ml: 1 }} onClick={openPopup} variant='contained'>
                                     우편번호 검색
                                 </Button>
                             </Box>
+<<<<<<< HEAD
+=======
+                            <TextField sx={{ mb: 1 }} variant='outlined' size='small' disabled value={props.city} />
+>>>>>>> feat/api/frontend
                             <TextField
                                 sx={{ mb: 1, backgroundColor: "#FBFBFD" }}
                                 variant='outlined'

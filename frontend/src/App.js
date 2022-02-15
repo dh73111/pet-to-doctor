@@ -17,7 +17,7 @@ import DoctorPasswordChange from "./components/doctor/DoctorPasswordChange";
 import DoctorMypage from "components/doctor/DoctorMypage";
 import Notice from "components/Notice";
 import Review from "components/Review";
-
+import Index from "components/Index";
 import UserLoginModal from "components/user/UserLoginModal";
 import UserJoin from "components/user/UserJoin";
 import UserSignupConfirm from "components/user/UserSignupConfirm";
@@ -55,6 +55,7 @@ function App() {
         <ThemeProvider theme={fontTheme}>
             <Box>
                 <div className='App'>
+<<<<<<< HEAD
                     <ScrollToTop>
                         <Routes>
                             <Route path='/petodoctor/*' element={<NavBar />}></Route>
@@ -71,6 +72,24 @@ function App() {
                             <Route path='/petodoctor/doctormypage' element={<DoctorMypage />}></Route>
                             <Route path='/doctorprescriptonform' element={<DoctorPrescriptionForm />}></Route>
                             <Route path='/petodoctor/doctorconsulting' element={<DoctorConsuliting />}></Route>
+=======
+                    <Routes>
+                        <Route path='/petodoctor/*' element={<NavBar />}></Route>
+                    </Routes>
+                    <Routes>
+                        <Route path='/petodoctor/' element={<Home />}></Route>
+                        <Route path='/' element={<Index />}></Route>
+                        <Route path='/petodoctor/kakaooauth*' element={<Home />}></Route>
+                    </Routes>
+                    <Routes>
+                        {/* doctor */}
+                        <Route path='/petodoctor/doctorreservation' element={<DoctorReservation />}></Route>
+                        <Route path='/petodoctor/doctordiagnosis' element={<DoctorDianosis />}></Route>
+                        <Route path='/petodoctor/doctorprescription' element={<DoctorPrescription />}></Route>
+                        <Route path='/petodoctor/doctormypage' element={<DoctorMypage />}></Route>
+                        <Route path='/doctorprescriptonform' element={<DoctorPrescriptionForm />}></Route>
+                        <Route path='/petodoctor/doctorconsulting' element={<DoctorConsuliting />}></Route>
+>>>>>>> feat/api/frontend
 
                             {/* user */}
                             <Route path='/petodoctor/notice' element={<Notice />}></Route>
