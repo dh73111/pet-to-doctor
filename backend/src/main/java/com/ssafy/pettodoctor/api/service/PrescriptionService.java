@@ -34,10 +34,8 @@ public class PrescriptionService {
                 prescriptionPostReq.getAdministration(),
                 prescriptionPostReq.getDiagnosis(),
                 prescriptionPostReq.getOpinion(),
-                prescriptionPostReq.getType(),
                 prescriptionPostReq.getMedicineCost(),
-                prescriptionPostReq.getAdditionalCost(),
-                prescriptionPostReq.getIsShipping()
+                prescriptionPostReq.getAdditionalCost()
         );
 
         medicineRepository.saveMedicines(prescription, prescriptionPostReq.getMedicines());
@@ -47,8 +45,13 @@ public class PrescriptionService {
         Treatment treatment = treatmentRepositry.findByTreatmentId(treatmentId);
         treatment.setPrescription(prescription);
 
-        // 처방전 등록하면 해당 알림 type 변경
-        noticeRepository.updateNotice(noticeRepository.findBytreatmentId(treatmentId).getId(), NoticeType.DELIVERY);
+        // 처방전이 등록되면 유저에게 알림
+        NoticePostReq noticeInfo = new NoticePostReq();
+        noticeInfo.setAccountId(treatment.getUser().getId());
+        noticeInfo.setType(NoticeType.NOTIFICATION);
+
+        noticeRepository.registerNotice(noticeInfo, treatment.getUser(), treatment);
+
     }
 
     @Transactional
@@ -58,7 +61,6 @@ public class PrescriptionService {
         updatePrescription.ifPresent(selectPrescription -> {
             selectPrescription.setIsShipping(certificateInfo.getIsShipping());
             selectPrescription.setInvoiceCode(certificateInfo.getInvoiceCode());
-            selectPrescription.setPaymentCode(certificateInfo.getPaymentCode());
             selectPrescription.setShippingAddress(certificateInfo.getAddress());
             selectPrescription.setShippingName(certificateInfo.getShippingName());
             selectPrescription.setShippingTel(certificateInfo.getShippingTel());
@@ -71,33 +73,44 @@ public class PrescriptionService {
     public Prescription findById(Long id) {return prescriptionRepository.findById(id); }
 
     @Transactional
-    public Prescription updateShippingInfo(Long prescriptionId, ShippingReq shippingReq){
+    public Prescription updateShippingInfo(Long prescriptionId, String invoiceCode){
+
         Prescription prescription = prescriptionRepository.findById(prescriptionId);
-        prescription.updateShippingInfo(shippingReq.getInvoiceCode(), shippingReq.getAddress(), shippingReq.getShippingName(),
-                shippingReq.getShippingTel(), shippingReq.getShippingCost());
+        prescription.updateShippingInfo(invoiceCode);
+
+        // 운송장이 등록되면 유저에게 알림
+        Treatment treatment = treatmentRepositry.findByPrescriptionId(prescriptionId);
+        NoticePostReq noticeInfo = new NoticePostReq();
+        noticeInfo.setAccountId(treatment.getUser().getId());
+        noticeInfo.setType(NoticeType.DELIVERY);
+
+        noticeRepository.registerNotice(noticeInfo, treatment.getUser(), treatment);
+
+
 
         // 운송장을 등록하면 해당 알림 type 변경
-        noticeRepository.updateNotice(noticeRepository.findBytreatmentId(treatmentRepositry.findByPrescriptionId(prescriptionId).getId()).getId(), NoticeType.NOTIFICATION);
+//        noticeRepository.updateNotice(noticeRepository.findBytreatmentId(treatmentRepositry.findByPrescriptionId(prescriptionId).getId()).getId(), NoticeType.DELIVERY);
         return prescription;
     }
 
     @Transactional
-    public Prescription updatePaymentInfo(Long prescriptionId, PaymentType paymentType) {
+    public Prescription updatePaymentInfo(Long prescriptionId, ShippingReq shippingReq) throws Exception {
 
         Long treatmentId = treatmentRepositry.findByPrescriptionId(prescriptionId).getId();
         Long doctorId = treatmentRepositry.findByPrescriptionId(prescriptionId).getDoctor().getId();
+        Prescription prescription = prescriptionRepository.findById(prescriptionId);
+        Treatment treatment = treatmentRepositry.findByTreatmentId(treatmentId);
 
-        if(paymentType.equals(PaymentType.COMPLETE)){ // 처방전 결제가 됐다면
+        if(!prescription.getType().equals(PaymentType.UNCOMPLETE)) throw new Exception("잘못된 접근입니다.");
+
+        prescription.updatePaymentInfo(shippingReq);
+        if(prescription.getType().equals(PaymentType.COMPLETE)){ // 처방전 결제가 됐다면
+
             // 의사에게 알림
-            NoticePostReq noticeInfo = new NoticePostReq();
-            noticeInfo.setAccountId(doctorId);
-            noticeInfo.setContent(treatmentId + "번 - 배송이 필요한 처방이 있습니다. 운송장 번호를 등록해주세요.");
-            noticeInfo.setUrl("https://"); // 운송장 등록하는 사이트
-            noticeInfo.setIsChecked(false);
-            noticeInfo.setNoticeDate(LocalDateTime.now());
-            noticeRepository.registerNotice(noticeInfo, treatmentRepositry.findByPrescriptionId(prescriptionId).getDoctor(), null);
+            Notice notice = Notice.createNotice2(treatment.getDoctor(), treatment, NoticeType.DELIVERY, treatment.getId() + "번 - 배송이 필요한 처방이 있습니다. 운송장 번호를 등록해주세요.");
+            noticeRepository.save(notice);
         }
-
-        return prescriptionRepository.updatePaymentInfo(prescriptionId, paymentType);
+        return prescription;
     }
 }
+

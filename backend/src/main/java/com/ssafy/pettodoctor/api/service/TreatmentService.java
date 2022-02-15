@@ -198,11 +198,11 @@ public class TreatmentService {
 
         // 유저 알람 생성
         Notice notice1 = Notice.createNotice2(treatment.getUser(), treatment, NoticeType.RESERVATION
-                , treatment.getId() + "번 - 예약이 취소 돼었습니다.");
+                , treatment.getId() + "번 - 예약이 취소 되었습니다.");
         noticeRepository.save(notice1);
         // 의사에게 알림 필요
         Notice notice2 = Notice.createNotice2(treatment.getDoctor(), treatment, NoticeType.RESERVATION
-                , treatment.getId() + "번 - 예약이 취소 돼었습니다.");
+                , treatment.getId() + "번 - 예약이 취소 되었습니다.");
         noticeRepository.save(notice2);
 
         return treatment;
@@ -227,7 +227,7 @@ public class TreatmentService {
 
         // 유저 알람 생성
         Notice notice1 = Notice.createNotice2(treatment.getUser(), treatment, NoticeType.RESERVATION
-                , treatment.getId() + "번 - 예약이 수락 돼었습니다.");
+                , treatment.getId() + "번 - 예약이 수락 되었습니다.");
         noticeRepository.save(notice1);
 
         return treatment;
@@ -252,11 +252,11 @@ public class TreatmentService {
 
         // 유저 알람 생성
         Notice notice1 = Notice.createNotice2(treatment.getUser(), treatment, NoticeType.RESERVATION
-                , treatment.getId() + "번 - 예약이 완료 돼었습니다.");
+                , treatment.getId() + "번 - 예약이 완료 되었습니다.");
         noticeRepository.save(notice1);
         // 의사에게 알림 필요
         Notice notice2 = Notice.createNotice2(treatment.getDoctor(), treatment, NoticeType.RESERVATION
-                , treatment.getId() + "번 - 예약이 완료 돼었습니다.");
+                , treatment.getId() + "번 - 예약이 완료 되었습니다.");
         noticeRepository.save(notice2);
 
         return treatment;

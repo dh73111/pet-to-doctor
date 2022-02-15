@@ -28,35 +28,24 @@ public class NoticeRepository {
     }
 
     public Long registerNotice(NoticePostReq noticeInfo, Account account, Treatment treatment) {
+        // 알림 type에 따라 content 및 url 내용 다르게 작성
+        String content = treatment.getId() + "번 [" + treatment.getHospital().getName() + "-" + treatment.getDoctor().getName() + "] ";
+        if(noticeInfo.getType().equals(NoticeType.RESERVATION)) { // 에약
+            noticeInfo.setContent(content + "예약이 완료되었습니다.");
+            noticeInfo.setUrl("");
+        }
+        else if(noticeInfo.getType().equals(NoticeType.NOTIFICATION)) { // 알림
+            noticeInfo.setContent(content + "처방전이 등록되었습니다. 결제를 진행해 주세요");
+            noticeInfo.setUrl(String.valueOf(treatment.getPrescription().getId()));
+        }
+        else if(noticeInfo.getType().equals(NoticeType.DELIVERY)){
+            noticeInfo.setContent(content + "운송장이 등록되었습니다."); // 배송
+            noticeInfo.setUrl(String.valueOf(treatment.getPrescription().getId()));
+        }
+
         Notice notice = Notice.createNotice(account, treatment, noticeInfo);
         em.persist(notice);
         return notice.getId();
-    }
-
-    public Notice updateNotice(Long noticeId, NoticeType noticeType) {
-        Notice notice = em.find(Notice.class, noticeId);
-        Long treatmentId = notice.getTreatment().getId();
-        String hospitalName = notice.getTreatment().getHospital().getName();
-        String doctorName = notice.getTreatment().getDoctor().getName();
-        String content = treatmentId + "번 [" + hospitalName + "-" + doctorName + "] ";
-
-        // 알림 type에 따라 content 및 url 내용 다르게 업데이트
-        if(noticeType.equals(NoticeType.RESERVATION)) { // 에약
-            notice.setContent(content + "예약이 완료되었습니다.");
-            notice.setUrl("https://");
-        }
-        else if(noticeType.equals(NoticeType.DELIVERY)) { // 배송
-            notice.setContent(content + "처방전이 등록되었습니다. 결제를 진행해 주세요");
-            notice.setUrl("https://");
-        }
-        else if(noticeType.equals(NoticeType.DELIVERY)){
-            notice.setContent(content + "운송장이 등록되었습니다.");
-            notice.setUrl("https://");
-        }
-        notice.setType(noticeType);
-        notice.setNoticeDate(LocalDateTime.now());
-        notice.setIsChecked(false);
-        return notice;
     }
 
     public Notice updateCheckInfo(Long noticeId) {

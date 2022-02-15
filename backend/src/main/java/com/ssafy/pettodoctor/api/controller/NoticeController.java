@@ -55,32 +55,6 @@ public class NoticeController {
         return new ResponseEntity<ResVO<Long>>(result, status);
     }
 
-    @PutMapping("/{noticeId}")
-    @Operation(summary = "알림 상태 수정", description = "알림 정보를 수정한다.")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "성공"),
-            @ApiResponse(responseCode = "401", description = "인증 실패"),
-            @ApiResponse(responseCode = "404", description = "사용자 없음"),
-            @ApiResponse(responseCode = "500", description = "서버 오류")
-    })
-    public ResponseEntity<ResVO<NoticeRes>> updateNoticeState(
-            @PathVariable @Parameter(description = "알림키") Long noticeId,
-            @RequestBody @Parameter(description = "알림 정보 상태") NoticeType noticeType) {
-        ResVO<NoticeRes> result = new ResVO<>();
-        HttpStatus status = null;
-        try {
-            Notice notice = noticeService.updateNotice(noticeId, noticeType);
-            result.setData(NoticeRes.convertToRes(notice));
-            result.setMessage("성공");
-            status = HttpStatus.OK;
-        } catch (Exception e) {
-            status = HttpStatus.INTERNAL_SERVER_ERROR;
-            result.setMessage("서버오류");
-        }
-
-        return new ResponseEntity<ResVO<NoticeRes>>(result, status);
-    }
-
     @PutMapping("/check/{noticeId}")
     @Operation(summary = "확인여부 정보 수정", description = "확인여부 정보를 수정한다.")
     @ApiResponses({

@@ -24,7 +24,7 @@ public class User extends Account {
     private List<Pet> pets = new ArrayList<>();
 
     //== 생성 메소드 ==//
-    public static User createCommonUser(String email, String name, String password, Address address){
+    public static User createCommonUser(String email, String name, String password, Address address, byte[] salt){
         User user = new User();
         user.setEmail(email);
         user.setName(name);
@@ -34,6 +34,7 @@ public class User extends Account {
         user.setIsOauth(false);
         user.setJoinDate(LocalDate.now());
         user.setRole("ROLE_USER");
+        user.setSalt(salt);
         return user;
     }
 

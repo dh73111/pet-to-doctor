@@ -12,6 +12,7 @@ import com.ssafy.pettodoctor.api.request.PetPostReq;
 import com.ssafy.pettodoctor.api.request.UserChangeReq;
 import com.ssafy.pettodoctor.api.request.UserCommonSignupPostReq;
 import com.ssafy.pettodoctor.api.request.UserPasswordChangeReq;
+import com.ssafy.pettodoctor.common.util.PasswordUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,12 +43,16 @@ public class UserService {
     private final UserRepository userRepository;
     private final PetRepository petRepository;
     private final UserCertificationRepository userCertificationRepository;
+    private final PasswordUtil passwordUtil;
 
     @Transactional
     public User signup(UserCommonSignupPostReq signupInfo) {
+        byte[] salt = PasswordUtil.getNextSalt();
+        String hash = new String(PasswordUtil.hash(signupInfo.getPassword().toCharArray(), salt));
+
         // 필수
         User user = User.createCommonUser(signupInfo.getEmail(),
-                signupInfo.getName(), signupInfo.getPassword(), signupInfo.getAddress());
+                signupInfo.getName(), hash, signupInfo.getAddress(), salt);
         // 선택
         user.setTel(signupInfo.getTel());
 
@@ -115,14 +120,17 @@ public class UserService {
 
     @Transactional
     public boolean checkPassword(String inputPass, User user) {
-        return user.getPassword().equals(inputPass);
+        String hash = new String(PasswordUtil.hash(inputPass.toCharArray(), user.getSalt()));
+        return user.getPassword().equals(hash);
     }
 
     @Transactional
     public boolean changePassword(Long id, UserPasswordChangeReq upcr) {
         User user = userRepository.findById(id).get();
-        if (upcr.getNewPassword().equals(upcr.getNewPasswordConf()) && user.getPassword().equals(upcr.getPassword())) {
-            user.setPassword(upcr.getNewPassword());
+        String hash = new String(PasswordUtil.hash(upcr.getPassword().toCharArray(), user.getSalt()));
+        if(user.getPassword().equals(hash)){
+            String newHash = new String(PasswordUtil.hash(upcr.getNewPassword().toCharArray(), user.getSalt()));
+            user.setPassword(newHash);
             return true;
         }
         return false;
