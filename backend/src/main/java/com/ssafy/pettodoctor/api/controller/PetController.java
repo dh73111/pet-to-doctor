@@ -31,7 +31,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/api/pet")
 @Tag(name = "pet controller", description = "반려동물 관련 컨트롤러")
-@CrossOrigin("*")
+@CrossOrigin("https://i6b209.p.ssafy.io/")
 public class PetController {
 
     private final PetService petService;

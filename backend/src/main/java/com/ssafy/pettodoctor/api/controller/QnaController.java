@@ -23,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/qna")
 @Tag(name = "Qna controller", description = "QnA 관련 컨트롤러")
-@CrossOrigin("*")
+@CrossOrigin("https://i6b209.p.ssafy.io/")
 public class QnaController {
     private final QnaService qnaService;
 

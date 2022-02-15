@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 @RequestMapping("/api/account/")
 @Tag(name = "account controller", description = "회원 관련 컨트롤러")
-@CrossOrigin("*")
+@CrossOrigin("https://i6b209.p.ssafy.io/")
 public class AccountController {
     private final AccountService accountService;
     private final UserService userService;
@@ -49,6 +49,8 @@ public class AccountController {
             }
 
             Account account = accountService.findByEmail(loginPostReq.getEmail());
+            System.out.println(account.getPassword());
+            System.out.println(new String(PasswordUtil.hash(loginPostReq.getPassword().toCharArray(), account.getSalt())));
             if(account == null || (account.getRole().equals("ROLE_USER")
                     && userService.getUserById(account.getId()).get().getIsOauth())) { // oauth 일반로그인 제한
                 status = HttpStatus.NOT_ACCEPTABLE;

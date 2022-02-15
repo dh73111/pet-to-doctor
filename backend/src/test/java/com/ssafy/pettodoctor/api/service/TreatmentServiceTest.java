@@ -25,37 +25,37 @@ class TreatmentServiceTest {
     @Autowired
     TreatmentService ts;
 
-    @Test
-    public void 진료예약테스트(){
-        User u = new User();
-        Doctor d = new Doctor();
-        Hospital h = new Hospital();
-        d.setHospital(h);
-        TreatmentPostReq tpr2 = new TreatmentPostReq();
-        tpr2.setType(TreatmentType.RES_REQUEST);
-        Treatment t = Treatment.createTreatment(tpr2, d, u ,h);
-        t.setPetName("고양이");
-        em.persist(u);
-        em.persist(d);
-        em.persist(h);
-        em.persist(t);
-        em.flush();
-        em.clear();
-
-        Assertions.assertEquals("고양이", ts.findById(t.getId()).getPetName());
-        Assertions.assertEquals("고양이", ts.findByUserIdAndType(t.getUser().getId(), TreatmentType.RES_REQUEST).get(0).getPetName());
-        Assertions.assertEquals("고양이", ts.findByDoctorIdAndType(t.getDoctor().getId(), TreatmentType.RES_REQUEST).get(0).getPetName());
-        ts.updateTreatment(t.getId(), TreatmentType.RES_REJECT);
-        Assertions.assertEquals(TreatmentType.RES_REJECT, ts.findById(t.getId()).getType());
-
-        TreatmentPostReq tpr = new TreatmentPostReq();
-        tpr.setDoctorId(d.getId());
-        tpr.setUserId(u.getId());
-        tpr.setHospitalId(h.getId());
-        tpr.setType(TreatmentType.RES_REQUEST);
-        ts.registerTreatment(tpr);
-        ts.registerTreatment(tpr);
-
-        Assertions.assertEquals(2, ts.findByUserIdAndType(u.getId(), TreatmentType.RES_REQUEST).size());
-    }
+//    @Test
+//    public void 진료예약테스트(){
+//        User u = new User();
+//        Doctor d = new Doctor();
+//        Hospital h = new Hospital();
+//        d.setHospital(h);
+//        TreatmentPostReq tpr2 = new TreatmentPostReq();
+//        tpr2.setType(TreatmentType.RES_REQUEST);
+//        Treatment t = Treatment.createTreatment(tpr2, d, u ,h);
+//        t.setPetName("고양이");
+//        em.persist(u);
+//        em.persist(d);
+//        em.persist(h);
+//        em.persist(t);
+//        em.flush();
+//        em.clear();
+//
+//        Assertions.assertEquals("고양이", ts.findById(t.getId()).getPetName());
+//        Assertions.assertEquals("고양이", ts.findByUserIdAndType(t.getUser().getId(), TreatmentType.RES_REQUEST).get(0).getPetName());
+//        Assertions.assertEquals("고양이", ts.findByDoctorIdAndType(t.getDoctor().getId(), TreatmentType.RES_REQUEST).get(0).getPetName());
+//        ts.updateTreatment(t.getId(), TreatmentType.RES_REJECT);
+//        Assertions.assertEquals(TreatmentType.RES_REJECT, ts.findById(t.getId()).getType());
+//
+//        TreatmentPostReq tpr = new TreatmentPostReq();
+//        tpr.setDoctorId(d.getId());
+//        tpr.setUserId(u.getId());
+//        tpr.setHospitalId(h.getId());
+//        tpr.setType(TreatmentType.RES_REQUEST);
+//        ts.registerTreatment(tpr);
+//        ts.registerTreatment(tpr);
+//
+//        Assertions.assertEquals(2, ts.findByUserIdAndType(u.getId(), TreatmentType.RES_REQUEST).size());
+//    }
 }

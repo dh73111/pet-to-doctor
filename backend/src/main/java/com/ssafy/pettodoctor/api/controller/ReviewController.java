@@ -24,7 +24,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/api/review")
 @Tag(name = "review controller", description = "리뷰 관련 컨트롤러")
-@CrossOrigin("*")
+@CrossOrigin("https://i6b209.p.ssafy.io/")
 public class ReviewController {
     private final ReviewService reviewService;
 

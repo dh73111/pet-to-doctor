@@ -30,7 +30,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/api/doctor")
 @Tag(name = "doctor controller", description = "의사 관련 컨트롤러")
-@CrossOrigin("*")
+@CrossOrigin("https://i6b209.p.ssafy.io/")
 public class DoctorController {
     private final DoctorService doctorService;
     @GetMapping("/hospital/{hospitalId}")

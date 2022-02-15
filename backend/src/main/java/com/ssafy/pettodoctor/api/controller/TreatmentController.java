@@ -24,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/treatment")
 @Tag(name = "treatment controller", description = "진료 관련 컨트롤러")
-@CrossOrigin("*")
+@CrossOrigin("https://i6b209.p.ssafy.io/")
 public class TreatmentController {
     private final TreatmentService treatmentService;
     private final PrescriptionService prescriptionService;

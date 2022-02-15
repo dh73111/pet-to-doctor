@@ -7,6 +7,7 @@ import com.ssafy.pettodoctor.api.repository.UserCertificationRepository;
 import com.ssafy.pettodoctor.api.repository.UserRepository;
 import com.ssafy.pettodoctor.common.util.PasswordUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,8 +30,12 @@ public class SendMailService {
     private final UserCertificationRepository userCertificationRepository;
     private final PasswordUtil passwordUtil;
 
-    final private static String myMail = "jh.javamail@gmail.com";
-    final private static String password = "a789a789";
+    @Value("${javamail.email}")
+    private String myMail;
+
+    @Value("${javamail.pw}")
+    private String pw;
+
     final private static String fromMail = "jh.javamail@gmail.com";
     final private static String fromName = "Pet-To-Doctor";
 
@@ -77,7 +82,7 @@ public class SendMailService {
 
         Session mailSession = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
                 protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(myMail, password);
+                    return new PasswordAuthentication(myMail, pw);
                 }
             });
 
@@ -125,7 +130,7 @@ public class SendMailService {
 
         Session mailSession = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(myMail, password);
+                return new PasswordAuthentication(myMail, pw);
             }
         });
 

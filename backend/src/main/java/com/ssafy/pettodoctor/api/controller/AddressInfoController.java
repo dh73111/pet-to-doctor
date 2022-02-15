@@ -22,7 +22,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/api/address-info")
 @Tag(name = "addressInfo controller", description = "주소정보 관련 컨트롤러")
-@CrossOrigin("*")
+@CrossOrigin("https://i6b209.p.ssafy.io/")
 public class AddressInfoController {
     private final AddressInfoService addressInfoService;
 

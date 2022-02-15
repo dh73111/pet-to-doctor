@@ -26,7 +26,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/api/notice")
 @Tag(name = "notice controller", description = "알림 관련 컨트롤러")
-@CrossOrigin("*")
+@CrossOrigin("https://i6b209.p.ssafy.io/")
 public class NoticeController {
     private final NoticeService noticeService;
 
