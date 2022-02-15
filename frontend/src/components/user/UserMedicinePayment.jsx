@@ -20,8 +20,8 @@ import PaymentUserInfo from "./resources/PaymentUserInfo";
 import Banner from "./resources/Banner";
 import { useSelector } from "react-redux";
 import { Store } from "@mui/icons-material";
-import { useLocation } from "react-router-dom";
-
+import { useLocation, useNavigate } from "react-router-dom";
+import { changePerscription } from "api/prescription";
 function UserMedicinePayment(props) {
     const gridContainer = { display: "flex", mb: 1 };
     const shipmentLabel = { width: "260px", fontWeight: "600", lineHeight: "40px" };
@@ -45,6 +45,7 @@ function UserMedicinePayment(props) {
     };
     const { drug } = useLocation().state;
     const { shippingCost } = useLocation().state;
+    const { id } = useLocation().state;
     const sum = () => {
         let sum = 0;
         for (let item of drug) {
@@ -52,8 +53,37 @@ function UserMedicinePayment(props) {
         }
         return sum;
     };
-    console.log(drug);
-    // const total = prescription.data.price;
+    const { IMP } = window;
+    IMP.init("imp36272840");
+    // console.log(city);
+    // console.log(street);
+    // console.log(zipcode);
+    // console.log(shippingName);
+    // console.log(tel);
+    // console.log(shippingCost);
+    const navigate = useNavigate();
+    const pay = async () => {
+        IMP.request_pay(
+            {
+                pg: "kakaopay",
+                pay_method: "kakaopay",
+                merchant_uid: String(id + 123456789),
+                name: `${userInfo.name} 처방 약 결제`,
+                amount: sum() + shippingCost,
+            },
+            async (response) => {
+                console.log(response);
+                await changePerscription(id, {
+                    paymentCode: id + 123456789,
+                    shippingCost: sum() + 3000,
+                    shippingTel: tel,
+                    shippingName: shippingName,
+                    address: { city: city, street: street, zipcode: zipcode },
+                });
+                navigate("/petodoctor/userreservationcomplete");
+            }
+        );
+    };
     return (
         <ThemeProvider theme={newTheme}>
             <Container maxWidth='lg'>
@@ -107,7 +137,7 @@ function UserMedicinePayment(props) {
                                     </Grid>
                                     <Grid align='right' item xs={7}>
                                         <Typography xs={6} sx={{ ml: 3, pr: 1 }}>
-                                            {shippingCost}
+                                            3000 원
                                         </Typography>
                                     </Grid>
                                 </Grid>
@@ -131,7 +161,12 @@ function UserMedicinePayment(props) {
                                 </Grid>
                             </Box>
                             <Box sx={{ p: 4 }}>
-                                <Button variant='contained' sx={{ width: "100%", height: "40px", mx: "auto" }}>
+                                <Button
+                                    variant='contained'
+                                    onClick={() => {
+                                        pay();
+                                    }}
+                                    sx={{ width: "100%", height: "40px", mx: "auto" }}>
                                     결제
                                 </Button>
                             </Box>

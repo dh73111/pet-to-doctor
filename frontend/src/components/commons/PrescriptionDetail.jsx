@@ -10,7 +10,6 @@ function PrescriptionDetail(props) {
     const [drugs, setDrugs] = useState([]);
     const navigate = useNavigate();
     const { user } = useSelector((store) => store);
-    console.log(user, "user");
     const sum = () => {
         let sum = 0;
         for (let item of drugs) {
@@ -28,7 +27,6 @@ function PrescriptionDetail(props) {
         };
         init();
     }, []);
-
     return (
         <Container>
             {/* <Box sx={{ fontSize: 40, mt: 7, textAlign: "center", fontWeight: "bold" }}>처방전</Box>; */}
@@ -76,7 +74,7 @@ function PrescriptionDetail(props) {
                     sx={{ mx: 1, mt: 3, mb: 3, float: "right" }}
                     onClick={() => {
                         navigate("/petodoctor/usermedipayment", {
-                            state: { drug: drugs, shippingCost: presc.shippingCost },
+                            state: { drug: drugs, shippingCost: presc.shippingCost, id: presc.id },
                         });
                     }}>
                     결제
