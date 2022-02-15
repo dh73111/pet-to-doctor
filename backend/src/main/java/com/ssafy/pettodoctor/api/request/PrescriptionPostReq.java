@@ -15,15 +15,12 @@ public class PrescriptionPostReq {
     private String opinion;
     private Integer additionalCost;
     private Integer medicineCost;
-    private PaymentType type;
 
     // 선택
     private Boolean isShipping;
     private String invoiceCode;
-    private String paymentCode;
-//    private String zipcode;
-//    private String city;
-//    private String street;
+//    private String paymentCode;
+
     private Address address;
     private String shippingName;
     private String shippingTel;

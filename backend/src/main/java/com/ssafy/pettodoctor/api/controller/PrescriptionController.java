@@ -140,7 +140,7 @@ public class PrescriptionController {
     }
 
     @PutMapping("/shipping")
-    @Operation(summary = "운송장 등록", description = "운송장을 등록한다.")
+    @Operation(summary = "운송장 등록", description = "운송장을 등록한다. 등록 시 isShipping를 true로 변환한다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공"),
             @ApiResponse(responseCode = "401", description = "인증 실패"),
@@ -149,17 +149,16 @@ public class PrescriptionController {
     })
     public ResponseEntity<ResVO<PrescriptionRes>> setShipping(
             @RequestParam @Parameter(description = "리스트 아이디") Long prescriptionId,
-            @RequestBody  @Parameter(description = "배송 정보")ShippingReq shippingReq
-            ) {
+            @RequestBody  @Parameter(description = "운송장 번호") String invoiceCode) {
         ResVO<PrescriptionRes> result = new ResVO<>();
         HttpStatus status = null;
         try {
-            Prescription prescription = prescriptionService.updateShippingInfo(prescriptionId, shippingReq);
-
+            Prescription prescription = prescriptionService.updateShippingInfo(prescriptionId, invoiceCode);
             result.setData(PrescriptionRes.convertToRes(prescription));
             status = HttpStatus.OK;
             result.setMessage("성공");
         } catch (Exception e) {
+            e.printStackTrace();
             status = HttpStatus.INTERNAL_SERVER_ERROR;
             result.setMessage("서버 오류");
         }
@@ -191,7 +190,7 @@ public class PrescriptionController {
     }
 
     @PutMapping("/payment/{prescriptionId}")
-    @Operation(summary = "결제 정보 수정", description = "처방 정보 수정한다.")
+    @Operation(summary = "결제 정보 수정", description = "처방 정보 수정한다. PayemntType이 COMPLETE로 변경된다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공"),
             @ApiResponse(responseCode = "401", description = "인증 실패"),
@@ -200,12 +199,11 @@ public class PrescriptionController {
     })
     public ResponseEntity<ResVO<PrescriptionRes>> updatePaymentInfo(
             @PathVariable @Parameter(description = "처방키") Long prescriptionId,
-            @RequestBody @Parameter(description = "결제 정보 상태") PaymentType paymentType) {
+            @RequestBody @Parameter(description = "결제 코드 및 배송 정보") ShippingReq shippingReq) {
         ResVO<PrescriptionRes> result = new ResVO<>();
         HttpStatus status = null;
-
         try{
-            Prescription prescription = prescriptionService.updatePaymentInfo(prescriptionId, paymentType);
+            Prescription prescription = prescriptionService.updatePaymentInfo(prescriptionId, shippingReq);
             result.setData(PrescriptionRes.convertToRes(prescription));
             result.setMessage("성공");
             status = HttpStatus.OK;

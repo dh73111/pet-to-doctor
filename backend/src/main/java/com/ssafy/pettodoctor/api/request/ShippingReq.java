@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter @Setter
 public class ShippingReq {
-    private String invoiceCode;
+    private String paymentCode;
     private Address address;
     private String shippingName;
     private String shippingTel;
