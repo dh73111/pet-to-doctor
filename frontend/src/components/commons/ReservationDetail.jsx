@@ -37,8 +37,8 @@ function ReservationDetail() {
                         <Box sx={{ mt: 2 }}>{res.id}</Box>
                         <Box sx={{ mt: 2 }}>{resdate}</Box>
                         <Box sx={{ mt: 2 }}>{restime}</Box>
-                        <Box sx={{ mt: 2 }}>{res.hospitalId}</Box>
-                        <Box sx={{ mt: 2 }}>{res.doctorId}</Box>
+                        <Box sx={{ mt: 2 }}>{res.hospitalName}</Box>
+                        <Box sx={{ mt: 2 }}>{res.doctorName}</Box>
                     </Grid>
                 </Grid>
                 <div className='devider'></div>

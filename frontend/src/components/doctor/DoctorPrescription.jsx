@@ -106,6 +106,14 @@ function DoctorPrescription(props) {
                 break;
         }
     };
+    const [invoice, setInvoice] = useState();
+    const handleChangeInvoice = (prop) => (event) => {
+        setInvoice(event.target.value);
+        console.log(prop);
+        console.log(invoice, "invoice");
+        console.log(event.target.value);
+    };
+
     const style = {
         position: "absolute",
         top: "50%",
@@ -115,7 +123,24 @@ function DoctorPrescription(props) {
         bgcolor: "background.paper",
         boxShadow: 24,
     };
-
+    // 모달 설정
+    const modalstyle = {
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        width: 200,
+        bgcolor: "background.paper",
+        border: "2px solid #000",
+        // boxShadow: 100,
+        p: 4,
+    };
+    const [openmodal, setOpenmodal] = React.useState(false);
+    const handleOpenmodal = () => setOpenmodal(true);
+    const handleClosemodal = () => setOpenmodal(false);
+    const changeinoivce = (idx) => {
+        console.log(idx);
+    };
     return (
         <Container>
             <Grid container>
@@ -160,13 +185,24 @@ function DoctorPrescription(props) {
                             <thead>
                                 <tr>
                                     <th>처방번호</th>
+                                    <th>고객명</th>
                                     <th>처방정보</th>
                                     <th>결제상태</th>
+                                    <th>배송여부</th>
                                     <th>운송장번호/택배사</th>
                                 </tr>
                             </thead>
                             {onLoad === 0 ? (
                                 <tr>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
                                     <td>
                                         <Skeleton />
                                     </td>
@@ -193,6 +229,7 @@ function DoctorPrescription(props) {
                                             return (
                                                 <tr key={idx}>
                                                     <td>{res.id}</td>
+                                                    <td>{res.shippingName}</td>
                                                     <td>
                                                         {res.perscriptionId ? (
                                                             "X"
@@ -204,10 +241,46 @@ function DoctorPrescription(props) {
                                                             </Link>
                                                         )}
                                                     </td>
-                                                    <td>{res.type === "COMPLETE" ? "결제 완료" : " 결제 대기"}</td>
-                                                    <td>{res.type === "COMPLETE" ? res.innvoiceCode : ""}</td>
+                                                    <td>{convertor[res.type]}</td>
+                                                    <td>{res.isShipping === false ? "X" : "O"}</td>
                                                     <td>
-                                                        <button>운송장 번호 등록</button>
+                                                        {res.type === "" ? (
+                                                            res.invoiceCode
+                                                        ) : (
+                                                            <Box>
+                                                                <TextField
+                                                                    label='운송장번호'
+                                                                    id='invoiceCode'
+                                                                    name='invoiceCode'
+                                                                    value={res.invoiceCodeice}
+                                                                    onChange={() => changeinoivce(idx)}></TextField>
+                                                                <button>저장</button>
+                                                            </Box>
+                                                        )}
+                                                    </td>
+                                                    <td>
+                                                        {res.type === "COMPLETE" ? (
+                                                            <Button onClick={handleOpen}>운송장 번호 입력</Button>
+                                                        ) : (
+                                                            <TextField></TextField>
+                                                        )}
+                                                        <Modal
+                                                            open={open}
+                                                            onClose={handleClose}
+                                                            aria-labelledby='modal-modal-title'
+                                                            aria-describedby='modal-modal-description'>
+                                                            <Box sx={modalstyle}>
+                                                                <TextField
+                                                                    label='운송장번호'
+                                                                    id='invoiceCode'
+                                                                    name='invoiceCode'
+                                                                    value={res.invoiceCode}
+                                                                    onChange={handleChangeInvoice(
+                                                                        "invoiceCode"
+                                                                    )}></TextField>
+                                                                <button type='submit'>확인</button>
+                                                            </Box>
+                                                        </Modal>
                                                     </td>
                                                 </tr>
                                             );
@@ -219,14 +292,6 @@ function DoctorPrescription(props) {
                     </Root>
                 </Grid>
             </Grid>
-
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby='modal-modal-title'
-                aria-describedby='modal-modal-description'>
-                <Box sx={style}></Box>
-            </Modal>
         </Container>
     );
 }
