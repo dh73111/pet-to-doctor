@@ -16,7 +16,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { prescriptionAll } from "../../api/prescription";
+import { prescriptionAll, addInvoice } from "../../api/prescription";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -106,13 +106,6 @@ function DoctorPrescription(props) {
                 break;
         }
     };
-    const [invoice, setInvoice] = useState();
-    const handleChangeInvoice = (prop) => (event) => {
-        setInvoice(event.target.value);
-        console.log(prop);
-        console.log(invoice, "invoice");
-        console.log(event.target.value);
-    };
 
     const style = {
         position: "absolute",
@@ -140,6 +133,33 @@ function DoctorPrescription(props) {
     const handleClosemodal = () => setOpenmodal(false);
     const changeinoivce = (idx) => {
         console.log(idx);
+    };
+    const [values, setValues] = useState({
+        invoiceCode: "",
+        address: {
+            city: "",
+            street: "",
+            zipcode: "",
+        },
+        shippingName: "",
+        shippingTel: "",
+        shippingCost: 0,
+    });
+    const handleChangeInvoice = (idx) => (event) => {
+        setValues({
+            ...values,
+            invoiceCode: event.target.value,
+        });
+        console.log(event.target.value, "target"); //입력값
+        console.log(values.invoiceCode, "123");
+        console.log(idx, "idx"); // 배열 순번.
+        console.log("prescriptions[idx]", "prescriptions"); // 배열 전체 값
+        console.log(prescriptions, "prescriptions"); // 배열 전체
+    };
+
+    const AddinvoiceCode = async (idx) => {
+        console.log(prescriptions[idx].id);
+        await addInvoice(prescriptions[idx].id, values);
     };
     return (
         <Container>
@@ -244,7 +264,7 @@ function DoctorPrescription(props) {
                                                     <td>{convertor[res.type]}</td>
                                                     <td>{res.isShipping === false ? "X" : "O"}</td>
                                                     <td>
-                                                        {res.type === "" ? (
+                                                        {res.type !== "" ? (
                                                             res.invoiceCode
                                                         ) : (
                                                             <Box>
@@ -252,13 +272,15 @@ function DoctorPrescription(props) {
                                                                     label='운송장번호'
                                                                     id='invoiceCode'
                                                                     name='invoiceCode'
-                                                                    value={res.invoiceCodeice}
-                                                                    onChange={() => changeinoivce(idx)}></TextField>
-                                                                <button>저장</button>
+                                                                    value={res.invoiceCode}
+                                                                    onChange={handleChangeInvoice(idx)}></TextField>
+                                                                <button onClick={() => AddinvoiceCode(idx)}>
+                                                                    저장
+                                                                </button>
                                                             </Box>
                                                         )}
                                                     </td>
-                                                    <td>
+                                                    {/* <td>
                                                         {res.type === "COMPLETE" ? (
                                                             <Button onClick={handleOpen}>운송장 번호 입력</Button>
                                                         ) : (
@@ -281,7 +303,7 @@ function DoctorPrescription(props) {
                                                                 <button type='submit'>확인</button>
                                                             </Box>
                                                         </Modal>
-                                                    </td>
+                                                    </td> */}
                                                 </tr>
                                             );
                                         })}
