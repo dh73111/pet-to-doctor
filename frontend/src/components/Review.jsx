@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Container, Typography } from "@mui/material";
+import { Box, Button, Container, Rating, Typography } from "@mui/material";
 import { allReview } from "../api/review";
+import ReviewSwiper from "./commons/ReviewSwiper";
+import StarIcon from "@mui/icons-material/Star";
 
 function Review() {
     const [reviews, setReviews] = useState([]);
@@ -50,7 +52,7 @@ function Review() {
             <Box sx={{ backgroundColor: "#F7F7FB", pb: 2 }}>
                 <Container>
                     <Typography variant='h5' component='h1' sx={{ pt: 10, pb: 2, fontWeight: 600 }}>
-                        펫투닥터 진료상담후기
+                        펫투닥터 BEST 후기👑
                     </Typography>
                     <Box
                         sx={{
@@ -58,13 +60,9 @@ function Review() {
                             borderRadius: "0.25rem",
                             backgroundColor: "white",
                             mb: 4,
-                            p: 3,
+                            // p: 3,
                         }}>
-                        병원리뷰순위 뿌려줄것임 아니면.. 음.. 머 대충그런거
-                        <br /> 리뷰는 페이징으로하고 안되면 무한스크롤링ㄱ
-                        <Box>병원2위</Box>
-                        <Box>병원1위</Box>
-                        <Box>병원3위</Box>
+                        <ReviewSwiper />
                     </Box>
                 </Container>
             </Box>
@@ -75,20 +73,21 @@ function Review() {
                     </Typography>
                     <Box sx={{ float: "right" }}>
                         <Button
-                            sx={{ mr: 1 }}
+                            sx={{ mr: 1, color: "#000" }}
                             onClick={() => {
                                 sortByTime("최신순");
                             }}>
                             최신순
                         </Button>
                         <Button
-                            sx={{ mr: 1 }}
+                            sx={{ mr: 1, color: "#000" }}
                             onClick={() => {
                                 sortByTime("작성순");
                             }}>
                             작성순
                         </Button>
                         <Button
+                            sx={{ color: "#000" }}
                             onClick={() => {
                                 sortByRate();
                             }}>
@@ -99,14 +98,25 @@ function Review() {
                 <Box sx={{ pt: 12 }}>
                     {reviews.map((review, idx) => {
                         return (
-                            <Box key={idx} sx={{ border: "1px solid #D7E2EB", borderRadius: "0.25rem", p: 3, mb: 3 }}>
-                                <p>{JSON.stringify(review)}</p>
-                                <p>리뷰 ID : {review.id}</p>
-                                <p>평점 : {review.rate}</p>
-                                <p>유저네임 : {review.username}</p>
-                                <p>병원 ID : {review.hospitalId}</p>
-                                <p>내용 : {review.content}</p>
-                                <p>작성시간 : {review.createTime}</p>
+                            <Box
+                                key={idx}
+                                sx={{
+                                    backgroundColor: "#F7F7FB",
+                                    border: "1px solid #D7E2EB",
+                                    borderRadius: "0.25rem",
+                                    p: 3,
+                                    mb: 3,
+                                }}>
+                                <Typography sx={{ float: "right", color: "#263747", opacity: "0.4" }}>
+                                    {review.createTime.slice(0, 10)}
+                                </Typography>
+                                <Typography sx={{ fontWeight: "700", mb: 1, pl: 0.5 }}>{review.username}</Typography>
+                                <Rating
+                                    value={review.rate}
+                                    readOnly
+                                    emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize='inherit' />}
+                                />
+                                <Typography sx={{ mt: 2 }}>{review.content}</Typography>
                             </Box>
                         );
                     })}

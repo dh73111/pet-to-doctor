@@ -5,7 +5,7 @@
 } */
 * {
     font-family: "Noto Sans KR", sans-serif;
-    /* font-family: 나눔스퀘어, 'NanumSquare', sans-serif; */
+    /* font-family: "나눔스퀘어", "NanumSquare", sans-serif; */
     margin: 0;
     -ms-overflow-style: none;
     color: "#263747";
@@ -16,7 +16,7 @@
     text-shadow: 1px 0px 10px #000;
 }
 .gnb div:hover {
-    color: #309fb3;
+    color: #1dc6f6;
 }
 .card {
     /* transform: translateX(-50%); */
@@ -47,13 +47,16 @@
 .input_required::after {
     content: "*";
     display: inline;
-    color: #309fb3;
+    color: #1dc6f6;
 }
 /* 회원가입 스타일 끝 */
-
+.pet_card {
+    transition: 0.5s;
+}
 .pet_card:hover {
     /* border-color: #1dc6f6; */
-    border-color: #309fb3;
+    box-shadow: 1px 1px 10px rgb(0 0 0 / 12%);
+    /* border-color: #309fb3; */
     cursor: pointer;
 }
 
@@ -102,9 +105,16 @@
 
 .profile-img-upload-btn {
     padding: 6px 25px;
-    background-color: #309fb3;
+    background-color: #1dc6f6;
     border-radius: 4px;
     color: white;
     cursor: pointer;
     transform: translateX(-50%);
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+    color: white !important;
+    fill: white !important;
+    stroke: white !important;
 }

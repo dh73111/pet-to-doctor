@@ -146,6 +146,8 @@ function UserPetInfo(props) {
             species: "말티즈",
             weight: "88",
         });
+        const [petImgPreview, setpetImgPreview] = useState();
+        const [petImg, setpetImg] = useState();
         let today = new Date();
         const year = today.getFullYear();
         const month = today.getMonth() + 1;
@@ -156,23 +158,56 @@ function UserPetInfo(props) {
             const data = e.target.value;
             setNewPetInfo({ ...newPetInfo, [dataTitle]: data });
         };
+        const changePetProfile = () => {
+            const fd = new FormData();
+            Object.petImg.forEach((file) => fd.append("profileImgUrl", file));
+            alert("프로필변경이완료되었습니다");
+        };
         const requestNewPet = async () => {
             const response = await registerPet(newPetInfo);
+            const profileUp = await modifyPetPic();
             if (response.data.message === "성공") {
                 const reloaded = await petList();
                 setIsAddNew(false);
                 setUserPet(reloaded);
             }
         };
+        const encodeFileToBase64 = (fileBloab) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(fileBloab);
+            return new Promise((resolv) => {
+                reader.onload = () => {
+                    setpetImgPreview(reader.result);
+                    resolv();
+                };
+            });
+        };
         return (
             <>
                 <Box
                     container
-                    sx={{ height: "100%", border: "0.0625rem solid #309fb3", borderRadius: "0.25rem", p: 1 }}>
+                    sx={{ height: "100%", border: "0.0625rem solid #D7E2EB", borderRadius: "0.25rem", p: 1 }}
+                    className='pet_card'>
                     <Grid item xs={12}>
-                        <Box sx={{ width: "100%", minHeight: "140px", border: 1 }}></Box>
+                        <Box
+                            sx={{
+                                width: "100%",
+                                height: "244px",
+                                border: 1,
+                                backgroundImage: `url(${petImgPreview})`,
+                                backgroundSize: "cover",
+                            }}></Box>
                         <label for='petProfileNew'>이미지업로드</label>
-                        <Input type='file' id='petProfileNew' style={{ display: "none" }} />
+                        <input
+                            type='file'
+                            accept='image/*'
+                            id='petProfileNew'
+                            style={{ display: "none" }}
+                            onChange={(e) => {
+                                encodeFileToBase64(e.target.files[0]);
+                                setpetImg(e.target.files[0]);
+                            }}
+                        />
                     </Grid>
                     <Grid item xs={12}>
                         <Input

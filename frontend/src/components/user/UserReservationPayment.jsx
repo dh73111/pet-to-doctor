@@ -59,7 +59,7 @@ function UserReservationPayment(props) {
 
     return (
         <ThemeProvider theme={newTheme}>
-            <Container maxWidth='xl'>
+            <Container maxWidth='lg' sx={{ mb: 20 }}>
                 <Box container>
                     <Box item xs={12} sx={{ display: "flex", flexDirection: "column" }}>
                         <Typography variant='h4' component='h1' sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
@@ -76,20 +76,20 @@ function UserReservationPayment(props) {
                                     진료정보
                                 </Typography>
                                 <Grid container sx={{ mt: 2 }}>
-                                    <Grid item xs={12} md={5} sx={{ display: "flex", flexDirection: "column" }}>
+                                    <Grid item xs={12} md={12} sx={{ display: "flex", flexDirection: "column" }}>
                                         <Grid item sx={{ display: "flex", flexDirection: "row", mt: 0.5 }}>
-                                            <Grid item xs={12} md={3.5}>
-                                                <Typography sx={{ fontWeight: 600 }}>병원 이름 :</Typography>
+                                            <Grid item xs={12} md={4}>
+                                                <Typography sx={{ fontWeight: 600 }}>병원 이름 </Typography>
                                             </Grid>
-                                            <Grid item xs={12} md={8.5}>
+                                            <Grid item xs={12} md={8}>
                                                 <Typography>{state.hospital.name}</Typography>
                                             </Grid>
                                         </Grid>
                                         <Grid item sx={{ display: "flex", flexDirection: "row", mt: 0.5 }}>
-                                            <Grid item xs={12} md={3.5}>
-                                                <Typography sx={{ fontWeight: 600 }}>예약 날짜 :</Typography>
+                                            <Grid item xs={12} md={4}>
+                                                <Typography sx={{ fontWeight: 600 }}>예약 날짜 </Typography>
                                             </Grid>
-                                            <Grid item xs={12} md={8.5}>
+                                            <Grid item xs={12} md={8}>
                                                 <Typography>{`${state.data.scheduleDate.substring(
                                                     0,
                                                     4
@@ -98,26 +98,26 @@ function UserReservationPayment(props) {
                                             </Grid>
                                         </Grid>
                                         <Grid item sx={{ display: "flex", flexDirection: "row", mt: 1 }}>
-                                            <Grid item xs={12} md={3.5}>
-                                                <Typography sx={{ fontWeight: 600 }}>예약 시간 :</Typography>
+                                            <Grid item xs={12} md={4}>
+                                                <Typography sx={{ fontWeight: 600 }}>예약 시간 </Typography>
                                             </Grid>
-                                            <Grid item xs={12} md={8.5}>
+                                            <Grid item xs={12} md={8}>
                                                 <Typography>{state.data.scheduleDate.substring(11, 16)}</Typography>
                                             </Grid>
                                         </Grid>
                                         <Grid item sx={{ display: "flex", flexDirection: "row", mt: 1 }}>
-                                            <Grid item xs={12} md={3.5}>
-                                                <Typography sx={{ fontWeight: 600 }}>병원 소개 :</Typography>
+                                            <Grid item xs={12} md={4}>
+                                                <Typography sx={{ fontWeight: 600 }}>병원 소개 </Typography>
                                             </Grid>
-                                            <Grid item xs={12} md={8.5}>
+                                            <Grid item xs={12} md={8}>
                                                 <Typography>{state.hospital.description}</Typography>
                                             </Grid>
                                         </Grid>
                                     </Grid>
-                                    <Divider orientation='vertical' flexItem sx={{ mx: 3 }} />
-                                    <Grid item xs={12} md={6} sx={{ display: "flex", flexDirection: "column" }}>
+                                    <div className='devider' style={{ marginTop: "20px", marginBottom: "20px" }}></div>
+                                    <Grid item xs={12} md={12} sx={{ display: "flex", flexDirection: "column" }}>
                                         <Grid container>
-                                            <Grid item xs={12} md={6} sx={{ display: "flex", flexDirection: "row" }}>
+                                            <Grid item xs={12} md={12} sx={{ display: "flex", flexDirection: "row" }}>
                                                 <Typography
                                                     xs={12}
                                                     md={4}
@@ -129,7 +129,7 @@ function UserReservationPayment(props) {
                                                     {state.data.petName}
                                                 </Typography>
                                             </Grid>
-                                            <Grid item xs={12} md={6} sx={{ display: "flex", flexDirection: "row" }}>
+                                            <Grid item xs={12} md={12} sx={{ display: "flex", flexDirection: "row" }}>
                                                 <Typography xs={12} md={12} sx={{ fontWeight: 600 }} minWidth='80px'>
                                                     생년월일
                                                 </Typography>
@@ -137,7 +137,7 @@ function UserReservationPayment(props) {
                                                     {state.data.birthDate}
                                                 </Typography>
                                             </Grid>
-                                            <Grid item xs={12} md={6} sx={{ display: "flex", flexDirection: "row" }}>
+                                            <Grid item xs={12} md={12} sx={{ display: "flex", flexDirection: "row" }}>
                                                 <Typography xs={12} md={12} sx={{ fontWeight: 600 }} minWidth='80px'>
                                                     몸무게
                                                 </Typography>

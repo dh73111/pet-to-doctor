@@ -18,21 +18,29 @@ const hostname = "192.168.35.26";
 let users = {};
 
 let socketToRoom = {};
-
+let members = [];
 const maximum = 4;
 
 io.on("connection", (socket) => {
     socket.on("joinRoom", (data) => {
-        console.log("dddd");
+        if (members.includes(data.userId)) {
+            io.sockets.to(socket.id).emit("invalid");
+            console.log("중복입장!");
+            return;
+        } else {
+            members.push(data.userId);
+        }
+        console.log(members, "입장유저들");
+
         if (users[data.room]) {
             const length = users[data.room].length;
             if (length === maximum) {
                 socket.to(socket.id).emit("room_full");
                 return;
             }
-            users[data.room].push({ id: socket.id, email: data.email });
+            users[data.room].push({ id: socket.id, userId: data.userId });
         } else {
-            users[data.room] = [{ id: socket.id, email: data.email }];
+            users[data.room] = [{ id: socket.id, userId: data.userId }];
         }
         socketToRoom[socket.id] = data.room;
 
@@ -41,11 +49,19 @@ io.on("connection", (socket) => {
 
         const usersInThisRoom = users[data.room].filter((user) => user.id !== socket.id);
 
-        console.log(usersInThisRoom);
         io.sockets.to(socket.id).emit("all_users", usersInThisRoom);
     });
 
-    socket.on("disconnect", () => {
+    socket.on("disconnectA", (userId) => {
+        console.log(userId);
+        for (let i = 0; i < members.length; i++) {
+            if (members[i] === userId) {
+                members.splice(i, 1);
+                break;
+            }
+        }
+
+        console.log(members, " exit members");
         console.log(`[${socketToRoom[socket.id]}]: ${socket.id} exit`);
         // disconnect한 user가 포함된 roomID
         const roomID = socketToRoom[socket.id];
@@ -59,7 +75,7 @@ io.on("connection", (socket) => {
         }
         // 어떤 user가 나갔는 지 room의 다른 user들에게 통보
         socket.broadcast.to(room).emit("user_exit", { id: socket.id });
-        console.log(users);
+        console.log(users, " users!!");
     });
 
     // 다른 user들에게 offer를 보냄 (자신의 RTCSessionDescription)
