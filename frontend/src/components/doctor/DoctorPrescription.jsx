@@ -138,6 +138,9 @@ function DoctorPrescription(props) {
     const [openmodal, setOpenmodal] = React.useState(false);
     const handleOpenmodal = () => setOpenmodal(true);
     const handleClosemodal = () => setOpenmodal(false);
+    const changeinoivce = (idx) => {
+        console.log(idx);
+    };
     return (
         <Container>
             <Grid container>
@@ -240,12 +243,26 @@ function DoctorPrescription(props) {
                                                     </td>
                                                     <td>{convertor[res.type]}</td>
                                                     <td>{res.isShipping === false ? "X" : "O"}</td>
-                                                    <td>{res.type === "COMPLETE" ? res.invoiceCode : ""}</td>
+                                                    <td>
+                                                        {res.type === "" ? (
+                                                            res.invoiceCode
+                                                        ) : (
+                                                            <Box>
+                                                                <TextField
+                                                                    label='운송장번호'
+                                                                    id='invoiceCode'
+                                                                    name='invoiceCode'
+                                                                    value={res.invoiceCodeice}
+                                                                    onChange={() => changeinoivce(idx)}></TextField>
+                                                                <button>저장</button>
+                                                            </Box>
+                                                        )}
+                                                    </td>
                                                     <td>
                                                         {res.type === "COMPLETE" ? (
                                                             <Button onClick={handleOpen}>운송장 번호 입력</Button>
                                                         ) : (
-                                                            ""
+                                                            <TextField></TextField>
                                                         )}
                                                         <Modal
                                                             open={open}
