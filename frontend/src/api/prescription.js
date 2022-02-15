@@ -3,9 +3,9 @@ import { apiInstance } from "./index.js";
 const api = apiInstance();
 
 // 운송장 등록
-async function addInvoice(prescriptionId) {
-    return (await api.put(`/prescription/shipping`, JSON.stringify(prescriptionId))).data.data;
-}
+async function addInvoice(prescriptionId, invoice) {
+  return (await api.put(`/prescription/shipping/${prescriptionId}`, JSON.stringify(invoice))).data.data;
+
 async function changePerscription(prescriptionId, data) {
     console.log(data);
     return (await api.put(`/prescription/payment/${prescriptionId}`, JSON.stringify(data))).data.data;

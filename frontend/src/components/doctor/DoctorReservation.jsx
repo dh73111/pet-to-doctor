@@ -139,7 +139,7 @@ function DoctorReservation(props) {
         const type = treatmentInfo[idx].type;
         console.log(id, "idd");
         console.log(type, "typeee");
-        if (type === "RES_REQUEST") {
+        if (type === "RES_PAID") {
             const data = {
                 treatmentId: id,
                 treatmentType: "RES_CONFIRMED",
@@ -147,17 +147,16 @@ function DoctorReservation(props) {
             SetStatechange(data);
             console.log(data, "data");
             await treatmentState(data.treatmentId, data.treatmentType);
-        } else if (treatmentInfo[idx].type === "VST_REQUEST") {
-            setTreatmentInfo({ ...treatmentInfo, type: "VST_CONFIRMED" });
+        } else if (type === "VST_REQUEST") {
+            const data = {
+                treatmentId: id,
+                treatmentType: "VST_CONFIRMED",
+            };
+            SetStatechange(data);
+            await treatmentState(data.treatmentId, data.treatmentType);
         }
     };
-    const handleChangeCanceled = (idx) => {
-        if (treatmentInfo[idx].type === "RES_CONFIRMED") {
-            setTreatmentInfo({ ...treatmentInfo, type: "RES_REQUEST" });
-        } else if (treatmentInfo[idx].type === "VST_CONFIRMED") {
-            setTreatmentInfo({ ...treatmentInfo, type: "VST_REQUEST" });
-        }
-    };
+
     const setList = (value) => {
         switch (value) {
             case 0:
@@ -288,14 +287,12 @@ function DoctorReservation(props) {
                                                         )}
                                                     </td>
                                                     <td>
-                                                        {res.type === "RES_REQUEST" ? (
+                                                        {res.type === "RES_PAID" ? (
                                                             <Button onClick={() => handleChangeCompleted(idx)}>
                                                                 승인
                                                             </Button>
                                                         ) : (
-                                                            <Button onClick={() => handleChangeCanceled(idx)}>
-                                                                취소
-                                                            </Button>
+                                                            ""
                                                         )}
                                                     </td>
                                                 </tr>
