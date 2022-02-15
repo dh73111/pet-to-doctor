@@ -17,7 +17,7 @@ import DoctorPasswordChange from "./components/doctor/DoctorPasswordChange";
 import DoctorMypage from "components/doctor/DoctorMypage";
 import Notice from "components/Notice";
 import Review from "components/Review";
-
+import Index from "components/Index";
 import UserLoginModal from "components/user/UserLoginModal";
 import UserJoin from "components/user/UserJoin";
 import UserSignupConfirm from "components/user/UserSignupConfirm";
@@ -48,6 +48,7 @@ function App() {
                     </Routes>
                     <Routes>
                         <Route path='/petodoctor/' element={<Home />}></Route>
+                        <Route path='/' element={<Index />}></Route>
                         <Route path='/petodoctor/kakaooauth*' element={<Home />}></Route>
                     </Routes>
                     <Routes>
