@@ -57,7 +57,7 @@ function App() {
                         <Route path='/petodoctor/doctordiagnosis' element={<DoctorDianosis />}></Route>
                         <Route path='/petodoctor/doctorprescription' element={<DoctorPrescription />}></Route>
                         <Route path='/petodoctor/doctormypage' element={<DoctorMypage />}></Route>
-                        <Route path='/doctorprescriptonform' element={<DoctorPrescriptionForm />}></Route>
+                        <Route path='/doctorprescriptonform/:id' element={<DoctorPrescriptionForm />}></Route>
                         <Route path='/petodoctor/doctorconsulting' element={<DoctorConsuliting />}></Route>
 
                         {/* user */}

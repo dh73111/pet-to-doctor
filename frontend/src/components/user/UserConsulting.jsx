@@ -211,6 +211,13 @@ function UserConsulting(props) {
                     />
                     {user.role === "ROLE_DOCTOR" ? (
                         <BottomNavigationAction
+                            onClick={() => {
+                                window.open(
+                                    `http://localhost:3000/doctorprescriptonform/${id}`,
+                                    "처방전",
+                                    "width=#,height=#"
+                                );
+                            }}
                             label={<Box sx={{ fontSize: 20, fontWeight: "bold" }}>처방작성</Box>}
                             icon={<MedicalServicesIcon sx={{ fontSize: 35, color: "red" }} />}
                         />
