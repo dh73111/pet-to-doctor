@@ -1,27 +1,36 @@
-import { createServer } from "http";
+import { createServer } from "https";
 import { Server } from "socket.io";
 import express from "express";
 const app = express();
+
+const fs = require("fs");
+const options = {
+    ca: fs.readFileSync("./fullchain.pem"),
+    key: fs.readFileSync("./privkey.pem"),
+    cert: fs.readFileSync("./cert.pem"),
+};
+
 const httpServer = createServer(app);
 var cors = require("cors");
 const io = new Server(httpServer, {
     cors: {
-        origin: ["http://localhost:3000", "http://localhost:3001"],
-        methods: ["GET", "POST"],
+        origin: ["https://i6b209.p.ssafy.io", "https:/kapi.kakao.com", "http://localhost"],
+        transports: ["ws", "wss", "websocket", "polling"],
+
         credentials: true,
     },
     allowEIO3: true,
 });
 
-const PORT = 9000;
-const hostname = "192.168.35.26";
+const PORT = 443;
+const hostname = "0.0.0.0";
 let users = {};
 
 let socketToRoom = {};
 let members = [];
-const maximum = 4;
+const maximum = 1000;
 
-io.on("connection", (socket) => {
+io.of("/signaling").on("connection", (socket) => {
     socket.on("joinRoom", (data) => {
         if (members.includes(data.userId)) {
             io.sockets.to(socket.id).emit("invalid");
@@ -49,7 +58,7 @@ io.on("connection", (socket) => {
 
         const usersInThisRoom = users[data.room].filter((user) => user.id !== socket.id);
 
-        io.sockets.to(socket.id).emit("all_users", usersInThisRoom);
+        io.of("/signaling").to(socket.id).emit("all_users", usersInThisRoom);
     });
 
     socket.on("disconnectA", (userId) => {

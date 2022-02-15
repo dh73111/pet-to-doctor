@@ -34,7 +34,6 @@ function reducer(currentState, action) {
 
     if (action.type === "socket") {
         newState.socket = action.socket;
-        console.log(newState);
         return newState;
     }
 

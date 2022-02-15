@@ -8,10 +8,20 @@ import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
 import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
 import { useDispatch, useSelector } from "react-redux";
 const pc_config = {
-    iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
+    iceServers: [
+        {
+            urls: [
+                "stun:stun.l.google.com:19302",
+                "stun:stun1.l.google.com:19302",
+                "stun:stun2.l.google.com:19302",
+                "stun:stun3.l.google.com:19302",
+                "stun:stun4.l.google.com:19302",
+            ],
+        },
+    ],
 };
-// const SOCKET_SERVER_URL = "https://i6b209.p.ssafy.io/signaling"; 배포용
-const SOCKET_SERVER_URL = "http://192.168.35.26:9000";
+const SOCKET_SERVER_URL = "https://i6b209.p.ssafy.io/signaling";
+// const SOCKET_SERVER_URL = "http://192.168.35.26:9000";
 
 function UserConsulting(props) {
     const dispatch = useDispatch();
@@ -21,7 +31,6 @@ function UserConsulting(props) {
     const pcRef = useRef();
     const localVideoRef = useRef(null);
     const remoteVideoRef = useRef(null);
-    const [state, setState] = useState("doctor");
     const { user } = useSelector((store) => store);
     console.log(user);
     let stream;
@@ -209,9 +218,9 @@ function UserConsulting(props) {
                         <></>
                     )}
                     <BottomNavigationAction
-                        onClick={() => {
+                        onClick={async () => {
                             socketRef.current.emit("disconnectA", user.userId);
-                            navigate("/petodoctor");
+                            window.location.href = "http://localhost:3000/petodoctor";
                         }}
                         label={<Box sx={{ fontSize: 20, fontWeight: "bold" }}>나가기</Box>}
                         icon={<ExitToAppIcon sx={{ fontSize: 35, color: "blue" }} />}></BottomNavigationAction>
