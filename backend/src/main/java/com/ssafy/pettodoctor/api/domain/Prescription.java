@@ -33,12 +33,12 @@ public class Prescription {
     private Integer shippingCost;
 
     //== 생성 메소드 ==//
-    public static Prescription createPrescription(String administration, String diagnosis, String opinion, PaymentType type, Integer medicineCost, Integer additionalCost, Boolean isShipping){
+    public static Prescription createPrescription(String administration, String diagnosis, String opinion, Integer medicineCost, Integer additionalCost, Boolean isShipping){
         Prescription prescription = new Prescription();
         prescription.setAdministration(administration);
         prescription.setDiagnosis(diagnosis);
         prescription.setOpinion(opinion);
-        prescription.setType(type);
+        prescription.setType(PaymentType.UNCOMPLETE);
         prescription.setMedicineCost(medicineCost);
         prescription.setAdditionalCost(additionalCost);
         prescription.isShipping = isShipping;
@@ -53,5 +53,12 @@ public class Prescription {
         this.shippingName = shippingName;
         this.shippingTel = shippingTel;
         this.shippingCost = shippingCost;
+    }
+
+    //비즈니스 메소드
+    public void updatePaymentInfo(String paymentCode) {
+        this.setPaymentCode(paymentCode);
+        if(this.getType().equals(PaymentType.UNCOMPLETE))
+            this.setType(PaymentType.COMPLETE);
     }
 }
