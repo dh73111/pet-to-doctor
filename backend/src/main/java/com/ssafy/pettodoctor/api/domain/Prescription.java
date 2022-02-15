@@ -1,5 +1,6 @@
 package com.ssafy.pettodoctor.api.domain;
 
+import com.ssafy.pettodoctor.api.request.ShippingReq;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,7 +34,7 @@ public class Prescription {
     private Integer shippingCost;
 
     //== 생성 메소드 ==//
-    public static Prescription createPrescription(String administration, String diagnosis, String opinion, Integer medicineCost, Integer additionalCost, Boolean isShipping){
+    public static Prescription createPrescription(String administration, String diagnosis, String opinion, Integer medicineCost, Integer additionalCost){
         Prescription prescription = new Prescription();
         prescription.setAdministration(administration);
         prescription.setDiagnosis(diagnosis);
@@ -41,23 +42,26 @@ public class Prescription {
         prescription.setType(PaymentType.UNCOMPLETE);
         prescription.setMedicineCost(medicineCost);
         prescription.setAdditionalCost(additionalCost);
-        prescription.isShipping = isShipping;
+        prescription.setIsShipping(false);
 
         return prescription;
     }
 
     // 비즈니스 메소드
-    public void updateShippingInfo(String invoiceCode, Address address, String shippingName, String shippingTel, Integer shippingCost){
-        this.invoiceCode = invoiceCode;
-        this.shippingAddress = address;
-        this.shippingName = shippingName;
-        this.shippingTel = shippingTel;
-        this.shippingCost = shippingCost;
+    public void updateShippingInfo(String invoiceCode){
+        this.setInvoiceCode(invoiceCode);
+        if(this.getIsShipping().equals(false))
+            this.setIsShipping(true);
     }
 
     //비즈니스 메소드
-    public void updatePaymentInfo(String paymentCode) {
-        this.setPaymentCode(paymentCode);
+    public void updatePaymentInfo(ShippingReq shippingReq) {
+        this.setPaymentCode(shippingReq.getPaymentCode());
+        this.setShippingName(shippingReq.getShippingName());
+        this.setShippingTel(shippingReq.getShippingTel());
+        this.setShippingCost(shippingReq.getShippingCost());
+        this.setShippingAddress(shippingReq.getAddress());
+
         if(this.getType().equals(PaymentType.UNCOMPLETE))
             this.setType(PaymentType.COMPLETE);
     }
