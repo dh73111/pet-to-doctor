@@ -26,6 +26,7 @@ const SOCKET_SERVER_URL = "https://i6b209.p.ssafy.io/signaling";
 function UserConsulting(props) {
     const dispatch = useDispatch();
     const { id } = useParams();
+    const { hospitalId } = useParams();
     const navigate = useNavigate();
     const socketRef = useRef();
     const pcRef = useRef();
@@ -211,6 +212,13 @@ function UserConsulting(props) {
                     />
                     {user.role === "ROLE_DOCTOR" ? (
                         <BottomNavigationAction
+                            onClick={() => {
+                                window.open(
+                                    `http://localhost:3000/doctorprescriptonform/${id}`,
+                                    "처방전",
+                                    "width=#,height=#"
+                                );
+                            }}
                             label={<Box sx={{ fontSize: 20, fontWeight: "bold" }}>처방작성</Box>}
                             icon={<MedicalServicesIcon sx={{ fontSize: 35, color: "red" }} />}
                         />
@@ -220,6 +228,10 @@ function UserConsulting(props) {
                     <BottomNavigationAction
                         onClick={async () => {
                             socketRef.current.emit("disconnectA", user.userId);
+                            if (user.role === "ROLE_USER") {
+                                window.location.href = `http://localhost:3000/petodoctor/userrating/${hospitalId}`;
+                                return;
+                            }
                             window.location.href = "http://localhost:3000/petodoctor";
                         }}
                         label={<Box sx={{ fontSize: 20, fontWeight: "bold" }}>나가기</Box>}

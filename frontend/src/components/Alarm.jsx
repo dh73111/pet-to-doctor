@@ -1,24 +1,22 @@
-import { Box } from "@mui/material";
-import React from "react";
-
+import { Box, Button } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { getNotice, checkNotice } from "api/notice";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 function Alarm(props) {
-    const alarmLists = [
-        {
-            title: "의사가 어쩌고했습니다.",
-        },
-        {
-            title: "원격진료상담 예약이 완료되었습니다.",
-        },
-        {
-            title: "원격진료상담 취소가 완료되었습니다.",
-        },
-        {
-            title: "원격진료상담 취소가 완료되었습니다.",
-        },
-        {
-            title: "원격진료상담 취소가 완료되었습니다.",
-        },
-    ];
+    const [list, setList] = useState([]);
+    const { id } = useSelector((store) => store.user);
+    const navigate = useNavigate();
+    useEffect(() => {
+        const init = async () => {
+            let list = await getNotice(id);
+            list = list.filter((item) => !item.isChecked);
+            setList(list);
+            console.log(list);
+        };
+        init();
+    }, []);
+
     return (
         <Box
             sx={{
@@ -34,10 +32,27 @@ function Alarm(props) {
                 overflow: "scroll",
                 // zIndex: -1,
             }}>
-            {alarmLists.map((a) => {
+            {list.map((item, index) => {
                 return (
-                    <Box sx={{ backgroundColor: "#eaeaea", width: "100%", height: "60px", marginBottom: "10px" }}>
-                        {a.title}
+                    <Box
+                        key={index}
+                        sx={{ backgroundColor: "#eaeaea", width: "100%", height: "80px", marginBottom: "10px" }}>
+                        {item.content}
+                        <Button
+                            onClick={async () => {
+                                const res = await checkNotice(item.id);
+                                console.log(res);
+                                list.splice(index, 1);
+                                setList(list);
+                            }}>
+                            확인
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                navigate("/petodoctor/presciption/8");
+                            }}>
+                            이동
+                        </Button>
                     </Box>
                 );
             })}

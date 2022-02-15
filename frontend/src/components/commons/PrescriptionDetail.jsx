@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { medicineInfo, checkPrescription } from "api/prescription";
 
 function PrescriptionDetail(props) {
-    const location = useLocation(); // 넘겨주는 user값 location으로 주소
+    const { prescId } = useParams(); // 넘겨주는 user값 location으로 주소
     const [presc, setPresc] = useState({});
     const [drugs, setDrugs] = useState([]);
+    console.log(prescId);
     const navigate = useNavigate();
     const { user } = useSelector((store) => store);
     const sum = () => {
@@ -19,10 +20,9 @@ function PrescriptionDetail(props) {
     };
     useEffect(() => {
         const init = async () => {
-            const precId = location.state;
-            const data = await checkPrescription(precId);
+            const data = await checkPrescription(prescId);
             setPresc(data);
-            const drugs = await medicineInfo(precId);
+            const drugs = await medicineInfo(prescId);
             setDrugs(drugs);
         };
         init();

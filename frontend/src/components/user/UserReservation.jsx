@@ -124,7 +124,7 @@ function UserReservation(props) {
     const handleClose = () => setOpen(false);
     const navigate = useNavigate();
     const offset = new Date().getTimezoneOffset() * 60000; // 1000밀리초 * 60  -> 1분
-    const enterConsulting = (time, id) => {
+    const enterConsulting = (time, id, hospitalId) => {
         // 입장가능 로직 -> 확인해야함
         let currentTime = new Date(Date.now() - offset).toISOString();
         let start = Number(time.substring(14, 16));
@@ -144,7 +144,7 @@ function UserReservation(props) {
                     16
                 )} 그러나 발표를 위해서 입장!`
             );
-        navigate(`/petodoctor/userconsulting/${id}`);
+        navigate(`/petodoctor/userconsulting/${id}/${hospitalId}`);
     };
     const handleChange = (event) => {
         setState(event.target.value);
@@ -338,7 +338,11 @@ function UserReservation(props) {
                                                         <Button
                                                             variant='contained'
                                                             onClick={() => {
-                                                                enterConsulting(treat.scheduleDate, treat.id);
+                                                                enterConsulting(
+                                                                    treat.scheduleDate,
+                                                                    treat.id,
+                                                                    treat.hospitalId
+                                                                );
                                                             }}>
                                                             입장하기 테스트
                                                         </Button>

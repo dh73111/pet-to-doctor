@@ -12,8 +12,8 @@ async function changePerscription(prescriptionId, data) {
 }
 
 // 진단서 작성
-async function addPrescription(treatmentId) {
-    return (await api.post(`/prescription/${treatmentId}`)).data.data;
+async function addPrescription(treatmentId, data) {
+    return (await api.post(`/prescription/${treatmentId}`, data)).data.data;
 }
 
 // 약 리스트 정보
@@ -28,7 +28,7 @@ async function checkPrescription(treatmentId) {
 
 // 진단서 리스트 조회
 async function checkPrescriptionList(id, status) {
-    return (await api.get(`/prescription/list?doctor_id=${id}&type=${status}'`)).data.data;
+    return (await api.get(`/prescription/list?doctor_id=${id}&type=${status}`)).data.data;
 }
 
 // 의사의 전체 진단서 리스트 조회
