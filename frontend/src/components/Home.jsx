@@ -35,7 +35,18 @@ const gridItemStyle = {
     borderRight: { md: "1px solid #eaeaea" },
     borderBottom: { xs: "1px solid #eaeaea", md: "0" },
 };
-const mainicon = { height: "18rem", textAlign: "center", padding: 2, borderRadius: "0.55rem", cursor: "pointer" };
+const mainicon = {
+    height: "18rem",
+    textAlign: "center",
+    padding: 2,
+    borderRadius: "0.55rem",
+    cursor: "pointer",
+    fontWeight: 800,
+    fontSize: "18px",
+    fontFamily: "NanumSquare",
+    pt: 5,
+    color: "#fff",
+};
 
 function Home(props) {
     return (
@@ -60,8 +71,9 @@ function Home(props) {
                                 sx={{
                                     ...mainicon,
                                     backgroundImage: `url(${process.env.PUBLIC_URL}/img/hospital.jpg)`,
-                                    backgroundSize: "cover",
-                                    backgroundPosition: "center",
+                                    backgroundSize: "110%",
+                                    backgroundPosition: "50% 0%",
+                                    height: { xs: "180px", md: "300px" },
                                 }}>
                                 병원찾기
                             </Box>
@@ -73,7 +85,8 @@ function Home(props) {
                                     ...mainicon,
                                     backgroundImage: `url(${process.env.PUBLIC_URL}/img/review.png)`,
                                     backgroundSize: "cover",
-                                    backgroundPosition: "center",
+                                    backgroundPosition: "50% 10%",
+                                    height: { xs: "180px", md: "300px" },
                                 }}>
                                 펫투닥터 후기
                             </Box>
@@ -86,8 +99,9 @@ function Home(props) {
                                     backgroundImage: `url(${process.env.PUBLIC_URL}/img/faq.png)`,
                                     backgroundSize: "60%",
                                     backgroundRepeat: "no-repeat",
-                                    backgroundPosition: "center",
+                                    backgroundPosition: "50% 70%",
                                     backgroundColor: "#FAC8BF",
+                                    height: { xs: "180px", md: "300px" },
                                 }}>
                                 자주묻는 질문
                             </Box>

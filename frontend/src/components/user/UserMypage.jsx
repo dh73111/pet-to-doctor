@@ -57,10 +57,16 @@ function UserMypage(props) {
             <Typography variant='h4' component='h1' sx={{ mt: 10, mb: 2, fontWeight: 600, color: "#263747" }}>
                 마이페이지
             </Typography>
-            <Box sx={{ border: "1px solid #D7E2EB", p: 4, borderRadius: "0.55rem" }}>
+            <Box sx={{ border: "1px solid #D7E2EB", p: 4, borderRadius: "0.55rem", mb: 15 }}>
                 <UserInfo user={user} />
-                <UserPetInfo user={user} /*pets={currentUserPet}*/ />
-                <FavoriteHospital hospitals={favHospitals} />
+                {user.role !== "ROLE_USER" ? (
+                    ""
+                ) : (
+                    <>
+                        <UserPetInfo user={user} /*pets={currentUserPet}*/ />
+                        <FavoriteHospital hospitals={favHospitals} />
+                    </>
+                )}
             </Box>
         </Container>
     );

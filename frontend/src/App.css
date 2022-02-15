@@ -16,6 +16,7 @@
 .mainicon:hover {
     margin-top: 10px;
     box-shadow: rgb(0 0 0 / 10%) 4px 12px 30px 6px;
+    /* color: "#263747"; */
 }
 .mainTitle {
     color: white;
