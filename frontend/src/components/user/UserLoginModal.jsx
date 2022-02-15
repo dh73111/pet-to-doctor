@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TextField, Grid, Button, Typography, Box, Link } from "@mui/material";
+import { TextField, Grid, Button, Typography, Box, Link, Snackbar, Alert } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { loginUser, userInfo } from "api/user.js";
 import { getDoctorInfo } from "api/doctor.js";
@@ -18,6 +18,7 @@ const newTheme = createTheme({
 function UserLoginModal(props) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [open, setOpen] = useState(false);
     const [state, setState] = useState(true);
     const [values, setValues] = useState({
         email: "",
@@ -32,7 +33,12 @@ function UserLoginModal(props) {
     const REDIRECT_URI = "http://localhost:3000/kakaooauth";
     const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
     const userLogin = async (user) => {
-        const loginRes = await loginUser({ email: user.email, password: user.password });
+        // const loginRes = await loginUser({ email: user.email, password: user.password });
+        const loginRes = await loginUser({ email: user.email, password: user.password }).catch((err) => {
+            if (err.response.status === 401) {
+                setOpen(true);
+            }
+        });
         sessionStorage.setItem("accessToken", loginRes);
         let decode_token = jwtDecode(loginRes);
         let info;
@@ -46,10 +52,23 @@ function UserLoginModal(props) {
         navigate("/petodoctor");
     };
 
+    const handleClose = () => {
+        setOpen(false);
+    };
+
     return (
         <ThemeProvider theme={newTheme}>
             <div>
                 <Grid container maxHeight='800px' sx={{ height: "100vh" }}>
+                    <Snackbar
+                        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                        open={open}
+                        autoHideDuration={2000}
+                        onClose={handleClose}>
+                        <Alert onClose={handleClose} severity='warning'>
+                            아이디 또는 비밀번호를 확인해주세요
+                        </Alert>
+                    </Snackbar>
                     <Grid
                         item
                         xs={false}
@@ -178,7 +197,7 @@ function UserLoginModal(props) {
                                         <Typography variant='body2' align='center' sx={{ color: "#aeaeae" }}>
                                             펫투닥터가 처음이신가요?
                                         </Typography>
-                                        <Link href='UserJoin' variant='body2'>
+                                        <Link href='/petodoctor/userjoin' variant='body2'>
                                             <Typography variant='body2' align='center' sx={{ color: "#309FB3" }}>
                                                 회원가입
                                             </Typography>
@@ -187,12 +206,12 @@ function UserLoginModal(props) {
                                 ) : (
                                     <Box></Box>
                                 )}
-                                <Grid
+                                {/* <Grid
                                     onClick={() => {
                                         setState(!state);
                                     }}>
                                     {state ? "의사 로그인으로 이동" : "일반 유저로그인으로 이동"}
-                                </Grid>
+                                </Grid> */}
                             </Box>
                         </Box>
                     </Grid>

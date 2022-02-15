@@ -32,7 +32,6 @@ function Qna(props) {
                                 fontSize: "18px",
                                 fontWeight: "bold",
                                 lineHeight: "50px",
-                                borderTop: "1px solid #eaeaea",
                             }}>
                             예약은 어떻게 하나요?
                         </Typography>

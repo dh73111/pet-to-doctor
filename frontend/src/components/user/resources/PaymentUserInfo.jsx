@@ -15,7 +15,7 @@ function PaymentUserInfo(props) {
                         이름
                     </Typography>
                     <TextField
-                        sx={{ flex: 1, maxWidth: "260px" }}
+                        sx={{ flex: 1, maxWidth: "260px", backgroundColor: "#FBFBFD" }}
                         id='outlined-basic'
                         variant='outlined'
                         size='small'
@@ -27,7 +27,7 @@ function PaymentUserInfo(props) {
                         전화번호
                     </Typography>
                     <TextField
-                        sx={{ flex: 1, maxWidth: "260px" }}
+                        sx={{ flex: 1, maxWidth: "260px", backgroundColor: "#FBFBFD" }}
                         id='outlined-basic'
                         variant='outlined'
                         size='small'

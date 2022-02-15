@@ -6,7 +6,7 @@ import { styled } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import { Container, Typography } from "@mui/material";
 import Footer from "./Footer";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import HomeSwiper from "./commons/HomeSwiper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
@@ -49,6 +49,7 @@ const mainicon = {
 };
 
 function Home(props) {
+    const navigate = useNavigate();
     return (
         <Box style={{ border: 1, backgroundColor: "#fafafa" }}>
             {/* <MyImage>
@@ -68,6 +69,9 @@ function Home(props) {
                         <Grid item xs={12} md={4}>
                             <Box
                                 className='mainicon'
+                                onClick={() => {
+                                    navigate("/petodoctor/hospitalsearch");
+                                }}
                                 sx={{
                                     ...mainicon,
                                     backgroundImage: `url(${process.env.PUBLIC_URL}/img/hospital.jpg)`,
@@ -81,6 +85,9 @@ function Home(props) {
                         <Grid item xs={12} md={4}>
                             <Box
                                 className='mainicon'
+                                onClick={() => {
+                                    navigate("/petodoctor/review");
+                                }}
                                 sx={{
                                     ...mainicon,
                                     backgroundImage: `url(${process.env.PUBLIC_URL}/img/review.png)`,
@@ -94,6 +101,9 @@ function Home(props) {
                         <Grid item xs={12} md={4}>
                             <Box
                                 className='mainicon'
+                                onClick={() => {
+                                    navigate("/petodoctor/qna");
+                                }}
                                 sx={{
                                     ...mainicon,
                                     backgroundImage: `url(${process.env.PUBLIC_URL}/img/faq.png)`,
