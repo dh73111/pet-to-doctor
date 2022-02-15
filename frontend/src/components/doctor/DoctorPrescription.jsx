@@ -136,14 +136,6 @@ function DoctorPrescription(props) {
     };
     const [values, setValues] = useState({
         invoiceCode: "",
-        address: {
-            city: "",
-            street: "",
-            zipcode: "",
-        },
-        shippingName: "",
-        shippingTel: "",
-        shippingCost: 0,
     });
     const handleChangeInvoice = (idx) => (event) => {
         setValues({
@@ -151,6 +143,7 @@ function DoctorPrescription(props) {
             invoiceCode: event.target.value,
         });
         console.log(event.target.value, "target"); //입력값
+        setValues(event.target.value);
         console.log(values.invoiceCode, "123");
         console.log(idx, "idx"); // 배열 순번.
         console.log("prescriptions[idx]", "prescriptions"); // 배열 전체 값
@@ -158,7 +151,8 @@ function DoctorPrescription(props) {
     };
 
     const AddinvoiceCode = async (idx) => {
-        console.log(prescriptions[idx].id);
+        console.log(prescriptions[idx].id, "id");
+        console.log(prescriptions[idx], "배열");
         await addInvoice(prescriptions[idx].id, values);
     };
     return (
@@ -264,10 +258,11 @@ function DoctorPrescription(props) {
                                                     <td>{convertor[res.type]}</td>
                                                     <td>{res.isShipping === false ? "X" : "O"}</td>
                                                     <td>
-                                                        {res.type !== "" ? (
-                                                            res.invoiceCode
-                                                        ) : (
-                                                            <Box>
+                                                        {res.invoiceCode !== "" && res.invoiceCode !== "0"
+                                                            ? res.invoiceCode
+                                                            : ""}
+                                                    </td>
+                                                    {/* <Box>
                                                                 <TextField
                                                                     label='운송장번호'
                                                                     id='invoiceCode'
@@ -277,14 +272,12 @@ function DoctorPrescription(props) {
                                                                 <button onClick={() => AddinvoiceCode(idx)}>
                                                                     저장
                                                                 </button>
-                                                            </Box>
-                                                        )}
-                                                    </td>
-                                                    {/* <td>
-                                                        {res.type === "COMPLETE" ? (
+                                                            </Box> */}
+                                                    <td>
+                                                        {res.isShipping === true && res.invoiceCode === "0" ? (
                                                             <Button onClick={handleOpen}>운송장 번호 입력</Button>
                                                         ) : (
-                                                            <TextField></TextField>
+                                                            ""
                                                         )}
                                                         <Modal
                                                             open={open}
@@ -296,14 +289,16 @@ function DoctorPrescription(props) {
                                                                     label='운송장번호'
                                                                     id='invoiceCode'
                                                                     name='invoiceCode'
-                                                                    value={res.invoiceCode}
-                                                                    onChange={handleChangeInvoice(
-                                                                        "invoiceCode"
-                                                                    )}></TextField>
-                                                                <button type='submit'>확인</button>
+                                                                    onChange={handleChangeInvoice(idx)
+                                                                    }></TextField>
+                                                                <button
+                                                                    type='submit'
+                                                                    onClick={() => AddinvoiceCode(idx)}>
+                                                                    확인
+                                                                </button>
                                                             </Box>
                                                         </Modal>
-                                                    </td> */}
+                                                    </td>
                                                 </tr>
                                             );
                                         })}

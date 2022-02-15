@@ -17,6 +17,8 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { Pagination, Stack } from "@mui/material";
 import { doctorTreatmentAllInfo } from "api/treatment";
 import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { Modal, Skeleton } from "@mui/material";
 
 function createData(no, date, time, name, state) {
     return { no, date, time, name, state };
@@ -38,72 +40,149 @@ const Root = styled("div")`
     }
 `;
 
-const CustomTablePagination = styled(TablePaginationUnstyled)`
-    & .MuiTablePaginationUnstyled-toolbar {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-
-        @media (min-width: 768px) {
-            flex-direction: row;
-            align-items: center;
-        }
-    }
-
-    & .MuiTablePaginationUnstyled-selectLabel {
-        margin: 0;
-    }
-
-    & .MuiTablePaginationUnstyled-displayedRows {
-        margin: 0;
-
-        @media (min-width: 768px) {
-            margin-left: auto;
-        }
-    }
-
-    & .MuiTablePaginationUnstyled-spacer {
-        display: none;
-    }
-
-    & .MuiTablePaginationUnstyled-actions {
-        display: flex;
-        gap: 0.25rem;
-    }
-`;
 function DoctorDiagnosis(props) {
-    const docInfo = useSelector((store) => store.user);
-    const [diags, setDiags] = useState({});
-    // const [docInfo, setDocInfo] = useState();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const doctorId = useSelector((store) => store.user.id);
+    const [diagonosisInfo, setDiagonosisInfo] = useState({});
+    const [diagonosisAllList, setDiagonosisAllList] = useState([]);
+    const [diagonosisRequest, setDiagonosisRequest] = useState([]);
+    const [diagonosisPaid, setDiagonosisPaid] = useState([]);
+    const [diagonosisCancel, setDiagonosisCancel] = useState([]);
+    const [diagonosisConfirm, setDiagonosisConfirm] = useState([]);
+    const [diagonosisComplete, setDiagonosisComplete] = useState([]);
     const [value, setValue] = React.useState(new Date());
     const [state, setState] = React.useState("");
+    const [onLoad, setOnLoad] = useState(true);
+
+    const convertor = {
+        RES_REQUEST: "신청(온라인)",
+        RES_PAID: "결제완료(온라인)",
+        RES_CANCEL: "취소(온라인)",
+        RES_CONFIRMED: "승인(온라인)",
+        RES_COMPLETED: "상담완료(온라인)",
+        VST_REQUEST: "신청(방문)",
+        VST_PAID: "결제완료(방문)",
+        VST_CANCEL: "취소(방문)",
+        VST_CONFIRMED: "승인(방문)",
+        VST_COMPLETED: "상담완료(방문)",
+    };
+
+    const conditions = [
+        "RES_REQUEST",
+        "RES_PAID",
+        "RES_CANCEL",
+        "RES_CONFIRMED",
+        "RES_COMPLETED",
+        "VST_REQUEST",
+        "VST_PAID",
+        "VST_CANCEL",
+        "VST_CONFIRMED",
+        "VST_COMPLETED",
+    ];
 
     useEffect(() => {
         const init = async () => {
-            const data = await doctorTreatmentAllInfo(docInfo.id);
-            setDiags(data);
-            console.log(data, "의사의 모든 진료현황");
+            const list = await doctorTreatmentAllInfo(doctorId);
+            let tempRequestList = [];
+            let tempCancelList = [];
+            let tempConfirmList = [];
+            let tempPaidList = [];
+            let tempCompleteList = [];
+            for (let item of list) {
+                const status = item.type.substring(4);
+                if (status === "REQUEST") {
+                    tempRequestList.push(item);
+                } else if (status === "CANCEL") {
+                    tempCancelList.push(item);
+                } else if (status === "CONFIRMED ") {
+                    tempConfirmList.push(item);
+                } else if (status === "PAID") {
+                    tempPaidList.push(item);
+                } else if (status === "COMPLETED") {
+                    tempCompleteList.push(item);
+                }
+            }
+            setDiagonosisInfo(list);
+            setDiagonosisAllList(list);
+            setDiagonosisRequest(tempRequestList);
+            setDiagonosisPaid(tempPaidList);
+            setDiagonosisCancel(tempCancelList);
+            setDiagonosisConfirm(tempConfirmList);
+            setDiagonosisComplete(tempCompleteList);
+            setOnLoad(false);
         };
         init();
     }, []);
-
-    // Avoid a layout jump when reaching the last page with empty rows.
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
+    const [open, setOpen] = useState(false);
+    const handleClose = () => setOpen(false);
+    const navigate = useNavigate();
+    const offset = new Date().getTimezoneOffset() * 60000; // 1000밀리초 * 60  -> 1분
+    const enterConsulting = (time, id) => {
+        // 입장가능 로직 -> 확인해야함
+        let currentTime = new Date(Date.now() - offset).toISOString();
+        let start = Number(time.substring(14, 16));
+        let end = start + 30;
+        let currentMin = currentTime.substring(14, 16);
+        if (
+            currentTime.substring(0, 10) === time.substring(0, 10) &&
+            currentTime.substring(11, 13) === time.substring(11, 13) &&
+            start <= currentMin &&
+            currentMin <= end
+        ) {
+            navigate(`/petodoctor/userconsulting/${id}`);
+        } else
+            alert(
+                `입장이 불가능합니다. 현재시간 ${currentTime.substring(11, 16)} , 입장시간 ${time.substring(
+                    11,
+                    16
+                )} 그러나 발표를 위해서 입장!`
+            );
+        navigate(`/petodoctor/userconsulting/${id}`);
+    };
     const handleChange = (event) => {
         setState(event.target.value);
-    };
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
+        // setList(event.target.value, value);
+        setList(event.target.value, value);
     };
 
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
+    const setList = (value) => {
+        switch (value) {
+            case 0:
+                setDiagonosisInfo(diagonosisAllList);
+                break;
+            case 1:
+                setDiagonosisInfo(diagonosisRequest);
+                break;
+            case 2:
+                setDiagonosisInfo(diagonosisCancel);
+                break;
+            case 3:
+                setDiagonosisInfo(diagonosisPaid);
+                break;
+            case 4:
+                setDiagonosisInfo(diagonosisConfirm);
+                break;
+            case 5:
+                setDiagonosisInfo(diagonosisComplete);
+                break;
+            default:
+                setDiagonosisInfo(diagonosisAllList);
+                break;
+        }
     };
+    const style = {
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        width: 1200,
+        height: 800,
+        bgcolor: "background.paper",
+        boxShadow: 24,
+    };
+    // Avoid a layout jump when reaching the last page with empty rows.
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
     return (
         <Container>
@@ -111,29 +190,11 @@ function DoctorDiagnosis(props) {
                 <Typography variant='h4' component='h1' sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
                     진료현황
                 </Typography>
-                {/* <Grid item xs={4}></Grid> */}
-                {/* <Grid item xs={4}>
-                    <Box
-                        sx={{
-                            background: "#CDEEF4",
-                            mt: 10,
-                            width: "100%",
-                            height: "80px",
-                            fontWeight: "bold",
-                            textAlign: "center",
-                            fontSize: 30,
-                            pt: 5,
-                        }}
-                    >
-                        진료 현황
-                    </Box>
-                </Grid> */}
-                {/* <Grid item xs={4}></Grid> */}
             </Grid>
             <Grid container>
                 <Grid item xs={8}></Grid>
                 <Grid item xs={2} sx={{ px: 4 }}>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DatePicker
                             disableFuture
                             label='날짜'
@@ -145,30 +206,35 @@ function DoctorDiagnosis(props) {
                             }}
                             renderInput={(params) => <TextField {...params} />}
                         />
-                    </LocalizationProvider>
+                    </LocalizationProvider> */}
                 </Grid>
                 <Grid item xs={2}>
                     <Box sx={{ width: 120 }}>
                         <FormControl fullWidth>
-                            <InputLabel id='demo-simple-select-label'>ALL</InputLabel>
+                            <InputLabel id='demo-simple-select-label'>선택</InputLabel>
                             <Select
+                                sx={{ height: 55 }}
                                 labelId='demo-simple-select-label'
                                 id='demo-simple-select'
                                 value={state}
                                 label='state'
+                                size='small'
                                 onChange={handleChange}>
-                                <MenuItem value={10}>진료 대기</MenuItem>
-                                <MenuItem value={20}>진료 완료</MenuItem>
+                                <MenuItem value={0}>모두 보기</MenuItem>
+                                <MenuItem value={1}>예약 신청</MenuItem>
+                                <MenuItem value={2}>예약 취소</MenuItem>
+                                <MenuItem value={3}>예약 승인</MenuItem>
+                                <MenuItem value={4}>결제 완료</MenuItem>
+                                <MenuItem value={5}>진료 완료</MenuItem>
                             </Select>
                         </FormControl>
                     </Box>
                 </Grid>
             </Grid>
             <Grid container>
-                {/* <Grid item xs={2}></Grid> */}
                 <Grid item xs={12}>
-                    <Root sx={{ width: "100%", mt: 3 }}>
-                        <table aria-label='custom pagination table' className='favhospital'>
+                    <Root sx={{ mt: 3 }}>
+                        <table className='favhospital'>
                             <thead>
                                 <tr>
                                     <th>예약번호</th>
@@ -179,84 +245,73 @@ function DoctorDiagnosis(props) {
                                     <th>상태</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                {diags.map((diag, idx) => {
-                                    return (
-                                        <tr key={idx}>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                    );
-                                })}
-                                {/* {(rowsPerPage > 0
-                                    ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                    : rows
-                                ).map((row) => (
-                                    <tr key={row.no}>
-                                        <td style={{ width: 160 }}> {row.no}</td>
-                                        <td style={{ width: 160 }} align='right'>
-                                            {row.date}
-                                        </td>
-                                        <td style={{ width: 160 }} align='right'>
-                                            {row.time}
-                                        </td>
-                                        <td style={{ width: 160 }} align='right'>
-                                            {row.name}
-                                        </td>
-                                        <td style={{ width: 160 }} align='right'>
-                                            <Box>
-                                                <Button variant='contained' sx={{ width: "50px", height: "20px" }}>
-                                                    open
-                                                </Button>
-                                            </Box>
-                                            <Box sx={{ mt: 0.3 }}>
-                                                <Button
-                                                    variant='contained'
-                                                    sx={{ width: "50px", height: "20px" }}
-                                                    color='error'>
-                                                    close
-                                                </Button>
-                                            </Box>
-                                        </td>
-                                        <td style={{ width: 160 }} align='right'>
-                                            {row.state}
-                                        </td>
-                                    </tr>
-                                ))}
-
-                                {emptyRows > 0 && (
-                                    <tr style={{ height: 41 * emptyRows }}>
-                                        <td colSpan={3} />
-                                    </tr>
-                                )} */}
-                            </tbody>
-                            <tfoot>
-                                <thead sx={{ width: 1200 }}>
-                                    {/* <CustomTablePagination
-                                        rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-                                        colSpan={6}
-                                        count={rows.length}
-                                        rowsPerPage={rowsPerPage}
-                                        page={page}
-                                        componentsProps={{
-                                            select: {
-                                                "aria-label": "rows per page",
-                                            },
-                                            actions: {
-                                                showFirstButton: true,
-                                                showLastButton: true,
-                                            },
-                                        }}
-                                        onPageChange={handleChangePage}
-                                        onRowsPerPageChange={handleChangeRowsPerPage}
-                                        labelRowsPerPage={"글 개수"}
-                                    /> */}
-                                </thead>
-                            </tfoot>
+                            {onLoad ? (
+                                <tr>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                    <td>
+                                        <Skeleton />
+                                    </td>
+                                </tr>
+                            ) : (
+                                <>
+                                    <tbody>
+                                        {diagonosisInfo.map((treat, idx) => {
+                                            return (
+                                                <tr key={idx}>
+                                                    <td>{idx + 1}</td>
+                                                    <td>{treat.scheduleDate.substring(0, 10)}</td>
+                                                    <td>{treat.scheduleDate.substring(11, 16)}</td>
+                                                    <td>{treat.petName}</td>
+                                                    <td>
+                                                        {treat.type !== "RES_CONFIRMED" ? (
+                                                            <Box sx={{ mx: 2 }}>-</Box>
+                                                        ) : (
+                                                            <Button
+                                                                variant='contained'
+                                                                onClick={() => {
+                                                                    enterConsulting(treat.scheduleDate);
+                                                                }}>
+                                                                입장하기
+                                                            </Button>
+                                                        )}
+                                                        <Button
+                                                            variant='contained'
+                                                            onClick={() => {
+                                                                enterConsulting(treat.scheduleDate, treat.id);
+                                                            }}>
+                                                            입장하기 테스트
+                                                        </Button>
+                                                    </td>
+                                                    <td>{convertor[treat.type]}</td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </>
+                            )}
                         </table>
                     </Root>
                 </Grid>
