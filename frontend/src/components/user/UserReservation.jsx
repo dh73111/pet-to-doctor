@@ -139,8 +139,12 @@ function UserReservation(props) {
             navigate(`/petodoctor/userconsulting/${id}`);
         } else
             alert(
-                `입장이 불가능합니다. 현재시간 ${currentTime.substring(11, 16)} , 입장시간 ${time.substring(11, 16)}`
+                `입장이 불가능합니다. 현재시간 ${currentTime.substring(11, 16)} , 입장시간 ${time.substring(
+                    11,
+                    16
+                )} 그러나 발표를 위해서 입장!`
             );
+        navigate(`/petodoctor/userconsulting/${id}`);
     };
     const handleChange = (event) => {
         setState(event.target.value);
