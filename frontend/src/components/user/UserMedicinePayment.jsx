@@ -44,53 +44,9 @@ function UserMedicinePayment(props) {
         name: user.name,
         tel: user.tel,
     };
+    console.log(useLocation());
     const { drug } = useLocation().state;
-
-    console.log(drug, "location");
-
-    const prescription = {
-        message: "string",
-        data: {
-            id: 0,
-            administration: "string",
-            medicine: "소독약, 소염제, 해열제",
-            diagnosis: "알러지",
-            opinion: "아이가 피부가 약해서 염증이 난 것 같습니다. 심각한건 아니니 소독만 해주시면 됩니다 :)",
-            price: 3000,
-            type: "UNCOMPLETE",
-            isShipping: true,
-            invoiceCode: "string",
-            paymentCode: "string",
-            shippingAddress: {
-                city: "대전광역시",
-                street: "문정로 11",
-                zipcode: "12345",
-            },
-            shippingName: "string",
-            shippingTel: "string",
-        },
-    };
-    const treatment = {
-        message: "string",
-        data: {
-            id: 0,
-            userId: 0,
-            doctorId: 0,
-            prescriptionId: 0,
-            hospitalId: 0,
-            paymentCode: "string",
-            scheduleDate: "2022-02-04T02:57:19.525Z",
-            type: "RES_REQUEST",
-            reVisit: true,
-            petName: "string",
-            symptom: "string",
-            birthDate: "2022-02-04",
-            petSpecies: "string",
-            petWeight: "string",
-            price: 0,
-            url: "string",
-        },
-    };
+    const { shippingCost } = useLocation().state;
 
     // const total = prescription.data.price;
     return (
@@ -162,7 +118,7 @@ function UserMedicinePayment(props) {
                                     </Grid>
                                     <Grid item xs={8}>
                                         <Typography variant='h4' sx={{ textAlign: "right" }}>
-                                            {}원
+                                            {shippingCost}원
                                         </Typography>
                                     </Grid>
                                 </Grid>

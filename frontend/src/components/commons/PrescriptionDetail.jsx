@@ -8,6 +8,15 @@ function PrescriptionDetail(props) {
     const [presc, setPresc] = useState({});
     const [drugs, setDrugs] = useState([]);
     const navigate = useNavigate();
+
+    const sum = () => {
+        let sum = 0;
+        for (let item of drugs) {
+            console.log(typeof item.price);
+            sum += item.price;
+        }
+        return sum;
+    };
     useEffect(() => {
         const init = async () => {
             const precId = location.state;
@@ -48,7 +57,7 @@ function PrescriptionDetail(props) {
                             );
                         })}
                     </Box>
-                    <Box sx={{ mt: 2 }}>가격 : {presc.medicineCost} 원</Box>
+                    <Box sx={{ mt: 2 }}>가격 : {sum()} 원</Box>
                 </Box>
             </Box>
             <div className='devider'></div>
@@ -65,7 +74,9 @@ function PrescriptionDetail(props) {
                     variant='contained'
                     sx={{ mx: 1, mt: 3, mb: 3, float: "right" }}
                     onClick={() => {
-                        navigate("/petodoctor/usermedipayment", { state: { drug: drugs } });
+                        navigate("/petodoctor/usermedipayment", {
+                            state: { drug: drugs, shippingCost: presc.shippingCost },
+                        });
                     }}>
                     결제
                 </Button>
