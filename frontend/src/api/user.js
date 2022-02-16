@@ -17,6 +17,10 @@ async function registerUser(user) {
 async function deleteUser(userId) {
     return await api.delete(`/user/${userId}`);
 }
+// 카카오 로그인
+async function kakaoLogin(code) {
+    return await api.post(`user/oauth-login/kakao?code=${code}`);
+}
 
 // 비밀번호 확인
 async function checkPassword(password) {
@@ -25,20 +29,11 @@ async function checkPassword(password) {
     return await loginApi.post(`/user/password/check`, { password: password });
 }
 
-// 비밀번호 변경
-// function changePassword(user, success, fail) {
-//   const loginApi = loginApiInstance();
-//   loginApi.post(`/user/password/change`, JSON.stringify(user)).then(success).catch(fail);
-// }
 async function changePassword(password) {
     const loginApi = loginApiInstance();
     return await loginApi.post(`/user/password/change`, JSON.stringify(password));
 }
 
-// 로그인
-// function loginUser(user, success, fail) {
-//   api.post(`/user/login`, JSON.stringify(user)).then(success).catch(fail);
-// }
 async function loginUser(user) {
     console.log(JSON.stringify(user));
     return (await api.post(`/account/login`, JSON.stringify(user))).data.data;
@@ -71,4 +66,5 @@ export {
     loginUser,
     findUserPassword,
     checkDuplication,
+    kakaoLogin,
 };

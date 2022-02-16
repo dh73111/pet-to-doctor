@@ -8,7 +8,7 @@ function UserReservationComplete(props) {
     return (
         <>
             <Container align='center' maxWidth='sm' sx={{ mt: 24, mb: 30 }}>
-                <CheckCircleIcon sx={{ fontSize: 60 }} color='success' />
+                <CheckCircleIcon sx={{ fontSize: 60, color: "#309FB3" }} />
                 <Typography variant='h4' sx={{ fontWeight: 600, mt: 3, mb: 1 }}>
                     상담예약 결제가 완료되었습니다!
                 </Typography>

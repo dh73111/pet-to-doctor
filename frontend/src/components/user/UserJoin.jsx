@@ -162,6 +162,7 @@ function UserJoin(props) {
                     alignItems: "center",
                     width: "600px",
                     mx: "auto",
+                    mb: 20,
                 }}>
                 <img src={logo} alt='로고' style={{ marginBottom: "40px" }} />
                 {/* <Typography mt={5} align='left' component='h1' variant='h6'>

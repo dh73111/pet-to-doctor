@@ -21,11 +21,23 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { listNameHospital, listDongHospital } from "api/hospital.js";
 import { getDoctorInfoFromHospital } from "api/doctor.js";
 import { hospitalReviews } from "../../api/review.js";
-import { CircularProgress, IconButton, Tooltip } from "@mui/material";
+import { CircularProgress, createTheme, IconButton, ThemeProvider, Tooltip } from "@mui/material";
 import StarsIcon from "@mui/icons-material/Stars";
 import { useSelector } from "react-redux";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
+
+const buttons = createTheme({
+    palette: {
+        type: "light",
+        primary: {
+            main: "#309FB3",
+        },
+        secondary: {
+            main: "#1dc6f6",
+        },
+    },
+});
 
 function HospitalSearch(props) {
     const { kakao } = window;
@@ -238,11 +250,16 @@ function HospitalSearch(props) {
                                     </Grid>
                                 </Box> */}
                                 <Box sx={{ float: "right", mr: 2 }}>
-                                    <Button variant='contained' sx={{ mt: 3 }}>
+                                    <Button
+                                        variant='contained'
+                                        sx={{ mt: 3, color: "white", fontWeight: 0, backgroundColor: "#309FB3" }}>
                                         <NavLink
                                             to={`${process.env.PUBLIC_URL}/hospitalsearchreservation/${hospital.id}/${item.id}`}
                                             state={doctor}
-                                            style={{ textDecoration: "none", color: "white" }}
+                                            style={{
+                                                textDecoration: "none",
+                                                color: "white",
+                                            }}
                                             onClick={(e) => {
                                                 if (!isLogin) {
                                                     e.preventDefault();
@@ -546,7 +563,12 @@ function HospitalSearch(props) {
     const [hospitalList, setHospitalList] = useState([]);
 
     const searchHospitalList = async (name) => {
-        const tempHospitalList = await listNameHospital(name);
+        name = name.trim();
+        if (name === "") {
+            alert("검색 내용을 입력해주세요");
+            return;
+        }
+        const tempHospitalList = await listNameHospital(name.trim());
         const hospitalDongList = await listDongHospital(name);
         let list = [...tempHospitalList, ...hospitalDongList];
         list = list.filter((hosiptal, index, arr) => {
@@ -570,65 +592,67 @@ function HospitalSearch(props) {
         kakaoMap(lat, lng);
     });
     return (
-        <Grid container sx={{ overflow: "hidden" }}>
-            <Grid item xs={12} md={2.5} sx={{ zIndex: 1 }}>
-                <Box sx={{ my: 2 }}>
-                    <TextField
-                        id='outlined-basic'
-                        label='동,병원 이름검색'
-                        variant='outlined'
-                        value={name}
-                        onChange={onHandleChange}
-                        sx={{ ml: 3 }}
-                        size='small'
-                    />
-                    <Button
-                        variant='contained'
-                        sx={{ mx: 1 }}
-                        onClick={() => {
-                            setOnLoad(true);
-                            searchHospitalList(name);
-                        }}>
-                        검색
-                    </Button>
-                </Box>
-                {onLoad ? (
-                    <CircularProgress sx={{ position: "absolute", top: "540px", left: "180px" }} />
-                ) : (
-                    <Box
-                        style={{
-                            maxHeight: 833,
-                            height: "100%",
-                            overflow: "auto",
-                            WebkitScrollSnapType: "none",
-                            backgroundColor: "white",
-                            border: "1px solid #D7E2EB",
-                        }}>
-                        {hospitalList.map((item, index) => (
-                            <Hospital
-                                key={index}
-                                hospital={item.hospital}
-                                index={index}
-                                reviewList={item.reviewList}
-                                markerPosition={markerPosition}></Hospital>
-                        ))}
+        <ThemeProvider theme={buttons}>
+            <Grid container sx={{ overflow: "hidden" }}>
+                <Grid item xs={12} md={2.5} sx={{ zIndex: 1 }}>
+                    <Box sx={{ my: 2 }}>
+                        <TextField
+                            id='outlined-basic'
+                            label='동,병원 이름검색'
+                            variant='outlined'
+                            value={name}
+                            onChange={onHandleChange}
+                            sx={{ ml: 3 }}
+                            size='small'
+                        />
+                        <Button
+                            variant='contained'
+                            sx={{ mx: 1, backgroundColor: "#309FB3" }}
+                            onClick={() => {
+                                setOnLoad(true);
+                                searchHospitalList(name);
+                            }}>
+                            검색
+                        </Button>
                     </Box>
-                )}
-            </Grid>
-            <Grid item xs={12} md={9.5}>
-                {mode === "list" ? (
-                    // 리스트 페이지
-                    <Box id='map' style={{ width: "100%", height: "890px" }}></Box>
-                ) : (
-                    // 상세 보기 페이지
+                    {onLoad ? (
+                        <CircularProgress sx={{ position: "absolute", top: "540px", left: "180px" }} />
+                    ) : (
+                        <Box
+                            style={{
+                                maxHeight: 833,
+                                height: "100%",
+                                overflow: "auto",
+                                WebkitScrollSnapType: "none",
+                                backgroundColor: "white",
+                                border: "1px solid #D7E2EB",
+                            }}>
+                            {hospitalList.map((item, index) => (
+                                <Hospital
+                                    key={index}
+                                    hospital={item.hospital}
+                                    index={index}
+                                    reviewList={item.reviewList}
+                                    markerPosition={markerPosition}></Hospital>
+                            ))}
+                        </Box>
+                    )}
+                </Grid>
+                <Grid item xs={12} md={9.5}>
+                    {mode === "list" ? (
+                        // 리스트 페이지
+                        <Box id='map' style={{ width: "100%", height: "890px" }}></Box>
+                    ) : (
+                        // 상세 보기 페이지
 
-                    <HospitalDetail
-                        key={hospitalNo}
-                        hospital={hospitalList[hospitalNo].hospital}
-                        reviewList={hospitalList[hospitalNo].reviewList}></HospitalDetail>
-                )}
+                        <HospitalDetail
+                            key={hospitalNo}
+                            hospital={hospitalList[hospitalNo].hospital}
+                            reviewList={hospitalList[hospitalNo].reviewList}></HospitalDetail>
+                    )}
+                </Grid>
             </Grid>
-        </Grid>
+        </ThemeProvider>
     );
 }
 

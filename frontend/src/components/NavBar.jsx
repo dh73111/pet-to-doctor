@@ -39,12 +39,6 @@ const doctorpages = [
     { id: 1, path: "/petodoctor/doctorreservation", name: "받은예약" },
     { id: 2, path: "/petodoctor/doctordiagnosis", name: "진료현황" },
     { id: 3, path: "/petodoctor/doctorprescription", name: "처방현황" },
-    { id: 4, path: "/petodoctor/doctorprescriptonform", name: "처방작성 테스트용" },
-];
-const settings = [
-    { title: "내 예약", link: "/petodoctor/userreservation" },
-    { title: "마이페이지", link: "/petodoctor/usermypage" },
-    { title: "Logout", link: "/petodoctor" },
 ];
 
 const style = {
@@ -127,7 +121,7 @@ const NavTop = (props) => {
             return (
                 <Box sx={{ width: "100%", display: { xs: "none", md: "flex" }, justifyContent: "space-between" }}>
                     {doctorpages.map((page) => (
-                        <NavLink to={page.path} key={page.path} style={{ textDecoration: "none" }}>
+                        <NavLink to={page.path} key={page.path} style={{ textDecoration: "none", textWeight: "bold" }}>
                             {props.selectedNav === page.id ? MyButton(page, "#29A1B1") : MyButton(page, "black")}
                         </NavLink>
                     ))}
@@ -361,7 +355,7 @@ function NavBottom(props) {
                 props.clickNav(page.id);
             }}
             sx={{ color: selectedColor, display: "block" }}>
-            <Typography sx={{ fontSize: 16, fontWeight: fontWeight }}>{page.name}</Typography>
+            <Typography sx={{ fontSize: 16, fontWeight: "bold" }}>{page.name}</Typography>
         </Box>
     );
 

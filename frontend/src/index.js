@@ -28,6 +28,7 @@ function reducer(currentState, action) {
 
     if (action.type === "login") {
         newState.user = action.userData;
+        console.log(newState.user, "store");
         newState.isLogin = true;
         return newState;
     }
