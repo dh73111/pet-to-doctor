@@ -217,7 +217,7 @@ const NavTop = (props) => {
                     anchorOrigin={{ vertical: "top", horizontal: "center" }}
                     open={loginAlert}
                     onClose={handleLoginAlert}
-                    autoHideDuration={2000}
+                    autoHideDuration={1500}
                     // key={vertical + horizontal}
                 >
                     <Alert onClose={handleLoginAlert} severity='success' sx={{ width: "100%" }}>

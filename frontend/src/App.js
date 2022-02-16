@@ -40,7 +40,7 @@ import KakaoAuth from "components/user/KakaoAuth";
 function App() {
     const fontTheme = createTheme({
         typography: {
-            fontFamily: "noto-sans",
+            fontFamily: "Noto Sans KR",
         },
         palette: {
             type: "light",
@@ -50,6 +50,9 @@ function App() {
             secondary: {
                 main: "#1dc6f6",
             },
+            success: {
+                main: '#D7E2EB',
+            }
         },
     });
     return (

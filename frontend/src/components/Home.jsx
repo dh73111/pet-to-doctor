@@ -67,7 +67,7 @@ function Home(props) {
                                     ...mainicon,
                                     backgroundImage: `url(${process.env.PUBLIC_URL}/img/review.png)`,
                                     backgroundSize: "cover",
-                                    backgroundPosition: "50% 10%",
+                                    backgroundPosition: "50% 5%",
                                     height: { xs: "180px", md: "300px" },
                                 }}>
                                 펫투닥터 후기

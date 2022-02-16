@@ -169,12 +169,12 @@ function UserConsulting(props) {
     };
     console.log(user, "user");
     return (
-        <Box>
+        <Box sx={{ mb: 15}}>
             <Grid container>
                 <Grid item md={6}>
                     <Box>
                         <video
-                            style={{ width: "98%", height: 500, margin: 5, background: "black" }}
+                            style={{ width: "100%", height: 500, margin: 0, background: "black" }}
                             ref={localVideoRef}
                             autoPlay
                             muted></video>
@@ -183,7 +183,7 @@ function UserConsulting(props) {
                 <Grid item md={6}>
                     <Box>
                         <video
-                            style={{ width: "98%", height: 500, margin: 5, background: "black" }}
+                            style={{ width: "100%", height: 500, margin: 0, background: "black" }}
                             ref={remoteVideoRef}
                             autoPlay></video>
                     </Box>

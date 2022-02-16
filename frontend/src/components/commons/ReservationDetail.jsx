@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate} from "react-router-dom";
 import { treatmentInfo } from "api/treatment";
 import { getHosiptal } from "api/hospital";
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
@@ -17,12 +17,12 @@ function ReservationDetail() {
     }, []);
     const resdate = res.scheduleDate ? res.scheduleDate.substring(0, 10) : "";
     const restime = res.scheduleDate ? res.scheduleDate.substring(11, 16) : "";
+    const navigate = useNavigate();
     return (
-        <Container>
-            <Typography sx={{ fontSize: 30, mx: 5, mt: 5, mb: 1, fontWeight: "bold", textAlign: "center" }}>
+        <Container maxWidth="md" sx={{border: "1px solid #D7E2EB", p: 4, borderRadius: "0.55rem", mb: 15, mt: 8}}>
+            <Typography sx={{ fontSize: 30, mx: 5, mt: 3, mb: 3, fontWeight: "bold", textAlign: "center" }}>
                 상세예약내역
             </Typography>
-            <Typography sx={{ mb: 2, textAlign: "center" }}>예약상태코드써주세용 props 받아서</Typography>
             <div className='devider'></div>
             <Grid container>
                 <Grid container xs={12} sx={{ p: 3, textAlign: "left" }}>
@@ -60,7 +60,9 @@ function ReservationDetail() {
                 </Grid>
             </Grid>
             <div className='devider'></div>
-            <Button variant='contained' sx={{ mt: 3, mb: 3, float: "right" }}>
+            <Button variant='contained' sx={{ mt: 3, mb: 3 }} style={{marginLeft: '90%'}} onClick={() => {
+                navigate(-1);
+            }}>
                 확인
             </Button>
         </Container>
