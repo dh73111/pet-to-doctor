@@ -142,7 +142,7 @@ public class UserService {
     }
 
     @Transactional
-    public void updateProfile(Long userId, MultipartFile multipartFile) {
+    public User updateProfile(Long userId, MultipartFile multipartFile) {
         User user = userRepository.findById(userId).get();
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -161,6 +161,8 @@ public class UserService {
             }
             user.setProfileImgUrl(imageFileName);
         }
+
+        return user;
     }
 
     @Transactional

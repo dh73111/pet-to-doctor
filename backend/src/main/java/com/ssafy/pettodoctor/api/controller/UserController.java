@@ -197,16 +197,17 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "사용자 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
-    public ResponseEntity<ResVO<String>> updateProfile(
+    public ResponseEntity<ResVO<UserRes>> updateProfile(
             @PathVariable @Parameter(description = "사용자 아이디") Long userId,
             @RequestParam("profileImgUrl") @Parameter(description = "프로필 사진") MultipartFile multipartFile,
             HttpServletRequest req) {
-        ResVO<String> result = new ResVO<>();
+        ResVO<UserRes> result = new ResVO<>();
         HttpStatus status = null;
 
         try{
             status = HttpStatus.OK;
-            userService.updateProfile(userId, multipartFile);
+            User user = userService.updateProfile(userId, multipartFile);
+            result.setData(UserRes.convertToUserRes(user));
             result.setMessage("성공");
         } catch (Exception e){
             status = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -214,7 +215,7 @@ public class UserController {
             e.printStackTrace();
         }
 
-        return new ResponseEntity<ResVO<String>>(result, status);
+        return new ResponseEntity<ResVO<UserRes>>(result, status);
     }
 
 
