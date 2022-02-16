@@ -91,7 +91,7 @@ public class DoctorService {
         Doctor doctor = doctorRepository.findById(doctorId);
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-        String imageFileName = "doctor_" + doctor.getId() + "." + FilenameUtils.getExtension(multipartFile.getOriginalFilename());
+        String imageFileName = "doctor_" + doctor.getId() + "_" + Long.toString(System.currentTimeMillis()) + "." + FilenameUtils.getExtension(multipartFile.getOriginalFilename());
         Path imageFilePath = Paths.get(uploadFolder + imageFileName);
 
         if (multipartFile.getSize() != 0) { // 파일이 업로드 되었는지 확인

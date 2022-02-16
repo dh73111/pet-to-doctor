@@ -43,7 +43,7 @@ public class HospitalService {
         Hospital hospital = hospitalRepository.findById(hospitalId);
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-        String imageFileName = "hospital_" + hospital.getId() + "." + FilenameUtils.getExtension(multipartFile.getOriginalFilename());
+        String imageFileName = "hospital_" + hospital.getId() + "_" + Long.toString(System.currentTimeMillis()) + "." + FilenameUtils.getExtension(multipartFile.getOriginalFilename());
         Path imageFilePath = Paths.get(uploadFolder + imageFileName);
 
         if (multipartFile.getSize() != 0){

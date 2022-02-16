@@ -145,8 +145,7 @@ public class UserService {
     public User updateProfile(Long userId, MultipartFile multipartFile) {
         User user = userRepository.findById(userId).get();
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
-        String imageFileName = "user_" + user.getId() + "." + FilenameUtils.getExtension(multipartFile.getOriginalFilename());
+        String imageFileName = "user_" + user.getId() + "_" + Long.toString(System.currentTimeMillis()) + "." + FilenameUtils.getExtension(multipartFile.getOriginalFilename());
         Path imageFilePath = Paths.get(uploadFolder + imageFileName);
 
         if (multipartFile.getSize() != 0) { // 파일이 업로드 되었는지 확인
