@@ -17,17 +17,16 @@ import {
     IconButton,
     OutlinedInput,
 } from "@mui/material";
-import { useLocation, useParams, NavLink, Link } from "react-router-dom";
+import { useLocation, useParams, NavLink, Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import logo from "../../components/logo.png";
 import DaumPostCode from "react-daum-postcode";
-import { useNavigate } from "react-router-dom";
 import { modifyUser, modifyUserPic, checkPassword, changePassword } from "../../api/user.js";
 import { modifyPetPic } from "api/pet";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
     return (
@@ -62,15 +61,16 @@ function a11yProps(index) {
 const newTheme = createTheme();
 
 function UserMypageChange(props) {
-    const location = useLocation(); // 넘겨주는 user값 location으로 주소
+    const location = useSelector((store) => store.user);
+    console.log(location, "!!!!!!!!!!!!"); // 넘겨주는 user값 location으로 주소
     const [newUserInfo, setNewUserInfo] = useState({
-        name: location.state.name,
-        tel: location.state.tel,
-        joinDate: location.state.joinDate,
+        name: location.name,
+        tel: location.tel,
+        joinDate: location.joinDate,
         address: {
-            city: location.state.address.city,
-            street: location.state.address.street,
-            zipcode: location.state.address.zipcode,
+            city: location.address.city,
+            street: location.address.street,
+            zipcode: location.address.zipcode,
         },
         isCertificated: true,
     });
@@ -87,7 +87,7 @@ function UserMypageChange(props) {
         newPasswordConf: "",
     });
     const [passwordError, setPasswordError] = useState("");
-    const [modImg, setModImg] = useState(`${process.env.PUBLIC_URL}/img/main.png`);
+    const [modImg, setModImg] = useState(`https://i6b209.p.ssafy.io:8443/profile_imgs/${store.profileImgUrl}`);
     const [profileSend, setProfileSend] = useState();
 
     const style = {
@@ -102,7 +102,7 @@ function UserMypageChange(props) {
     };
 
     useEffect(() => {
-        setAddress(location.state.address.city);
+        setAddress(location.address.city);
     }, []);
 
     const handleChange = (event, newValue) => {
@@ -110,6 +110,8 @@ function UserMypageChange(props) {
     };
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const handleComplete = (data) => {
         console.log(data, "from handle complete");
         let fullAddress = data.address;
@@ -160,8 +162,10 @@ function UserMypageChange(props) {
     const requestChangeInfo = async () => {
         setChanged(true);
         const response = await modifyUser(newUserInfo);
-        window.location.href = "https://i6b209.p.ssafy.io/petodoctor/usermypage";
-        console.log(response);
+        // window.location.href = "https://i6b209.p.ssafy.io/petodoctor/usermypage";
+        console.log(response.data.data, "response");
+        dispatch({ type: "login", userData: { ...response.data.data, role: "ROLE_USER" } });
+        navigate(`/petodoctor/usermypage`);
     };
 
     const requestPwChange = async () => {
@@ -213,16 +217,16 @@ function UserMypageChange(props) {
     const handleClickShowPassword = (category, value) => {
         setShowPassword({ ...showPassword, [category]: !value });
     };
-    console.log(store.id);
 
     return (
         <ThemeProvider theme={newTheme}>
             <Container sx={{ mb: 20 }}>
                 <form
                     action={`https://i6b209.p.ssafy.io:8443/api/user/profile/${store.id}`}
+                    // action={`http://localhost:8080/api/user/profile/${store.id}`}
                     method='post'
                     enctype='multipart/form-data'
-                    target='param'>
+                    target='iframe1'>
                     <Typography variant='h4' component='h1' sx={{ mt: 10, mb: 2, fontWeight: 600, color: "#263747" }}>
                         회원정보 변경
                     </Typography>
@@ -413,8 +417,8 @@ function UserMypageChange(props) {
                                     variant='contained'
                                     disabled={!changed}
                                     type='submit'
-                                    onClick={() => {
-                                        requestChangeInfo(newUserInfo);
+                                    onClick={async (e) => {
+                                        await requestChangeInfo(newUserInfo);
                                     }}>
                                     수정 완료
                                 </Button>
@@ -589,6 +593,7 @@ function UserMypageChange(props) {
                             </Container>
                         </TabPanel>
                     </Box>
+                    <iframe id='iframe1' name='iframe1' style={{ display: "none" }}></iframe>
                 </form>
             </Container>
         </ThemeProvider>

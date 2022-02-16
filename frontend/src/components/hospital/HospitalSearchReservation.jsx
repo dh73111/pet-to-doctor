@@ -395,8 +395,8 @@ function HospitalSearchReservation(props) {
                                 name='row-radio-buttons-group'
                                 value={values.type}
                                 onChange={handleChange("type")}>
-                                <FormControlLabel value='RES_REQUEST' control={<Radio />} label='방문' />
-                                <FormControlLabel value='VST_REQUEST' control={<Radio />} label='화상' />
+                                <FormControlLabel value='VST_REQUEST' control={<Radio />} label='방문' />
+                                <FormControlLabel value='RES_REQUEST' control={<Radio />} label='화상' />
                             </RadioGroup>
                         </FormControl>
                     </Box>

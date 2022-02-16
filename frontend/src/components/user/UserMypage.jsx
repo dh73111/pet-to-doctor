@@ -77,14 +77,18 @@ function UserMypage(props) {
 function UserInfo(props) {
     const informationUser = props.user;
     const store = useSelector((store) => store.user);
+    console.log("");
     return (
         <Grid container>
             <Grid item xs={12} md={12}>
                 <Grid container sx={{ mt: 1, p: 3 }}>
                     <Grid item xs={12} md={12}>
                         <Box sx={{ float: "right" }}>
-                            <Link to={`/petodoctor/usermypage/${informationUser.id}`} state={informationUser} style={{textDecoration: 'none'}}>
-                                <Button varient='contained' startIcon={<EditIcon />} >
+                            <Link
+                                to={`/petodoctor/usermypage/${informationUser.id}`}
+                                state={informationUser}
+                                style={{ textDecoration: "none" }}>
+                                <Button varient='contained' startIcon={<EditIcon />}>
                                     회원정보수정
                                 </Button>
                             </Link>
@@ -346,17 +350,20 @@ function UserPetInfo(props) {
                     </Button>
                 </Typography>
                 <Grid container spacing={1.5}>
-                    {userPet.map((pet, idx) => (
-                        <UserPets
-                            key={idx}
-                            pet={pet}
-                            handleDeletePetInfo={handleDeletePetInfo}
-                            handleChangePetInfo={handleChangePetInfo}
-                            changeModPetInfo={changeModPetInfo}
-                            handleModPetInfo={handleModPetInfo}
-                            changeModPetInfo={changeModPetInfo}
-                        />
-                    ))}
+                    {userPet.length === 0 ? (
+                        <></>
+                    ) : (
+                        userPet.map((pet, idx) => (
+                            <UserPets
+                                key={idx}
+                                pet={pet}
+                                handleDeletePetInfo={handleDeletePetInfo}
+                                handleChangePetInfo={handleChangePetInfo}
+                                changeModPetInfo={changeModPetInfo}
+                                handleModPetInfo={handleModPetInfo}
+                            />
+                        ))
+                    )}
                     <Grid item xs={6} md={3}>
                         {isAddNew ? <AddPet /> : ""}
                     </Grid>
@@ -435,27 +442,31 @@ function FavoriteHospital() {
                     </tr>
                 </thead>
                 <tbody>
-                    {favHospitals.map((fav, idx) => {
-                        const favId = fav.id;
-                        return (
-                            <tr key={idx} style={{ textAlign: "center" }}>
-                                <td>{idx + 1}</td>
-                                <td>{fav.hospital_name}</td>
-                                <td>
-                                    {fav.hospital_address.city} {fav.hospital_address.street}
-                                </td>
-                                <td>{fav.hospital_tel}</td>
-                                <td>
-                                    <Button
-                                        onClick={() => {
-                                            handleFavMark(favId);
-                                        }}>
-                                        즐겨찾기 삭제
-                                    </Button>
-                                </td>
-                            </tr>
-                        );
-                    })}
+                    {favHospitals.length === 0 ? (
+                        <></>
+                    ) : (
+                        favHospitals.map((fav, idx) => {
+                            const favId = fav.id;
+                            return (
+                                <tr key={idx} style={{ textAlign: "center" }}>
+                                    <td>{idx + 1}</td>
+                                    <td>{fav.hospital_name}</td>
+                                    <td>
+                                        {fav.hospital_address.city} {fav.hospital_address.street}
+                                    </td>
+                                    <td>{fav.hospital_tel}</td>
+                                    <td>
+                                        <Button
+                                            onClick={() => {
+                                                handleFavMark(favId);
+                                            }}>
+                                            즐겨찾기 삭제
+                                        </Button>
+                                    </td>
+                                </tr>
+                            );
+                        })
+                    )}
                 </tbody>
                 <tfoot>
                     <tr></tr>
