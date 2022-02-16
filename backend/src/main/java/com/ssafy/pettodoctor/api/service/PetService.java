@@ -79,7 +79,7 @@ public class PetService {
         Pet pet = petRepository.findOne(petId).get();
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-        String imageFileName = "pet_" + pet.getId() + "." + FilenameUtils.getExtension(multipartFile.getOriginalFilename());
+        String imageFileName = "pet_" + pet.getId() + "_" + Long.toString(System.currentTimeMillis()) + "." + FilenameUtils.getExtension(multipartFile.getOriginalFilename());
         Path imageFilePath = Paths.get(uploadFolder + imageFileName);
 
         if (multipartFile.getSize() != 0) { // 파일이 업로드 되었는지 확인
