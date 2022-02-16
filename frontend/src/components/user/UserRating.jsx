@@ -4,10 +4,13 @@ import StarIcon from "@mui/icons-material/Star";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { addReview } from "api/review";
+import { treatmentState } from "api/treatment";
 function UserRating(props) {
     const [value, setValue] = useState(3);
     const [hover, setHover] = useState(-1);
     const { hospitalId } = useParams();
+    const { prescriptionId } = useParams();
+    console.log(prescriptionId);
     const { id: userId } = useSelector((store) => store.user);
     const labels = {
         1: "별로에요",
@@ -59,6 +62,9 @@ function UserRating(props) {
                             content: content,
                             rate: value,
                         });
+
+                        const res2 = await treatmentState(prescriptionId, "RES_COMPLETED");
+                        console.log(res2);
                         console.log(res);
                         navigate("/petodoctor");
                     }}>

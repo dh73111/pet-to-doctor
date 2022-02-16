@@ -33,6 +33,8 @@ function UserConsulting(props) {
     const localVideoRef = useRef(null);
     const remoteVideoRef = useRef(null);
     const { user } = useSelector((store) => store);
+    console.log(id);
+    console.log(hospitalId);
     console.log(user);
     let stream;
     const setVideoTracks = async () => {
@@ -230,7 +232,7 @@ function UserConsulting(props) {
                             socketRef.current.emit("disconnectA", user.userId);
                             if (window.confirm("정말로 종료하시겠습니까?")) {
                                 if (user.role === "ROLE_USER") {
-                                    window.location.href = `http://localhost:3000/petodoctor/userrating/${hospitalId}`;
+                                    window.location.href = `http://localhost:3000/petodoctor/userrating/${hospitalId}/${id}`;
                                     return;
                                 }
                                 window.location.href = "http://localhost:3000/petodoctor";

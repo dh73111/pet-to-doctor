@@ -5,12 +5,11 @@ import CardContent from "@mui/material/CardContent";
 import { styled } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import { Container, Typography } from "@mui/material";
-import jwtDecode from "jwt-decode";
+
 import Footer from "./Footer";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import HomeSwiper from "./commons/HomeSwiper";
-import { useDispatch } from "react-redux";
-import { kakaoLogin, userInfo } from "api/user";
+
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 const mainicon = {
     height: "18rem",
@@ -25,30 +24,6 @@ const mainicon = {
     color: "#fff",
 };
 function Home(props) {
-    const locations = useLocation();
-    const dispatch = useDispatch();
-    useEffect(() => {
-        console.log(locations);
-        const init = async () => {
-            console.log(locations);
-            if (locations.search === "") {
-                return;
-            }
-            const res = await kakaoLogin(locations.search.substring(6)).catch(() => {
-                alert("카카오로그인 에러");
-            });
-
-            let decode_token = jwtDecode(res.data.data);
-            console.log(decode_token);
-            let info = await userInfo(decode_token.sub);
-            console.log(info);
-            info = { ...info, role: decode_token.role };
-            dispatch({ type: "login", userData: info });
-            navigate("/petodocotor");
-            console.log(locations.search.substring(6));
-        };
-        init();
-    }, []);
     const navigate = useNavigate();
     return (
         <Box style={{ border: 1, backgroundColor: "#fafafa" }}>

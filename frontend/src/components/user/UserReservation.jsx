@@ -120,6 +120,7 @@ function UserReservation(props) {
     const offset = new Date().getTimezoneOffset() * 60000; // 1000밀리초 * 60  -> 1분
     const enterConsulting = (time, id, hospitalId) => {
         // 입장가능 로직 -> 확인해야함
+        console.log(id, " ", hospitalId);
         let currentTime = new Date(Date.now() - offset).toISOString();
         let start = Number(time.substring(14, 16));
         let end = start + 30;
@@ -130,7 +131,7 @@ function UserReservation(props) {
             start <= currentMin &&
             currentMin <= end
         ) {
-            navigate(`/petodoctor/userconsulting/${id}`);
+            navigate(`/petodoctor/userconsulting/${id}/${hospitalId}`);
         } else
             alert(
                 `입장이 불가능합니다. 현재시간 ${currentTime.substring(11, 16)} , 입장시간 ${time.substring(
@@ -330,7 +331,12 @@ function UserReservation(props) {
                                                             <Button
                                                                 variant='contained'
                                                                 onClick={() => {
-                                                                    enterConsulting(treat.scheduleDate);
+                                                                    console.log(treat);
+                                                                    enterConsulting(
+                                                                        treat.scheduleDate,
+                                                                        treat.id,
+                                                                        treat.hospitalId
+                                                                    );
                                                                 }}>
                                                                 입장하기
                                                             </Button>

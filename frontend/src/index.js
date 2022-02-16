@@ -22,6 +22,7 @@ function reducer(currentState, action) {
         return {
             user: {},
             isLogin: false,
+            search: "",
         };
     }
     const newState = { ...currentState };
@@ -45,6 +46,12 @@ function reducer(currentState, action) {
     }
     if (action.type === "register") {
         newState.user = action.userData;
+        return newState;
+    }
+
+    if (action.type === "search") {
+        console.log(action.value, " value");
+        newState.search = action.value;
         return newState;
     }
     return newState;

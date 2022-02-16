@@ -35,6 +35,7 @@ import ReservationDetail from "components/commons/ReservationDetail";
 import PrescriptionDetail from "components/commons/PrescriptionDetail";
 import Wrong from "components/commons/wrong";
 import ScrollToTop from "components/commons/ScrollToTop";
+import KakaoAuth from "components/user/KakaoAuth";
 
 function App() {
     const fontTheme = createTheme({
@@ -61,7 +62,7 @@ function App() {
                         </Routes>
                         <Routes>
                             <Route path='/petodoctor/' element={<Home />}></Route>
-                            <Route path='/petodoctor/kakaooauth*' element={<Home />}></Route>
+                            <Route path='/petodoctor/kakaooauth' element={<KakaoAuth />}></Route>
                         </Routes>
                         <Routes>
                             {/* doctor */}
@@ -85,7 +86,9 @@ function App() {
                             <Route path='/petodoctor/usersignupconfirm' element={<UserSignupConfirm />}></Route>
                             <Route path='/petodoctor/usermypage' element={<UserMypage />}></Route>
                             <Route path='/petodoctor/usermypage/:userId' element={<UserMypageChange />}></Route>
-                            <Route path='/petodoctor/userrating/:hospitalId' element={<UserRating />}></Route>
+                            <Route
+                                path='/petodoctor/userrating/:hospitalId/:prescriptionId'
+                                element={<UserRating />}></Route>
                             <Route path='/petodoctor/userreservation' element={<UserReservation />}></Route>
                             <Route
                                 path='/petodoctor/userreservationpayment'
