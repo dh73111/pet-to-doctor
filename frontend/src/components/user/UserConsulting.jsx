@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import io from "socket.io-client";
 import { Box, Grid, BottomNavigation, BottomNavigationAction } from "@mui/material";
-import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import MicIcon from "@mui/icons-material/Mic";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
@@ -33,6 +33,8 @@ function UserConsulting(props) {
     const localVideoRef = useRef(null);
     const remoteVideoRef = useRef(null);
     const { user } = useSelector((store) => store);
+    console.log(id);
+    console.log(hospitalId);
     console.log(user);
     let stream;
     const setVideoTracks = async () => {
@@ -228,13 +230,15 @@ function UserConsulting(props) {
                     <BottomNavigationAction
                         onClick={async () => {
                             socketRef.current.emit("disconnectA", user.userId);
-                            if (user.role === "ROLE_USER") {
-                                window.location.href = `http://localhost:3000/petodoctor/userrating/${hospitalId}`;
-                                return;
+                            if (window.confirm("정말로 종료하시겠습니까?")) {
+                                if (user.role === "ROLE_USER") {
+                                    window.location.href = `http://localhost:3000/petodoctor/userrating/${hospitalId}/${id}`;
+                                    return;
+                                }
+                                window.location.href = "http://localhost:3000/petodoctor";
                             }
-                            window.location.href = "http://localhost:3000/petodoctor";
                         }}
-                        label={<Box sx={{ fontSize: 20, fontWeight: "bold" }}>나가기</Box>}
+                        label={<Box sx={{ fontSize: 20, fontWeight: "bold" }}>종료</Box>}
                         icon={<ExitToAppIcon sx={{ fontSize: 35, color: "blue" }} />}></BottomNavigationAction>
                 </BottomNavigation>
             </Box>

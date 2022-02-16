@@ -42,14 +42,21 @@ function Alarm(props) {
                             onClick={async () => {
                                 const res = await checkNotice(item.id);
                                 console.log(res);
-                                list.splice(index, 1);
-                                setList(list);
+                                let tempList = [...list];
+                                tempList.splice(index, 1);
+                                setList(tempList);
                             }}>
                             확인
                         </Button>
                         <Button
                             onClick={() => {
-                                navigate("/petodoctor/presciption/8");
+                                console.log(item.type);
+                                if (item.type === "RESERVATION" || item.type === "PAYMENT") {
+                                    console.log("예약, 결제");
+                                    navigate("/petodoctor/userreservation");
+                                } else {
+                                    navigate(`/petodoctor/presciption/${item.url}`);
+                                }
                             }}>
                             이동
                         </Button>

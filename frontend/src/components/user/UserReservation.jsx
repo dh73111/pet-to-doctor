@@ -9,17 +9,11 @@ import Typography from "@mui/material/Typography";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import TablePaginationUnstyled from "@mui/base/TablePaginationUnstyled";
 import { Modal, Skeleton } from "@mui/material";
 import ReservationDetail from "../commons/ReservationDetail";
-import DatePicker from "@mui/lab/DatePicker";
-import TextField from "@mui/material/TextField";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { Link, useNavigate } from "react-router-dom";
 import { userAllTreatmentList } from "api/treatment";
 import { useSelector } from "react-redux";
-import { SwitchCameraSharp } from "@mui/icons-material";
 
 const Root = styled("div")`
     table {
@@ -126,6 +120,7 @@ function UserReservation(props) {
     const offset = new Date().getTimezoneOffset() * 60000; // 1000밀리초 * 60  -> 1분
     const enterConsulting = (time, id, hospitalId) => {
         // 입장가능 로직 -> 확인해야함
+        console.log(id, " ", hospitalId);
         let currentTime = new Date(Date.now() - offset).toISOString();
         let start = Number(time.substring(14, 16));
         let end = start + 30;
@@ -136,7 +131,7 @@ function UserReservation(props) {
             start <= currentMin &&
             currentMin <= end
         ) {
-            navigate(`/petodoctor/userconsulting/${id}`);
+            navigate(`/petodoctor/userconsulting/${id}/${hospitalId}`);
         } else
             alert(
                 `입장이 불가능합니다. 현재시간 ${currentTime.substring(11, 16)} , 입장시간 ${time.substring(
@@ -217,6 +212,12 @@ function UserReservation(props) {
 
     return (
         <Container>
+            {/* <button
+                onClick={() => {
+                    console.log(treatmentInfo);
+                }}>
+                모든예약현황
+            </button> */}
             <Grid container>
                 <Typography variant='h4' component='h1' sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
                     내 예약
@@ -330,22 +331,16 @@ function UserReservation(props) {
                                                             <Button
                                                                 variant='contained'
                                                                 onClick={() => {
-                                                                    enterConsulting(treat.scheduleDate);
+                                                                    console.log(treat);
+                                                                    enterConsulting(
+                                                                        treat.scheduleDate,
+                                                                        treat.id,
+                                                                        treat.hospitalId
+                                                                    );
                                                                 }}>
                                                                 입장하기
                                                             </Button>
                                                         )}
-                                                        <Button
-                                                            variant='contained'
-                                                            onClick={() => {
-                                                                enterConsulting(
-                                                                    treat.scheduleDate,
-                                                                    treat.id,
-                                                                    treat.hospitalId
-                                                                );
-                                                            }}>
-                                                            입장하기 테스트
-                                                        </Button>
                                                     </td>
                                                     <td>
                                                         {treat.prescriptionId === null ? (
@@ -405,6 +400,28 @@ function UserReservation(props) {
                                         <td colSpan={3} />
                                     </tr>
                                 )} */}
+                            <tfoot>
+                                {/* <tr sx={{ width: 1200 }}>
+                                    <CustomTablePagination
+                                        rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+                                        colSpan={9}
+                                        count={rows.length}
+                                        rowsPerPage={rowsPerPage}
+                                        page={page}
+                                        componentsProps={{
+                                            select: {
+                                                "aria-label": "rows per page",
+                                            },
+                                            actions: {
+                                                showFirstButton: true,
+                                                showLastButton: true,
+                                            },
+                                        }}
+                                        onPageChange={handleChangePage}
+                                        onRowsPerPageChange={handleChangeRowsPerPage}
+                                    />
+                                </tr> */}
+                            </tfoot>
                         </table>
                     </Root>
                 </Grid>

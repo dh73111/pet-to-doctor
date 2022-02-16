@@ -41,8 +41,8 @@ const Root = styled("div")`
 `;
 
 function DoctorDiagnosis(props) {
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
     const doctorId = useSelector((store) => store.user.id);
     const [diagonosisInfo, setDiagonosisInfo] = useState({});
     const [diagonosisAllList, setDiagonosisAllList] = useState([]);
@@ -297,13 +297,6 @@ function DoctorDiagnosis(props) {
                                                                 입장하기
                                                             </Button>
                                                         )}
-                                                        <Button
-                                                            variant='contained'
-                                                            onClick={() => {
-                                                                enterConsulting(treat.scheduleDate, treat.id);
-                                                            }}>
-                                                            입장하기 테스트
-                                                        </Button>
                                                     </td>
                                                     <td>{convertor[treat.type]}</td>
                                                 </tr>

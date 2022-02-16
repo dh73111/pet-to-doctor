@@ -33,63 +33,89 @@ import UserRating from "components/user/UserRating";
 import Qna from "components/user/Qna";
 import ReservationDetail from "components/commons/ReservationDetail";
 import PrescriptionDetail from "components/commons/PrescriptionDetail";
+import Wrong from "components/commons/wrong";
+import ScrollToTop from "components/commons/ScrollToTop";
+import KakaoAuth from "components/user/KakaoAuth";
+
 function App() {
     const fontTheme = createTheme({
         typography: {
             fontFamily: "noto-sans",
+        },
+        palette: {
+            type: "light",
+            primary: {
+                main: "#309FB3",
+            },
+            secondary: {
+                main: "#1dc6f6",
+            },
         },
     });
     return (
         <ThemeProvider theme={fontTheme}>
             <Box>
                 <div className='App'>
-                    <Routes>
-                        <Route path='/petodoctor/*' element={<NavBar />}></Route>
-                    </Routes>
-                    <Routes>
-                        <Route path='/petodoctor/' element={<Home />}></Route>
-                        <Route path='/' element={<Index />}></Route>
-                        <Route path='/petodoctor/kakaooauth*' element={<Home />}></Route>
-                    </Routes>
-                    <Routes>
-                        {/* doctor */}
-                        <Route path='/petodoctor/doctorreservation' element={<DoctorReservation />}></Route>
-                        <Route path='/petodoctor/doctordiagnosis' element={<DoctorDianosis />}></Route>
-                        <Route path='/petodoctor/doctorprescription' element={<DoctorPrescription />}></Route>
-                        <Route path='/petodoctor/doctormypage' element={<DoctorMypage />}></Route>
-                        <Route path='/doctorprescriptonform/:id' element={<DoctorPrescriptionForm />}></Route>
-                        <Route path='/petodoctor/doctorconsulting' element={<DoctorConsuliting />}></Route>
+                    <ScrollToTop>
+                        <Routes>
+                            <Route path='/petodoctor/*' element={<NavBar />}></Route>
+                        </Routes>
+                        <Routes>
+                            <Route path='/petodoctor/' element={<Home />}></Route>
+                            <Route path='/petodoctor/kakaooauth' element={<KakaoAuth />}></Route>
+                        </Routes>
+                        <Routes>
+                            {/* doctor */}
+                            <Route path='/' element={<Index />}></Route>
+                            <Route path='/petodoctor/doctorreservation' element={<DoctorReservation />}></Route>
+                            <Route path='/petodoctor/doctordiagnosis' element={<DoctorDianosis />}></Route>
+                            <Route path='/petodoctor/doctorprescription' element={<DoctorPrescription />}></Route>
+                            <Route path='/petodoctor/doctormypage' element={<DoctorMypage />}></Route>
+                            <Route path='/doctorprescriptonform/:id' element={<DoctorPrescriptionForm />}></Route>
+                            <Route path='/petodoctor/doctorconsulting' element={<DoctorConsuliting />}></Route>
 
-                        {/* user */}
-                        <Route path='/petodoctor/notice' element={<Notice />}></Route>
-                        <Route path='/petodoctor/login' element={<UserLoginModal />}></Route>
-                        <Route path='/petodoctor/hospitalsearch' element={<HospitalSearch />}></Route>
-                        <Route path='/petodoctor/hospitalreservation' element={<HospitalReservation />}></Route>
-                        <Route
-                            path='/petodoctor/hospitalsearchreservation/:hospitalId/:doctorId'
-                            element={<HospitalSearchReservation />}></Route>
-                        <Route path='/petodoctor/userjoin' element={<UserJoin />}></Route>
-                        <Route path='/petodoctor/usersignupconfirm' element={<UserSignupConfirm />}></Route>
-                        <Route path='/petodoctor/usermypage' element={<UserMypage />}></Route>
-                        <Route path='/petodoctor/usermypage/:userId' element={<UserMypageChange />}></Route>
-                        <Route path='/petodoctor/userrating/:hospitalId' element={<UserRating />}></Route>
-                        <Route path='/petodoctor/userreservation' element={<UserReservation />}></Route>
-                        <Route path='/petodoctor/userreservationpayment' element={<UserReservationPayment />}></Route>
-                        <Route
-                            path='/petodoctor/userreservationpaymenting'
-                            element={<UserReservationPaymenting />}></Route>
-                        <Route path='/petodoctor/userreservationcomplete' element={<UserReservationComplete />}></Route>
-                        <Route path='/petodoctor/presciption/:prescId' element={<PrescriptionDetail />}></Route>
-                        <Route path='/petodoctor/reservation/:resId' element={<ReservationDetail />}></Route>
-                        <Route path='/petodoctor/usermedipayment' element={<UserMedicinePayment />}></Route>
-                        <Route path='/petodoctor/userconsulting/:id/:hospitalId' element={<UserConsulting />}></Route>
-                        <Route path='/petodoctor/usersignupconfirm/:userid' element={<UserSignupConfirm />}></Route>
-                        <Route path='/petodoctor/qna' element={<Qna />}></Route>
-                        <Route path='/petodoctor/review' element={<Review />}></Route>
-                    </Routes>
-                    <Routes>
-                        <Route path='/petodoctor/*' element={<Footer />}></Route>
-                    </Routes>
+                            {/* user */}
+                            <Route path='/petodoctor/notice' element={<Notice />}></Route>
+                            <Route path='/petodoctor/login' element={<UserLoginModal />}></Route>
+                            <Route path='/petodoctor/hospitalsearch' element={<HospitalSearch />}></Route>
+                            <Route path='/petodoctor/hospitalreservation' element={<HospitalReservation />}></Route>
+                            <Route
+                                path='/petodoctor/hospitalsearchreservation/:hospitalId/:doctorId'
+                                element={<HospitalSearchReservation />}></Route>
+                            <Route path='/petodoctor/userjoin' element={<UserJoin />}></Route>
+                            <Route path='/petodoctor/usersignupconfirm' element={<UserSignupConfirm />}></Route>
+                            <Route path='/petodoctor/usermypage' element={<UserMypage />}></Route>
+                            <Route path='/petodoctor/usermypage/:userId' element={<UserMypageChange />}></Route>
+                            <Route
+                                path='/petodoctor/userrating/:hospitalId/:prescriptionId'
+                                element={<UserRating />}></Route>
+                            <Route path='/petodoctor/userreservation' element={<UserReservation />}></Route>
+                            <Route
+                                path='/petodoctor/userreservationpayment'
+                                element={<UserReservationPayment />}></Route>
+                            <Route
+                                path='/petodoctor/userreservationpaymenting'
+                                element={<UserReservationPaymenting />}></Route>
+                            <Route
+                                path='/petodoctor/userreservationcomplete'
+                                element={<UserReservationComplete />}></Route>
+                            <Route path='/petodoctor/presciption/:prescId' element={<PrescriptionDetail />}></Route>
+                            <Route path='/petodoctor/reservation/:resId' element={<ReservationDetail />}></Route>
+                            <Route path='/petodoctor/usermedipayment' element={<UserMedicinePayment />}></Route>
+                            <Route
+                                path='/petodoctor/userconsulting/:id/:hospitalId'
+                                element={<UserConsulting />}></Route>
+                            <Route path='/petodoctor/usersignupconfirm/:userid' element={<UserSignupConfirm />}></Route>
+                            <Route path='/petodoctor/qna' element={<Qna />}></Route>
+                            <Route path='/petodoctor/review' element={<Review />}></Route>
+                        </Routes>
+                        <Routes>
+                            <Route path='/petodoctor/*' element={<Footer />}></Route>
+                        </Routes>
+                        <Routes>
+                            <Route path='/wrong' element={<Wrong />}></Route>
+                        </Routes>
+                    </ScrollToTop>
                 </div>
             </Box>
         </ThemeProvider>

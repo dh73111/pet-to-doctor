@@ -22,12 +22,14 @@ function reducer(currentState, action) {
         return {
             user: {},
             isLogin: false,
+            search: "",
         };
     }
     const newState = { ...currentState };
 
     if (action.type === "login") {
         newState.user = action.userData;
+        console.log(newState.user, "store");
         newState.isLogin = true;
         return newState;
     }
@@ -44,6 +46,12 @@ function reducer(currentState, action) {
     }
     if (action.type === "register") {
         newState.user = action.userData;
+        return newState;
+    }
+
+    if (action.type === "search") {
+        console.log(action.value, " value");
+        newState.search = action.value;
         return newState;
     }
     return newState;

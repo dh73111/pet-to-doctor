@@ -1,5 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Card, CardMedia, Checkbox, Container, Grid, Input, InputAdornment, Paper, TextField, Typography } from "@mui/material";
+import {
+    Box,
+    Button,
+    Card,
+    CardMedia,
+    Checkbox,
+    Container,
+    Grid,
+    Input,
+    InputAdornment,
+    Paper,
+    TextField,
+    Typography,
+} from "@mui/material";
 import { useSelector } from "react-redux";
 import { Link, Outlet } from "react-router-dom";
 import { userFavMark, addFavMark } from "../../api/mark.js";
@@ -47,7 +60,10 @@ function DoctorMypage(props) {
 
     return (
         <Container>
-            <Typography variant="h4" component="h1" sx={{ mt: 10, mb: 2, fontWeight: 600, color: "rgba(48, 159, 179)" }}>
+            <Typography
+                variant='h4'
+                component='h1'
+                sx={{ mt: 10, mb: 2, fontWeight: 600, color: "rgba(48, 159, 179)" }}>
                 마이페이지
             </Typography>
             <UserInfo user={user} />
@@ -75,8 +91,7 @@ function UserInfo(props) {
                                 backgroundPosition: "center",
                                 backgroundImage: `url(${process.env.PUBLIC_URL}/img/main.png)`,
                                 // 유저의 프로필
-                            }}
-                        ></Box>
+                            }}></Box>
                     </Grid>
                     <Grid item xs={12} md={8} sx={{ border: 1 }}>
                         <Box sx={{ typography: "h5" }}>{informationUser.name}</Box>
@@ -87,7 +102,7 @@ function UserInfo(props) {
                     </Grid>
                     <Box sx={{ mt: 2, mx: 2 }}>
                         <Link to={`/petodoctor/usermypage/${informationUser.id}`} state={informationUser}>
-                            <Button varient="contained">회원정보 수정</Button>
+                            <Button varient='contained'>회원정보 수정</Button>
                         </Link>
                         <Outlet />
                     </Box>

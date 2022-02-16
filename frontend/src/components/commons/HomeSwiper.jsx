@@ -11,7 +11,8 @@ import { Navigation, Pagination, Autoplay } from "swiper";
 import { Box, Container, Grid, Typography } from "@mui/material";
 
 function HomeSwiper(props) {
-    const containerStyle = { p: { xs: 3 }, pt: { xs: 8, md: 20 } };
+    const containerStyle = { p: { xs: 3 }, pt: { xs: 8, md: 20 }, pl: { xs: 0, md: 10 } };
+    const right = { mt: { xs: -3, md: 8 }, pl: { xs: 0, md: 15 } };
     return (
         <>
             <Swiper
@@ -62,7 +63,7 @@ function HomeSwiper(props) {
                                         한번에 언제 어디서나 간편하게
                                     </Typography>
                                 </Grid>
-                                <Grid item xs={12} md={6.5} sx={{ mt: 8 }}>
+                                <Grid item xs={12} md={6.5} sx={right}>
                                     <img src={`${process.env.PUBLIC_URL}/img/main_dog_walk1.gif`} width='500px' />
                                 </Grid>
                             </Grid>
@@ -104,7 +105,7 @@ function HomeSwiper(props) {
                                         한번에 언제 어디서나 간편하게
                                     </Typography>
                                 </Grid>
-                                <Grid item xs={12} md={6.5} sx={{ mt: 8 }}>
+                                <Grid item xs={12} md={6.5} sx={right}>
                                     <img src={`${process.env.PUBLIC_URL}/img/main_dog_walk2.gif`} width='500px' />
                                 </Grid>
                             </Grid>
@@ -146,7 +147,7 @@ function HomeSwiper(props) {
                                         한번에 언제 어디서나 간편하게
                                     </Typography>
                                 </Grid>
-                                <Grid item xs={12} md={6.5} sx={{ mt: { xs: 0, md: 8 } }}>
+                                <Grid item xs={12} md={6.5} sx={right}>
                                     <img src={`${process.env.PUBLIC_URL}/img/ulys_dog.gif`} width='550px' />
                                 </Grid>
                             </Grid>
@@ -188,7 +189,7 @@ function HomeSwiper(props) {
                                         한번에 언제 어디서나 간편하게
                                     </Typography>
                                 </Grid>
-                                <Grid item xs={12} md={6.5} sx={{ mt: { xs: 2, md: 8 } }}>
+                                <Grid item xs={12} md={6.5} sx={right}>
                                     <img src={`${process.env.PUBLIC_URL}/img/main_dog_walk3.gif`} width='550px' />
                                 </Grid>
                             </Grid>
