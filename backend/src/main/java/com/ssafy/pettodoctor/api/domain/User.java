@@ -45,6 +45,7 @@ public class User extends Account {
         user.setIsCertificated(true);
         user.setIsOauth(true);
         user.setJoinDate(LocalDate.now());
+        user.setRole("ROLE_USER");
 
         return user;
     }
