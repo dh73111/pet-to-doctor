@@ -14,9 +14,8 @@
     transition: 0.5s;
 }
 .mainicon:hover {
-    margin-top: 10px;
+    transform: translateY(10px);
     box-shadow: rgb(0 0 0 / 10%) 4px 12px 30px 6px;
-    /* color: "#263747"; */
 }
 .mainTitle {
     color: white;
@@ -131,5 +130,21 @@
     text-decoration: none;
 }
 .error_to_main:hover {
+    text-decoration: underline;
+}
+
+.form-link {
+    text-decoration: none;
+    color: #309FB3;
+}
+.form-link:hover {
+    text-decoration: underline;
+}
+
+.alarm-content {
+}
+.alarm-content:hover {
+    cursor: pointer;
+    color: '#D7E2EB';
     text-decoration: underline;
 }

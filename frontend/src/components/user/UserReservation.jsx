@@ -349,7 +349,7 @@ function UserReservation(props) {
                                                             <Link
                                                                 to={`/petodoctor/presciption/${treat.prescriptionId}`}
                                                                 state={treat.prescriptionId}
-                                                                style={{ textDecoration: "none", color: "blue" }}>
+                                                                className="form-link">
                                                                 처방전
                                                             </Link>
                                                         )}

@@ -83,8 +83,8 @@ function UserInfo(props) {
                 <Grid container sx={{ mt: 1, p: 3 }}>
                     <Grid item xs={12} md={12}>
                         <Box sx={{ float: "right" }}>
-                            <Link to={`/petodoctor/usermypage/${informationUser.id}`} state={informationUser}>
-                                <Button varient='contained' startIcon={<EditIcon />}>
+                            <Link to={`/petodoctor/usermypage/${informationUser.id}`} state={informationUser} style={{textDecoration: 'none'}}>
+                                <Button varient='contained' startIcon={<EditIcon />} >
                                     회원정보수정
                                 </Button>
                             </Link>

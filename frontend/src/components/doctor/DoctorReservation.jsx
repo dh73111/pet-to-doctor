@@ -281,7 +281,8 @@ function DoctorReservation(props) {
                                                         ) : (
                                                             <Link
                                                                 to={`/petodoctor/reservation/${res.id}`}
-                                                                state={res.id}>
+                                                                state={res.id}
+                                                                className="form-link">
                                                                 예약 내용
                                                             </Link>
                                                         )}
