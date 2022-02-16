@@ -22,6 +22,7 @@ import { modifyPet, deletePet, registerPet, modifyPetPic, petList, petInfo } fro
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import UserPets from "./resources/UserPets.jsx";
+import { useSelect } from "@mui/base";
 
 // 마이페이지 메인 최상단 컴포넌트
 function UserMypage(props) {
@@ -43,15 +44,15 @@ function UserMypage(props) {
     });
     const [favHospitals, setfavHospitals] = useState([]);
 
+    const { user: userStore } = useSelector((store) => store);
+    console.log(userStore, " user Store");
     useEffect(() => {
         const init = async () => {
-            const user = await userInfo(userId);
             console.log(user, "유저데이터");
-            setUser(user);
+            setUser(userStore);
         };
         init();
     }, []);
-
     return (
         <Container>
             <Typography variant='h4' component='h1' sx={{ mt: 10, mb: 2, fontWeight: 600, color: "#263747" }}>
@@ -75,7 +76,7 @@ function UserMypage(props) {
 // 유저 정보 컴포넌트
 function UserInfo(props) {
     const informationUser = props.user;
-
+    const store = useSelector((store) => store.user);
     return (
         <Grid container>
             <Grid item xs={12} md={12}>
@@ -94,7 +95,7 @@ function UserInfo(props) {
                                 height: "200px",
                                 backgroundSize: "cover",
                                 backgroundPosition: "center",
-                                backgroundImage: `url(${process.env.PUBLIC_URL}/img/main.png)`,
+                                backgroundImage: `url(https://i6b209.p.ssafy.io:8443/profile_imgs/${store.profileImgUrl})`,
                                 borderRadius: "200px",
                                 mx: "auto",
                                 // 유저의 프로필

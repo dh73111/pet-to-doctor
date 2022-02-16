@@ -216,7 +216,7 @@ function UserConsulting(props) {
                         <BottomNavigationAction
                             onClick={() => {
                                 window.open(
-                                    `http://localhost:3000/doctorprescriptonform/${id}`,
+                                    `https://i6b209.p.ssafy.io/petodoctor/doctorprescriptonform/${id}`,
                                     "처방전",
                                     "width=#,height=#"
                                 );
@@ -232,10 +232,10 @@ function UserConsulting(props) {
                             socketRef.current.emit("disconnectA", user.userId);
                             if (window.confirm("정말로 종료하시겠습니까?")) {
                                 if (user.role === "ROLE_USER") {
-                                    window.location.href = `http://localhost:3000/petodoctor/userrating/${hospitalId}/${id}`;
+                                    window.location.href = `https://i6b209.p.ssafy.io/petodoctor/userrating/${hospitalId}/${id}`;
                                     return;
                                 }
-                                window.location.href = "http://localhost:3000/petodoctor";
+                                window.location.href = "https://i6b209.p.ssafy.io/petodoctor";
                             }
                         }}
                         label={<Box sx={{ fontSize: 20, fontWeight: "bold" }}>종료</Box>}
