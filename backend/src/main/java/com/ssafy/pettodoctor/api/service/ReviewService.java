@@ -37,7 +37,21 @@ public class ReviewService {
         return reviewRepository.findAll();
     }
 
-    public List<Review> findRecentReview(int count){
-        return reviewRepository.findRecentReview(count);
+    public List<Review> findRecentReview(int start){
+        return reviewRepository.findRecentReview(start);
+    }
+
+    public List<Review> findOldReview(int start){ return reviewRepository.findOldReview(start); }
+
+    public List<Review> findLowRateReview(int start){
+        return reviewRepository.findLowRateReview(start);
+    }
+
+    public List<Review> findHighRateReview(int start){
+        return reviewRepository.findHighRateReview(start);
+    }
+
+    public Long getCount(){
+        return reviewRepository.getCount();
     }
 }
