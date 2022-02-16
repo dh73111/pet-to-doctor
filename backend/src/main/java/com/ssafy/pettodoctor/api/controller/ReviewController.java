@@ -106,7 +106,7 @@ public class ReviewController {
     }
 
     @GetMapping("/recent")
-    @Operation(summary = "최근 리뷰 10개 정보 반환", description = "최근 리뷰 10개 정보 리스트를 반환한다.")
+    @Operation(summary = "시작 위치부터 최근 기준 10개 리뷰 정보 반환", description = "시작 위치부터 최근 기준 10개 리뷰 정보 반환한다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공"),
             @ApiResponse(responseCode = "401", description = "인증 실패"),
@@ -114,13 +114,13 @@ public class ReviewController {
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
     public ResponseEntity<ResVO<List<ReviewRes>>> findRecentReview(
-            @RequestParam @Parameter(description = "요청 개수") int count
+            @RequestParam @Parameter(description = "시작 위치") int start
     ) {
         ResVO<List<ReviewRes>> result = new ResVO<>();
         HttpStatus status = null;
 
         try{
-            List<Review> reviews = reviewService.findRecentReview(count);
+            List<Review> reviews = reviewService.findRecentReview(start);
             result.setData(ReviewRes.convertToResList(reviews));
             result.setMessage("성공");
             status = HttpStatus.OK;
@@ -130,5 +130,112 @@ public class ReviewController {
         }
 
         return new ResponseEntity<ResVO<List<ReviewRes>>>(result, status);
+    }
+
+    @GetMapping("/old")
+    @Operation(summary = "시작 위치부터 작성 기준 10개 리뷰 정보 반환", description = "시작 위치부터 작성 기준 10개 리뷰 정보 반환한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "401", description = "인증 실패"),
+            @ApiResponse(responseCode = "404", description = "사용자 없음"),
+            @ApiResponse(responseCode = "500", description = "서버 오류")
+    })
+    public ResponseEntity<ResVO<List<ReviewRes>>> findOldReview(
+            @RequestParam @Parameter(description = "시작 위치") int start
+    ) {
+        ResVO<List<ReviewRes>> result = new ResVO<>();
+        HttpStatus status = null;
+
+        try{
+            List<Review> reviews = reviewService.findOldReview(start);
+            result.setData(ReviewRes.convertToResList(reviews));
+            result.setMessage("성공");
+            status = HttpStatus.OK;
+        } catch (Exception e){
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            result.setMessage("서버 오류");
+        }
+
+        return new ResponseEntity<ResVO<List<ReviewRes>>>(result, status);
+    }
+
+    @GetMapping("/high")
+    @Operation(summary = "시작 위치부터 높은 평점 기준 10개 리뷰 정보 반환", description = "시작 위치부터 높은 평점 기준 10개 리뷰 정보 반환한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "401", description = "인증 실패"),
+            @ApiResponse(responseCode = "404", description = "사용자 없음"),
+            @ApiResponse(responseCode = "500", description = "서버 오류")
+    })
+    public ResponseEntity<ResVO<List<ReviewRes>>> findHighReview(
+            @RequestParam @Parameter(description = "시작 위치") int start
+    ) {
+        ResVO<List<ReviewRes>> result = new ResVO<>();
+        HttpStatus status = null;
+
+        try{
+            List<Review> reviews = reviewService.findHighRateReview(start);
+            result.setData(ReviewRes.convertToResList(reviews));
+            result.setMessage("성공");
+            status = HttpStatus.OK;
+        } catch (Exception e){
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            result.setMessage("서버 오류");
+        }
+
+        return new ResponseEntity<ResVO<List<ReviewRes>>>(result, status);
+    }
+
+    @GetMapping("/low")
+    @Operation(summary = "시작 위치부터 낮은 평점 기준 10개 리뷰 정보 반환", description = "시작 위치부터 낮은 평점 기준 10개 리뷰 정보 반환한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "401", description = "인증 실패"),
+            @ApiResponse(responseCode = "404", description = "사용자 없음"),
+            @ApiResponse(responseCode = "500", description = "서버 오류")
+    })
+    public ResponseEntity<ResVO<List<ReviewRes>>> findLowReview(
+            @RequestParam @Parameter(description = "시작 위치") int start
+    ) {
+        ResVO<List<ReviewRes>> result = new ResVO<>();
+        HttpStatus status = null;
+
+        try{
+            List<Review> reviews = reviewService.findLowRateReview(start);
+            result.setData(ReviewRes.convertToResList(reviews));
+            result.setMessage("성공");
+            status = HttpStatus.OK;
+        } catch (Exception e){
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            result.setMessage("서버 오류");
+        }
+
+        return new ResponseEntity<ResVO<List<ReviewRes>>>(result, status);
+    }
+
+    @GetMapping("/count")
+    @Operation(summary = "전체 리뷰 개수 반환", description = "전체 리뷰 개수를 반환한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "401", description = "인증 실패"),
+            @ApiResponse(responseCode = "404", description = "사용자 없음"),
+            @ApiResponse(responseCode = "500", description = "서버 오류")
+    })
+    public ResponseEntity<ResVO<Long>> getCount(){
+        ResVO<Long> result = new ResVO<>();
+        HttpStatus status = null;
+
+        try{
+            Long count = reviewService.getCount();
+            result.setData(count);
+            result.setMessage("성공");
+            status = HttpStatus.OK;
+        } catch (Exception e){
+            e.printStackTrace();
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            result.setMessage("서버 오류");
+        }
+
+        return new ResponseEntity<ResVO<Long>>(result, status);
     }
 }

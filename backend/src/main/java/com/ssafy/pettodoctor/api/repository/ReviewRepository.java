@@ -27,13 +27,40 @@ public class ReviewRepository {
         return review.getId();
     }
 
+    // 일단 104개로 제한
     public List<Review> findAll(){
-        return em.createQuery("select r from Review r", Review.class).getResultList();
+        return em.createQuery("select r from Review r", Review.class).setMaxResults(104).getResultList();
     }
 
-    public List<Review> findRecentReview(int count){
+    public List<Review> findRecentReview(int start){
         return em.createQuery("select r from Review r order by r.createTime desc")
-                .setMaxResults(count)
+                .setFirstResult(10*start + 1)
+                .setMaxResults(10)
                 .getResultList();
+    }
+
+    public List<Review> findOldReview(int start){
+        return em.createQuery("select r from Review r order by r.createTime asc")
+                .setFirstResult(10*start + 1)
+                .setMaxResults(10)
+                .getResultList();
+    }
+
+    public List<Review> findLowRateReview(int start){
+        return em.createQuery("select r from Review r order by r.rate asc")
+                .setFirstResult(10*start + 1)
+                .setMaxResults(10)
+                .getResultList();
+    }
+
+    public List<Review> findHighRateReview(int start){
+        return em.createQuery("select r from Review r order by r.rate desc")
+                .setFirstResult(10*start + 1)
+                .setMaxResults(10)
+                .getResultList();
+    }
+
+    public Long getCount(){
+        return em.createQuery("select count(r) from Review r", Long.class).getSingleResult();
     }
 }
