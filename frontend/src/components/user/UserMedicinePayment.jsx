@@ -111,8 +111,6 @@ function UserMedicinePayment(props) {
                                 </Grid>
                                 <Box container sx={{ mt: 2, display: "flex" }}>
                                     <PaymentUserInfo user={userInfo} />
-                                    {/* <Box sx={{ border: 1 }}>목록</Box>
-                  <Box>인풋들</Box> */}
                                 </Box>
                             </Box>
                             <ShipmentInfo

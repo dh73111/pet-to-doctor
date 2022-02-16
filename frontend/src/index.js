@@ -50,7 +50,6 @@ function reducer(currentState, action) {
     }
 
     if (action.type === "search") {
-        console.log(action.value, " value");
         newState.search = action.value;
         return newState;
     }

@@ -250,7 +250,8 @@ function DoctorPrescription(props) {
                                                         ) : (
                                                             <Link
                                                                 to={`/petodoctor/presciption/${res.id}`}
-                                                                state={res.id}>
+                                                                state={res.id}
+                                                                className="form-link">
                                                                 처방 내용
                                                             </Link>
                                                         )}

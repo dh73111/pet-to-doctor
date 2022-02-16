@@ -80,7 +80,7 @@ function ShipmentInfo(props) {
                         </Typography>
                         <Box sx={{ display: "flex", flexDirection: "column", flex: 1 }}>
                             <Box
-                                sx={{ mb: 1, backgroundColor: "#FBFBFD" }}
+                                sx={{ mb: 1 }}
                                 variant='outlined'
                                 size='small'
                                 disabled
@@ -89,7 +89,7 @@ function ShipmentInfo(props) {
                                     우편번호 검색
                                 </Button>
                             </Box>
-                            <TextField sx={{ mb: 1 }} variant='outlined' size='small' disabled value={props.city} />
+                            <TextField sx={{ mb: 1, backgroundColor: "#FBFBFD" }} variant='outlined' size='small' disabled value={props.city} />
                             <TextField
                                 sx={{ mb: 1, backgroundColor: "#FBFBFD" }}
                                 variant='outlined'

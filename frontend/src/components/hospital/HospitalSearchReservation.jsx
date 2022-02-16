@@ -330,7 +330,7 @@ function HospitalSearchReservation(props) {
                     <Box sx={{ fontWeight: "bold", fontSize: 22, pt: 2 }}>
                         <span style={{ lineHeight: "26px" }}>선택한 수의사 선생님</span>
                     </Box>
-                    <Grid container sx={{ mt: 3 }}>
+                    <Grid container sx={{ mt: 1 }}>
                         <Grid item xs={12} md={4}>
                             <Box sx={{ mt: 2 }}>
                                 <img
@@ -395,8 +395,8 @@ function HospitalSearchReservation(props) {
                                 name='row-radio-buttons-group'
                                 value={values.type}
                                 onChange={handleChange("type")}>
-                                <FormControlLabel value='RES_REQUEST' control={<Radio />} label='방문' />
-                                <FormControlLabel value='VST_REQUEST' control={<Radio />} label='화상' />
+                                <FormControlLabel value='VST_REQUEST' control={<Radio />} label='방문' />
+                                <FormControlLabel value='RES_REQUEST' control={<Radio />} label='화상' />
                             </RadioGroup>
                         </FormControl>
                     </Box>
@@ -430,7 +430,7 @@ function HospitalSearchReservation(props) {
                                         <FormControlLabel
                                             value='myPet'
                                             control={<Radio />}
-                                            label='나의 반려동물중 선택'
+                                            label='나의 반려동물 중 선택'
                                         />
                                     </RadioGroup>
                                 </FormControl>
