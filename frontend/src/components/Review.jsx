@@ -104,7 +104,10 @@ function Review() {
                                         {review.createTime.slice(0, 10)}
                                     </Typography>
                                     <Typography sx={{ fontWeight: "700", mb: 1, pl: 0.5 }}>
-                                        {review.username}
+                                        병원 명 : {review.hospitalName}
+                                    </Typography>
+                                    <Typography sx={{ fontWeight: "700", mb: 1, pl: 0.5 }}>
+                                        ID : {review.userName}
                                     </Typography>
                                     <Rating
                                         value={review.rate}
