@@ -36,7 +36,7 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
 @Tag(name = "user controller", description = "사용자 관련 컨트롤러")
-@CrossOrigin("https://i6b209.p.ssafy.io/")
+@CrossOrigin("*")
 public class UserController {
     private final UserService userService;
     private final SendMailService sendMailService;
