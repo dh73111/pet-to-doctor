@@ -372,6 +372,7 @@ public class UserController {
             status = HttpStatus.OK;
 
         } catch (Exception e) {
+            e.printStackTrace();
             status = HttpStatus.INTERNAL_SERVER_ERROR;
             resultMap.put("message", "서버 오류");
         }

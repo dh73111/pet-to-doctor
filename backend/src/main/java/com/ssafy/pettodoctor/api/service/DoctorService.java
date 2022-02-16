@@ -73,10 +73,13 @@ public class DoctorService {
     @Transactional
     public Optional<Doctor> updatePassword(Long doctor_id, String password) {
         Optional<Doctor> updateDoctor = Optional.ofNullable(doctorRepository.findById(doctor_id));
+        Doctor doctor = updateDoctor.get();
+
+        byte[] salt = doctor.getSalt();
+        String hash = new String(PasswordUtil.hash(password.toCharArray(), salt));
 
         updateDoctor.ifPresent(selectDoctor -> {
-            selectDoctor.setPassword(password);
-
+            selectDoctor.setPassword(hash);
             doctorRepository.save(selectDoctor);
         });
 
