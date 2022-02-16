@@ -180,6 +180,7 @@ public class TreatmentService {
             throw new Exception("잘못된 접근입니다.");
 
 
+        // 결제를 취소해야하는 경우
         if(treatment.getType().equals(TreatmentType.RES_PAID)
                 || treatment.equals(TreatmentType.RES_CONFIRMED)
                 || treatment.getType().equals(TreatmentType.VST_PAID)
@@ -190,7 +191,11 @@ public class TreatmentService {
             String mId = treatment.getPaymentCode();
             Integer amount = treatment.getPrice();
             CancleRequestUtil.passCancleRequest(accessToken, mId, reason, amount);
-            System.out.println("send cancel request to imaport");
+
+            // 유저 알람 생성
+            Notice notice = Notice.createNotice2(treatment.getUser(), treatment, NoticeType.PAYMENT
+                    , treatment.getId() + "번 - 결제가 취소 되었습니다.");
+            noticeRepository.save(notice);
         }
 
         // 상태 Cancel 로 변경
