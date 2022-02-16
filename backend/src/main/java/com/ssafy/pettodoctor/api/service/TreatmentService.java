@@ -158,10 +158,15 @@ public class TreatmentService {
         else if(treatment.getType().equals(TreatmentType.VST_PAID))
             executorService.submit(checkTaskUtil.new CheckTask(treatmentId, TreatmentType.VST_PAID));
 
+        // 사용자에게 알림 필요
+        Notice notice1 = Notice.createNotice2(treatment.getUser(), treatment, NoticeType.PAYMENT
+                , treatment.getId() + "번 - 예약 결제가 완료됐습니다.");
+        noticeRepository.save(notice1);
+
         // 의사에게 알림 필요
-        Notice notice = Notice.createNotice2(treatment.getDoctor(), treatment, NoticeType.RESERVATION
+        Notice notice2 = Notice.createNotice2(treatment.getDoctor(), treatment, NoticeType.RESERVATION
                 , treatment.getId() + "번 - 승인이 필요한 예약이 있습니다.");
-        noticeRepository.save(notice);
+        noticeRepository.save(notice2);
         return treatment;
     }
 
