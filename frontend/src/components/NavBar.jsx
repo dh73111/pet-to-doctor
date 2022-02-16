@@ -417,7 +417,7 @@ function NavBottom(props) {
                                 }
                                 e.preventDefault();
                             }}>
-                            {props.selectedNav === page.id ? MyButton(page, "#1dc6f6", "800") : MyButton(page, "black")}
+                            {props.selectedNav === page.id ? MyButton(page, "#1dc6f6", "800") : MyButton(page, "#263747")}
                         </NavLink>
                     ))}
                     <Snackbar
