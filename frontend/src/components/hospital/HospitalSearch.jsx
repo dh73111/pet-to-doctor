@@ -27,7 +27,7 @@ import { useSelector } from "react-redux";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import { useDispatch } from "react-redux";
-import { userFavMark } from "api/mark";
+import { userFavMark, addFavMark, deleteHospitalFavMark } from "api/mark";
 
 const buttons = createTheme({
     palette: {
@@ -77,6 +77,7 @@ function HospitalSearch(props) {
     function markerPosition(lat, lng) {
         setLat(lat);
         setLng(lng);
+        console.log(lat, lng);
     }
 
     function detailHospital(id) {
@@ -392,6 +393,8 @@ function HospitalSearch(props) {
                         component='div'
                         sx={{ fontSize: "18px", fontWeight: "700", cursor: "pointer" }}
                         onClick={() => {
+                            console.log("클릭");
+                            console.log("클릭");
                             detailHospital(props.index);
                             props.markerPosition(hospital.latitude, hospital.longitude);
                         }}>
@@ -422,6 +425,7 @@ function HospitalSearch(props) {
         const reviewList = [...props.reviewList];
         const [isMark, setMark] = useState(false);
         const { id } = useSelector((store) => store.user);
+        const [markId, setMarkId] = useState(hospital.id);
         let rating = 0;
         for (let review of props.reviewList) {
             rating += review.rate;
@@ -430,17 +434,18 @@ function HospitalSearch(props) {
         useEffect(() => {
             const init = async () => {
                 const res = await userFavMark(id);
-                console.log(res);
-                console.log(hospital);
+                console.log(res, " 응답");
                 for (let item of res) {
-                    if (item.id === hospital.id) {
+                    if (item.hospital_id === hospital.id) {
+                        setMarkId(hospital.id);
                         setMark(true);
-                        break;
+                        return;
                     }
                 }
+                setMark(false);
             };
             init();
-        });
+        }, []);
         return (
             <Grid container>
                 <Grid item xs={3.3} sx={{ position: "relative" }}>
@@ -505,12 +510,7 @@ function HospitalSearch(props) {
                                     24시 병원
                                 </Box>
                             )}
-                            <Tooltip
-                                title='즐겨찾기'
-                                onClick={() => {
-                                    console.log("11");
-                                }}
-                                arrow>
+                            <Tooltip title='즐겨찾기' arrow>
                                 {isMark ? (
                                     <BookmarkIcon
                                         sx={{
@@ -522,7 +522,10 @@ function HospitalSearch(props) {
                                             fontSize: "30px",
                                             zIndex: 1,
                                         }}
-                                        onClick={console.log("삭제")}
+                                        onClick={async () => {
+                                            await deleteHospitalFavMark(markId);
+                                            setMark(false);
+                                        }}
                                     />
                                 ) : (
                                     <BookmarkIcon
@@ -535,8 +538,9 @@ function HospitalSearch(props) {
                                             fontSize: "30px",
                                             zIndex: 1,
                                         }}
-                                        onClick={() => {
-                                            console.log("등록");
+                                        onClick={async () => {
+                                            await addFavMark(markId);
+                                            setMark(true);
                                         }}
                                     />
                                 )}
@@ -631,14 +635,19 @@ function HospitalSearch(props) {
         setHospitalList(tempList);
         setOnLoad(false);
     };
+
     useEffect(() => {
         kakaoMap(lat, lng);
+    });
+
+    useEffect(() => {
         if (search !== "") {
             setName(search);
             searchHospitalList(search);
             dispatch({ type: "search", value: "" });
         }
     }, []);
+
     return (
         <ThemeProvider theme={buttons}>
             <Grid container sx={{ overflow: "hidden" }}>

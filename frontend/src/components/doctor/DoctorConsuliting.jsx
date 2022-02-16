@@ -3,7 +3,7 @@ import React from "react";
 function DoctorConsuliting(props) {
     // 진단서 작성 새창열기 테스트
     const openDiagForm = () => {
-        window.open("http://localhost:3000/doctorprescriptonform", "", "_blank");
+        window.open("https://i6b209.p.ssafy.io/petodoctor/doctorprescriptonform", "", "_blank");
     };
 
     return (

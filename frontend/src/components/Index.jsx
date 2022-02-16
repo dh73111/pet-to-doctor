@@ -1,7 +1,7 @@
 import React from "react";
 
 function Index(props) {
-    window.location.href = "http://localhost:3000/petodoctor";
+    window.location.href = "https://i6b209.p.ssafy.io/petodoctor";
     return <div></div>;
 }
 

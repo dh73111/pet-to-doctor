@@ -10,19 +10,6 @@ function Review() {
     const [sortTime, setSortTime] = useState(false);
     const [onLoad, setonLoad] = useState(true);
     let sortByOld = [...reviews];
-    const allReviews = {
-        message: "성공",
-        data: [
-            {
-                id: 0,
-                userId: 0,
-                hospitalId: 0,
-                content: "너무좋네요.너무좋네요.너무좋네요.너무좋네요.",
-                rate: 4,
-                createTime: "2022-02-07T14:02:14.289Z",
-            },
-        ],
-    };
     useEffect(() => {
         const init = async () => {
             const res = await allReview();
