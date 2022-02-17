@@ -245,7 +245,7 @@ function HospitalSearchReservation(props) {
                     <Grid container>
                         <Grid item xs={4}>
                             <img
-                                src={`${process.env.PUBLIC_URL}/img/resHospital.png`}
+                                src={`${process.env.PUBLIC_URL}/img/hospital.png`}
                                 width='300px'
                                 height='300px'
                                 style={{ float: "right", paddingRight: "40px" }}

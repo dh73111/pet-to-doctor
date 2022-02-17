@@ -39,8 +39,8 @@ function PrescriptionDetail(props) {
                     <Grid item xs={6}>
                         <Box sx={{ mt: 2 }}>진단</Box>
                         <Box sx={{ mt: 2 }}>소견</Box>
-                        <Box sx={{ mt: 2 }}>배송여부</Box>
-                        <Box sx={{ mt: 2 }}>특이사항</Box>
+                        <Box sx={{ mt: 2 }}>배송 여부 </Box>
+                        <Box sx={{ mt: 2 }}>복용 방법</Box>
                         <Box sx={{ mt: 2 }}>처방약</Box>
                     </Grid>
                     <Grid item xs={6} sx={{ textAlign: "right" }}>
