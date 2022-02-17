@@ -305,6 +305,19 @@ docker-compose up
         restart: unless-stopped
     ```
     
+- Nginx, Frontend, Signaling 실행 방법
+    - VM 내에 volume 적용할 폴더와 파일 생성
+        - conf.d : nginx.config 파일 경로
+        - letsencrypt : 인증서 파일 저장 경로
+    - 폴더 구조
+        ```
+        conf.d  docker-compose.yml  frontend  letsencrypt  signaling
+        ```
+    - 명령어
+        ```bash
+        # docker-compose.yml이 있는 경로에서
+        docker-compose up
+        ```
 
 # Signaling
 
