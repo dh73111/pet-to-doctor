@@ -435,7 +435,7 @@ public class UserController {
             return "<body>\n" +
                     "    <h1>펫투닥터 서비스 메일 인증에 성공했습니다!</h1>\n" +
                     "    <h3>\n" +
-                    "        <a href=\"https://i6b209.p.ssafy.io:3333/petodoctor\">펫투닥터 서비스</a>\n" +
+                    "        <a href=\"https://i6b209.p.ssafy.io/petodoctor\">펫투닥터 서비스</a>\n" +
                     "        로 이동해 로그인 해주세요.\n" +
                     "    </h3>\n" +
                     "</body>\n";

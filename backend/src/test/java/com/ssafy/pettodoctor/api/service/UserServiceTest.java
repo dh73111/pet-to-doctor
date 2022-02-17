@@ -34,8 +34,12 @@ class UserServiceTest {
         ur2.getPets().add(new PetPostReq());
 
         // when
-        userService.signup(ur1);
-        userService.signup(ur2);
+        try {
+            userService.signup(ur1);
+            userService.signup(ur2);
+        } catch (Exception e){
+
+        }
 
         // then
 //        Assertions.
@@ -47,8 +51,11 @@ class UserServiceTest {
         UserCommonSignupPostReq ur1 = new UserCommonSignupPostReq();
         ur1.setEmail("aaa");
 
-        userService.signup(ur1);
+        try {
+            userService.signup(ur1);
+        } catch (Exception e){
 
+        }
         Assertions.assertThat(userService.isDuplicated("aaa")).isEqualTo(true);
         Assertions.assertThat(userService.isDuplicated("bbb")).isEqualTo(false);
     }
