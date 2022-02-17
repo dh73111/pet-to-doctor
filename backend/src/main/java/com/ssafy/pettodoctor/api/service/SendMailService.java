@@ -114,7 +114,7 @@ public class SendMailService {
         StringBuffer content = new StringBuffer();
         content.append("<h1> 아래의 링크를 클릭해 계정 인증을 완료해주세요. </h1>\n");
         content.append("<br>");
-        content.append("<a href=\"http://localhost:8080/api/user/certification/").append(uc.getCertificationKey()).append("\">이메일 인증 링크</a>");
+        content.append("<a href=\"https://i6b209.p.ssafy.io/api/user/certification/").append(uc.getCertificationKey()).append("\">이메일 인증 링크</a>");
 
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
