@@ -133,7 +133,7 @@ function HospitalSearchReservation(props) {
             <Button
                 disabled={props.item === "1"}
                 variant='contained'
-                color={props.index === selectTime ? "success" : "primary"}
+                color={props.index === selectTime ? "warning" : "primary"}
                 sx={{ width: "98%", mt: 1, mx: 1 }}
                 onClick={() => {
                     setSelectTime(props.index);

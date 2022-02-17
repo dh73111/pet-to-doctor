@@ -16,8 +16,6 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import StarIcon from "@mui/icons-material/Star";
 import Button from "@mui/material/Button";
 import { NavLink } from "react-router-dom";
-import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { listNameHospital, listDongHospital } from "api/hospital.js";
 import { getDoctorInfoFromHospital } from "api/doctor.js";
 import { hospitalReviews } from "../../api/review.js";
@@ -28,6 +26,7 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import { useDispatch } from "react-redux";
 import { userFavMark, addFavMark, deleteHospitalFavMark } from "api/mark";
+import { textAlign } from "@mui/system";
 
 const buttons = createTheme({
     palette: {
@@ -652,6 +651,9 @@ function HospitalSearch(props) {
         <ThemeProvider theme={buttons}>
             <Grid container sx={{ overflow: "hidden" }}>
                 <Grid item xs={12} md={2.5} sx={{ zIndex: 1 }}>
+                    <Box sx={{ backgroundColor: "#309FB3", fontSize: 15, color: "white", textAlign: "center" }}>
+                        현재 수도권 지역만 서비스 중입니다.
+                    </Box>
                     <Box sx={{ my: 2 }}>
                         <TextField
                             id='outlined-basic'
