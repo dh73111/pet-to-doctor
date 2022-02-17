@@ -30,14 +30,14 @@ function UserLoginModal(props) {
     };
 
     const REST_API_KEY = "c9d9cd706215602e662da44e2c2150a2";
-    const REDIRECT_URI = "http://localhost:3000/petodoctor/kakaooauth";
+    const REDIRECT_URI = "https://i6b209.p.ssafy.io/petodoctor/kakaooauth";
     const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
     const userLogin = async (user) => {
         // const loginRes = await loginUser({ email: user.email, password: user.password });
         const loginRes = await loginUser({ email: user.email, password: user.password }).catch((err) => {
             if (err.response.status === 401) {
                 setOpen(true);
-            } 
+            }
         });
         sessionStorage.setItem("accessToken", loginRes);
         let decode_token = jwtDecode(loginRes);
