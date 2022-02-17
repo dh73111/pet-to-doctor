@@ -41,7 +41,7 @@ function UserConsulting(props) {
         try {
             stream = await navigator.mediaDevices.getUserMedia({
                 video: true,
-                audio: true,
+                audio: false,
             });
             if (localVideoRef.current) localVideoRef.current.srcObject = stream;
             if (!(pcRef.current && socketRef.current)) return;
@@ -154,7 +154,7 @@ function UserConsulting(props) {
     }, []);
 
     const [video, setVideo] = useState(true);
-    const [mic, setMic] = useState(true);
+    const [mic, setMic] = useState(false);
 
     const videoStartOrStop = () => {
         localVideoRef.current.srcObject.getVideoTracks().forEach((track) => {

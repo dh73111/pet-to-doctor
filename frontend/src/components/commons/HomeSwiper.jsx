@@ -29,7 +29,7 @@ function HomeSwiper(props) {
                 modules={[Navigation, Pagination, Autoplay]}
                 className='mySwiper'>
                 <SwiperSlide>
-                    <div style={{ width: "1920px", height: "500px", backgroundColor: "#F4DED3" }}>
+                    <div style={{ width: "100%", height: "500px", backgroundColor: "#F4DED3" }}>
                         <Container>
                             <Grid container>
                                 <Grid item xs={12} md={5.5} sx={containerStyle}>

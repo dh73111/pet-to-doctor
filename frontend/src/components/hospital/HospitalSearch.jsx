@@ -161,7 +161,7 @@ function HospitalSearch(props) {
                                 {hospital.treatmentSubject}
                             </Grid>
                             <Grid item xs={4} sx={{ mt: 1 }}>
-                                대표 수의사 :
+                                대표 수의사
                             </Grid>
                             <Grid item xs={8} sx={{ color: "black", mt: 1 }}>
                                 {doctor.leadDoctor.name}

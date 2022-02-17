@@ -34,7 +34,7 @@ function ShipmentInfo(props) {
             document.body.append(script);
         }
     }, []);
-
+    console.log(props.address, "자식");
     const gridContainer = { display: "flex", mb: 1 };
     const shipmentLabel = { width: "260px", fontWeight: "600", lineHeight: "40px" };
     return (
@@ -55,6 +55,7 @@ function ShipmentInfo(props) {
                             id='outlined-basic'
                             variant='outlined'
                             size='small'
+                            value={props.name}
                             onChange={(e) => {
                                 props.setShippingName(e.target.value);
                             }}
@@ -69,6 +70,7 @@ function ShipmentInfo(props) {
                             id='outlined-basic'
                             variant='outlined'
                             size='small'
+                            value={props.tel}
                             onChange={(e) => {
                                 props.setTel(e.target.value);
                             }}
@@ -79,27 +81,30 @@ function ShipmentInfo(props) {
                             주소
                         </Typography>
                         <Box sx={{ display: "flex", flexDirection: "column", flex: 1 }}>
-                            <Box
-                                sx={{ mb: 1 }}
-                                variant='outlined'
-                                size='small'
-                                disabled
-                                value={props.zipcode}>
+                            <Box sx={{ mb: 1 }} variant='outlined' size='small' disabled value={props.zipcode}>
                                 <Button sx={{ ml: 1 }} onClick={openPopup} variant='contained'>
                                     우편번호 검색
                                 </Button>
                             </Box>
-                            <TextField sx={{ mb: 1, backgroundColor: "#FBFBFD" }} variant='outlined' size='small' disabled value={props.city} />
                             <TextField
                                 sx={{ mb: 1, backgroundColor: "#FBFBFD" }}
                                 variant='outlined'
                                 size='small'
+                                value={props.zipcode}
+                                disabled
+                            />
+                            <TextField
+                                sx={{ mb: 1, backgroundColor: "#FBFBFD" }}
+                                variant='outlined'
+                                size='small'
+                                value={props.city}
                                 disabled
                             />
                             <TextField
                                 variant='outlined'
                                 size='small'
                                 sx={{ backgroundColor: "#FBFBFD" }}
+                                value={props.street}
                                 onChange={(e) => {
                                     props.setStreet(e.target.value);
                                 }}

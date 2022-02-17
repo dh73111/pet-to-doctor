@@ -18,6 +18,7 @@ function DoctorPrescriptionForm(props) {
         symptom: "",
         diagnosis: "",
         admin: "",
+        opinion: "",
     });
     const [medicineList, setMedicineList] = useState([]);
     const [isChecked, setIsChecked] = useState(false);
@@ -39,10 +40,6 @@ function DoctorPrescriptionForm(props) {
         setMedicineList(tempmedicineList);
     };
 
-    const handleList = (list) => {
-        console.log("핸들");
-        setMedicineList(list);
-    };
     const handleCheck = () => {
         setIsChecked(!isChecked);
     };
@@ -59,8 +56,8 @@ function DoctorPrescriptionForm(props) {
                             <InputLabel htmlFor='filled-adornment-name'>증상</InputLabel>
                             <FilledInput
                                 id='filled-adornment-name'
-                                value={values.symptom}
-                                onChange={handleChange("symptom")}
+                                value={values.diagnosis}
+                                onChange={handleChange("diagnosis")}
                                 startAdornment={<InputAdornment position='start'></InputAdornment>}
                             />
                         </FormControl>
@@ -113,8 +110,8 @@ function DoctorPrescriptionForm(props) {
                             <InputLabel htmlFor='filled-adornment-name'>진단</InputLabel>
                             <FilledInput
                                 id='filled-adornment-name'
-                                value={values.diagnosis}
-                                onChange={handleChange("diagnosis")}
+                                value={values.opinion}
+                                onChange={handleChange("opinion")}
                                 startAdornment={<InputAdornment position='start'></InputAdornment>}
                             />
                         </FormControl>
@@ -149,19 +146,21 @@ function DoctorPrescriptionForm(props) {
                                     medicines: medicineList,
                                     isShipping: isChecked,
                                     administration: values.admin,
-                                    opinion: values.symptom,
+                                    opinion: values.opinion,
                                 });
                                 const res = await addPrescription(id, {
-                                    diagonose: values.diagonose,
+                                    diagnosis: values.diagnosis,
                                     medicines: medicineList,
                                     isShipping: isChecked,
                                     administration: values.admin,
-                                    opinion: values.symptom,
+                                    opinion: values.opinion,
                                 });
 
                                 const res2 = await treatmentState(id, "RES_COMPLETED");
                                 console.log(res);
                                 console.log(res2);
+
+                                window.close();
                             }}>
                             작성 완료
                         </Button>
