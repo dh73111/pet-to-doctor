@@ -105,7 +105,7 @@
     -   VM 내 /etc/letsencrypt/live/{domain name}[/](http://i6b209.p.ssafy.io/) 경로에 인증서 파일 생성
 -   **Dockerize Project**
     -   docker, docker-compose 명령어를 이용해 편리하게 프로젝트를 컨테이너로 만들어 관리할 수 있습니다.
-    -   Dockerfile, docker-compose.yml 작성 (github 에 상세한 내용이 담겨져 있습니다. (링크))
+    -   Dockerfile, docker-compose.yml 작성 (🔥🔥🔥👉[궁금하면 여기봐](./Deploy/README.md)👈🔥🔥🔥)
 
 # ✨기술 특이점
 
