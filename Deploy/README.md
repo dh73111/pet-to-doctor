@@ -159,12 +159,17 @@ certbot certonly --standalone [-d] 도메인
         - logs
     - profileImgVol : 프로필 이미지 저장 경로
     - war : docker-compse 실행 시 war 파일 읽는 경로
-- docker-compose 실행
 
-```bash
-# docker-compose.yml이 있는 경로에서
-docker-compose up
-```
+- 폴더 구조
+    ```
+    Dockerfile  docker-compose.yml  imageVol  profileImgVol  tomcatVol  war
+    ```
+
+- docker-compose 실행
+    ```
+    # docker-compose.yml이 있는 경로에서
+    docker-compose up
+    ```
 
 - tomcat 버전
     - tomcat10으로 했을 때 안됐는데
