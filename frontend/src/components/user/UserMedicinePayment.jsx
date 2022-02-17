@@ -153,7 +153,7 @@ function UserMedicinePayment(props) {
                                     </Grid>
                                     <Grid item xs={8}>
                                         <Typography variant='h4' sx={{ textAlign: "right" }}>
-                                            {sum() + shippingCost}원
+                                            {sum() + 3000}원
                                         </Typography>
                                     </Grid>
                                 </Grid>
