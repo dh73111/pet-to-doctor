@@ -51,9 +51,6 @@ function App() {
             secondary: {
                 main: "#1dc6f6",
             },
-            success: {
-                main: "#D7E2EB",
-            },
         },
     });
     return (
