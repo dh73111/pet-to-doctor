@@ -35,7 +35,8 @@ public class PrescriptionService {
                 prescriptionPostReq.getDiagnosis(),
                 prescriptionPostReq.getOpinion(),
                 prescriptionPostReq.getMedicineCost(),
-                prescriptionPostReq.getAdditionalCost()
+                prescriptionPostReq.getAdditionalCost(),
+                prescriptionPostReq.getIsShipping()
         );
 
         medicineRepository.saveMedicines(prescription, prescriptionPostReq.getMedicines());
