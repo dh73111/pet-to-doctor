@@ -46,7 +46,7 @@ public class UserService {
     private final PasswordUtil passwordUtil;
 
     @Transactional
-    public User signup(UserCommonSignupPostReq signupInfo) {
+    public User signup(UserCommonSignupPostReq signupInfo) throws Exception {
         byte[] salt = PasswordUtil.getNextSalt();
         String hash = new String(PasswordUtil.hash(signupInfo.getPassword().toCharArray(), salt));
 
@@ -55,6 +55,10 @@ public class UserService {
                 signupInfo.getName(), hash, signupInfo.getAddress(), salt);
         // 선택
         user.setTel(signupInfo.getTel());
+
+        if (userRepository.findByEmail(user.getEmail()) != null)
+            throw new Exception("존재하는 이메일입니다.");
+
 
         userRepository.save(user);
 

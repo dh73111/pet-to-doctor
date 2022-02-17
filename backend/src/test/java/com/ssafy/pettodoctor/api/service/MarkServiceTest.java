@@ -26,7 +26,11 @@ public class MarkServiceTest {
     @Test
     public void 마크생성(){
         UserCommonSignupPostReq ur1 = new UserCommonSignupPostReq();
-        User u1 = userService.signup(ur1);
+        User u1 = new User();
+        try {
+            u1 = userService.signup(ur1);
+        } catch(Exception e){
+        }
         Hospital hospital = new Hospital();
 
         Mark mark = markService.addMark(u1, hospital.getId()).get();
@@ -38,7 +42,12 @@ public class MarkServiceTest {
     @Test         //hospital 없어서 cascade켜놓고 돌리는중
     public void 유저마크리스트() {
         UserCommonSignupPostReq ur1 = new UserCommonSignupPostReq();
-        User user = userService.signup(ur1);
+        User user = new User();
+        try {
+            user = userService.signup(ur1);
+        } catch(Exception e){
+        }
+
         Hospital hospital = new Hospital();
         Mark mark1 = markService.addMark(user, hospital.getId()).get();
         Mark mark2 = markService.addMark(user, hospital.getId()).get();
@@ -56,7 +65,12 @@ public class MarkServiceTest {
     @Test         //hospital 없어서 cascade켜놓고 돌리는중
     public void 유저마크삭제() {
         UserCommonSignupPostReq ur1 = new UserCommonSignupPostReq();
-        User user = userService.signup(ur1);
+        User user = new User();
+        try {
+            user = userService.signup(ur1);
+        } catch(Exception e){
+        }
+
         Hospital hospital = new Hospital();
         Mark mark1 = markService.addMark(user, hospital.getId()).get();
         Mark mark2 = markService.addMark(user, hospital.getId()).get();
