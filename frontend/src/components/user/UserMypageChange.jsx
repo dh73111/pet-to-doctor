@@ -160,7 +160,6 @@ function UserMypageChange(props) {
     };
 
     const requestChangeInfo = async () => {
-        
         setChanged(true);
         const response = await modifyUser(newUserInfo);
         // window.location.href = "https://i6b209.p.ssafy.io/petodoctor/usermypage";
