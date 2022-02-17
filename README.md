@@ -31,9 +31,9 @@
 # 👀펫투닥터 서비스 화면
 
 ###   병원 예약 및 결제
-    ![Untitled](Images/%EB%B3%91%EC%9B%90%EC%98%88%EC%95%BD%EB%B0%8F%EA%B2%B0%EC%A0%9C.gif)
+![Untitled](Images/%EB%B3%91%EC%9B%90%EC%98%88%EC%95%BD%EB%B0%8F%EA%B2%B0%EC%A0%9C.gif)
 ###   예약 승인
-    ![Untitled](Images/%EC%98%88%EC%95%BD%EC%8A%B9%EC%9D%B8.gif)
+![Untitled](Images/%EC%98%88%EC%95%BD%EC%8A%B9%EC%9D%B8.gif)
 ###   화상 진료
 
 ![Untitled](Images/Untitled%201.png)
