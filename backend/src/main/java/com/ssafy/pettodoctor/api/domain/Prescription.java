@@ -34,7 +34,7 @@ public class Prescription {
     private Integer shippingCost;
 
     //== 생성 메소드 ==//
-    public static Prescription createPrescription(String administration, String diagnosis, String opinion, Integer medicineCost, Integer additionalCost){
+    public static Prescription createPrescription(String administration, String diagnosis, String opinion, Integer medicineCost, Integer additionalCost, Boolean isShipping){
         Prescription prescription = new Prescription();
         prescription.setAdministration(administration);
         prescription.setDiagnosis(diagnosis);
@@ -42,7 +42,7 @@ public class Prescription {
         prescription.setType(PaymentType.UNCOMPLETE);
         prescription.setMedicineCost(medicineCost);
         prescription.setAdditionalCost(additionalCost);
-        prescription.setIsShipping(false);
+        prescription.setIsShipping(isShipping);
 
         return prescription;
     }
