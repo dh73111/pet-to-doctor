@@ -1,4 +1,3 @@
-import { ConstructionOutlined } from "@mui/icons-material";
 import { apiInstance, loginApiInstance } from "./index.js";
 
 const api = apiInstance();

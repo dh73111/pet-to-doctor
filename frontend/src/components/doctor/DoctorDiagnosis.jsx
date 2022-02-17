@@ -84,6 +84,7 @@ function DoctorDiagnosis(props) {
     useEffect(() => {
         const init = async () => {
             const list = await doctorTreatmentAllInfo(doctorId);
+            console.log(list, " 리스트 ");
             let tempRequestList = [];
             let tempCancelList = [];
             let tempConfirmList = [];
@@ -118,7 +119,7 @@ function DoctorDiagnosis(props) {
     const handleClose = () => setOpen(false);
     const navigate = useNavigate();
     const offset = new Date().getTimezoneOffset() * 60000; // 1000밀리초 * 60  -> 1분
-    const enterConsulting = (time, id) => {
+    const enterConsulting = (time, id, hospitalId) => {
         // 입장가능 로직 -> 확인해야함
         let currentTime = new Date(Date.now() - offset).toISOString();
         let start = Number(time.substring(14, 16));
@@ -130,7 +131,7 @@ function DoctorDiagnosis(props) {
             start <= currentMin &&
             currentMin <= end
         ) {
-            navigate(`/petodoctor/userconsulting/${id}`);
+            navigate(`/petodoctor/userconsulting/${id}/${hospitalId}`);
         } else
             alert(
                 `입장이 불가능합니다. 현재시간 ${currentTime.substring(11, 16)} , 입장시간 ${time.substring(
@@ -138,7 +139,7 @@ function DoctorDiagnosis(props) {
                     16
                 )} 그러나 발표를 위해서 입장!`
             );
-        navigate(`/petodoctor/userconsulting/${id}`);
+        navigate(`/petodoctor/userconsulting/${id}/${hospitalId}`);
     };
     const handleChange = (event) => {
         setState(event.target.value);
@@ -292,7 +293,11 @@ function DoctorDiagnosis(props) {
                                                             <Button
                                                                 variant='contained'
                                                                 onClick={() => {
-                                                                    enterConsulting(treat.scheduleDate);
+                                                                    enterConsulting(
+                                                                        treat.scheduleDate,
+                                                                        treat.id,
+                                                                        treat.hospitalId
+                                                                    );
                                                                 }}>
                                                                 입장하기
                                                             </Button>

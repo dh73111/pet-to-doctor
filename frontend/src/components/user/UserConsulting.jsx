@@ -169,7 +169,7 @@ function UserConsulting(props) {
     };
     console.log(user, "user");
     return (
-        <Box sx={{ mb: 15}}>
+        <Box sx={{ mb: 15 }}>
             <Grid container>
                 <Grid item md={6}>
                     <Box>
@@ -216,7 +216,7 @@ function UserConsulting(props) {
                         <BottomNavigationAction
                             onClick={() => {
                                 window.open(
-                                    `https://i6b209.p.ssafy.io/petodoctor/doctorprescriptonform/${id}`,
+                                    `https://i6b209.p.ssafy.io/doctorprescriptonform/${id}`,
                                     "처방전",
                                     "width=#,height=#"
                                 );

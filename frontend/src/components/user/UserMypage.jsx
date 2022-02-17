@@ -1,28 +1,15 @@
 import React, { useEffect, useState } from "react";
-import {
-    Box,
-    Button,
-    Card,
-    CardMedia,
-    Checkbox,
-    Container,
-    Grid,
-    Input,
-    InputAdornment,
-    Paper,
-    TextField,
-    Typography,
-} from "@mui/material";
+import { Box, Button, Container, Grid, Input, InputAdornment, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
-import { Link, Outlet } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { userFavMark, addFavMark } from "../../api/mark.js";
 import { userInfo } from "../../api/user.js";
 import { deleteFavMark } from "../../api/mark.js";
-import { modifyPet, deletePet, registerPet, modifyPetPic, petList, petInfo } from "../../api/pet.js";
+import { modifyPet, deletePet, registerPet, modifyPetPic, petList } from "../../api/pet.js";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import UserPets from "./resources/UserPets.jsx";
-import { useSelect } from "@mui/base";
+import { useDispatch } from "react-redux";
 
 // 마이페이지 메인 최상단 컴포넌트
 function UserMypage(props) {
@@ -48,6 +35,7 @@ function UserMypage(props) {
     console.log(userStore, " user Store");
     useEffect(() => {
         const init = async () => {
+            console.log("useEffect!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             console.log(user, "유저데이터");
             setUser(userStore);
         };
@@ -77,7 +65,17 @@ function UserMypage(props) {
 function UserInfo(props) {
     const informationUser = props.user;
     const store = useSelector((store) => store.user);
-    console.log("");
+    const [url, setUrl] = useState("");
+    const dispatch = useDispatch();
+    useEffect(() => {
+        const init = async () => {
+            const res = await userInfo(store.id);
+            console.log(res, "res!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            setUrl(res.profileImgUrl);
+            dispatch({ type: "login", userData: res });
+        };
+        init();
+    }, []);
     return (
         <Grid container>
             <Grid item xs={12} md={12}>
@@ -99,7 +97,7 @@ function UserInfo(props) {
                                 height: "200px",
                                 backgroundSize: "cover",
                                 backgroundPosition: "center",
-                                backgroundImage: `url(https://i6b209.p.ssafy.io:8443/profile_imgs/${store.profileImgUrl})`,
+                                backgroundImage: `url(https://i6b209.p.ssafy.io:8443/profile_imgs/${url})`,
                                 borderRadius: "200px",
                                 mx: "auto",
                                 // 유저의 프로필

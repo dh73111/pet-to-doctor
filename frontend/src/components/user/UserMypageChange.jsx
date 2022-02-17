@@ -22,11 +22,11 @@ import PropTypes from "prop-types";
 import logo from "../../components/logo.png";
 import DaumPostCode from "react-daum-postcode";
 import { modifyUser, modifyUserPic, checkPassword, changePassword } from "../../api/user.js";
-import { modifyPetPic } from "api/pet";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useDispatch, useSelector } from "react-redux";
+import { fileApiInstance } from "api/index";
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
     return (
@@ -160,10 +160,11 @@ function UserMypageChange(props) {
     };
 
     const requestChangeInfo = async () => {
+        
         setChanged(true);
         const response = await modifyUser(newUserInfo);
         // window.location.href = "https://i6b209.p.ssafy.io/petodoctor/usermypage";
-        console.log(response.data.data, "response");
+        console.log(response.data.data, "response !!!!!!!!!!!!@@@@@@@@@@@@@#########$$$$$$$$$");
         dispatch({ type: "login", userData: { ...response.data.data, role: "ROLE_USER" } });
         navigate(`/petodoctor/usermypage`);
     };
@@ -222,7 +223,7 @@ function UserMypageChange(props) {
         <ThemeProvider theme={newTheme}>
             <Container sx={{ mb: 20 }}>
                 <form
-                    action={`https://i6b209.p.ssafy.io:8443/api/user/profile/${store.id}`}
+                    action={`https://i6b209.p.ssafy.io:8443/api/user/profile/${store.id}/`}
                     // action={`http://localhost:8080/api/user/profile/${store.id}`}
                     method='post'
                     enctype='multipart/form-data'
@@ -336,7 +337,7 @@ function UserMypageChange(props) {
                                         <TextField
                                             size='small'
                                             placeholder={store.email}
-                                            enabled
+                                            disabled
                                             name='email'
                                             defaultValue={newUserInfo.email}
                                             onChange={handleChangeUserInfo("email")}
