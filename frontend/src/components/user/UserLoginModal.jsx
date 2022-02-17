@@ -37,7 +37,7 @@ function UserLoginModal(props) {
         const loginRes = await loginUser({ email: user.email, password: user.password }).catch((err) => {
             if (err.response.status === 401) {
                 setOpen(true);
-            }
+            } 
         });
         sessionStorage.setItem("accessToken", loginRes);
         let decode_token = jwtDecode(loginRes);
