@@ -33,12 +33,12 @@ function UserMedicinePayment(props) {
             },
         },
     });
-    const [tel, setTel] = useState("");
-    const [shippingName, setShippingName] = useState("");
-    const [street, setStreet] = useState("");
-    const [zipcode, setZipcode] = useState("");
-    const [city, setCity] = useState("");
     const user = useSelector((store) => store.user);
+    const [tel, setTel] = useState(user.tel);
+    const [shippingName, setShippingName] = useState(user.name);
+    const [street, setStreet] = useState(user.address.street);
+    const [zipcode, setZipcode] = useState(user.address.zipcode);
+    const [city, setCity] = useState(user.address.city);
     const userInfo = {
         name: user.name,
         tel: user.tel,
@@ -53,6 +53,7 @@ function UserMedicinePayment(props) {
         }
         return sum;
     };
+    const address = user.address;
     const { IMP } = window;
     IMP.init("imp36272840");
     // console.log(city);
@@ -80,7 +81,7 @@ function UserMedicinePayment(props) {
                     shippingName: shippingName,
                     address: { city: city, street: street, zipcode: zipcode },
                 });
-                navigate("/petodoctor/userreservationcomplete");
+                navigate("/petodoctor/userpaymentcomplete");
             }
         );
     };
@@ -96,9 +97,7 @@ function UserMedicinePayment(props) {
                                     약정보
                                 </Typography>
                                 <ul sx={{ mt: 2 }}>
-                                    {drug.map((item, index) => (
-                                        <li>{item.name}</li>
-                                    ))}
+                                    {drug.length !== 0 ? drug.map((item, index) => <li>{item.name}</li>) : <></>}
                                 </ul>
                             </Box>
                             <Box sx={{ mb: 2, p: 3, border: "1px solid #D7E2EB", borderRadius: "0.55rem" }}>
@@ -121,6 +120,10 @@ function UserMedicinePayment(props) {
                                 setTel={setTel}
                                 zipcode={zipcode}
                                 city={city}
+                                address={address}
+                                street={street}
+                                name={shippingName}
+                                tel={tel}
                             />
                             {/* <PayMethod /> */}
                         </Grid>
@@ -129,6 +132,22 @@ function UserMedicinePayment(props) {
                                 <Typography variant='h6' sx={{ fontWeight: 600, mb: 2 }}>
                                     최종결제금액
                                 </Typography>
+                                {drug.length !== 0 ? (
+                                    drug.map((item, index) => (
+                                        <Grid container sx={{ justifyContent: "flex-end", mb: 4 }}>
+                                            <Grid align='right' item xs={4}>
+                                                <Typography sx={{ fontWeight: 600 }}>{item.name}</Typography>
+                                            </Grid>
+                                            <Grid align='right' item xs={7}>
+                                                <Typography xs={6} sx={{ ml: 3, pr: 1 }}>
+                                                    {item.price} 원
+                                                </Typography>
+                                            </Grid>
+                                        </Grid>
+                                    ))
+                                ) : (
+                                    <></>
+                                )}
                                 <Grid container sx={{ justifyContent: "flex-end", mb: 4 }}>
                                     <Grid align='right' item xs={4}>
                                         <Typography sx={{ fontWeight: 600 }}>배송비</Typography>

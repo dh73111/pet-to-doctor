@@ -315,7 +315,6 @@ function DoctorDiagnosis(props) {
                 </Grid>
                 <Grid item xs={2}></Grid>
             </Grid>
-            <Pagination count={10} sx={{ border: 1, mx: "auto", maxWidth: "414px" }} size='large' />
         </Container>
     );
 }
