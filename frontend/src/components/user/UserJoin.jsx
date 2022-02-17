@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import { Typography, Grid, Button, Box, TextField, InputAdornment, Modal, Stack, Divider } from "@mui/material";
 import logo from "../../components/logo.png";
 import DaumPostCode from "react-daum-postcode";
@@ -66,7 +66,6 @@ function UserJoin(props) {
         if (prop === "confirmPassword") {
             if (values.password !== event.target.value) {
                 setPasswordError("비밀번호 불일치");
-                // console.log(passwordError);
             } else {
                 setPasswordError("");
             }

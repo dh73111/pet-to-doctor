@@ -10,7 +10,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import UserPets from "./resources/UserPets.jsx";
 import { useDispatch } from "react-redux";
-
+import { doctorInfo } from "api/doctor";
 // 마이페이지 메인 최상단 컴포넌트
 function UserMypage(props) {
     const userId = useSelector((store) => store.user.id);
@@ -69,10 +69,16 @@ function UserInfo(props) {
     const dispatch = useDispatch();
     useEffect(() => {
         const init = async () => {
-            const res = await userInfo(store.id);
-            console.log(res, "res!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            setUrl(res.profileImgUrl);
-            dispatch({ type: "login", userData: res });
+            if (store.role === "ROLE_DOCTOR") {
+                const res = await doctorInfo(store.id);
+                setUrl(res.profileImgUrl);
+                dispatch({ type: "login", userData: res });
+            } else {
+                const res = await userInfo(store.id);
+                console.log(res, "res!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                setUrl(res.profileImgUrl);
+                dispatch({ type: "login", userData: res });
+            }
         };
         init();
     }, []);
@@ -82,14 +88,18 @@ function UserInfo(props) {
                 <Grid container sx={{ mt: 1, p: 3 }}>
                     <Grid item xs={12} md={12}>
                         <Box sx={{ float: "right" }}>
-                            <Link
-                                to={`/petodoctor/usermypage/${informationUser.id}`}
-                                state={informationUser}
-                                style={{ textDecoration: "none" }}>
-                                <Button varient='contained' startIcon={<EditIcon />}>
-                                    회원정보수정
-                                </Button>
-                            </Link>
+                            {store.role === "ROLE_USER" ? (
+                                <Link
+                                    to={`/petodoctor/usermypage/${informationUser.id}`}
+                                    state={informationUser}
+                                    style={{ textDecoration: "none" }}>
+                                    <Button varient='contained' startIcon={<EditIcon />}>
+                                        회원정보수정
+                                    </Button>
+                                </Link>
+                            ) : (
+                                <></>
+                            )}
                         </Box>
                         <Box
                             sx={{
@@ -116,7 +126,7 @@ function UserInfo(props) {
                                 {/* {informationUser.address.city}
                                 <br />
                                 {informationUser.address.street} */}
-                                {informationUser.address !== null ? (
+                                {store.role === "ROLE_USER" && informationUser.address !== null ? (
                                     <>
                                         {informationUser.address.city}
                                         <br />

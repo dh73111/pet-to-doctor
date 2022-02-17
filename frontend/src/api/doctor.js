@@ -13,7 +13,8 @@ async function checkPassword(doctor, success, fail) {
 }
 
 // 의사 정보 조회
-async function doctorInfo(doctor_id, success, fail) {
+async function doctorInfo(doctor_id) {
+    console.log(doctor_id);
     return (await api.get(`/doctor/${doctor_id}`)).data.data;
 }
 
