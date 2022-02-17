@@ -12,7 +12,6 @@
 
 **펫투닥터 UCC** : [https://youtu.be/TdUwbNEi2O8](https://youtu.be/TdUwbNEi2O8)
 
-[https://youtu.be/TdUwbNEi2O8](https://youtu.be/TdUwbNEi2O8)
 
 # ✨펫투닥터의 기획의도
 
@@ -31,19 +30,19 @@
 
 # 👀펫투닥터 서비스 화면
 
--   병원 예약 및 결제
+###   병원 예약 및 결제
     ![병원예약및결제.gif](Images/%EB%B3%91%EC%9B%90%EC%98%88%EC%95%BD%EB%B0%8F%EA%B2%B0%EC%A0%9C.gif)
--   예약 승인
+###   예약 승인
     ![예약승인.gif](Images/%EC%98%88%EC%95%BD%EC%8A%B9%EC%9D%B8.gif)
--   화상 진료
+###   화상 진료
 
 ![Untitled](Images/Untitled%201.png)
 
--   진료 완료 후 리뷰 작성
+###   진료 완료 후 리뷰 작성
     ![진료완료 후 리뷰작성.gif](Images/%EC%A7%84%EB%A3%8C%EC%99%84%EB%A3%8C_%ED%9B%84_%EB%A6%AC%EB%B7%B0%EC%9E%91%EC%84%B1.gif)
--   처방전 작성
+###   처방전 작성
     ![처방전작성.gif](Images/%EC%B2%98%EB%B0%A9%EC%A0%84%EC%9E%91%EC%84%B1.gif)
--   약값 결제
+###  약값 결제
     ![약값결제.gif](Images/%EC%95%BD%EA%B0%92%EA%B2%B0%EC%A0%9C.gif)
 
 # ✨ 주요 기능
