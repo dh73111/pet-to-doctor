@@ -30,7 +30,6 @@ function UserJoin(props) {
     const [emailError, setEmailError] = useState("");
     const [passwordError, setPasswordError] = useState("");
 
-    const [user, setUser] = useState({});
     const handleStreetChange = (prop) => (event) => {
         setValues({
             ...values,
@@ -91,7 +90,6 @@ function UserJoin(props) {
                 },
             ],
         });
-        dispatch({ type: "register" });
         alert("가입 성공");
         navigate(`/petodoctor`);
     }
@@ -383,7 +381,7 @@ function UserJoin(props) {
                     />
                 </Box>
                 <Typography mt={5} align='center' component='h2' sx={{ fontSize: "18px", fontWeight: "600", mb: 2 }}>
-                    반려동물 정보(선택입력사항)
+                    반려동물 정보(*필수입력사항)
                 </Typography>
                 <Grid
                     container
