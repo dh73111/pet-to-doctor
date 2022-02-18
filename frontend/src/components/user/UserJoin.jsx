@@ -1,5 +1,16 @@
 import React, { useState } from "react";
-import { Typography, Grid, Button, Box, TextField, InputAdornment, Modal, Stack, Divider } from "@mui/material";
+import {
+    Typography,
+    Grid,
+    Button,
+    Box,
+    TextField,
+    InputAdornment,
+    Modal,
+    CircularProgress,
+    Stack,
+    Divider,
+} from "@mui/material";
 import logo from "../../components/logo.png";
 import DaumPostCode from "react-daum-postcode";
 import { border } from "@mui/system";
@@ -29,8 +40,7 @@ function UserJoin(props) {
     const [telError, setTelError] = useState("");
     const [emailError, setEmailError] = useState("");
     const [passwordError, setPasswordError] = useState("");
-
-    const [user, setUser] = useState({});
+    const [isLoading, setLoading] = useState(false);
     const handleStreetChange = (prop) => (event) => {
         setValues({
             ...values,
@@ -72,7 +82,8 @@ function UserJoin(props) {
         }
     };
     async function userRegister(user) {
-        await registerUser({
+        setLoading(true);
+        const res = await registerUser({
             email: user.email,
             password: user.password,
             name: user.name,
@@ -91,9 +102,8 @@ function UserJoin(props) {
                 },
             ],
         });
-        dispatch({ type: "register" });
-        alert("가입 성공");
-        navigate(`/petodoctor`);
+        setLoading(false);
+        navigate(`/petodoctor/usersignupconfirm`);
     }
 
     const [pet, setPet] = useState({
@@ -383,7 +393,7 @@ function UserJoin(props) {
                     />
                 </Box>
                 <Typography mt={5} align='center' component='h2' sx={{ fontSize: "18px", fontWeight: "600", mb: 2 }}>
-                    반려동물 정보(선택입력사항)
+                    반려동물 정보(*필수입력사항)
                 </Typography>
                 <Grid
                     container
@@ -563,6 +573,19 @@ function UserJoin(props) {
                     가입하기
                 </Button>
             </Box>
+            {isLoading && (
+                <CircularProgress
+                    size={80}
+                    sx={{
+                        color: "primary",
+                        position: "absolute",
+                        top: "60%",
+                        left: "50%",
+                        marginTop: "-12px",
+                        marginLeft: "-12px",
+                    }}
+                />
+            )}
         </Box>
     );
 }
