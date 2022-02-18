@@ -109,7 +109,7 @@ function App() {
                             <Route
                                 path='/petodoctor/userconsulting/:id/:hospitalId'
                                 element={<UserConsulting />}></Route>
-                            <Route path='/petodoctor/usersignupconfirm/:userid' element={<UserSignupConfirm />}></Route>
+                            <Route path='/petodoctor/usersignupconfirms' element={<UserSignupConfirm />}></Route>
                             <Route path='/petodoctor/qna' element={<Qna />}></Route>
                             <Route path='/petodoctor/review' element={<Review />}></Route>
                         </Routes>

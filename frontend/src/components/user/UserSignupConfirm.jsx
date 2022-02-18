@@ -20,7 +20,6 @@ const newTheme = createTheme({
     },
 });
 function UserSignupConfirm(props) {
-    const userEmail = useParams().userid;
     const navigate = useNavigate();
     return (
         <div>
@@ -32,7 +31,7 @@ function UserSignupConfirm(props) {
                             이메일 인증
                         </Typography>
                         <Typography variant='subtitle1' component='subtitle1'>
-                            인증 메일이 <b>{userEmail}</b>(으)로 전송되었습니다.
+                            인증 메일이 <b>가입 신청한 이메일</b>(으)로 전송되었습니다.
                             <br />
                             받으신 이메일을 열어 버튼을 클릭하면 가입이 완료됩니다.
                         </Typography>
