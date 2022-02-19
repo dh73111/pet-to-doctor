@@ -156,9 +156,9 @@ function DoctorPrescriptionForm(props) {
                                     opinion: values.opinion,
                                 });
 
-                                const res2 = await treatmentState(id, "RES_COMPLETED");
+                                // const res2 = await treatmentState(id, "RES_COMPLETED");
                                 console.log(res);
-                                console.log(res2);
+                                // console.log(res2);
 
                                 window.close();
                             }}>
