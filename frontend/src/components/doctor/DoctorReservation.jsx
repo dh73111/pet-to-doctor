@@ -155,6 +155,7 @@ function DoctorReservation(props) {
             SetStatechange(data);
             await treatmentState(data.treatmentId, data.treatmentType);
         }
+        window.location.reload();
     };
 
     const setList = (value) => {
@@ -282,7 +283,7 @@ function DoctorReservation(props) {
                                                             <Link
                                                                 to={`/petodoctor/reservation/${res.id}`}
                                                                 state={res.id}
-                                                                className="form-link">
+                                                                className='form-link'>
                                                                 예약 내용
                                                             </Link>
                                                         )}
