@@ -106,10 +106,13 @@ public class PrescriptionService {
 
         prescription.updatePaymentInfo(shippingReq);
         if(prescription.getType().equals(PaymentType.COMPLETE)){ // 처방전 결제가 됐다면
+            // 사용자에게 알림
+            Notice notice1 = Notice.createNotice2(treatment.getUser(), treatment, NoticeType.NOTIFICATION, treatment.getId() + "번 - 처방전 결제가 완료되었습니다.");
+            noticeRepository.save(notice1);
 
             // 의사에게 알림
-            Notice notice = Notice.createNotice2(treatment.getDoctor(), treatment, NoticeType.DELIVERY, treatment.getId() + "번 - 배송이 필요한 처방이 있습니다. 운송장 번호를 등록해주세요.");
-            noticeRepository.save(notice);
+            Notice notice2 = Notice.createNotice2(treatment.getDoctor(), treatment, NoticeType.DELIVERY, treatment.getId() + "번 - 배송이 필요한 처방이 있습니다. 운송장 번호를 등록해주세요.");
+            noticeRepository.save(notice2);
         }
         return prescription;
     }
