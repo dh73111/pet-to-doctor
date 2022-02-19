@@ -5,16 +5,10 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/system";
-import TablePaginationUnstyled from "@mui/base/TablePaginationUnstyled";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
-import DatePicker from "@mui/lab/DatePicker";
-import TextField from "@mui/material/TextField";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import { Pagination, Stack } from "@mui/material";
 import { doctorTreatmentAllInfo } from "api/treatment";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -195,19 +189,6 @@ function DoctorDiagnosis(props) {
             <Grid container>
                 <Grid item xs={8}></Grid>
                 <Grid item xs={2} sx={{ px: 4 }}>
-                    {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DatePicker
-                            disableFuture
-                            label='날짜'
-                            openTo='year'
-                            views={["year", "month", "day"]}
-                            value={value}
-                            onChange={(newValue) => {
-                                setValue(newValue);
-                            }}
-                            renderInput={(params) => <TextField {...params} />}
-                        />
-                    </LocalizationProvider> */}
                 </Grid>
                 <Grid item xs={2}>
                     <Box sx={{ width: 120 }}>

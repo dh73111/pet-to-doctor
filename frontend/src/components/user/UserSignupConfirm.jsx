@@ -1,8 +1,8 @@
 import React from "react";
-import { Box, Button, Container, Grid, Paper, Typography } from "@mui/material";
+import { Button, Container, Grid, Typography } from "@mui/material";
 import DraftsOutlinedIcon from "@mui/icons-material/DraftsOutlined";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { NavLink, useParams, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const newTheme = createTheme({
     palette: {

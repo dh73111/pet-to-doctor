@@ -13,7 +13,7 @@ import DoctorDianosis from "./components/doctor/DoctorDiagnosis";
 import DoctorPrescription from "./components/doctor/DoctorPrescription";
 import DoctorPrescriptionForm from "components/doctor/DoctorPrescriptionForm";
 import DoctorConsuliting from "components/doctor/DoctorConsuliting";
-import DoctorPasswordChange from "./components/doctor/DoctorPasswordChange";
+// import DoctorPasswordChange from "./components/doctor/DoctorPasswordChange";
 import DoctorMypage from "components/doctor/DoctorMypage";
 import Notice from "components/Notice";
 import Review from "components/Review";

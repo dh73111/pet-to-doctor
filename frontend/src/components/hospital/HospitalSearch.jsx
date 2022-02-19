@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -19,14 +18,12 @@ import { NavLink } from "react-router-dom";
 import { listNameHospital, listDongHospital } from "api/hospital.js";
 import { getDoctorInfoFromHospital } from "api/doctor.js";
 import { hospitalReviews } from "../../api/review.js";
-import { CircularProgress, createTheme, IconButton, ThemeProvider, Tooltip } from "@mui/material";
-import StarsIcon from "@mui/icons-material/Stars";
+import { CircularProgress, createTheme, ThemeProvider, Tooltip } from "@mui/material";
 import { useSelector } from "react-redux";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import { useDispatch } from "react-redux";
 import { userFavMark, addFavMark, deleteHospitalFavMark } from "api/mark";
-import { textAlign } from "@mui/system";
 
 const buttons = createTheme({
     palette: {
@@ -235,25 +232,6 @@ function HospitalSearch(props) {
                                 <Typography sx={{ pl: 1 }}>
                                     {item.specialty === null ? "없음" : item.specialty + " 전문"}
                                 </Typography>
-                                {/* <Box>
-                                    {item.name}
-                                    <Box
-                                        component='span'
-                                        sx={{ mx: 0.1, fontSize: 16, fontWeight: "bold", color: "gray" }}>
-                                        수의사
-                                    </Box>
-                                </Box>
-                                <Box sx={{ mt: 2 }}>
-                                    <Grid container>
-                                        <Grid item xs={1}></Grid>
-                                        <Grid item xs={3} sx={{ fontWeight: "bold", fontSize: 14 }}>
-                                            전문
-                                        </Grid>
-                                        <Grid item xs={8} sx={{ fontSize: 14, fontWeight: "bold" }}>
-                                            {item.specialty}
-                                        </Grid>
-                                    </Grid>
-                                </Box> */}
                                 <Box sx={{ float: "right", mr: 2 }}>
                                     <Button
                                         variant='contained'
@@ -274,24 +252,6 @@ function HospitalSearch(props) {
                                             예약하기
                                         </NavLink>
                                     </Button>
-                                    {/* <Grid container>
-                                        <Grid item xs={4.5}>
-                                            <Button variant='contained' sx={{ mt: 3 }}>
-                                                <NavLink
-                                                    to={`${process.env.PUBLIC_URL}/hospitalsearchreservation/${hospital.id}/${item.id}`}
-                                                    state={doctor}
-                                                    style={{ textDecoration: "none", color: "white" }}
-                                                    onClick={(e) => {
-                                                        if (!isLogin) {
-                                                            e.preventDefault();
-                                                            setAlertOpen(true);
-                                                        }
-                                                    }}>
-                                                    예약하기
-                                                </NavLink>
-                                            </Button>
-                                        </Grid>
-                                    </Grid> */}
                                 </Box>
                             </Grid>
                             <Snackbar

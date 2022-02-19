@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { useLocation, useNavigate } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import { treatmentPay, treatmentInfo } from "api/treatment";
-import { getHosiptal } from "api/hospital";
 import { Container, createTheme, Divider, Grid, ThemeProvider } from "@mui/material";
-// import NavBar from '../NavBar';
 import StepBar from "./resources/StepBar";
 
 function UserReservationPayment(props) {

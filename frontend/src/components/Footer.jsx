@@ -2,18 +2,12 @@ import React from "react";
 import { styled } from "@mui/material/styles";
 import { Container, Grid, Typography } from "@mui/material";
 
-//FFF5F6
 function Footer(props) {
     const MyFooter = styled("div")({
         width: "100%",
-        // height: "300px",
         borderTop: "1px solid rgb(241, 241, 241)",
         backgroundColor: "rgb(249, 249, 249)",
-        // backgroundColor: "#FFF5F6",
-        // position: "relative",
-        // bottom: 0,
         paddingBottom: "100px",
-        // marginTop: "100px",
     });
     return (
         <MyFooter>
@@ -46,9 +40,3 @@ function Footer(props) {
 }
 
 export default Footer;
-
-// const MyDiv = styled("div")({
-//   position: "absolute",
-//   top: "580px",
-//   width: "100%",
-// });

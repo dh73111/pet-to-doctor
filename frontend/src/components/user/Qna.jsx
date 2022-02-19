@@ -1,10 +1,8 @@
 import { Accordion, AccordionDetails, AccordionSummary, Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Box } from "@mui/system";
-import { Button, Container } from "@mui/material";
+import { Container } from "@mui/material";
 import React, { useState } from "react";
-import QuizIcon from "@mui/icons-material/Quiz";
-// import { Provider, useSelector, useDispatch } from "react-redux";
 
 function Qna(props) {
     const [expanded, setExpanded] = useState(false);
