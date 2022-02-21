@@ -70,35 +70,14 @@ function PrescriptionDetail(props) {
                         <Box>가격</Box>
                     </Grid>
                     <Grid item xs={6} sx={{ textAlign: "right" }}>
-                        <Box>{sum()}</Box>
+                        <Box>
+                            {sum()
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        </Box>
                     </Grid>
                 </Grid>
             </Grid>
-            {/* <Box>
-                <Box sx={{ mt: 2 }}>진단 : {presc.diagnosis}</Box>
-                <Box sx={{ mt: 2 }}>소견 : {presc.opinion}</Box>
-                <Box sx={{ mt: 2 }}>배송여부 : {presc.isShipping ? "배송" : "-"}</Box>
-                <Box sx={{ mt: 2 }}></Box>
-                <Box sx={{ mt: 2 }}>특이사항 :{presc.administration}</Box>
-                <Box sx={{ mt: 2 }}>
-                    <Box sx={{ mt: 2 }}>
-                        {drugs.map((drug, idx) => {
-                            return (
-                                <Box key={idx}>
-                                    {idx === 0 ? (
-                                        `처방약 : ${drug.name} (₩${drug.price})`
-                                    ) : (
-                                        <Box sx={{ mx: 7 }}>
-                                            {drug.name} (₩{drug.price})
-                                        </Box>
-                                    )}
-                                </Box>
-                            );
-                        })}
-                    </Box>
-                    <Box sx={{ mt: 2 }}>가격 : {sum()} 원</Box>
-                </Box>
-            </Box> */}
             <div className='devider'></div>
             {presc.type !== "COMPLETE" && user.role !== "ROLE_DOCTOR" ? (
                 <Button

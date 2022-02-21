@@ -1,4 +1,4 @@
-import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import { Box, Grid, TextField, Typography } from "@mui/material";
 import React from "react";
 
 function PaymentUserInfo(props) {
@@ -9,7 +9,7 @@ function PaymentUserInfo(props) {
 
     return (
         <Box sx={{ display: "flex" }}>
-            <Box sx={{ display: "flex", flexDirection: "column", width: "100%" /* backgroundColor: '#CDEEF4' */ }}>
+            <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
                 <Grid container sx={gridContainer}>
                     <Typography item xs={12} sx={shipmentLabel}>
                         이름
@@ -35,14 +35,6 @@ function PaymentUserInfo(props) {
                     />
                 </Grid>
                 <Grid container sx={gridContainer}>
-                    {/* <Typography item xs={12} sx={shipmentLabel}>주소</Typography>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-                    <Box>
-                        <TextField sx={{ mb: 1 }} variant="outlined" size="small" value={userInfo.zipcode}/>
-                    </Box>
-                    <TextField sx={{ mb: 1, width: '100%' }} variant="outlined" size="small" value={userInfo.city + ' ' + userInfo.street}/>
-                    <TextField variant="outlined" size="small" />
-                    </Box> */}
                 </Grid>
             </Box>
         </Box>

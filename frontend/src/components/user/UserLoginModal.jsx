@@ -204,13 +204,6 @@ function UserLoginModal(props) {
                                         </Link>
                                     </Grid>
                                 </Grid>
-
-                                {/* <Grid
-                                    onClick={() => {
-                                        setState(!state);
-                                    }}>
-                                    {state ? "의사 로그인으로 이동" : "일반 유저로그인으로 이동"}
-                                </Grid> */}
                             </Box>
                         </Box>
                     </Grid>

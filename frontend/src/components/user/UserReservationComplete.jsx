@@ -1,7 +1,6 @@
-import { Button, Container, Grid, Typography } from "@mui/material";
+import { Button, Container, Typography } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import React from "react";
-import NavBar from "../NavBar";
 import { Link } from "react-router-dom";
 
 function UserReservationComplete(props) {

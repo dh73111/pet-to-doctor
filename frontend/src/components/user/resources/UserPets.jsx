@@ -1,4 +1,4 @@
-import { Card, CardMedia, Grid, Button, Input, Box, Typography } from "@mui/material";
+import { CardMedia, Grid, Button, Input, Box, Typography } from "@mui/material";
 import React, { useState } from "react";
 
 function UserPets(props) {

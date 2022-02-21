@@ -29,7 +29,7 @@ public class ReviewRepository {
 
     // 일단 104개로 제한
     public List<Review> findAll(){
-        return em.createQuery("select r from Review r", Review.class).setMaxResults(104).getResultList();
+        return em.createQuery("select r from Review r order by r.createTime desc", Review.class).setMaxResults(104).getResultList();
     }
 
     public List<Review> findRecentReview(int start){

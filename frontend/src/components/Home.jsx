@@ -1,13 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import { styled } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import { Container, Typography } from "@mui/material";
 
-import Footer from "./Footer";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import HomeSwiper from "./commons/HomeSwiper";
 
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -27,16 +23,6 @@ function Home(props) {
     const navigate = useNavigate();
     return (
         <Box style={{ border: 1, backgroundColor: "#fafafa" }}>
-            {/* <MyImage>
-                <img src={`${process.env.PUBLIC_URL}/img/image132.png`} width="100%" alt="mainVisual" />
-                <Typography
-                    className='mainTitle'
-                    sx={{ fontSize: "42px", fontWeight: "600", pt: 26, fontFamily: "NanumSquare" }}
-                    textAlign='center'>
-                    <Typography sx={{ fontSize: "24px" }}>원격 반료동물 진료 플랫폼</Typography>" 펫투닥터로 우리아이
-                    건강을 지켜주세요 "
-                </Typography>
-            </MyImage> */}
             <HomeSwiper />
             <Box sx={{ mt: 8, backgroundColor: "#fafafa" }}>
                 <Container sx={{ p: 3 }}>
@@ -94,39 +80,6 @@ function Home(props) {
                     </Grid>
                 </Container>
             </Box>
-            {/* <Container sx={{ my: 4 }}>
-                <Grid container style={cardStyle} className='card'>
-                    <Grid item sx={gridItemStyle} xs={12} md={4}>
-                        <Box sx={{ color: "#29A1B1", fontSize: 25, fontWeight: "700" }}>
-                            <NavLink
-                                to='/petodoctor/hospitalsearch'
-                                style={{ color: "#29A1B1", textDecoration: "none" }}>
-                                병원찾기
-                            </NavLink>
-                        </Box>
-                        <Box sx={{ fontSize: 18, mt: 2 }}>
-                            주변에 위치한 병원 정보를 <br /> 알려드립니다
-                        </Box>
-                    </Grid>
-                </Grid>
-                <Grid container style={cardStyle} className='card'>
-                    <Grid item sx={gridItemStyle} xs={12} md={4}>
-                        <Box sx={{ color: "#29A1B1", fontSize: 25, fontWeight: "700" }}>예약하기</Box>
-                        <Box sx={{ fontSize: 18, mt: 2 }}>
-                            온라인 진료 서비스를 위한 예약을 <br /> 도와드립니다.
-                        </Box>
-                    </Grid>
-                </Grid>
-                <Grid container style={cardStyle} className='card'>
-                    <Grid item sx={{ height: "200px", p: 5 }} xs={12} md={4}>
-                        <Box sx={{ color: "#29A1B1", fontSize: 25, fontWeight: "700" }}>공지사항</Box>
-                        <Box sx={{ fontSize: 16, mt: 2 }}>
-                            새로운 병원이 추가되었습니다. 22.01.29 <br />
-                            새로운 병원이 추가되었습니다. 22.01.29
-                        </Box>
-                    </Grid>
-                </Grid>
-            </Container> */}
             <Box sx={{ backgroundColor: "#fafafa", p: "200px 26px 160px 26px" }}>
                 <Grid container maxWidth='lg' sx={{ mx: "auto" }}>
                     <Grid item xs={12} md={6}>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box } from '@mui/system';
-import { Button, Checkbox, Divider, FormControlLabel, Grid, TextField, Typography } from '@mui/material';
+import { Button, Divider, Grid, Typography } from '@mui/material';
 
 function TotalPrice(props) {
   const priceTotal = props.prescription.data.price;

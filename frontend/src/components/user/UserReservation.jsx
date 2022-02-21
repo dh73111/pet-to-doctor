@@ -212,12 +212,6 @@ function UserReservation(props) {
 
     return (
         <Container>
-            {/* <button
-                onClick={() => {
-                    console.log(treatmentInfo);
-                }}>
-                모든예약현황
-            </button> */}
             <Grid container>
                 <Typography variant='h4' component='h1' sx={{ mt: 10, mb: 2, fontWeight: 600 }}>
                     내 예약
@@ -225,24 +219,7 @@ function UserReservation(props) {
             </Grid>
             <Grid container>
                 <Grid item xs={8}></Grid>
-                <Grid item xs={2} sx={{ px: 4 }}>
-                    {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DatePicker
-                            disableFuture
-                            label='날짜'
-                            openTo='year'
-                            views={["year", "month", "day"]}
-                            value={value}
-                            onChange={(newValue) => {
-                                console.log(newValue, "newValue");
-                                setValue(newValue);
-                                setList(state, newValue);
-                            }}
-                            size='small'
-                            renderInput={(params) => <TextField {...params} />}
-                        />
-                    </LocalizationProvider> */}
-                </Grid>
+                <Grid item xs={2} sx={{ px: 4 }}></Grid>
                 <Grid item xs={2}>
                     <Box sx={{ width: 120 }}>
                         <FormControl fullWidth>
@@ -359,48 +336,9 @@ function UserReservation(props) {
                                         })}
                                     </tbody>
                                 </>
-                            )}
-                            {/* {(rowsPerPage > 0
-                                    ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                    : rows
-                                ).map((row) => (
-                                    <tr key={row.no}>
-                                        <td style={{ width: 140 }}> {row.no}</td>
-                                        <td style={{ width: 140 }} align='right'>
-                                            {row.date}
-                                        </td>
-                                        <td style={{ width: 140 }} align='right'>
-                                            {row.time}
-                                        </td>
-                                        <td style={{ width: 140 }} align='right'>
-                                            {row.hospital}
-                                        </td>
-                                        <td style={{ width: 140 }} align='right'>
-                                            {row.doctor}
-                                        </td>
-                                        <td style={{ width: 140 }} align='right'>
-                                            {row.state}
-                                        </td>
-                                        <td style={{ width: 140 }} align='right'>
-                                            <NavLink to={`/petodoctor/userconsulting/${row.no}`}>
-                                                <Button variant='contained'>들어가기</Button>
-                                            </NavLink>
-                                        </td>
-                                        <td style={{ width: 140 }} align='right'>
-                                            <Button variant='contained'>{row.perscription}</Button>
-                                        </td>
-                                        <td style={{ width: 140 }} align='right'>
-                                            {row.shipNo}
-                                        </td>
-                                    </tr>
-                                ))}
-
-                                {emptyRows > 0 && (
-                                    <tr style={{ height: 41 * emptyRows }}>
-                                        <td colSpan={3} />
-                                    </tr>
-                                )} */}
+                            )}                  
                             <tfoot>
+                                {/* 페이지네이션 */}
                                 {/* <tr sx={{ width: 1200 }}>
                                     <CustomTablePagination
                                         rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}

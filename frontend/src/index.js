@@ -16,6 +16,12 @@ const persistConfig = {
     key: "root",
     storage: sessionStorage,
 };
+if (process.env.REACT_APP_ENV === "production") {
+    console.log = () => {};
+    console.error = () => {};
+    console.debug = () => {};
+    console.warn = () => {};
+}
 
 function reducer(currentState, action) {
     if (currentState === undefined) {

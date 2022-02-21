@@ -8,18 +8,12 @@ import {
     InputAdornment,
     Modal,
     CircularProgress,
-    Stack,
-    Divider,
 } from "@mui/material";
 import logo from "../../components/logo.png";
 import DaumPostCode from "react-daum-postcode";
-import { border } from "@mui/system";
 import { registerUser } from "../../api/user.js";
-import { ElevenMpTwoTone, PestControl } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 
 function UserJoin(props) {
     const dispatch = useDispatch();
@@ -342,7 +336,7 @@ function UserJoin(props) {
                     <Typography style={{ color: "red", fontSize: "14px" }}>{telError}</Typography>
                 </Box>
                 <Box>
-                    <Box>
+                    <Box sx={{ml: 4}}>
                         {/* <Typography align='center' component='h1' variant='h6'>
                             주소
                         </Typography> */}
@@ -410,6 +404,7 @@ function UserJoin(props) {
                     <Grid>
                         <label
                             for='name'
+                            className='input_required'
                             style={{
                                 display: "block",
                                 float: "left",
@@ -447,6 +442,7 @@ function UserJoin(props) {
                         </Typography> */}
                         <label
                             for='date'
+                            className='input_required'
                             style={{
                                 display: "block",
                                 float: "left",
@@ -457,7 +453,6 @@ function UserJoin(props) {
                             }}>
                             생년월일
                         </label>
-                        {/* <Stack component='form' noValidate spacing={3}> */}
                         <TextField
                             id='date'
                             type='date'
@@ -470,7 +465,6 @@ function UserJoin(props) {
                             }}
                             size='small'
                         />
-                        {/* </Stack> */}
                     </Grid>
                 </Grid>
                 <Grid
@@ -480,14 +474,10 @@ function UserJoin(props) {
                         flexDirection: "column",
                         alignItems: "center",
                     }}>
-                    {/* <Grid>
-                        <Typography mt={3} align='right' component='h1' variant='h6'>
-                            종
-                        </Typography>
-                    </Grid> */}
                     <Grid>
                         <label
                             for='species'
+                            className='input_required'
                             style={{
                                 display: "block",
                                 float: "left",
@@ -517,14 +507,10 @@ function UserJoin(props) {
                         flexDirection: "column",
                         alignItems: "center",
                     }}>
-                    {/* <Grid>
-                        <Typography mt={3} align='right' component='h1' variant='h6'>
-                            몸무게
-                        </Typography>
-                    </Grid> */}
                     <Grid>
                         <label
                             for='weight'
+                            className='input_required'
                             style={{
                                 display: "block",
                                 float: "left",
@@ -554,6 +540,7 @@ function UserJoin(props) {
                     type='submit'
                     variant='contained'
                     size='large'
+                    disabled={isLoading}
                     sx={{ mt: 3 }}
                     onClick={() => {
                         if (emailError !== "") {
@@ -570,22 +557,22 @@ function UserJoin(props) {
                             userRegister(values);
                         }
                     }}>
-                    가입하기
+                    {isLoading ? (<>
+                        <CircularProgress
+                            size={20}
+                            sx={{
+                                color: "primary",
+                                position: "absolute",
+                                top: "55%",
+                                left: "52%",
+                                marginTop: "-12px",
+                                marginLeft: "-12px",
+                            }}
+                        />
+                        <Typography sx={{margin: '13px 28px'}}></Typography>
+                </>): "가입하기"}
                 </Button>
             </Box>
-            {isLoading && (
-                <CircularProgress
-                    size={80}
-                    sx={{
-                        color: "primary",
-                        position: "absolute",
-                        top: "60%",
-                        left: "50%",
-                        marginTop: "-12px",
-                        marginLeft: "-12px",
-                    }}
-                />
-            )}
         </Box>
     );
 }

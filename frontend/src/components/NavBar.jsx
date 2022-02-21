@@ -58,25 +58,16 @@ const NavTop = (props) => {
     const { id } = props.store.user;
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    // const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
     const [open, setOpen] = useState(false);
     const [mode, setMode] = useState("");
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    // const handleClose = () => setOpen(false);
-    // const handleOpenNavMenu = (event) => {
-    //   setAnchorElNav(event.currentTarget);
-    // };
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };
 
-    // const handleCloseNavMenu = (id) => {
-    //   console.log(id);
-    //   if (id === props.selectNav) props.clickNav(id);
-    // };
     const [loginAlert, setLoginAlert] = useState(false);
     const handleLoginAlert = () => {
         console.log("로그인변화스낵");
@@ -97,9 +88,9 @@ const NavTop = (props) => {
     let MyButton = (page, selectedColor) => (
         <Box
             key={page}
-            onClick={() => {
-                // props.clickNav(page.id);
-            }}
+            // onClick={() => {
+            //     props.clickNav(page.id);
+            // }}
             sx={{ color: selectedColor, display: "block" }}>
             <Typography sx={{ fontSize: 17 }}>{page.name}</Typography>
         </Box>
@@ -293,9 +284,6 @@ const NavTop = (props) => {
                                     />
                                 </Box>
                             </Tooltip>
-                            {/* <NavLink to='/petodoctor/usermypage' className='test'>
-                                <PersonOutlineOutlined sx={{ fontSize: "30px", color: "#309FB3" }} />
-                            </NavLink> */}
                             <Tooltip title='자주하는 질문' arrow>
                                 <NavLink to='/petodoctor/qna' className='test2'>
                                     <LiveHelpOutlined sx={{ fontSize: "30px", color: "#1dc6f6" }} />
@@ -358,11 +346,6 @@ function NavBottom(props) {
             <Typography sx={{ fontSize: 16, fontWeight: "bold" }}>{page.name}</Typography>
         </Box>
     );
-
-    // const [loginAlert, setLoginAlert] = useState(false);
-    // const handleLoginAlert = () => {
-    //     setLoginAlert(false);
-    // };
 
     const NavItem = () => {
         // 네비 모드 바꾸기

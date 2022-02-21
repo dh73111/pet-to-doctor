@@ -4,9 +4,7 @@ import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
 import FormControl from "@mui/material/FormControl";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import CalendarPicker from "@mui/lab/CalendarPicker";
@@ -23,7 +21,6 @@ import { addTreatment } from "api/treatment";
 import { useSelector } from "react-redux";
 import DatePicker from "@mui/lab/DatePicker";
 import { petList } from "api/pet";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 
 function HospitalSearchReservation(props) {
     const navigate = useNavigate();
@@ -240,7 +237,6 @@ function HospitalSearchReservation(props) {
     return (
         <Container sx={{ mt: 10, mb: 15, border: "1px solid #D7E2EB", borderRadius: "0.55rem" }}>
             <Grid container>
-                {/* <Grid item xs={2.5}></Grid> */}
                 <Grid item xs={12} sx={{ mt: 5 }}>
                     <Grid container>
                         <Grid item xs={4}>
@@ -348,7 +344,9 @@ function HospitalSearchReservation(props) {
                                     ? doctor.pysicianLicenseNumber
                                     : "면허 정보 미등록"}
                             </Box>
-                            <Box sx={{ fontSize: 18 }}>진료비 : {doctor.price}</Box>
+                            <Box sx={{ fontSize: 18 }}>
+                                진료비 : {doctor.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+                            </Box>
                             <Box sx={{ fontSize: 18, mt: 2 }}>한마디 : 최선을 다하겠습니다.</Box>
                         </Grid>
                     </Grid>
@@ -539,7 +537,6 @@ function HospitalSearchReservation(props) {
                         </Button>
                     </Box>
                 </Grid>
-                {/* <Grid item xs={2.5}></Grid> */}
             </Grid>
         </Container>
     );

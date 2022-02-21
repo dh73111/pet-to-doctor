@@ -6,8 +6,6 @@ import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
 import Skeleton from "@mui/material/Skeleton";
 import { styled } from "@mui/system";
-import TablePaginationUnstyled from "@mui/base/TablePaginationUnstyled";
-import PerscriptionDetail from "../commons/PrescriptionDetail";
 import DatePicker from "@mui/lab/DatePicker";
 import TextField from "@mui/material/TextField";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
