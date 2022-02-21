@@ -344,7 +344,9 @@ function HospitalSearchReservation(props) {
                                     ? doctor.pysicianLicenseNumber
                                     : "면허 정보 미등록"}
                             </Box>
-                            <Box sx={{ fontSize: 18 }}>진료비 : {doctor.price}</Box>
+                            <Box sx={{ fontSize: 18 }}>
+                                진료비 : {doctor.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+                            </Box>
                             <Box sx={{ fontSize: 18, mt: 2 }}>한마디 : 최선을 다하겠습니다.</Box>
                         </Grid>
                     </Grid>

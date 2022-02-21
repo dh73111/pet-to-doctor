@@ -563,6 +563,7 @@ function HospitalSearch(props) {
     const [name, setName] = useState("");
     const [onLoad, setOnLoad] = useState(false);
     const onHandleChange = (e) => {
+        setMode("list");
         setName(e.target.value);
     };
     const [hospitalList, setHospitalList] = useState([]);

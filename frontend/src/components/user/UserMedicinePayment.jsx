@@ -140,7 +140,7 @@ function UserMedicinePayment(props) {
                                             </Grid>
                                             <Grid align='right' item xs={7}>
                                                 <Typography xs={6} sx={{ ml: 3, pr: 1 }}>
-                                                    {item.price} 원
+                                                    {item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} 원
                                                 </Typography>
                                             </Grid>
                                         </Grid>
@@ -154,7 +154,7 @@ function UserMedicinePayment(props) {
                                     </Grid>
                                     <Grid align='right' item xs={7}>
                                         <Typography xs={6} sx={{ ml: 3, pr: 1 }}>
-                                            3000 원
+                                            3,000 원
                                         </Typography>
                                     </Grid>
                                 </Grid>
@@ -172,7 +172,7 @@ function UserMedicinePayment(props) {
                                     </Grid>
                                     <Grid item xs={8}>
                                         <Typography variant='h4' sx={{ textAlign: "right" }}>
-                                            {sum() + 3000}원
+                                            {(sum() + 3000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원
                                         </Typography>
                                     </Grid>
                                 </Grid>

@@ -170,7 +170,7 @@ function UserReservationPayment(props) {
                                     </Grid>
                                     <Grid align='right' item xs={7}>
                                         <Typography xs={6} sx={{ ml: 3, pr: 1 }}>
-                                            {`${state.data.price} 원`}
+                                            {`${state.data.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} 원`}
                                         </Typography>
                                     </Grid>
                                 </Grid>
@@ -188,7 +188,7 @@ function UserReservationPayment(props) {
                                     </Grid>
                                     <Grid item xs={8}>
                                         <Typography variant='h4' sx={{ textAlign: "right" }}>
-                                            {`${state.data.price} 원`}
+                                            {`${state.data.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} 원`}
                                         </Typography>
                                     </Grid>
                                 </Grid>

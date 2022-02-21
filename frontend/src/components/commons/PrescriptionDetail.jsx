@@ -70,7 +70,11 @@ function PrescriptionDetail(props) {
                         <Box>가격</Box>
                     </Grid>
                     <Grid item xs={6} sx={{ textAlign: "right" }}>
-                        <Box>{sum()}</Box>
+                        <Box>
+                            {sum()
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        </Box>
                     </Grid>
                 </Grid>
             </Grid>
